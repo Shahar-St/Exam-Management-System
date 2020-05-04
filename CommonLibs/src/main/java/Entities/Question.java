@@ -16,7 +16,7 @@ public class Question {
 
     private String questionDescription;
 
-    private String [] answersArray;
+    private String[] answersArray;
     // the index of the correct answer in the answers array
     private int correctAnswer;
 
@@ -27,6 +27,10 @@ public class Question {
     private Teacher author;
 
     private String lastModified;
+    // question number by the subjects counter
+    private String questionSubjectId;
+
+    private double questionScore;
 
     public Question() {
     }
@@ -40,6 +44,9 @@ public class Question {
         this.questionCourse = questionCourse;
         this.author = author;
         this.updateLastModified();
+        // unique question identifier not fot db , for question serial encoding
+        this.questionSubjectId = String.valueOf(this.questionSubject.getSubjectQuestionCounter());
+        this.questionSubject.updateSubjectQuestionCounter(); // increment the subject questions counter
     }
 
     public String getQuestionContent() {
@@ -107,7 +114,23 @@ public class Question {
     }
 
     // update last modified field using current time
-    private void updateLastModified(){
+    private void updateLastModified() {
         this.lastModified = LocalDateTime.now().toString();
+    }
+
+    public String getQuestionSubjectId() {
+        return questionSubjectId;
+    }
+
+    protected void setQuestionSubjectId(String questionSubjectId) {
+        this.questionSubjectId = questionSubjectId;
+    }
+
+    public double getQuestionScore() {
+        return questionScore;
+    }
+
+    public void setQuestionScore(double questionScore) {
+        this.questionScore = questionScore;
     }
 }
