@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.args.Entities.Teacher;
 
 import java.io.IOException;
 
@@ -33,7 +32,6 @@ public class ClientApp extends Application {
     }
 
     public static void main(String[] args) {
-        Teacher teacher;
         launch();
     }
 

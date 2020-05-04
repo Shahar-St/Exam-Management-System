@@ -7,8 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Server" />
+        <module name="CommonLibs" />
         <module name="Client" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="CommonLibraries" target="14" />
+    </bytecodeTargetLevel>
   </component>
 </project>

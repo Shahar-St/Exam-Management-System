@@ -1,4 +1,4 @@
-package org.args.Entities;
+package Entities;
 
 public class Teacher {
 
