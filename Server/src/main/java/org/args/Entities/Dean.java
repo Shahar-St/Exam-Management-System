@@ -1,4 +1,4 @@
-package Entities;
+package org.args.Entities;
 
 import javax.persistence.Entity;
 

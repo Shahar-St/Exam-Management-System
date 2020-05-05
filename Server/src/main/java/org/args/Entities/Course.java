@@ -1,4 +1,4 @@
-package Entities;
+package org.args.Entities;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;

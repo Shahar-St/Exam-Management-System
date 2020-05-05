@@ -1,7 +1,6 @@
-package Entities;
+package org.args.Entities;
 
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Level;
 
 import javax.persistence.criteria.CriteriaBuilder;
