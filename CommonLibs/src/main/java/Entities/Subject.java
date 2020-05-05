@@ -12,22 +12,17 @@ public class Subject {
     private int id;
 
     private String subjectId;
-    @ManyToMany
+    @ManyToMany(mappedBy = "teacherSubjectList", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, targetEntity = Teacher.class)
     private List<Teacher> subjectTeachersList;
 
     public Subject() {
         this.subjectTeachersList = new ArrayList<>();
     }
 
-
-    public Subject(String subjectId, List<Teacher> subjectTeachersList) {
-        this.subjectId = subjectId;
-        this.subjectTeachersList = subjectTeachersList;
-        this.subjectTeachersList = new ArrayList<>();
-    }
-
     public Subject(String subjectId) {
         this.subjectId = subjectId;
+        this.subjectTeachersList = new ArrayList<>();
+
     }
 
 

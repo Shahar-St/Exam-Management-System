@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class StudentExam {
+public class ExecutedExam {
 
     private Subject studentExamSubject;
 
@@ -31,7 +31,7 @@ public class StudentExam {
     @ManyToOne
     private Student student;
 
-    public StudentExam(Exam exam, Student student) {
+    public ExecutedExam(Exam exam, Student student) {
 
         this.studentExamSubject = exam.getExamSubject();
         this.studentExamCourse = exam.getExamCourse();

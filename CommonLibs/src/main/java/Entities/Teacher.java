@@ -1,7 +1,10 @@
 package Entities;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +12,20 @@ import java.util.List;
 @Entity
 public class Teacher extends User {
 
-    @ManyToMany
+    //    @ManyToMany(targetEntity = Subject.class)
+//    @Cascade({CascadeType.SAVE_UPDATE,CascadeType.MERGE})
+//    @JoinTable(
+//            name = "teachers_subjects",
+//            joinColumns = @JoinColumn(name = "teacher_id"),
+//            inverseJoinColumns = @JoinColumn(name = "subject_id")
+//    )
     private List<Subject> teacherSubjectList;
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "teacher")
+    @Cascade(CascadeType.SAVE_UPDATE)
     private List<Course> teacherCourseList;
-    @OneToMany
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "author")
+    @Cascade(CascadeType.SAVE_UPDATE)
     private List<Exam> teacherExamList;
 
     public Teacher() {
@@ -35,8 +47,11 @@ public class Teacher extends User {
     }
 
     public void addSubject(Subject subject) {
-        this.teacherSubjectList.add(subject);
-        subject.addTeacher(this);
+        if (!this.teacherSubjectList.contains(subject)) {
+            this.teacherSubjectList.add(subject);
+            subject.addTeacher(this);
+        }
+
     }
 
     public List<Course> getCourseList() {
@@ -44,8 +59,11 @@ public class Teacher extends User {
     }
 
     public void addCourse(Course course) {
-        this.teacherCourseList.add(course);
-        course.setTeacher(this);
+        if (!this.teacherCourseList.contains(course)) {
+            this.teacherCourseList.add(course);
+            course.setTeacher(this);
+        }
+
     }
 
     public List<Exam> getExamList() {
@@ -53,7 +71,10 @@ public class Teacher extends User {
     }
 
     public void addExam(Exam exam) {
-        this.teacherExamList.add(exam);
-        exam.setAuthor(this);
+        if (!this.teacherExamList.contains(exam)) {
+            this.teacherExamList.add(exam);
+            exam.setAuthor(this);
+        }
+
     }
 }

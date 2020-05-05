@@ -1,10 +1,10 @@
 package Entities;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +19,15 @@ public class Course {
 
     private Subject courseSubject;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Cascade(CascadeType.SAVE_UPDATE)
+    @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
+    @OneToMany
     private List<Exam> courseExamList;
 
+    @OneToMany
     private List<Student> courseStudentList;
 
     public Course() {
@@ -84,8 +89,7 @@ public class Course {
         return courseStudentList;
     }
 
-    public void addCourseStudentList(Student student) {
+    public void addStudent(Student student) {
         this.courseStudentList.add(student);
-        student.addCourse(this);
     }
 }

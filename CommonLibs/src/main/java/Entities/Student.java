@@ -1,6 +1,10 @@
 package Entities;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,33 +12,38 @@ import java.util.List;
 @Entity
 public class Student extends User {
 
-    @OneToMany
-    private List<StudentExam> studentExamList;
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "author")
+    @Cascade(CascadeType.SAVE_UPDATE)
+    private List<ExecutedExam> executedExamList;
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "author")
+    @Cascade(CascadeType.SAVE_UPDATE)
     private List<Course> studentCourseList;
 
-    private Boolean isExtensionEligible;
+    private Boolean isExtensionEligible=false;
 
     public Student() {
         super();
-        this.studentExamList = new ArrayList<>();
+        this.executedExamList = new ArrayList<>();
         this.studentCourseList = new ArrayList<>();
-        this.isExtensionEligible = false;
     }
 
     public Student(int socialId, String firstName, String lastName, String password, String userName, Boolean isExtensionEligible) {
         super(socialId, firstName, lastName, password, userName);
-        this.studentExamList = new ArrayList<>();
+        this.executedExamList = new ArrayList<>();
         this.studentCourseList = new ArrayList<>();
         this.isExtensionEligible = isExtensionEligible;
     }
 
-    public List<StudentExam> getStudentExamList() {
-        return studentExamList;
+    public List<ExecutedExam> getExecutedExamList() {
+        return executedExamList;
     }
 
-    public void addStudentExam(StudentExam studentExam) {
-        this.studentExamList.add(studentExam);
+    public void addStudentExam(ExecutedExam executedExam) {
+        if (!this.executedExamList.contains(executedExam)) {
+            this.executedExamList.add(executedExam);
+        }
+
     }
 
     public List<Course> getCourseList() {
@@ -42,7 +51,10 @@ public class Student extends User {
     }
 
     public void addCourse(Course course) {
-        this.studentCourseList.add(course);
+        if (!this.studentCourseList.contains(course)) {
+
+            this.studentCourseList.add(course);
+        }
     }
 
     public Boolean getExtensionEligible() {
