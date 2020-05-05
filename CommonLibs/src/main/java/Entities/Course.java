@@ -5,21 +5,25 @@ import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 @Entity
 public class Course {
+
     private static int courseQuestionCounter = 0;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String courseId;
+    private Queue<Integer> availableQuestionNumbers = new LinkedList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Cascade(CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "subject_id")
-    private Subject courseSubject;
+    private Subject subject;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Cascade(CascadeType.SAVE_UPDATE)
@@ -41,29 +45,36 @@ public class Course {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
-    private List<Student> courseStudentList;
+    private List<Student> studentsList;
 
     public Course() {
         this.courseExamList = new ArrayList<>();
-        this.courseStudentList = new ArrayList<>();
+        this.studentsList = new ArrayList<>();
         this.courseQuestionList = new ArrayList<>();
     }
 
-    public Course(String courseId, Subject courseSubject, Teacher teacher) {
+    public Course(String courseId, Subject subject, Teacher teacher) {
         this.courseId = courseId;
-        this.courseSubject = courseSubject;
+        this.subject = subject;
         this.teacher = teacher;
         this.courseExamList = new ArrayList<>();
-        this.courseStudentList = new ArrayList<>();
+        this.studentsList = new ArrayList<>();
         this.courseQuestionList = new ArrayList<>();
+
+        for (int i = 0; i < 1000; i++)
+            availableQuestionNumbers.add(i);
+
     }
 
-    public Subject getCourseSubject() {
-        return courseSubject;
+    public Queue<Integer> getAvailableQuestionNumbers() {
+        return availableQuestionNumbers;
+    }
+    public Subject getSubject() {
+        return subject;
     }
 
-    public void setCourseSubject(Subject courseSubject) {
-        this.courseSubject = courseSubject;
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
 
     public Teacher getTeacher() {
@@ -99,11 +110,11 @@ public class Course {
         exam.setExamCourse(this);
     }
 
-    public List<Student> getCourseStudentList() {
-        return courseStudentList;
+    public List<Student> getStudentsList() {
+        return studentsList;
     }
 
     public void addStudent(Student student) {
-        this.courseStudentList.add(student);
+        this.studentsList.add(student);
     }
 }

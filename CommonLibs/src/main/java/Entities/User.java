@@ -1,28 +1,16 @@
 package Entities;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-abstract class User {
+public abstract class User {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
     private int socialId;
+    private String firstName, lastName, password, userName;
 
-    private String firstName;
-
-    private String lastName;
-
-    private String password;
-
-    private String permissionLevel;
-
-    private String userName;
-
+    //Group c'tors
     public User() {
     }
 
@@ -34,51 +22,36 @@ abstract class User {
         this.userName = userName;
     }
 
+    //Group setters and getters
     public int getSocialId() {
         return socialId;
-    }
-
-    protected void setSocialId(int socialId) {
-        this.socialId = socialId;
     }
 
     public String getFirstName() {
         return firstName;
     }
-
-    protected void setFirstName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
     public String getLastName() {
         return lastName;
     }
-
-    protected void setLastName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
     public String getPassword() {
         return password;
     }
-
-    protected void setPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getPermissionLevel() {
-        return permissionLevel;
-    }
-
-    protected void setPermissionLevel(String permissionLevel) {
-        this.permissionLevel = permissionLevel;
     }
 
     public String getUserName() {
         return userName;
     }
-
-    protected void setUserName(String userName) {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 }

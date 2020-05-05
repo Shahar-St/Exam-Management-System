@@ -4,22 +4,25 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Question {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Column(nullable = false, unique = true)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
 
     private String questionContent;
-
     private String[] answersArray;
     // the index of the correct answer in the answers array
     private int correctAnswer;
 
+    // not sure it's needed
     @ManyToMany
     @Cascade({CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -27,104 +30,103 @@ public class Question {
             joinColumns = @JoinColumn(name = "question_id"),
             inverseJoinColumns = @JoinColumn(name = "exam_id")
     )
-    private List<Exam> containingExams;
+    private List<Exam> containedInExams = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @Cascade(CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "course_id")
-    private Course questionCourse;
+    private Course course;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @Cascade(CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "teacher_id")
     private Teacher author;
 
-    private String lastModified;
+    private LocalDateTime lastModified;
 
-    private String questionCourseId;
-
-    public Question() { this.containingExams = new ArrayList<>(); }
-
-    public Question(String questionContent, String questionDescription, String[] answersArray, int correctAnswer, Course questionCourse, Teacher author) {
+    //Group c'tors
+    public Question() {
+    }
+    public Question(String questionContent, String[] answersArray, int correctAnswer,
+                    List<Exam> containedInExams, Course course, Teacher author) {
         this.questionContent = questionContent;
         this.answersArray = answersArray;
         this.correctAnswer = correctAnswer;
-        this.questionCourse = questionCourse;
+        this.containedInExams = containedInExams;
+        this.course = course;
         this.author = author;
-        this.containingExams = new ArrayList<>();
-        this.updateLastModified();
-        // unique question identifier not fot db , for question serial encoding
-        this.questionCourseId = String.valueOf(this.questionCourse.getCourseQuestionCounter());
-        this.questionCourse.updateCourseQuestionCounter(); // increment the subject questions counter
+        updateLastModified();
+
+        // handle empty queue
+        DecimalFormat nf = new DecimalFormat("000");
+        this.id = course.getCourseId() + nf.format(course.getAvailableQuestionNumbers().poll());
+    }
+
+    //Group adders and removers
+    public void addCourseExamList(Exam exam, double score) {
+        this.containedInExams.add(exam);
+        exam.addExamQuestion(this, score);
+    }
+
+    //Group setters and getters
+    public String getId() {
+        return id;
     }
 
     public String getQuestionContent() {
         return questionContent;
     }
-
-    protected void setQuestionContent(String questionContent) {
+    public void setQuestionContent(String questionContent) {
         this.questionContent = questionContent;
     }
 
     public String[] getAnswersArray() {
         return answersArray;
     }
-
-    protected void setAnswersArray(String[] answersArray) {
+    public void setAnswersArray(String[] answersArray) {
         this.answersArray = answersArray;
     }
 
     public int getCorrectAnswer() {
         return correctAnswer;
     }
-
-    protected void setCorrectAnswer(int correctAnswer) {
+    public void setCorrectAnswer(int correctAnswer) {
         this.correctAnswer = correctAnswer;
     }
 
-    public Course getQuestionCourse() {
-        return questionCourse;
+    public List<Exam> getContainedInExams() {
+        return containedInExams;
+    }
+    public void setContainedInExams(List<Exam> containedInExams) {
+        this.containedInExams = containedInExams;
     }
 
-    protected void setQuestionCourse(Course questionCourse) {
-        this.questionCourse = questionCourse;
+    public Course getCourse() {
+        return course;
+    }
+    public void setCourse(Course course) {
+        this.course = course;
     }
 
     public Teacher getAuthor() {
         return author;
     }
-
-    protected void setAuthor(Teacher author) {
+    public void setAuthor(Teacher author) {
         this.author = author;
     }
 
-    public String getLastModified() {
+    public LocalDateTime getLastModified() {
         return lastModified;
     }
-
-    protected void setLastModified(String lastModified) {
+    public void setLastModified(LocalDateTime lastModified) {
         this.lastModified = lastModified;
     }
 
+    //Group other methods
+
     // update last modified field using current time
     private void updateLastModified() {
-        this.lastModified = LocalDateTime.now().toString();
+        this.lastModified = LocalDateTime.now();
     }
 
-    public String getQuestionCourseId() {
-        return questionCourseId;
-    }
-
-    protected void setQuestionCourseId(String questionCourseId) {
-        this.questionCourseId = questionCourseId;
-    }
-
-    public String getQuestionId() {
-        return this.questionCourse.getCourseId() + this.questionCourseId;
-    }
-
-    public void addCourseExamList(Exam exam, double score) {
-        this.containingExams.add(exam);
-        exam.addExamQuestion(this, score);
-    }
 }
