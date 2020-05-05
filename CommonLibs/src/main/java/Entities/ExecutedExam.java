@@ -46,6 +46,7 @@ public class ExecutedExam {
         this.studentExamDescription = exam.getExamDescription();
         this.teacherPrivateNotes = exam.getTeacherPrivateNotes();
         this.student = student;
+        this.student.addStudentExam(this);
 
     }
 

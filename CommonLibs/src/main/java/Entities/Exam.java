@@ -1,6 +1,7 @@
 package Entities;
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,8 +15,13 @@ public class Exam {
 
     private Subject examSubject;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @JoinColumn(name = "exam_id")
     private Course examCourse;
 
+    @ManyToMany(mappedBy = "containingExams")
+    @Cascade({CascadeType.PERSIST, CascadeType.MERGE})
     private List<Question> examQuestionsList;
 
     private List<Double> examQuestionsScores;

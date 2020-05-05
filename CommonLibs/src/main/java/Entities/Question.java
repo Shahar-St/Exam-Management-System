@@ -1,10 +1,12 @@
 package Entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -18,27 +20,38 @@ public class Question {
     // the index of the correct answer in the answers array
     private int correctAnswer;
 
-    private Subject questionSubject;
+    @ManyToMany
+    @Cascade({CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "questions_exams",
+            joinColumns = @JoinColumn(name = "question_id"),
+            inverseJoinColumns = @JoinColumn(name = "exam_id")
+    )
+    private List<Exam> containingExams;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @JoinColumn(name = "course_id")
     private Course questionCourse;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @JoinColumn(name = "teacher_id")
     private Teacher author;
 
     private String lastModified;
 
     private String questionCourseId;
 
+    public Question() { this.containingExams = new ArrayList<>(); }
 
-    public Question() {
-    }
-
-    public Question(String questionContent, String questionDescription, String[] answersArray, int correctAnswer, Subject questionSubject, Course questionCourse, Teacher author) {
+    public Question(String questionContent, String questionDescription, String[] answersArray, int correctAnswer, Course questionCourse, Teacher author) {
         this.questionContent = questionContent;
         this.answersArray = answersArray;
         this.correctAnswer = correctAnswer;
-        this.questionSubject = questionSubject;
         this.questionCourse = questionCourse;
         this.author = author;
+        this.containingExams = new ArrayList<>();
         this.updateLastModified();
         // unique question identifier not fot db , for question serial encoding
         this.questionCourseId = String.valueOf(this.questionCourse.getCourseQuestionCounter());
@@ -67,14 +80,6 @@ public class Question {
 
     protected void setCorrectAnswer(int correctAnswer) {
         this.correctAnswer = correctAnswer;
-    }
-
-    public Subject getQuestionSubject() {
-        return questionSubject;
-    }
-
-    protected void setQuestionSubject(Subject questionSubject) {
-        this.questionSubject = questionSubject;
     }
 
     public Course getQuestionCourse() {
@@ -116,5 +121,10 @@ public class Question {
 
     public String getQuestionId() {
         return this.questionCourse.getCourseId() + this.questionCourseId;
+    }
+
+    public void addCourseExamList(Exam exam, double score) {
+        this.containingExams.add(exam);
+        exam.addExamQuestion(this, score);
     }
 }

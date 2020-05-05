@@ -5,6 +5,7 @@ import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +17,11 @@ public class Student extends User {
     @Cascade(CascadeType.SAVE_UPDATE)
     private List<ExecutedExam> executedExamList;
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "author")
-    @Cascade(CascadeType.SAVE_UPDATE)
+    @ManyToMany(mappedBy = "courseStudentList")
+    @Cascade({CascadeType.PERSIST, CascadeType.MERGE})
     private List<Course> studentCourseList;
 
-    private Boolean isExtensionEligible=false;
+    private Boolean isExtensionEligible = false;
 
     public Student() {
         super();

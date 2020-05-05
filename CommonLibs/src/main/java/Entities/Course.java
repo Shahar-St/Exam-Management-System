@@ -1,6 +1,5 @@
 package Entities;
 
-
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -17,6 +16,9 @@ public class Course {
 
     private String courseId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Cascade(CascadeType.SAVE_UPDATE)
+    @JoinColumn(name = "subject_id")
     private Subject courseSubject;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -24,15 +26,27 @@ public class Course {
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "examCourse")
+    @Cascade(CascadeType.SAVE_UPDATE)
     private List<Exam> courseExamList;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "questionCourse")
+    @Cascade(CascadeType.SAVE_UPDATE)
+    private List<Question> courseQuestionList;
+
+    @ManyToMany
+    @Cascade({CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "courses_students",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
     private List<Student> courseStudentList;
 
     public Course() {
         this.courseExamList = new ArrayList<>();
         this.courseStudentList = new ArrayList<>();
+        this.courseQuestionList = new ArrayList<>();
     }
 
     public Course(String courseId, Subject courseSubject, Teacher teacher) {
@@ -41,6 +55,7 @@ public class Course {
         this.teacher = teacher;
         this.courseExamList = new ArrayList<>();
         this.courseStudentList = new ArrayList<>();
+        this.courseQuestionList = new ArrayList<>();
     }
 
     public Subject getCourseSubject() {
@@ -62,7 +77,6 @@ public class Course {
     public int getCourseQuestionCounter() {
         return courseQuestionCounter;
     }
-
 
     protected void updateCourseQuestionCounter() {
         courseQuestionCounter++;
