@@ -37,11 +37,11 @@ public class Student extends User {
         this.studentExamList.add(studentExam);
     }
 
-    public List<Course> getStudentCourseList() {
+    public List<Course> getCourseList() {
         return studentCourseList;
     }
 
-    public void addStudentCourseList(Course course) {
+    public void addCourse(Course course) {
         this.studentCourseList.add(course);
     }
 

@@ -14,13 +14,20 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String courseId;
+
     private Subject courseSubject;
+
     private Teacher teacher;
+
     private List<Exam> courseExamList;
+
+    private List<Student> courseStudentList;
 
     public Course() {
         this.courseExamList = new ArrayList<>();
+        this.courseStudentList = new ArrayList<>();
     }
 
     public Course(String courseId, Subject courseSubject, Teacher teacher) {
@@ -28,6 +35,7 @@ public class Course {
         this.courseSubject = courseSubject;
         this.teacher = teacher;
         this.courseExamList = new ArrayList<>();
+        this.courseStudentList = new ArrayList<>();
     }
 
     public Subject getCourseSubject() {
@@ -50,9 +58,6 @@ public class Course {
         return courseQuestionCounter;
     }
 
-    public static void setCourseQuestionCounter(int courseQuestionCounter) {
-        Course.courseQuestionCounter = courseQuestionCounter;
-    }
 
     protected void updateCourseQuestionCounter() {
         courseQuestionCounter++;
@@ -72,5 +77,15 @@ public class Course {
 
     public void addCourseExamList(Exam exam) {
         this.courseExamList.add(exam);
+        exam.setExamCourse(this);
+    }
+
+    public List<Student> getCourseStudentList() {
+        return courseStudentList;
+    }
+
+    public void addCourseStudentList(Student student) {
+        this.courseStudentList.add(student);
+        student.addCourse(this);
     }
 }
