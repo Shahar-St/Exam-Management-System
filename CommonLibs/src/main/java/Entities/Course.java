@@ -10,18 +10,13 @@ import java.util.List;
 
 @Entity
 public class Course {
+    private static int courseQuestionCounter = 0;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     private String courseId;
-
     private Subject courseSubject;
-
     private Teacher teacher;
-
-    private static int courseQuestionCounter = 0;
-
     private List<Exam> courseExamList;
 
     public Course() {
@@ -51,12 +46,12 @@ public class Course {
         this.teacher = teacher;
     }
 
-    public static void setCourseQuestionCounter(int courseQuestionCounter) {
-        Course.courseQuestionCounter = courseQuestionCounter;
-    }
-
     public int getCourseQuestionCounter() {
         return courseQuestionCounter;
+    }
+
+    public static void setCourseQuestionCounter(int courseQuestionCounter) {
+        Course.courseQuestionCounter = courseQuestionCounter;
     }
 
     protected void updateCourseQuestionCounter() {

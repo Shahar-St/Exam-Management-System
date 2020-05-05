@@ -5,7 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -20,7 +19,7 @@ public class Exam {
 
     private List<Question> examQuestionsList;
 
-    private List<Double>  examQuestionsScores;
+    private List<Double> examQuestionsScores;
 
     private Teacher author;
 
@@ -34,7 +33,7 @@ public class Exam {
 
     public Exam() {
         this.examQuestionsList = new ArrayList<>();
-        this.examQuestionsScores  = new ArrayList<>();
+        this.examQuestionsScores = new ArrayList<>();
     }
 
     public Exam(Subject examSubject, Course examCourse, Teacher author, int examDuration, String examDescription, String teacherPrivateNotes) {
@@ -45,7 +44,7 @@ public class Exam {
         this.examDescription = examDescription;
         this.teacherPrivateNotes = teacherPrivateNotes;
         this.examQuestionsList = new ArrayList<>();
-        this.examQuestionsScores  = new ArrayList<>();
+        this.examQuestionsScores = new ArrayList<>();
     }
 
     public Subject getExamSubject() {
@@ -117,7 +116,7 @@ public class Exam {
         return examQuestionsScores;
     }
 
-    public String getSerialExamId(){
+    public String getSerialExamId() {
         return this.examSubject.getSubjectId() + this.examCourse.getCourseId() + this.examId;
     }
 }

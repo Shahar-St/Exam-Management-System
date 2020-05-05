@@ -2,6 +2,7 @@ package Entities;
 
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class StudentExam {
 
     private List<Question> studentExamQuestionsList;
 
-    private List<Double>  studentExamQuestionsScores;
+    private List<Double> studentExamQuestionsScores;
 
     private Teacher author;
 
@@ -27,8 +28,10 @@ public class StudentExam {
     private String studentExamDescription;
 
     private String teacherPrivateNotes; // only for the teacher
+    @ManyToOne
+    private Student student;
 
-    public StudentExam(Exam exam) {
+    public StudentExam(Exam exam, Student student) {
 
         this.studentExamSubject = exam.getExamSubject();
         this.studentExamCourse = exam.getExamCourse();
@@ -42,6 +45,7 @@ public class StudentExam {
         this.studentExamDuration = exam.getExamDuration();
         this.studentExamDescription = exam.getExamDescription();
         this.teacherPrivateNotes = exam.getTeacherPrivateNotes();
+        this.student = student;
 
     }
 
@@ -85,8 +89,11 @@ public class StudentExam {
         return teacherPrivateNotes;
     }
 
-    public void setOverTime()
-    {
-        this.studentExamDuration+= 0.25*this.studentExamDuration;
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setOverTime() {
+        this.studentExamDuration += 0.25 * this.studentExamDuration;
     }
 }

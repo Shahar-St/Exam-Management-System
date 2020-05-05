@@ -114,7 +114,7 @@ public class Question {
         this.questionCourseId = questionCourseId;
     }
 
-    public String getQuestionId(){
-        return this.questionCourse.getCourseId()+this.questionCourseId;
+    public String getQuestionId() {
+        return this.questionCourse.getCourseId() + this.questionCourseId;
     }
 }
