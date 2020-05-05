@@ -25,6 +25,7 @@ public class Check {
     public static void main(String[] args) {
         try
         {
+            int a;
             SessionFactory sessionFactory = getSessionFactory();
             session = sessionFactory.openSession();
             session.beginTransaction();
