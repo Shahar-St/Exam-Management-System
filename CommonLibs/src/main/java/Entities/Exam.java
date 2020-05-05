@@ -26,8 +26,6 @@ public class Exam {
 
     private String examId;
 
-    private int examGrade;
-
     private int examDuration; // in minutes
 
     private String examDescription;
@@ -89,14 +87,6 @@ public class Exam {
 
     protected void setExamId(String examId) {
         this.examId = examId;
-    }
-
-    public int getExamGrade() {
-        return examGrade;
-    }
-
-    protected void setExamGrade(int examGrade) {
-        this.examGrade = examGrade;
     }
 
     public int getExamDuration() {
