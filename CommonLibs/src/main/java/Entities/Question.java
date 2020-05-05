@@ -14,8 +14,6 @@ public class Question {
 
     private String questionContent;
 
-    private String questionDescription;
-
     private String[] answersArray;
     // the index of the correct answer in the answers array
     private int correctAnswer;
@@ -27,17 +25,15 @@ public class Question {
     private Teacher author;
 
     private String lastModified;
-    // question number by the subjects counter
-    private String questionSubjectId;
 
-    private double questionScore;
+    private String questionCourseId;
+
 
     public Question() {
     }
 
     public Question(String questionContent, String questionDescription, String[] answersArray, int correctAnswer, Subject questionSubject, Course questionCourse, Teacher author) {
         this.questionContent = questionContent;
-        this.questionDescription = questionDescription;
         this.answersArray = answersArray;
         this.correctAnswer = correctAnswer;
         this.questionSubject = questionSubject;
@@ -45,8 +41,8 @@ public class Question {
         this.author = author;
         this.updateLastModified();
         // unique question identifier not fot db , for question serial encoding
-        this.questionSubjectId = String.valueOf(this.questionSubject.getSubjectQuestionCounter());
-        this.questionSubject.updateSubjectQuestionCounter(); // increment the subject questions counter
+        this.questionCourseId = String.valueOf(this.questionCourse.getCourseQuestionCounter());
+        this.questionCourse.updateCourseQuestionCounter(); // increment the subject questions counter
     }
 
     public String getQuestionContent() {
@@ -55,14 +51,6 @@ public class Question {
 
     protected void setQuestionContent(String questionContent) {
         this.questionContent = questionContent;
-    }
-
-    public String getQuestionDescription() {
-        return questionDescription;
-    }
-
-    protected void setQuestionDescription(String questionDescription) {
-        this.questionDescription = questionDescription;
     }
 
     public String[] getAnswersArray() {
@@ -118,19 +106,15 @@ public class Question {
         this.lastModified = LocalDateTime.now().toString();
     }
 
-    public String getQuestionSubjectId() {
-        return questionSubjectId;
+    public String getQuestionCourseId() {
+        return questionCourseId;
     }
 
-    protected void setQuestionSubjectId(String questionSubjectId) {
-        this.questionSubjectId = questionSubjectId;
+    protected void setQuestionCourseId(String questionCourseId) {
+        this.questionCourseId = questionCourseId;
     }
 
-    public double getQuestionScore() {
-        return questionScore;
-    }
-
-    public void setQuestionScore(double questionScore) {
-        this.questionScore = questionScore;
+    public String getQuestionId(){
+        return this.questionCourse.getCourseId()+this.questionCourseId;
     }
 }

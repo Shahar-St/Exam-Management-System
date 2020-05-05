@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Course {
@@ -14,13 +16,66 @@ public class Course {
 
     private String courseId;
 
+    private Subject courseSubject;
+
+    private Teacher teacher;
+
+    private static int courseQuestionCounter = 0;
+
+    private List<Exam> courseExamList;
+
+    public Course() {
+        this.courseExamList = new ArrayList<>();
+    }
+
+    public Course(String courseId, Subject courseSubject, Teacher teacher) {
+        this.courseId = courseId;
+        this.courseSubject = courseSubject;
+        this.teacher = teacher;
+        this.courseExamList = new ArrayList<>();
+    }
+
+    public Subject getCourseSubject() {
+        return courseSubject;
+    }
+
+    public void setCourseSubject(Subject courseSubject) {
+        this.courseSubject = courseSubject;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
+
+    public static void setCourseQuestionCounter(int courseQuestionCounter) {
+        Course.courseQuestionCounter = courseQuestionCounter;
+    }
+
+    public int getCourseQuestionCounter() {
+        return courseQuestionCounter;
+    }
+
+    protected void updateCourseQuestionCounter() {
+        courseQuestionCounter++;
+    }
+
     public String getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(String courseId) {
+    protected void setCourseId(String courseId) {
         this.courseId = courseId;
     }
 
+    public List<Exam> getCourseExamList() {
+        return courseExamList;
+    }
 
+    public void addCourseExamList(Exam exam) {
+        this.courseExamList.add(exam);
+    }
 }

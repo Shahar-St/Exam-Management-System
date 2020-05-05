@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,6 +20,8 @@ public class Exam {
 
     private List<Question> examQuestionsList;
 
+    private List<Double>  examQuestionsScores;
+
     private Teacher author;
 
     private String examId;
@@ -29,19 +32,22 @@ public class Exam {
 
     private String examDescription;
 
-    private String teacherPrivateDescription; // only for the teacher
+    private String teacherPrivateNotes; // only for the teacher
 
     public Exam() {
+        this.examQuestionsList = new ArrayList<>();
+        this.examQuestionsScores  = new ArrayList<>();
     }
 
-    public Exam(Subject examSubject, Course examCourse, Teacher author, int examDuration, String examDescription, String teacherPrivateDescription) {
+    public Exam(Subject examSubject, Course examCourse, Teacher author, int examDuration, String examDescription, String teacherPrivateNotes) {
         this.examSubject = examSubject;
         this.examCourse = examCourse;
         this.author = author;
         this.examDuration = examDuration;
         this.examDescription = examDescription;
-        this.teacherPrivateDescription = teacherPrivateDescription;
-        this.examQuestionsList = new LinkedList<>();
+        this.teacherPrivateNotes = teacherPrivateNotes;
+        this.examQuestionsList = new ArrayList<>();
+        this.examQuestionsScores  = new ArrayList<>();
     }
 
     public Subject getExamSubject() {
@@ -64,8 +70,9 @@ public class Exam {
         return examQuestionsList;
     }
 
-    protected void addExamQuestion(Question question) {
+    protected void addExamQuestion(Question question, double score) {
         this.examQuestionsList.add(question);
+        this.examQuestionsScores.add(score);
     }
 
     public Teacher getAuthor() {
@@ -108,11 +115,19 @@ public class Exam {
         this.examDescription = examDescription;
     }
 
-    public String getTeacherPrivateDescription() {
-        return teacherPrivateDescription;
+    public String getTeacherPrivateNotes() {
+        return teacherPrivateNotes;
     }
 
-    protected void setTeacherPrivateDescription(String teacherPrivateDescription) {
-        this.teacherPrivateDescription = teacherPrivateDescription;
+    protected void setTeacherPrivateNotes(String teacherPrivateNotes) {
+        this.teacherPrivateNotes = teacherPrivateNotes;
+    }
+
+    public List<Double> getExamQuestionsScores() {
+        return examQuestionsScores;
+    }
+
+    public String getSerialExamId(){
+        return this.examSubject.getSubjectId() + this.examCourse.getCourseId() + this.examId;
     }
 }
