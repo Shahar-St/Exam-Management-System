@@ -11,6 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
+
 public class LoginScreenController {
 
     @FXML // fx:id="loginButton"
@@ -23,11 +25,8 @@ public class LoginScreenController {
     private PasswordField passwordField; // Value injected by FXMLLoader
 
     @FXML
-    void loginAttempt(ActionEvent event) {
-        ClientApp.setRoot(QuestionManagementScreen.fxml);
-
-
-
+    void loginAttempt(ActionEvent event) throws IOException {
+        ClientApp.setRoot("TeacherMainScreen.fxml");
     }
 
 }

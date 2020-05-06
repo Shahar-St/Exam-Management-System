@@ -1,5 +1,6 @@
 package org.args.GUI;
 
+import DatabaseAccess.Responses.SubjectsAndQuestionResponse;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,7 +19,6 @@ import java.io.IOException;
 public class ClientApp extends Application {
 
     private static Scene scene;
-
     private static EMSClient client;
 
     private final String host = "127.0.0.1";
