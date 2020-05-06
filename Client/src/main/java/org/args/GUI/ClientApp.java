@@ -4,7 +4,11 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.stage.Popup;
+import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
+import org.args.Client.EMSClient;
 
 import java.io.IOException;
 
@@ -14,6 +18,7 @@ import java.io.IOException;
 public class ClientApp extends Application {
 
     private static Scene scene;
+
 
 
     @Override
@@ -35,5 +40,7 @@ public class ClientApp extends Application {
     public static void main(String[] args) {
         launch();
     }
+
+
 
 }

@@ -24,7 +24,8 @@ public class LoginScreenController {
 
     @FXML
     void loginAttempt(ActionEvent event) {
-        LoginRequest loginRequest = new LoginRequest(usernameField.getText(), passwordField.getText());
+        ClientApp.setRoot(QuestionManagementScreen.fxml);
+
 
 
     }

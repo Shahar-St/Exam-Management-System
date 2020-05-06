@@ -2,6 +2,7 @@ package org.args.Client;
 
 import DatabaseAccess.Requests.*;
 import DatabaseAccess.Responses.*;
+import org.args.GUI.ClientApp;
 
 import java.io.IOException;
 import java.util.logging.Logger;
