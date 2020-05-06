@@ -1,4 +1,4 @@
-package org.args;
+package org.args.GUI;
 
 import java.io.IOException;
 import javafx.fxml.FXML;

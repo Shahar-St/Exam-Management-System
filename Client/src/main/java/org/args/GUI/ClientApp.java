@@ -1,4 +1,4 @@
-package org.args;
+package org.args.GUI;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +14,7 @@ import java.io.IOException;
 public class ClientApp extends Application {
 
     private static Scene scene;
+
 
     @Override
     public void start(Stage stage) throws IOException {
