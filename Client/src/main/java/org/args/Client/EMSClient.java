@@ -21,6 +21,8 @@ public class EMSClient extends AbstractClient {
 
 	private String permission;
 
+	private ClientApp app;
+
 	public boolean isLoggedIn() {
 		return isLoggedIn;
 	}
@@ -41,8 +43,13 @@ public class EMSClient extends AbstractClient {
 		return permission;
 	}
 
-	public EMSClient(String host, int port) throws IOException {
+	public ClientApp getApp() {
+		return app;
+	}
+
+	public EMSClient(String host, int port, ClientApp clientApp) throws IOException {
 		super(host, port);
+		this.app = clientApp;
 		this.openConnection();
 	}
 
@@ -74,16 +81,10 @@ public class EMSClient extends AbstractClient {
 		if(msg instanceof LoginResponse){
 			LoginResponse response = (LoginResponse)msg;
 			if(response.isStatus()){
-				// login success
-				this.isLoggedIn = true;
-				this.permission = response.getPermission();
-				LoginRequest request = (LoginRequest) response.getRequest();
-				this.userName = request.getUserName();
-				this.password = request.getPassword();
-				// do some stuff with the gui
+				this.clientLoginSuccessful(response);
+
 			}else{
-				//login failed
-				//notify the user the login was not successful
+				this.clientLoginFailed();
 			}
 
 		}else if(msg instanceof EditQuestionResponse){
@@ -131,9 +132,26 @@ public class EMSClient extends AbstractClient {
 
 	}
 
+	public void clientLoginSuccessful(LoginResponse response){
+		this.isLoggedIn = true;
+		this.permission = response.getPermission();
+		LoginRequest request = (LoginRequest) response.getRequest();
+		this.userName = request.getUserName();
+		this.password = request.getPassword();
+		// call app switch to after login screen
+	}
+
+	public void clientLoginFailed(){
+		// call app function to notify the user
+	}
+
 	public void clientEditQuestion(int questionID, String newDescription, String[] newAnswers, int correctAnswer) throws IOException {
 		EditQuestionRequest request = new EditQuestionRequest(questionID,newDescription,newAnswers,correctAnswer);
 		this.sendToServer(request);
+
+	}
+
+	public void clientEditQuestionSuccessful(){
 
 	}
 
