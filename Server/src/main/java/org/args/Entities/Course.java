@@ -5,6 +5,7 @@ import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
 import java.sql.Struct;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Queue;
 @Entity
 public class Course {
 
+    //to remove
     private static int courseQuestionCounter = 0;
 
     @Id
@@ -20,7 +22,7 @@ public class Course {
     private String id;
 
     private String name;
-    private Queue<Integer> availableQuestionNumbers = new LinkedList<>();
+    private final Queue<Integer> availableQuestionNumbers = new LinkedList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Cascade(CascadeType.SAVE_UPDATE)
@@ -53,6 +55,8 @@ public class Course {
     public Course() { }
 
     public Course(String id,String name, Subject subject, Teacher teacher) {
+
+        // make id parameter int
         this.id = id;
         this.name = name;
         this.subject = subject;

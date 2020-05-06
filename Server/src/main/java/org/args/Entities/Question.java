@@ -66,8 +66,8 @@ public class Question {
         if (!containedInExams.contains(exam))
             containedInExams.add(exam);
 
-        if (!exam.getExamQuestionsList().contains(this))
-            exam.getExamQuestionsList().add(this);
+        if (!exam.getQuestionsList().contains(this))
+            exam.getQuestionsList().add(this);
     }
 
     //Group setters and getters

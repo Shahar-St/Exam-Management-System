@@ -27,6 +27,7 @@ public class Subject {
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     private List<Course> coursesList = new ArrayList<>();
 
+    // to remove
     private static Queue<Integer> availableSubjectId = null;
 
     //Group c'tors
