@@ -18,9 +18,8 @@ public class Question {
     private String id;
 
     private String questionContent;
-    private String[] answersArray;
-    // the index of the correct answer in the answers array
-    private int correctAnswer;
+    private String[] answersArray;  // 4 answers
+    private int correctAnswer; // the index-1 of the correct answer in the answers array
 
     // not sure it's needed
     @ManyToMany
@@ -45,8 +44,8 @@ public class Question {
     private LocalDateTime lastModified;
 
     //Group c'tors
-    public Question() {
-    }
+    public Question() { }
+
     public Question(String questionContent, String[] answersArray, int correctAnswer,
                     List<Exam> containedInExams, Course course, Teacher author) {
         this.questionContent = questionContent;
@@ -58,20 +57,24 @@ public class Question {
         updateLastModified();
 
         // handle empty queue
-        DecimalFormat nf = new DecimalFormat("000");
-        this.id = course.getCourseId() + nf.format(course.getAvailableQuestionNumbers().poll());
+        DecimalFormat decimalFormat = new DecimalFormat("000");
+        this.id = course.getId() + decimalFormat.format(course.getAvailableQuestionNumbers().poll());
     }
 
     //Group adders and removers
-    public void addCourseExamList(Exam exam, double score) {
-        this.containedInExams.add(exam);
-        exam.addExamQuestion(this, score);
+    public void addExam(Exam exam) {
+        if (!containedInExams.contains(exam))
+            containedInExams.add(exam);
+
+        if (!exam.getExamQuestionsList().contains(this))
+            exam.getExamQuestionsList().add(this);
     }
 
     //Group setters and getters
     public String getId() {
         return id;
     }
+    protected void setId(String id) { this.id = id; }
 
     public String getQuestionContent() {
         return questionContent;

@@ -1,100 +1,85 @@
 package org.args.Entities;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class ExecutedExam {
 
-    private Subject studentExamSubject;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-    private Course studentExamCourse;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Cascade(CascadeType.SAVE_UPDATE)
+    @JoinColumn(name = "student_id")
+    private Student student;
 
-    private List<Question> studentExamQuestionsList;
-
-    private List<Double> studentExamQuestionsScores;
+    private Course course;
 
     private Teacher author;
 
-    private String studentExamId;
+    private List<Question> questionsList = new ArrayList<>();
 
-    private int studentExamGrade;
+    private List<Double> questionsScores = new ArrayList<>();
+    private String examId;
+    private int grade = 0;
+    private int duration; // duration exam in minutes
+    private String executedExamDescription, teacherPrivateNotes; // teacherPrivateNotes only for the teacher
 
-    private int studentExamDuration; // in minutes
-
-    private String studentExamDescription;
-
-    private String teacherPrivateNotes; // only for the teacher
-    @ManyToOne
-    private Student student;
+    //Group c'tors
+    public ExecutedExam() { }
 
     public ExecutedExam(Exam exam, Student student) {
 
-        this.studentExamSubject = exam.getExamSubject();
-        this.studentExamCourse = exam.getExamCourse();
-        this.studentExamQuestionsList = new ArrayList<>();
-        this.studentExamQuestionsList.addAll(exam.getExamQuestionsList());
-        this.studentExamQuestionsScores = new ArrayList<>();
-        this.studentExamQuestionsScores.addAll(exam.getExamQuestionsScores());
+        this.course = exam.getCourse();
+        this.questionsList.addAll(exam.getQuestionsList());
+        this.questionsScores.addAll(exam.getQuestionsScores());
         this.author = exam.getAuthor();
-        this.studentExamId = exam.getExamId();
-        this.studentExamGrade = 0;
-        this.studentExamDuration = exam.getExamDuration();
-        this.studentExamDescription = exam.getExamDescription();
+        this.examId = exam.getId();
+        this.duration = exam.getDuration();
+        this.executedExamDescription = exam.getDescription();
         this.teacherPrivateNotes = exam.getTeacherPrivateNotes();
         this.student = student;
-        this.student.addStudentExam(this);
-
+        this.student.addExecutedExam(this);
     }
 
-    public Subject getStudentExamSubject() {
-        return studentExamSubject;
-    }
+    public int getId() { return id; }
 
-    public Course getStudentExamCourse() {
-        return studentExamCourse;
-    }
+    public Student getStudent() { return student; }
+    public void setStudent(Student student) { this.student = student; }
 
-    public List<Question> getStudentExamQuestionsList() {
-        return studentExamQuestionsList;
-    }
+    public Course getCourse() { return course; }
+    public void setCourse(Course course) { this.course = course; }
 
-    public List<Double> getStudentExamQuestionsScores() {
-        return studentExamQuestionsScores;
-    }
+    public Teacher getAuthor() { return author; }
+    public void setAuthor(Teacher author) { this.author = author; }
 
-    public Teacher getAuthor() {
-        return author;
-    }
+    public List<Question> getQuestionsList() { return questionsList; }
+    public void setQuestionsList(List<Question> questionsList) { this.questionsList = questionsList; }
 
-    public String getStudentExamId() {
-        return studentExamId;
-    }
+    public List<Double> getQuestionsScores() { return questionsScores; }
+    public void setQuestionsScores(List<Double> questionsScores) { this.questionsScores = questionsScores; }
 
-    public int getStudentExamGrade() {
-        return studentExamGrade;
-    }
+    public String getExamId() { return examId;  }
+    public void setExamId(String examId) { this.examId = examId; }
 
-    public int getStudentExamDuration() {
-        return studentExamDuration;
-    }
+    public int getGrade() { return grade; }
+    public void setGrade(int grade) { this.grade = grade; }
 
-    public String getStudentExamDescription() {
-        return studentExamDescription;
-    }
+    public int getDuration() { return duration; }
+    public void setDuration(int duration) { this.duration = duration; }
 
-    public String getTeacherPrivateNotes() {
-        return teacherPrivateNotes;
-    }
+    public String getExecutedExamDescription() { return executedExamDescription; }
+    public void setExecutedExamDescription(String description) { this.executedExamDescription = description; }
 
-    public Student getStudent() {
-        return student;
-    }
+    public String getTeacherPrivateNotes() { return teacherPrivateNotes; }
+    public void setTeacherPrivateNotes(String teacherPrivateNotes) { this.teacherPrivateNotes = teacherPrivateNotes; }
 
-    public void setOverTime() {
-        this.studentExamDuration += 0.25 * this.studentExamDuration;
-    }
+    public void setOverTime() { this.duration += 0.25 * this.duration; }
+
 }

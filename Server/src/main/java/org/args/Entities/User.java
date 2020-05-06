@@ -11,8 +11,7 @@ public abstract class User {
     private String firstName, lastName, password, userName;
 
     //Group c'tors
-    public User() {
-    }
+    public User() { }
 
     public User(int socialId, String firstName, String lastName, String password, String userName) {
         this.socialId = socialId;

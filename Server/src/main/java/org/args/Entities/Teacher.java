@@ -32,8 +32,7 @@ public class Teacher extends User {
     private List<Exam> examsList = new ArrayList<>();
 
     //Group c'tors
-    public Teacher() {
-    }
+    public Teacher() { }
 
     public Teacher(int socialId, String firstName, String lastName, String password, String userName) {
         super(socialId, firstName, lastName, password, userName);
@@ -50,25 +49,25 @@ public class Teacher extends User {
     }
 
     public void addCourse(Course course) {
-        if (!this.coursesList.contains(course))
+        if (!coursesList.contains(course))
         {
-            this.coursesList.add(course);
+            coursesList.add(course);
             course.setTeacher(this);
         }
     }
 
     public void addExam(Exam exam) {
-        if (!this.examsList.contains(exam))
+        if (!examsList.contains(exam))
         {
-            this.examsList.add(exam);
+            examsList.add(exam);
             exam.setAuthor(this);
         }
     }
 
     public void addQuestion(Question question) {
-        if (!this.questionsList.contains(question))
+        if (questionsList.contains(question))
         {
-            this.questionsList.add(question);
+            questionsList.add(question);
             question.setAuthor(this);
         }
     }

@@ -14,6 +14,7 @@ import java.util.Queue;
 public class Subject {
 
     @Id
+    @Column(nullable = false, unique = true)
     //  @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     private String name;
@@ -29,8 +30,8 @@ public class Subject {
     private static Queue<Integer> availableSubjectId = null;
 
     //Group c'tors
-    public Subject() {
-    }
+    public Subject() { }
+
     public Subject(String name) {
         this.name = name;
         if (availableSubjectId == null)
@@ -43,15 +44,30 @@ public class Subject {
         this.id = nf.format(availableSubjectId.poll());
     }
 
-    //Group adders
+    //Group adders and removers
     public void addTeacher(Teacher teacher) {
-        teachersList.add(teacher);
+       if(!teachersList.contains(teacher))
+           teachersList.add(teacher);
+
+        if (!teacher.getSubjectsList().contains(this))
+            teacher.getSubjectsList().add(this);
+    }
+
+    public void addCourse(Course course) {
+        if (!coursesList.contains(course))
+        {
+            coursesList.add(course);
+            course.setSubject(this);
+        }
     }
 
     //Group setters and getters
+    public static Queue<Integer> getAvailableSubjectId() { return availableSubjectId; }
+
     public String getId() {
         return id;
     }
+    protected void setId(String id) { this.id = id; }
 
     public String getName() {
         return name;
