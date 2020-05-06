@@ -124,7 +124,7 @@ public class Exam {
         return examQuestionsScores;
     }
 
-    public String getSerialExamId() {
-        return this.examSubject.getSubjectId() + this.examCourse.getCourseId() + this.examId;
-    }
+//    public String getSerialExamId() {
+//        return this.examSubject.getSubjectId() + this.examCourse.getCourseId() + this.examId;
+//    }
 }
