@@ -35,6 +35,8 @@ public class ServerApp {
             SessionFactory sessionFactory = getSessionFactory();
             session = sessionFactory.openSession();
             session.beginTransaction();
+            createDummyEntities();
+
 
             EMSserver server = new EMSserver(port, session);
             server.listen();
@@ -55,5 +57,9 @@ public class ServerApp {
             session.getSessionFactory().close();
         }
     }
+
+    private static void createDummyEntities() {
+    }
+
 
 }
