@@ -11,6 +11,8 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Paint;
 
+import java.io.IOException;
+
 public class EditQuestionScreenController {
 
     @FXML
@@ -72,7 +74,13 @@ public class EditQuestionScreenController {
 
     @FXML
     void CancelButtonClicked(ActionEvent event) {
-
+        try {
+            ClientApp.setRoot("TeacherMainScreen");
+        }
+        catch (IOException e){
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     @FXML

@@ -33,6 +33,33 @@ public class ClientApp extends Application {
         return fxmlLoader.load();
     }
 
+    @Override
+    public void init() throws Exception {
+        try {
+            super.init();
+            client = new EMSClient(this.host, this.port, this);
+        } catch (Exception e) {
+            System.out.println("Failed to init app.. exiting");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        try {
+            scene = new Scene(loadFXML("LoginScreen"), 640, 480);
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            System.out.println("Failed to start the app.. exiting");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+    }
+
     public static void sendRequest(Object data) {
         try {
             client.sendToServer(data);
@@ -90,32 +117,9 @@ public class ClientApp extends Application {
         launch();
     }
 
-    @Override
-    public void init() throws Exception {
-        try {
-            super.init();
-            client = new EMSClient(this.host, this.port, this);
-        } catch (Exception e) {
-            System.out.println("Failed to init app.. exiting");
-            e.printStackTrace();
-            System.exit(1);
-        }
 
-    }
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        try {
-            scene = new Scene(loadFXML("LoginScreen"), 640, 480);
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            System.out.println("Failed to start the app.. exiting");
-            e.printStackTrace();
-            System.exit(1);
-        }
 
-    }
 
 
 }
