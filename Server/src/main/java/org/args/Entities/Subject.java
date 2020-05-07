@@ -29,12 +29,6 @@ public class Subject {
     @Cascade(CascadeType.SAVE_UPDATE)
     private List<Course> coursesList = new ArrayList<>();
 
-<<<<<<< HEAD
-    //private static Queue<Integer> availableSubjectId = null;
-=======
-    // to remove
-    private static Queue<Integer> availableSubjectId = null;
->>>>>>> origin/gal
 
     //Group c'tors
     public Subject() { }

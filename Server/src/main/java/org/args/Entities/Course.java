@@ -14,24 +14,15 @@ import java.util.Queue;
 @Entity
 public class Course {
 
-<<<<<<< HEAD
     private static DecimalFormat decimalFormat = new DecimalFormat("00");
-=======
-    //to remove
-    private static int courseQuestionCounter = 0;
->>>>>>> origin/gal
 
     @Id
     @Column(nullable = false, unique = true)
     private String id;
 
     private String name;
-<<<<<<< HEAD
     private Queue<Integer> availableQuestionCodes = new LinkedList<>();
     private Queue<Integer> availableExamCodes = new LinkedList<>();
-=======
-    private final Queue<Integer> availableQuestionNumbers = new LinkedList<>();
->>>>>>> origin/gal
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Cascade(CascadeType.SAVE_UPDATE)
@@ -67,21 +58,12 @@ public class Course {
     //Group c'tors
     public Course() { }
 
-<<<<<<< HEAD
     public Course(int id, String name, Subject subject, Teacher teacher) {
 
         this.id = decimalFormat.format(id);
-=======
-    public Course(String id,String name, Subject subject, Teacher teacher) {
-
-        // make id parameter int
-        this.id = id;
->>>>>>> origin/gal
         this.name = name;
-        subject.addCourse(this);
-        //this.subject = subject;
-        teacher.addCourse(this);
-        //this.teacher = teacher;
+        this.subject = subject;
+        this.teacher = teacher;
 
         for (int i = 0; i < 1000; i++)  // max questions per course
             availableQuestionCodes.add(i);
