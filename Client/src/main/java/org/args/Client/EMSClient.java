@@ -57,6 +57,9 @@ public class EMSClient extends AbstractClient {
 	@Override
 	public void sendToServer(Object msg) throws IOException {
 		super.sendToServer(msg);
+		System.out.println("message has benn sent to the server");
+		LoginRequest request = (LoginRequest)msg;
+		System.out.println(request.getUserName()+""+request.getPassword());
 	}
 
 	@Override
@@ -81,7 +84,13 @@ public class EMSClient extends AbstractClient {
 		if(msg instanceof LoginResponse){
 			LoginResponse response = (LoginResponse)msg;
 			if(response.isStatus()){
-				this.clientLoginSuccessful(response);
+				try{
+					this.clientLoginSuccessful(response);
+				}catch (IOException e){
+					e.printStackTrace();
+					System.exit(1);
+				}
+
 
 			}else{
 				this.clientLoginFailed();
@@ -132,12 +141,19 @@ public class EMSClient extends AbstractClient {
 
 	}
 
-	public void clientLoginSuccessful(LoginResponse response){
-		this.isLoggedIn = true;
-		this.permission = response.getPermission();
-		LoginRequest request = (LoginRequest) response.getRequest();
-		this.userName = request.getUserName();
-		this.password = request.getPassword();
+	public void clientLoginSuccessful(LoginResponse response) throws IOException {
+		try{
+			this.isLoggedIn = true;
+			this.permission = response.getPermission();
+			LoginRequest request = (LoginRequest) response.getRequest();
+			this.userName = request.getUserName();
+			this.password = request.getPassword();
+			this.app.loginSuccess();
+		}catch (IOException e){
+			e.printStackTrace();
+			System.exit(1);
+		}
+
 		// call app switch to after login screen
 	}
 

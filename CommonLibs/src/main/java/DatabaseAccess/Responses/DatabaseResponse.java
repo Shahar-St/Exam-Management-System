@@ -2,13 +2,15 @@ package DatabaseAccess.Responses;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 
+import java.io.Serializable;
+
 /**
  * this class responsible for massage passing from the server to the client
  *
  * status: if the request succeeded or not
  * request: the request this responses to
  */
-public abstract class DatabaseResponse {
+public abstract class DatabaseResponse  implements Serializable {
 
     private final boolean status;
     private final DatabaseRequest request;

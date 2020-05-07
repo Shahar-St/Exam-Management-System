@@ -125,6 +125,6 @@ public class Exam {
     }
 
     public String getSerialExamId() {
-        return this.examSubject.getSubjectId() + this.examCourse.getCourseId() + this.examId;
+        return this.examSubject.getId() + this.examCourse.getCourseId() + this.examId;
     }
 }
