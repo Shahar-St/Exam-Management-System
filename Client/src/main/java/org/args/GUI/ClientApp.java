@@ -1,5 +1,7 @@
 package org.args.GUI;
 
+import DatabaseAccess.Responses.AllQuestionsResponse;
+import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,6 +10,7 @@ import javafx.stage.Stage;
 import org.args.Client.EMSClient;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * JavaFX App
@@ -78,6 +81,25 @@ public class ClientApp extends Application {
             System.exit(1);
         }
 
+    }
+
+    public static void fillCoursesDropdown(SubjectsAndCoursesResponse response)
+    {
+        String[] courses = response.getCourses();
+        for (String course : courses)
+        {
+            QuestionManagementScreenController.addCourseToDropdown(course);
+
+        }
+    }
+
+    public static void fillQuestionsList(AllQuestionsResponse response)
+    {
+        for (Map.Entry question : response.getQuestions().entrySet())
+        {
+            QuestionManagementScreenController.addQuestionsToQuestionsList(question);
+
+        }
     }
 
 

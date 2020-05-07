@@ -125,6 +125,7 @@ public class EMSClient extends AbstractClient {
 		}else if(msg instanceof SubjectsAndCoursesResponse){
 			SubjectsAndCoursesResponse response = (SubjectsAndCoursesResponse)msg;
 			if(response.isStatus()){
+				ClientApp.fillCoursesDropdown(response);
 
 			}else{
 
