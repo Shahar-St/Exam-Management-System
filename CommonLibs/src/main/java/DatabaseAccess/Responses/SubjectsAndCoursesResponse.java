@@ -10,18 +10,18 @@ import java.util.List;
  * <p>
  * response:
  * Hashmap: key=subject name, value = list of courses
- *
  */
 public class SubjectsAndCoursesResponse extends DatabaseResponse {
 
-    private final HashMap<String, List<String>> subjectsandcourses;
+    private final HashMap<String, List<String>> subjectsAndCourses;
 
-    public SubjectsAndCoursesResponse(boolean status, DatabaseRequest request, HashMap<String,List<String>> subjectsandcourses) {
+    public SubjectsAndCoursesResponse(boolean status, DatabaseRequest request,
+                                      HashMap<String, List<String>> subjectsAndCourses) {
         super(status, request);
-        this.subjectsandcourses = subjectsandcourses;
+        this.subjectsAndCourses = subjectsAndCourses;
     }
 
-    public HashMap<String, List<String>> getSubjectsandcourses() {
-        return subjectsandcourses;
+    public HashMap<String, List<String>> getSubjectsAndCourses() {
+        return subjectsAndCourses;
     }
 }
