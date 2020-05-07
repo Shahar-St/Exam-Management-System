@@ -81,7 +81,7 @@ public class EMSClient extends AbstractClient {
 
         if (msg instanceof LoginResponse) {
             LoginResponse response = (LoginResponse) msg;
-            if (response.isStatus()) {
+            if (response.getStatus()) {
                 try {
                     loginSuccessful(response);
                 } catch (IOException e) {
@@ -96,7 +96,7 @@ public class EMSClient extends AbstractClient {
 
         } else if (msg instanceof EditQuestionResponse) {
             EditQuestionResponse response = (EditQuestionResponse) msg;
-            if (response.isStatus()) {
+            if (response.getStatus()) {
                 // edit successful
                 // switch to other scene and
 
@@ -106,7 +106,7 @@ public class EMSClient extends AbstractClient {
 
         } else if (msg instanceof AllQuestionsResponse) {
             AllQuestionsResponse response = (AllQuestionsResponse) msg;
-            if (response.isStatus()) {
+            if (response.getStatus()) {
 
             } else {
 
@@ -114,7 +114,7 @@ public class EMSClient extends AbstractClient {
 
         } else if (msg instanceof QuestionResponse) {
             QuestionResponse response = (QuestionResponse) msg;
-            if (response.isStatus()) {
+            if (response.getStatus()) {
                 viewQuestionSuccessful(response);
 
             } else {
@@ -123,7 +123,7 @@ public class EMSClient extends AbstractClient {
 
         } else if (msg instanceof SubjectsAndCoursesResponse) {
             SubjectsAndCoursesResponse response = (SubjectsAndCoursesResponse) msg;
-            if (response.isStatus()) {
+            if (response.getStatus()) {
                 getSubjectsAndCoursesSuccess(response);
 
             } else {
