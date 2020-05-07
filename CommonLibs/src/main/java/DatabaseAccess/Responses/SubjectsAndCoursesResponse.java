@@ -13,8 +13,9 @@ public class SubjectsAndCoursesResponse extends DatabaseResponse {
 
     private final String[] subjects, courses;
 
-    public SubjectsAndCoursesResponse(boolean status, DatabaseRequest request, String[] subjects, String[] courses) {
-        super(status, request);
+    public SubjectsAndCoursesResponse(boolean status, DatabaseRequest request,
+                                      String[] subjects, String[] courses, String errorMsg) {
+        super(status, request, errorMsg);
         this.subjects = subjects;
         this.courses = courses;
     }

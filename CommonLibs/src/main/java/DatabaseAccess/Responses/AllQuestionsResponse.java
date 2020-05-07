@@ -13,8 +13,8 @@ public class AllQuestionsResponse extends DatabaseResponse {
     private final LocalDateTime questions;
 
     public AllQuestionsResponse(boolean status, DatabaseRequest request,
-                                LocalDateTime questions) {
-        super(status, request);
+                                LocalDateTime questions, String errorMsg) {
+        super(status, request, errorMsg);
         this.questions = questions;
     }
 
