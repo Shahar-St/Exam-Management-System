@@ -8,11 +8,11 @@ public abstract class User {
 
     @Id
     private int socialId;
+
     private String firstName, lastName, password, userName;
 
     //Group c'tors
-    public User() {
-    }
+    public User() { }
 
     public User(int socialId, String firstName, String lastName, String password, String userName) {
         this.socialId = socialId;

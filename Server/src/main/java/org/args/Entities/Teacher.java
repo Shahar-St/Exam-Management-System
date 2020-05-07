@@ -31,9 +31,12 @@ public class Teacher extends User {
     @Cascade(CascadeType.SAVE_UPDATE)
     private List<Exam> examsList = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
+    @Cascade(CascadeType.SAVE_UPDATE)
+    private List<ExecutedExam> executedExamsList = new ArrayList<>();
+
     //Group c'tors
-    public Teacher() {
-    }
+    public Teacher() { }
 
     public Teacher(int socialId, String firstName, String lastName, String password, String userName) {
         super(socialId, firstName, lastName, password, userName);
@@ -50,26 +53,34 @@ public class Teacher extends User {
     }
 
     public void addCourse(Course course) {
-        if (!this.coursesList.contains(course))
+        if (!coursesList.contains(course))
         {
-            this.coursesList.add(course);
+            coursesList.add(course);
             course.setTeacher(this);
         }
     }
 
     public void addExam(Exam exam) {
-        if (!this.examsList.contains(exam))
+        if (!examsList.contains(exam))
         {
-            this.examsList.add(exam);
+            examsList.add(exam);
             exam.setAuthor(this);
         }
     }
 
     public void addQuestion(Question question) {
-        if (!this.questionsList.contains(question))
+        if (questionsList.contains(question))
         {
-            this.questionsList.add(question);
+            questionsList.add(question);
             question.setAuthor(this);
+        }
+    }
+
+    public void addExecutedExam(ExecutedExam executedExam) {
+        if (executedExamsList.contains(executedExam))
+        {
+            executedExamsList.add(executedExam);
+            executedExam.setAuthor(this);
         }
     }
 
@@ -101,4 +112,7 @@ public class Teacher extends User {
     public void setExamsList(List<Exam> examsList) {
         this.examsList = examsList;
     }
+
+    public List<ExecutedExam> getExecutedExamsList() { return executedExamsList; }
+    public void setExecutedExamsList(List<ExecutedExam> execExamsList) { this.executedExamsList = execExamsList; }
 }

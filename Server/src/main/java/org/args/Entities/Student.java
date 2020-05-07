@@ -13,19 +13,19 @@ import java.util.List;
 @Entity
 public class Student extends User {
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
     @Cascade(CascadeType.SAVE_UPDATE)
     private List<ExecutedExam> executedExamsList = new ArrayList<>();
 
     @ManyToMany(mappedBy = "studentsList")
-    @Cascade({CascadeType.PERSIST, CascadeType.MERGE})
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
     private List<Course> coursesList = new ArrayList<>();
 
     private Boolean isExtensionEligible;
 
     //Group c'tors
-    public Student() {
-    }
+    public Student() { }
+
     public Student(int socialId, String firstName, String lastName, String password,
                    String userName, Boolean isExtensionEligible) {
         super(socialId, firstName, lastName, password, userName);
@@ -33,28 +33,26 @@ public class Student extends User {
     }
 
     //Group adders and removers
-    public void addStudentExam(ExecutedExam executedExam) {
-        if (!this.executedExamsList.contains(executedExam))
-        {
-            this.executedExamsList.add(executedExam);
-        }
+    public void addExecutedExam(ExecutedExam executedExam) {
+
+        if (!executedExamsList.contains(executedExam))
+            executedExamsList.add(executedExam);
+            executedExam.setStudent(this);
     }
 
     public void addCourse(Course course) {
-        if (!this.coursesList.contains(course))
-        {
+        if (!coursesList.contains(course))
+            coursesList.add(course);
 
-            this.coursesList.add(course);
-        }
+        if (!course.getStudentsList().contains(this))
+            course.getStudentsList().add(this);
     }
 
     //Group setters and getters
     public List<ExecutedExam> getExecutedExamsList() {
         return executedExamsList;
     }
-    public void setExecutedExamsList(List<ExecutedExam> executedExamsList) {
-        this.executedExamsList = executedExamsList;
-    }
+    public void setExecutedExamsList(List<ExecutedExam> execExamsList) { executedExamsList = execExamsList; }
 
     public List<Course> getCoursesList() {
         return coursesList;

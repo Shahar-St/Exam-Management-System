@@ -13,45 +13,63 @@ import java.util.Queue;
 @Entity
 public class Subject {
 
+    private static DecimalFormat decimalFormat = new DecimalFormat("00");
+
     @Id
-    //  @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true)
     private String id;
+
     private String name;
 
     @ManyToMany(mappedBy = "subjectsList")
-    @Cascade({CascadeType.PERSIST, CascadeType.MERGE})
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
     private List<Teacher> teachersList = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "subject")
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @Cascade(CascadeType.SAVE_UPDATE)
     private List<Course> coursesList = new ArrayList<>();
 
-    private static Queue<Integer> availableSubjectId = null;
 
     //Group c'tors
-    public Subject() {
-    }
-    public Subject(String name) {
+    public Subject() { }
+
+    public Subject(int id, String name) {
+
+        this.id = decimalFormat.format(id);
         this.name = name;
-        if (availableSubjectId == null)
-        {
-            availableSubjectId = new LinkedList<>();
-            for (int i = 0; i < 100; i++)
-                availableSubjectId.add(i);
-        }
-        DecimalFormat nf = new DecimalFormat("00");
-        this.id = nf.format(availableSubjectId.poll());
+//        if (availableSubjectId == null)
+//        {
+//            availableSubjectId = new LinkedList<>();
+//            for (int i = 0; i < 100; i++)
+//                availableSubjectId.add(i);
+//        }
+        //this.id = nf.format(availableSubjectId.poll());
     }
 
-    //Group adders
+    //Group adders and removers
     public void addTeacher(Teacher teacher) {
-        teachersList.add(teacher);
+       if(!teachersList.contains(teacher))
+           teachersList.add(teacher);
+
+        if (!teacher.getSubjectsList().contains(this))
+            teacher.getSubjectsList().add(this);
+    }
+
+    public void addCourse(Course course) {
+        if (!coursesList.contains(course))
+        {
+            coursesList.add(course);
+            course.setSubject(this);
+        }
     }
 
     //Group setters and getters
+   // public static Queue<Integer> getAvailableSubjectId() { return availableSubjectId; }
+
     public String getId() {
         return id;
     }
+    protected void setId(String id) { this.id = id; }
 
     public String getName() {
         return name;

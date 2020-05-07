@@ -12,19 +12,19 @@ import java.util.List;
 @Entity
 public class Question {
 
+    private static DecimalFormat decimalFormat = new DecimalFormat("000");
+
     @Id
     @Column(nullable = false, unique = true)
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     private String questionContent;
-    private String[] answersArray;
-    // the index of the correct answer in the answers array
-    private int correctAnswer;
+    private String[] answersArray;  // 4 answers
+    private int correctAnswer; // the index-1 of the correct answer in the answers array
 
     // not sure it's needed
     @ManyToMany
-    @Cascade({CascadeType.PERSIST, CascadeType.MERGE})
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
     @JoinTable(
             name = "questions_exams",
             joinColumns = @JoinColumn(name = "question_id"),
@@ -45,33 +45,35 @@ public class Question {
     private LocalDateTime lastModified;
 
     //Group c'tors
-    public Question() {
-    }
-    public Question(String questionContent, String[] answersArray, int correctAnswer,
-                    List<Exam> containedInExams, Course course, Teacher author) {
+    public Question() { }
+
+    public Question(String questionContent, String[] answersArray, int correctAnswer, Course course, Teacher author) {
         this.questionContent = questionContent;
         this.answersArray = answersArray;
         this.correctAnswer = correctAnswer;
-        this.containedInExams = containedInExams;
         this.course = course;
-        this.author = author;
+        author.addQuestion(this);
+        //this.author = author;
         updateLastModified();
 
         // handle empty queue
-        DecimalFormat nf = new DecimalFormat("000");
-        this.id = course.getCourseId() + nf.format(course.getAvailableQuestionNumbers().poll());
+        this.id = course.getId() + decimalFormat.format(course.getAvailableQuestionCodes().poll());
     }
 
     //Group adders and removers
-    public void addCourseExamList(Exam exam, double score) {
-        this.containedInExams.add(exam);
-        exam.addExamQuestion(this, score);
+    public void addExam(Exam exam) {
+        if (!containedInExams.contains(exam))
+            containedInExams.add(exam);
+
+        if (!exam.getQuestionsList().contains(this))
+            exam.getQuestionsList().add(this);
     }
 
     //Group setters and getters
     public String getId() {
         return id;
     }
+    protected void setId(String id) { this.id = id; }
 
     public String getQuestionContent() {
         return questionContent;
