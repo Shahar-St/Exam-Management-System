@@ -19,6 +19,7 @@ public class TeacherMainScreenController {
     @FXML
     void switchToQuestionManagement(ActionEvent event) throws IOException {
         ClientApp.sendRequest(new SubjectsAndCoursesRequest());
+        ClientApp.setRoot("EditQuestionScreen");
     }
 
 }

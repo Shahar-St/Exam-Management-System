@@ -41,7 +41,7 @@ public class QuestionManagementScreenController {
     @FXML
     void switchToQuestionEditScreen(ActionEvent event) throws IOException {
 
-        ClientApp.setRoot("QuestionEditScreen");
+        ClientApp.setRoot("EditQuestionScreen");
 
     }
 

@@ -58,8 +58,7 @@ public class EMSClient extends AbstractClient {
 	public void sendToServer(Object msg) throws IOException {
 		super.sendToServer(msg);
 		System.out.println("message has benn sent to the server");
-		LoginRequest request = (LoginRequest)msg;
-		System.out.println(request.getUserName()+""+request.getPassword());
+		System.out.println(msg.toString());
 	}
 
 	@Override

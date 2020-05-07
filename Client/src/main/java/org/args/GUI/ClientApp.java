@@ -95,11 +95,11 @@ public class ClientApp extends Application {
 
     public static void fillQuestionsList(AllQuestionsResponse response)
     {
-        for (Map.Entry question : response.getQuestions().entrySet())
-        {
-            QuestionManagementScreenController.addQuestionsToQuestionsList(question);
-
-        }
+//        for (Map.Entry question : response.getQuestions().entrySet())
+//        {
+//            QuestionManagementScreenController.addQuestionsToQuestionsList(question);
+//
+//        }
     }
 
 
