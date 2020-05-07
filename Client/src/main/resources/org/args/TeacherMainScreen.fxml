@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="653.0" prefWidth="940.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.TeacherMainScreenController">
+   <children>
+      <Button fx:id="questionMangementButton" alignment="CENTER" contentDisplay="TOP" layoutX="630.0" layoutY="157.0" mnemonicParsing="false" onAction="#switchToQuestionManagement" prefHeight="62.0" prefWidth="151.0" text="Question Management" />
+   </children>
+</AnchorPane>

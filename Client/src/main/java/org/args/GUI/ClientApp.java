@@ -1,9 +1,13 @@
 package org.args.GUI;
 
+import DatabaseAccess.Responses.SubjectsAndQuestionResponse;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.stage.Popup;
+import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 import org.args.Client.EMSClient;
 
@@ -15,12 +19,12 @@ import java.io.IOException;
 public class ClientApp extends Application {
 
     private static Scene scene;
-
     private static EMSClient client;
 
     private final String host = "127.0.0.1";
 
     private final int port = 1337;
+
 
     @Override
     public void init() throws Exception {
@@ -85,5 +89,7 @@ public class ClientApp extends Application {
     public static void main(String[] args) {
         launch();
     }
+
+
 
 }
