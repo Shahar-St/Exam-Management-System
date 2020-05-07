@@ -47,8 +47,8 @@ public class QuestionResponse extends DatabaseResponse{
         return author;
     }
 
-    public LocalDateTime getLastModified() {
-        return lastModified;
+    public String getLastModified() {
+        return lastModified.toString();
     }
 
 }
