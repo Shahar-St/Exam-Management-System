@@ -9,11 +9,11 @@ import DatabaseAccess.Requests.DatabaseRequest;
  * String[] subjects
  * String[] courses
  */
-public class SubjectsAndQuestionResponse extends DatabaseResponse {
+public class SubjectsAndCoursesResponse extends DatabaseResponse {
 
     private final String[] subjects, courses;
 
-    public SubjectsAndQuestionResponse(boolean status, DatabaseRequest request, String[] subjects, String[] courses) {
+    public SubjectsAndCoursesResponse(boolean status, DatabaseRequest request, String[] subjects, String[] courses) {
         super(status, request);
         this.subjects = subjects;
         this.courses = courses;

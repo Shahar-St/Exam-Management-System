@@ -1,13 +1,9 @@
 package org.args.GUI;
 
-import DatabaseAccess.Responses.SubjectsAndQuestionResponse;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.stage.Popup;
-import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 import org.args.Client.EMSClient;
 
@@ -20,7 +16,7 @@ public class ClientApp extends Application {
 
     private static Scene scene;
     private static EMSClient client;
-
+    // specify the server details
     private final String host = "127.0.0.1";
 
     private final int port = 1337;
@@ -42,7 +38,7 @@ public class ClientApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         try{
-            scene = new Scene(loadFXML("primary"), 640, 480);
+            scene = new Scene(loadFXML("LoginScreen"), 640, 480);
             stage.setScene(scene);
             stage.show();
         }catch (Exception e){
@@ -62,9 +58,9 @@ public class ClientApp extends Application {
         return fxmlLoader.load();
     }
 
-    public  void loginSuccess() throws IOException {
+    public static void loginSuccess() throws IOException {
         try{
-            setRoot("secondary");
+            setRoot("TeacherMainScreen");
         }catch (IOException e){
             System.out.println("Failed to switch scene on login success");
             e.printStackTrace();

@@ -21,7 +21,7 @@ public class EMSClient extends AbstractClient {
 
 	private String permission;
 
-	private ClientApp app;
+	private  ClientApp app;
 
 	public boolean isLoggedIn() {
 		return isLoggedIn;
@@ -122,8 +122,8 @@ public class EMSClient extends AbstractClient {
 
 			}
 
-		}else if(msg instanceof SubjectsAndQuestionResponse){
-			SubjectsAndQuestionResponse response = (SubjectsAndQuestionResponse)msg;
+		}else if(msg instanceof SubjectsAndCoursesResponse){
+			SubjectsAndCoursesResponse response = (SubjectsAndCoursesResponse)msg;
 			if(response.isStatus()){
 
 			}else{
@@ -135,11 +135,7 @@ public class EMSClient extends AbstractClient {
 
 	}
 
-	public void clientLogin(String userName,String password) throws IOException {
-		LoginRequest request = new LoginRequest(userName,password);
-		this.sendToServer(request);
 
-	}
 
 	public void clientLoginSuccessful(LoginResponse response) throws IOException {
 		try{
@@ -148,7 +144,7 @@ public class EMSClient extends AbstractClient {
 			LoginRequest request = (LoginRequest) response.getRequest();
 			this.userName = request.getUserName();
 			this.password = request.getPassword();
-			this.app.loginSuccess();
+			ClientApp.loginSuccess();
 		}catch (IOException e){
 			e.printStackTrace();
 			System.exit(1);
@@ -161,31 +157,12 @@ public class EMSClient extends AbstractClient {
 		// call app function to notify the user
 	}
 
-	public void clientEditQuestion(int questionID, String newDescription, String[] newAnswers, int correctAnswer) throws IOException {
-		EditQuestionRequest request = new EditQuestionRequest(questionID,newDescription,newAnswers,correctAnswer);
-		this.sendToServer(request);
-
-	}
 
 	public void clientEditQuestionSuccessful(){
 
 	}
 
-	public void clientViewQuestion(int questionID) throws IOException {
-		QuestionRequest request = new QuestionRequest(questionID);
-		this.sendToServer(request);
-	}
 
-	public void clientViewSubjectsAndCourses() throws IOException {
-		SubjectsAndCoursesRequest request = new SubjectsAndCoursesRequest();
-		this.sendToServer(request);
-	}
-
-	public void clientViewAllQuestions(String course) throws IOException {
-		AllQuestionsRequest request = new AllQuestionsRequest(course);
-		this.sendToServer(request);
-
-	}
 
 
 

@@ -26,7 +26,13 @@ public class LoginScreenController {
 
     @FXML
     void loginAttempt(ActionEvent event) throws IOException {
-        ClientApp.setRoot("TeacherMainScreen.fxml");
+        // the actual code
+//        String userName = usernameField.getText();
+//        String password = passwordField.getText();
+//        LoginRequest request = new LoginRequest(userName,password);
+//        ClientApp.sendRequest(request);
+
+        ClientApp.loginSuccess();
     }
 
 }
