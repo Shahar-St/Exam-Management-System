@@ -83,7 +83,7 @@ public class EMSClient extends AbstractClient {
             LoginResponse response = (LoginResponse) msg;
             if (response.isStatus()) {
                 try {
-                    this.clientLoginSuccessful(response);
+                    loginSuccessful(response);
                 } catch (IOException e) {
                     e.printStackTrace();
                     System.exit(1);
@@ -91,7 +91,7 @@ public class EMSClient extends AbstractClient {
 
 
             } else {
-                this.clientLoginFailed();
+                loginFailed(response);
             }
 
         } else if (msg instanceof EditQuestionResponse) {
@@ -115,7 +115,7 @@ public class EMSClient extends AbstractClient {
         } else if (msg instanceof QuestionResponse) {
             QuestionResponse response = (QuestionResponse) msg;
             if (response.isStatus()) {
-                clientViewQuestionSuccessful(response);
+                viewQuestionSuccessful(response);
 
             } else {
 
@@ -124,7 +124,7 @@ public class EMSClient extends AbstractClient {
         } else if (msg instanceof SubjectsAndCoursesResponse) {
             SubjectsAndCoursesResponse response = (SubjectsAndCoursesResponse) msg;
             if (response.isStatus()) {
-                ClientApp.fillCoursesDropdown(response);
+                getSubjectsAndCoursesSuccess(response);
 
             } else {
 
@@ -136,7 +136,7 @@ public class EMSClient extends AbstractClient {
     }
 
 
-    public void clientLoginSuccessful(LoginResponse response) throws IOException {
+    public void loginSuccessful(LoginResponse response) throws IOException {
         try {
             this.isLoggedIn = true;
             this.permission = response.getPermission();
@@ -152,13 +152,42 @@ public class EMSClient extends AbstractClient {
 
     }
 
-    public void clientLoginFailed() {
+    public void loginFailed(LoginResponse response) {
         // call app function to notify the user
     }
 
 
-    public void clientViewQuestionSuccessful(QuestionResponse response) {
+    public void viewQuestionSuccessful(QuestionResponse response) {
         ClientApp.fillEditQuestionScreen(response);
+
+    }
+
+    public void viewQuestionFailed(QuestionResponse response){
+
+    }
+
+    public void getSubjectsAndCoursesSuccess(SubjectsAndCoursesResponse response){
+        ClientApp.fillCoursesDropdown(response);
+
+    }
+
+    public void getSubjectsAndCoursesFailed(SubjectsAndCoursesResponse response){
+
+    }
+
+    public void editQuestionSuccessful(EditQuestionResponse response){
+
+    }
+
+    public void editQuestionFailed(EditQuestionResponse response){
+
+    }
+
+    public void getAllQuestionsSuccessful(AllQuestionsResponse response){
+
+    }
+
+    public void getAllQuestionsFailed(AllQuestionsResponse response){
 
     }
 
