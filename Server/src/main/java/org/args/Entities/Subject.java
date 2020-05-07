@@ -29,7 +29,6 @@ public class Subject {
     @Cascade(CascadeType.SAVE_UPDATE)
     private List<Course> coursesList = new ArrayList<>();
 
-
     //Group c'tors
     public Subject() { }
 
