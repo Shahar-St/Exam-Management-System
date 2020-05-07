@@ -4,28 +4,31 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Exam {
+
+    private static DecimalFormat decimalFormat = new DecimalFormat("00");
+
     @Id
     @Column(nullable = false, unique = true)
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @Cascade(CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "course_id")
     private Course course;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @Cascade(CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "teacher_id")
     private Teacher author;
 
     @ManyToMany(mappedBy = "containedInExams")
-    @Cascade({CascadeType.PERSIST, CascadeType.MERGE})
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
     private List<Question> questionsList = new ArrayList<>();
 
     private List<Double> questionsScores = new ArrayList<>();
@@ -37,11 +40,17 @@ public class Exam {
     public Exam() { }
 
     public Exam(Course course, Teacher author, int duration, String description, String teacherPrivateNotes) {
+
         this.course = course;
-        this.author = author;
+        author.addExam(this);
+        //this.author = author;
         this.duration = duration;
         this.description = description;
         this.teacherPrivateNotes = teacherPrivateNotes;
+
+        // handle empty queue
+        this.id = course.getSubject().getId() + course.getId() +
+                decimalFormat.format(course.getAvailableExamCodes().poll());
     }
 
     //Group adders and removers

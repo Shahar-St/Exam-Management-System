@@ -19,8 +19,14 @@ public class ExecutedExam {
     @JoinColumn(name = "student_id")
     private Student student;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Cascade(CascadeType.SAVE_UPDATE)
+    @JoinColumn(name = "course_id")
     private Course course;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Cascade(CascadeType.SAVE_UPDATE)
+    @JoinColumn(name = "teacher_id")
     private Teacher author;
 
     private List<Question> questionsList = new ArrayList<>();
@@ -39,13 +45,16 @@ public class ExecutedExam {
         this.course = exam.getCourse();
         this.questionsList.addAll(exam.getQuestionsList());
         this.questionsScores.addAll(exam.getQuestionsScores());
-        this.author = exam.getAuthor();
+        exam.getAuthor().addExecutedExam(this);
+        //this.author = exam.getAuthor();
         this.examId = exam.getId();
         this.duration = exam.getDuration();
         this.executedExamDescription = exam.getDescription();
         this.teacherPrivateNotes = exam.getTeacherPrivateNotes();
-        this.student = student;
-        this.student.addExecutedExam(this);
+        student.addExecutedExam(this);
+        //this.student = student;
+        if(student.getExtensionEligible())
+            setOverTime();
     }
 
     public int getId() { return id; }

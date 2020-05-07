@@ -5,6 +5,7 @@ import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
 import java.sql.Struct;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,14 +14,15 @@ import java.util.Queue;
 @Entity
 public class Course {
 
-    private static int courseQuestionCounter = 0;
+    private static DecimalFormat decimalFormat = new DecimalFormat("00");
 
     @Id
     @Column(nullable = false, unique = true)
     private String id;
 
     private String name;
-    private Queue<Integer> availableQuestionNumbers = new LinkedList<>();
+    private Queue<Integer> availableQuestionCodes = new LinkedList<>();
+    private Queue<Integer> availableExamCodes = new LinkedList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Cascade(CascadeType.SAVE_UPDATE)
@@ -41,7 +43,7 @@ public class Course {
     private List<Question> questionsList = new ArrayList<>();
 
     @ManyToMany
-    @Cascade({CascadeType.PERSIST, CascadeType.MERGE})
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
     @JoinTable(
             name = "courses_students",
             joinColumns = @JoinColumn(name = "course_id"),
@@ -49,17 +51,27 @@ public class Course {
     )
     private List<Student> studentsList = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+    @Cascade(CascadeType.SAVE_UPDATE)
+    private List<ExecutedExam> executedExamsList = new ArrayList<>();
+
     //Group c'tors
     public Course() { }
 
-    public Course(String id,String name, Subject subject, Teacher teacher) {
-        this.id = id;
+    public Course(int id, String name, Subject subject, Teacher teacher) {
+
+        this.id = decimalFormat.format(id);
         this.name = name;
-        this.subject = subject;
-        this.teacher = teacher;
+        subject.addCourse(this);
+        //this.subject = subject;
+        teacher.addCourse(this);
+        //this.teacher = teacher;
 
         for (int i = 0; i < 1000; i++)  // max questions per course
-            availableQuestionNumbers.add(i);
+            availableQuestionCodes.add(i);
+
+        for (int i = 0; i < 100; i++)  // max exams per course
+            availableExamCodes.add(i);
     }
 
     //Group adders and removers
@@ -88,12 +100,17 @@ public class Course {
             student.getCoursesList().add(this);
     }
 
+    public void addExecutedExam(ExecutedExam executedExam) {
+        if (executedExamsList.contains(executedExam))
+        {
+            executedExamsList.add(executedExam);
+            executedExam.setCourse(this);
+        }
+    }
+
     //Group setters and getters
-    public Queue<Integer> getAvailableQuestionNumbers() { return availableQuestionNumbers; }
-    public int getCourseQuestionCounter() { return courseQuestionCounter; }
-    protected void updateCourseQuestionCounter() { courseQuestionCounter++; }
-
-
+    public Queue<Integer> getAvailableQuestionCodes() { return availableQuestionCodes; }
+    public Queue<Integer> getAvailableExamCodes() { return availableExamCodes; }
 
     public String getId() { return id; }
     protected void setId(String courseId) { this.id = courseId; }
@@ -115,4 +132,7 @@ public class Course {
 
     public List<Student> getStudentsList() { return studentsList; }
     public void setStudentsList(List<Student> studentsList) { this.studentsList = studentsList; }
+
+    public List<ExecutedExam> getExecutedExamsList() { return executedExamsList; }
+    public void setExecutedExamsList(List<ExecutedExam> execExamsList) { this.executedExamsList = execExamsList; }
 }

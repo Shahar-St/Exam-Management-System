@@ -13,35 +13,38 @@ import java.util.Queue;
 @Entity
 public class Subject {
 
+    private static DecimalFormat decimalFormat = new DecimalFormat("00");
+
     @Id
     @Column(nullable = false, unique = true)
-    //  @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
+
     private String name;
 
     @ManyToMany(mappedBy = "subjectsList")
-    @Cascade({CascadeType.PERSIST, CascadeType.MERGE})
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
     private List<Teacher> teachersList = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "subject")
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @Cascade(CascadeType.SAVE_UPDATE)
     private List<Course> coursesList = new ArrayList<>();
 
-    private static Queue<Integer> availableSubjectId = null;
+    //private static Queue<Integer> availableSubjectId = null;
 
     //Group c'tors
     public Subject() { }
 
-    public Subject(String name) {
+    public Subject(int id, String name) {
+
+        this.id = decimalFormat.format(id);
         this.name = name;
-        if (availableSubjectId == null)
-        {
-            availableSubjectId = new LinkedList<>();
-            for (int i = 0; i < 100; i++)
-                availableSubjectId.add(i);
-        }
-        DecimalFormat nf = new DecimalFormat("00");
-        this.id = nf.format(availableSubjectId.poll());
+//        if (availableSubjectId == null)
+//        {
+//            availableSubjectId = new LinkedList<>();
+//            for (int i = 0; i < 100; i++)
+//                availableSubjectId.add(i);
+//        }
+        //this.id = nf.format(availableSubjectId.poll());
     }
 
     //Group adders and removers
@@ -62,7 +65,7 @@ public class Subject {
     }
 
     //Group setters and getters
-    public static Queue<Integer> getAvailableSubjectId() { return availableSubjectId; }
+   // public static Queue<Integer> getAvailableSubjectId() { return availableSubjectId; }
 
     public String getId() {
         return id;

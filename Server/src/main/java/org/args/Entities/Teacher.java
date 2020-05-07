@@ -31,6 +31,10 @@ public class Teacher extends User {
     @Cascade(CascadeType.SAVE_UPDATE)
     private List<Exam> examsList = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
+    @Cascade(CascadeType.SAVE_UPDATE)
+    private List<ExecutedExam> executedExamsList = new ArrayList<>();
+
     //Group c'tors
     public Teacher() { }
 
@@ -72,6 +76,14 @@ public class Teacher extends User {
         }
     }
 
+    public void addExecutedExam(ExecutedExam executedExam) {
+        if (executedExamsList.contains(executedExam))
+        {
+            executedExamsList.add(executedExam);
+            executedExam.setAuthor(this);
+        }
+    }
+
     //Group setters and getters
     public List<Subject> getSubjectsList() {
         return subjectsList;
@@ -100,4 +112,7 @@ public class Teacher extends User {
     public void setExamsList(List<Exam> examsList) {
         this.examsList = examsList;
     }
+
+    public List<ExecutedExam> getExecutedExamsList() { return executedExamsList; }
+    public void setExecutedExamsList(List<ExecutedExam> execExamsList) { this.executedExamsList = execExamsList; }
 }

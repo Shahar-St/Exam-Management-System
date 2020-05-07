@@ -12,9 +12,10 @@ import java.util.List;
 @Entity
 public class Question {
 
+    private static DecimalFormat decimalFormat = new DecimalFormat("000");
+
     @Id
     @Column(nullable = false, unique = true)
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     private String questionContent;
@@ -23,7 +24,7 @@ public class Question {
 
     // not sure it's needed
     @ManyToMany
-    @Cascade({CascadeType.PERSIST, CascadeType.MERGE})
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
     @JoinTable(
             name = "questions_exams",
             joinColumns = @JoinColumn(name = "question_id"),
@@ -46,19 +47,17 @@ public class Question {
     //Group c'tors
     public Question() { }
 
-    public Question(String questionContent, String[] answersArray, int correctAnswer,
-                    List<Exam> containedInExams, Course course, Teacher author) {
+    public Question(String questionContent, String[] answersArray, int correctAnswer, Course course, Teacher author) {
         this.questionContent = questionContent;
         this.answersArray = answersArray;
         this.correctAnswer = correctAnswer;
-        this.containedInExams = containedInExams;
         this.course = course;
-        this.author = author;
+        author.addQuestion(this);
+        //this.author = author;
         updateLastModified();
 
         // handle empty queue
-        DecimalFormat decimalFormat = new DecimalFormat("000");
-        this.id = course.getId() + decimalFormat.format(course.getAvailableQuestionNumbers().poll());
+        this.id = course.getId() + decimalFormat.format(course.getAvailableQuestionCodes().poll());
     }
 
     //Group adders and removers
@@ -66,8 +65,8 @@ public class Question {
         if (!containedInExams.contains(exam))
             containedInExams.add(exam);
 
-        if (!exam.getExamQuestionsList().contains(this))
-            exam.getExamQuestionsList().add(this);
+        if (!exam.getQuestionsList().contains(this))
+            exam.getQuestionsList().add(this);
     }
 
     //Group setters and getters

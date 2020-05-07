@@ -49,35 +49,35 @@ public class Check {
 
     private static SessionFactory getSessionFactory() throws HibernateException {
 
-        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
+        //java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
         Configuration configuration = new Configuration();
         configuration.addAnnotatedClass(Course.class);
+        configuration.addAnnotatedClass(Dean.class);
         configuration.addAnnotatedClass(Exam.class);
-        configuration.addAnnotatedClass(Question.class);
         configuration.addAnnotatedClass(ExecutedExam.class);
+        configuration.addAnnotatedClass(Question.class);
         configuration.addAnnotatedClass(Student.class);
         configuration.addAnnotatedClass(Subject.class);
         configuration.addAnnotatedClass(Teacher.class);
-        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+        configuration.addAnnotatedClass(User.class);
+
+        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings
+                                                    (configuration.getProperties()).build();
         return configuration.buildSessionFactory(serviceRegistry);
     }
 
     private static void generateAll() {
-            String [] arr = {"a","b","c","d"};
-            Teacher teacher = new Teacher(111111111, "gal","miro", "pass","galmiro");
-            Subject subject = new Subject("21");
-            Course course = new Course("12", new Subject(), teacher);
-            Question question = new Question("hii", "make it", arr, 2, course, teacher);
-            Student student = new Student(2222222,"gal","miro","pass","galm", false);
-            Exam exam = new Exam(subject,course,teacher,90,"do it","my secret description");
-            ExecutedExam examExecuted = new ExecutedExam(exam,student);
+            String [] arrAns = {"its a","its b","its c","its d"};
+            Teacher teacher = new Teacher(123456789,"teacher","one","pTeacherOne", "teacherOne");
+            Subject subject = new Subject(11,"subjectOne");
+            Course course = new Course(22,"courseOne", subject, teacher);
+            Question question = new Question("first question is: ", arrAns, 2, course, teacher);
+            Student student = new Student(987654321,"gal","mirovsky","pStudent","galMirovsky", false);
+            Exam exam = new Exam(course, teacher, 90, "you have only one question in this exam.", "secret description");
+            ExecutedExam examExecuted = new ExecutedExam(exam, student);
 
             student.addCourse(course);
-            teacher.addCourse(course);
-            teacher.addExam(exam);
-            teacher.addQuestion(question);
             teacher.addSubject(subject);
-            exam.addExamQuestion(question,50);
 
             session.save(question);
             session.flush();
@@ -95,6 +95,4 @@ public class Check {
         for (T object : tList)
             System.out.println(object);
     }
-
-
 }

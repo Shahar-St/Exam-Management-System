@@ -8,6 +8,7 @@ public abstract class User {
 
     @Id
     private int socialId;
+
     private String firstName, lastName, password, userName;
 
     //Group c'tors

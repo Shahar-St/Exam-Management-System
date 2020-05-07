@@ -18,7 +18,7 @@ public class Student extends User {
     private List<ExecutedExam> executedExamsList = new ArrayList<>();
 
     @ManyToMany(mappedBy = "studentsList")
-    @Cascade({CascadeType.PERSIST, CascadeType.MERGE})
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
     private List<Course> coursesList = new ArrayList<>();
 
     private Boolean isExtensionEligible;
