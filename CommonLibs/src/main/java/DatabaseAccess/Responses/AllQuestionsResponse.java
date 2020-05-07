@@ -3,6 +3,7 @@ package DatabaseAccess.Responses;
 import DatabaseAccess.Requests.DatabaseRequest;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 
 /**
  * Request: asks for all questions from a specific course of the logged in user
@@ -10,15 +11,15 @@ import java.time.LocalDateTime;
  */
 public class AllQuestionsResponse extends DatabaseResponse {
 
-    private final LocalDateTime questions;
+    private final HashMap<Integer, Pair> questionList;
 
     public AllQuestionsResponse(boolean status, DatabaseRequest request,
-                                LocalDateTime questions) {
+                                HashMap<Integer,Pair> questions) {
         super(status, request);
-        this.questions = questions;
+        questionList = questions;
     }
 
-    public LocalDateTime getQuestions() {
-        return questions;
+    public HashMap<Integer, Pair> getQuestionList() {
+        return questionList;
     }
 }

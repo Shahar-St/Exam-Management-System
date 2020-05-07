@@ -3,7 +3,7 @@ package DatabaseAccess.Responses;
 import DatabaseAccess.Requests.DatabaseRequest;
 
 /**
- * this class responsible for massage passing from the server to the client
+ * this class is responsible for message passing from the server to the client
  *
  * status: if the request succeeded or not
  * request: the request this responses to

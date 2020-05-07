@@ -2,27 +2,26 @@ package DatabaseAccess.Responses;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * request: get the all subjects and courses the user have read access to
  * <p>
  * response:
- * String[] subjects
- * String[] courses
+ * Hashmap: key=subject name, value = list of courses
+ *
  */
 public class SubjectsAndCoursesResponse extends DatabaseResponse {
 
-    private final String[] subjects, courses;
+    private final HashMap<String, List<String>> subjectsandcourses;
 
-    public SubjectsAndCoursesResponse(boolean status, DatabaseRequest request, String[] subjects, String[] courses) {
+    public SubjectsAndCoursesResponse(boolean status, DatabaseRequest request, HashMap<String,List<String>> subjectsandcourses) {
         super(status, request);
-        this.subjects = subjects;
-        this.courses = courses;
+        this.subjectsandcourses = subjectsandcourses;
     }
 
-    public String[] getSubjects() {
-        return subjects;
-    }
-    public String[] getCourses() {
-        return courses;
+    public HashMap<String, List<String>> getSubjectsandcourses() {
+        return subjectsandcourses;
     }
 }
