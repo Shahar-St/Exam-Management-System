@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  * Request: asks for a question's full details
  * Response: a string contains the question's full details
  */
-public class QuestionResponse extends DatabaseResponse{
+public class QuestionResponse extends DatabaseResponse {
 
     private final String questionContent;
     private final String[] answers;
@@ -17,8 +17,10 @@ public class QuestionResponse extends DatabaseResponse{
     private final String author;
     private final LocalDateTime lastModified;
 
-    public QuestionResponse(boolean status, DatabaseRequest request, String questionContent, String[] answers, int correctAnswer, String courseName, String author, LocalDateTime lastModified  ) {
-        super(status, request);
+    public QuestionResponse(boolean status, DatabaseRequest request, String questionContent, String[] answers,
+                            int correctAnswer, String courseName, String author,
+                            LocalDateTime lastModified, String errorMsg) {
+        super(status, request, errorMsg);
         this.questionContent = questionContent;
         this.answers = answers;
         this.correctAnswer = correctAnswer;
@@ -47,8 +49,8 @@ public class QuestionResponse extends DatabaseResponse{
         return author;
     }
 
-    public String getLastModified() {
-        return lastModified.toString();
+    public LocalDateTime getLastModified() {
+        return lastModified;
     }
 
 }
