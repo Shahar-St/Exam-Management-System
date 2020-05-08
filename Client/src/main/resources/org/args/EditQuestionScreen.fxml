@@ -8,32 +8,31 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-
 <AnchorPane prefHeight="414.0" prefWidth="665.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.EditQuestionScreenController">
-   <children>
-      <VBox layoutX="2.0" layoutY="6.0" prefHeight="414.0" prefWidth="665.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Label text="LastModified" />
-            <TextField fx:id="LastModified" editable="false" />
-            <Label text="Author" />
-            <TextField fx:id="Author" editable="false" />
-            <Label text="Content" />
-            <TextArea fx:id="Content" prefHeight="119.0" prefWidth="429.0" />
-            <Label text="Answer 1" />
-            <TextField fx:id="Answer1" editable="false" />
-            <Label text="Answer 2" />
-            <TextField fx:id="Answer2" editable="false" />
-            <Label text="Answer 3" />
-            <TextField fx:id="Answer3" editable="false" />
-            <Label text="Answer 4" />
-            <TextField fx:id="Answer4" editable="false" />
-            <ButtonBar prefHeight="40.0" prefWidth="200.0">
-              <buttons>
-                <Button fx:id="CancelButton" mnemonicParsing="false" onAction="#CancelButtonClicked" text="Cancel" />
-                  <Button fx:id="EditButton" mnemonicParsing="false" onAction="#EditButtonClicked" text="Edit" />
-              </buttons>
-            </ButtonBar>
-         </children>
-      </VBox>
-   </children>
+    <children>
+        <VBox layoutX="2.0" layoutY="6.0" prefHeight="414.0" prefWidth="665.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Label text="LastModified" />
+                <TextField fx:id="LastModified" editable="false" />
+                <Label text="Author" />
+                <TextField fx:id="Author" editable="false" />
+                <Label text="Content" />
+                <TextArea fx:id="Content" editable="false" prefHeight="119.0" prefWidth="429.0" />
+                <Label text="Answer 1" />
+                <TextField fx:id="Answer1" editable="false" />
+                <Label text="Answer 2" />
+                <TextField fx:id="Answer2" editable="false" />
+                <Label text="Answer 3" />
+                <TextField fx:id="Answer3" editable="false" />
+                <Label text="Answer 4" />
+                <TextField fx:id="Answer4" editable="false" />
+                <ButtonBar prefHeight="40.0" prefWidth="200.0">
+                    <buttons>
+                        <Button fx:id="CancelButton" mnemonicParsing="false" onAction="#CancelButtonClicked" text="Cancel" />
+                        <Button fx:id="EditButton" mnemonicParsing="false" onAction="#EditButtonClicked" text="Edit" />
+                    </buttons>
+                </ButtonBar>
+            </children>
+        </VBox>
+    </children>
 </AnchorPane>
