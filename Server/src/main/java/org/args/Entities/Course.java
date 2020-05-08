@@ -14,14 +14,15 @@ import java.util.Queue;
 @Entity
 public class Course {
 
-    private static DecimalFormat decimalFormat = new DecimalFormat("00");
-
     @Id
     @Column(nullable = false, unique = true)
     private String id;
 
     private String name;
+
+    @Transient
     private Queue<Integer> availableQuestionCodes = new LinkedList<>();
+    @Transient
     private Queue<Integer> availableExamCodes = new LinkedList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -60,10 +61,11 @@ public class Course {
 
     public Course(int id, String name, Subject subject, Teacher teacher) {
 
+        DecimalFormat decimalFormat = new DecimalFormat("00");
         this.id = decimalFormat.format(id);
         this.name = name;
-        this.subject = subject;
-        this.teacher = teacher;
+        subject.addCourse(this);
+        teacher.addCourse(this);
 
         for (int i = 0; i < 1000; i++)  // max questions per course
             availableQuestionCodes.add(i);
@@ -99,7 +101,7 @@ public class Course {
     }
 
     public void addExecutedExam(ExecutedExam executedExam) {
-        if (executedExamsList.contains(executedExam))
+        if (!executedExamsList.contains(executedExam))
         {
             executedExamsList.add(executedExam);
             executedExam.setCourse(this);

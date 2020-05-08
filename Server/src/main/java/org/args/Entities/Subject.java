@@ -13,8 +13,6 @@ import java.util.Queue;
 @Entity
 public class Subject {
 
-    private static DecimalFormat decimalFormat = new DecimalFormat("00");
-
     @Id
     @Column(nullable = false, unique = true)
     private String id;
@@ -34,15 +32,9 @@ public class Subject {
 
     public Subject(int id, String name) {
 
+        DecimalFormat decimalFormat = new DecimalFormat("00");
         this.id = decimalFormat.format(id);
         this.name = name;
-//        if (availableSubjectId == null)
-//        {
-//            availableSubjectId = new LinkedList<>();
-//            for (int i = 0; i < 100; i++)
-//                availableSubjectId.add(i);
-//        }
-        //this.id = nf.format(availableSubjectId.poll());
     }
 
     //Group adders and removers

@@ -11,8 +11,6 @@ import java.util.List;
 @Entity
 public class Exam {
 
-    private static DecimalFormat decimalFormat = new DecimalFormat("00");
-
     @Id
     @Column(nullable = false, unique = true)
     private String id;
@@ -31,7 +29,8 @@ public class Exam {
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
     private List<Question> questionsList = new ArrayList<>();
 
-    private List<Double> questionsScores = new ArrayList<>();
+    //private List<Double> questionsScores = new ArrayList<>();
+
     private int duration; // in minutes
     private String description;
     private String teacherPrivateNotes; // only for the teacher
@@ -41,14 +40,14 @@ public class Exam {
 
     public Exam(Course course, Teacher author, int duration, String description, String teacherPrivateNotes) {
 
-        this.course = course;
+        course.addExam(this);
         author.addExam(this);
-        //this.author = author;
         this.duration = duration;
         this.description = description;
         this.teacherPrivateNotes = teacherPrivateNotes;
 
         // handle empty queue
+        DecimalFormat decimalFormat = new DecimalFormat("00");
         this.id = course.getSubject().getId() + course.getId() +
                 decimalFormat.format(course.getAvailableExamCodes().poll());
     }
@@ -85,11 +84,7 @@ public class Exam {
     public String getTeacherPrivateNotes() { return teacherPrivateNotes; }
     protected void setTeacherPrivateNotes(String privateNotes) { teacherPrivateNotes = privateNotes; }
 
-    public List<Double> getQuestionsScores() { return questionsScores; }
-    public void setQuestionsScores(List<Double> questionsScores) { this.questionsScores = questionsScores; }
-
-//   public String getSerialExamId() {
-//        return this.subject.getSubjectId() + this.course.getCourseId() + this.examId;
-//    }
+//    public List<Double> getQuestionsScores() { return questionsScores; }
+//    public void setQuestionsScores(List<Double> questionsScores) { this.questionsScores = questionsScores; }
 
 }

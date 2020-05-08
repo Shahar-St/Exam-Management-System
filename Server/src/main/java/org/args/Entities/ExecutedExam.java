@@ -29,31 +29,35 @@ public class ExecutedExam {
     @JoinColumn(name = "teacher_id")
     private Teacher author;
 
+    @ManyToMany(mappedBy = "containedInExecutedExams")
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
     private List<Question> questionsList = new ArrayList<>();
 
-    private List<Double> questionsScores = new ArrayList<>();
+    //private List<Double> questionsScores = new ArrayList<>();
+
     private String examId;
     private int grade = 0;
     private int duration; // exam duration in minutes
     private String executedExamDescription, teacherPrivateNotes; // teacherPrivateNotes only for the teacher
 
     //Group c'tors
-    public ExecutedExam() {
-    }
+    public ExecutedExam() { }
 
     public ExecutedExam(Exam exam, Student student) {
 
-        this.course = exam.getCourse();
-        this.questionsList.addAll(exam.getQuestionsList());
-        this.questionsScores.addAll(exam.getQuestionsScores());
+        exam.getCourse().addExecutedExam(this);
+        for (Question question : exam.getQuestionsList())
+            question.addExecutedExam(this);
+
+       // this.questionsScores.addAll(exam.getQuestionsScores());
+
         exam.getAuthor().addExecutedExam(this);
-        //this.author = exam.getAuthor();
         this.examId = exam.getId();
         this.duration = exam.getDuration();
         this.executedExamDescription = exam.getDescription();
         this.teacherPrivateNotes = exam.getTeacherPrivateNotes();
         student.addExecutedExam(this);
-        //this.student = student;
+
         if(student.getExtensionEligible())
             setOverTime();
     }
@@ -91,12 +95,8 @@ public class ExecutedExam {
         this.questionsList = questionsList;
     }
 
-    public List<Double> getQuestionsScores() {
-        return questionsScores;
-    }
-    public void setQuestionsScores(List<Double> questionsScores) {
-        this.questionsScores = questionsScores;
-    }
+//    public List<Double> getQuestionsScores() { return questionsScores; }
+//    public void setQuestionsScores(List<Double> questionsScores) {this.questionsScores = questionsScores; }
 
     public String getExamId() {
         return examId;
