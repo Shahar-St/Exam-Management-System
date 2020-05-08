@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
+
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1"
             fx:controller="org.args.GUI.LoginScreenController">
@@ -15,7 +16,7 @@
     </top>
     <bottom>
         <Button fx:id="loginButton" mnemonicParsing="false" onAction="#loginAttempt" text="Login"
-                BorderPane.alignment="CENTER">
+                BorderPane.alignment="CENTER" styleClass="btn, btn-default">
             <font>
                 <Font name="Bell MT" size="24.0"/>
             </font>

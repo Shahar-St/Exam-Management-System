@@ -53,14 +53,14 @@ public class QuestionManagementScreenController {
     public static EventHandler<ActionEvent> displayCoursesFromSubject = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-        if (coursesDropDown.isDisabled())
-            coursesDropDown.setDisable(false);
-        String currentSubject = subjectsDropdown.getText();
-        List<String> coursesToAdd = subjectsAndCourses.get(currentSubject);
-        for (String course : coursesToAdd)
-        {
-            coursesDropDown.getItems().add(new MenuItem(course));
-        }
+            if (coursesDropDown.isDisabled())
+                coursesDropDown.setDisable(false);
+            String currentSubject = subjectsDropdown.getText();
+            List<String> coursesToAdd = subjectsAndCourses.get(currentSubject);
+            for (String course : coursesToAdd)
+            {
+                coursesDropDown.getItems().add(new MenuItem(course));
+            }
         }
     };
 
@@ -82,6 +82,16 @@ public class QuestionManagementScreenController {
     public static void setSubjectsAndCoursesState (HashMap<String,List<String>> mapFromResponse)
     {
         subjectsAndCourses = mapFromResponse;
+    }
+
+    @FXML
+    void switchToStatisticalAnalysisScreen(ActionEvent event) {
+
+    }
+
+    @FXML
+    void switchToTestsManagementScreen(ActionEvent event) {
+
     }
 
 

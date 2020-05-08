@@ -44,6 +44,7 @@ public class ClientApp extends Application {
         try {
             super.init();
             client = new EMSClient(this.host, this.port, this);
+            scene.getStylesheets().add("bootstrapfx.css"); //trying to add bootstrap!
         } catch (Exception e) {
             System.out.println("Failed to init app.. exiting");
             e.printStackTrace();
@@ -90,7 +91,7 @@ public class ClientApp extends Application {
 
     public static void fillEditQuestionScreen(QuestionResponse response) {
 
-        String lastModified = response.getLastModified();
+        String lastModified = response.getLastModified().toString();
 
         String author = response.getAuthor();
 
