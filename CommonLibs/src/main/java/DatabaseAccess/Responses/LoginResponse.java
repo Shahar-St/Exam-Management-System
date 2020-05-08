@@ -10,8 +10,8 @@ public class LoginResponse extends DatabaseResponse {
 
     private final String permission;
 
-    public LoginResponse(boolean status, DatabaseRequest request, String permission) {
-        super(status, request);
+    public LoginResponse(boolean status, DatabaseRequest request, String permission, String errorMsg) {
+        super(status, request, errorMsg);
         this.permission = permission;
     }
 
