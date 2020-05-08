@@ -107,6 +107,8 @@ public class EMSClient extends AbstractClient {
         } else if (msg instanceof AllQuestionsResponse) {
             AllQuestionsResponse response = (AllQuestionsResponse) msg;
             if (response.getStatus()) {
+                ClientApp.fillQuestionsList(response);
+
 
             } else {
 
@@ -124,8 +126,7 @@ public class EMSClient extends AbstractClient {
         } else if (msg instanceof SubjectsAndCoursesResponse) {
             SubjectsAndCoursesResponse response = (SubjectsAndCoursesResponse) msg;
             if (response.getStatus()) {
-                getSubjectsAndCoursesSuccess(response);
-
+                ClientApp.fillSubjectsDropdown(response);
             } else {
 
             }
@@ -167,7 +168,7 @@ public class EMSClient extends AbstractClient {
     }
 
     public void getSubjectsAndCoursesSuccess(SubjectsAndCoursesResponse response){
-        ClientApp.fillCoursesDropdown(response);
+
 
     }
 

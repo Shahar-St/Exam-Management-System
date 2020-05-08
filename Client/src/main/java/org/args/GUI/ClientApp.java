@@ -1,16 +1,22 @@
 package org.args.GUI;
 
 import DatabaseAccess.Responses.AllQuestionsResponse;
+import DatabaseAccess.Responses.Pair;
 import DatabaseAccess.Responses.QuestionResponse;
 import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import org.args.Client.EMSClient;
 
+
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * JavaFX App
@@ -97,20 +103,31 @@ public class ClientApp extends Application {
         EditQuestionScreenController.initScreen(lastModified, author, content, answers, correctAnswer);
     }
 
-    public static void fillCoursesDropdown(SubjectsAndCoursesResponse response) {
-        String[] courses = response.getCourses();
-        for (String course : courses) {
-            QuestionManagementScreenController.addCourseToDropdown(course);
+    public static void fillSubjectsDropdown(SubjectsAndCoursesResponse response) {
 
+        QuestionManagementScreenController.setSubjectsAndCoursesState(response.getSubjectsAndCourses()); //set the hashmap in the controllers state to later fill the courses dropdown list according to selected subject
+        for (String subjectName : response.getSubjectsAndCourses().keySet()) //iterate through every subject in the hashmap
+        {
+            MenuItem subject = new MenuItem(subjectName);
+            subject.setOnAction(QuestionManagementScreenController.displayCoursesFromSubject);
+            QuestionManagementScreenController.addSubjectToSubjectDropdown(subject);
         }
+
+
     }
 
     public static void fillQuestionsList(AllQuestionsResponse response) {
-//        for (Map.Entry question : response.getQuestions().entrySet())
-//        {
-//            QuestionManagementScreenController.addQuestionsToQuestionsList(question);
-//
-//        }
+
+        HashMap<Integer, Pair<LocalDateTime, String>> questions = response.getQuestionList(); //Response: hashmap: key = question id, value = pair{date modified, description}
+
+        for (Map.Entry<Integer, Pair<LocalDateTime, String>> question : questions.entrySet())
+        {
+            String questionId = Integer.toString(question.getKey());
+            String questionDescription = question.getValue().getSecond();
+            String menuItemText = "#" + questionId + ": " + questionDescription;
+
+            QuestionManagementScreenController.addQuestionToQuestionsList(menuItemText);
+        }
     }
 
     public static void main(String[] args) {
