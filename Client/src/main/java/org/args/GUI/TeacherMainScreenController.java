@@ -13,6 +13,8 @@ import java.io.IOException;
 
 public class TeacherMainScreenController {
 
+    private ClientApp clientApp=null;
+
     @FXML // fx:id="questionMangementButton"
     private Button questionMangementButton; // Value injected by FXMLLoader
 
@@ -20,6 +22,13 @@ public class TeacherMainScreenController {
     void switchToQuestionManagement(ActionEvent event) throws IOException {
         ClientApp.sendRequest(new SubjectsAndCoursesRequest());
         ClientApp.setRoot("EditQuestionScreen");
+    }
+
+    public void setClientApp(ClientApp clientApp) {
+        if(this.clientApp == null){
+            this.clientApp = clientApp;
+        }
+
     }
 
 }

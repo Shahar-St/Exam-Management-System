@@ -49,29 +49,37 @@ public class ClientApp extends Application {
 
     }
 
-    public static void fillSubjectsDropdown(SubjectsAndCoursesResponse response) {
+    public void fillSubjectsDropdown(SubjectsAndCoursesResponse response) throws IOException {
 
-        QuestionManagementScreenController.setSubjectsAndCoursesState(response.getSubjectsAndCourses()); //set the hashmap in the controllers state to later fill the courses dropdown list according to selected subject
+        FXMLLoader loader = fxmlLoader("EditQuestionScreen");
+        loader.load();
+        QuestionManagementScreenController screenController = loader.getController();
+        screenController.setClientApp(this);
+        screenController.setSubjectsAndCoursesState(response.getSubjectsAndCourses()); //set the hashmap in the controllers state to later fill the courses dropdown list according to selected subject
         for (String subjectName : response.getSubjectsAndCourses().keySet()) //iterate through every subject in the hashmap
         {
             MenuItem subject = new MenuItem(subjectName);
-            subject.setOnAction(QuestionManagementScreenController.displayCoursesFromSubject);
-            QuestionManagementScreenController.addSubjectToSubjectDropdown(subject);
+            subject.setOnAction(screenController.displayCoursesFromSubject);
+            screenController.addSubjectToSubjectDropdown(subject);
         }
 
 
     }
 
-    public static void fillQuestionsList(AllQuestionsResponse response) {
+    public void fillQuestionsList(AllQuestionsResponse response) throws IOException {
 
-        HashMap<Integer, Pair<LocalDateTime, String>> questions = response.getQuestionList(); //Response: hashmap: key = question id, value = pair{date modified, description}
+        HashMap<Integer, Pair<LocalDateTime, String>> questions = response.getQuestionList();
+        FXMLLoader loader = fxmlLoader("EditQuestionScreen");
+        loader.load();
+        QuestionManagementScreenController screenController = loader.getController();
+        screenController.setClientApp(this);
 
         for (Map.Entry<Integer, Pair<LocalDateTime, String>> question : questions.entrySet()) {
             String questionId = Integer.toString(question.getKey());
             String questionDescription = question.getValue().getSecond();
             String menuItemText = "#" + questionId + ": " + questionDescription;
 
-            QuestionManagementScreenController.addQuestionToQuestionsList(menuItemText);
+            screenController.addQuestionToQuestionsList(menuItemText);
         }
     }
 
@@ -151,6 +159,8 @@ public class ClientApp extends Application {
         scene.setRoot(screen);
 
     }
+
+
 
 
 }

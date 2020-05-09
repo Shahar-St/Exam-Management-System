@@ -77,7 +77,7 @@ public class EMSClient extends AbstractClient {
     }
 
     @Override
-    protected void handleMessageFromServer(Object msg) {
+    protected void handleMessageFromServer(Object msg) throws IOException {
 
         if (msg instanceof LoginResponse) {
             LoginResponse response = (LoginResponse) msg;
@@ -107,7 +107,7 @@ public class EMSClient extends AbstractClient {
         } else if (msg instanceof AllQuestionsResponse) {
             AllQuestionsResponse response = (AllQuestionsResponse) msg;
             if (response.getStatus()) {
-                ClientApp.fillQuestionsList(response);
+                app.fillQuestionsList(response);
 
 
             } else {
@@ -126,7 +126,7 @@ public class EMSClient extends AbstractClient {
         } else if (msg instanceof SubjectsAndCoursesResponse) {
             SubjectsAndCoursesResponse response = (SubjectsAndCoursesResponse) msg;
             if (response.getStatus()) {
-                ClientApp.fillSubjectsDropdown(response);
+                app.fillSubjectsDropdown(response);
             } else {
 
             }
