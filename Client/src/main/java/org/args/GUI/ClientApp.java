@@ -111,6 +111,7 @@ public class ClientApp extends Application {
             scene = new Scene(loader.load(), 640, 480);
             LoginScreenController screenController = loader.getController();
             screenController.setClientApp(this);
+            scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
