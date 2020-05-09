@@ -98,6 +98,7 @@ public class EditQuestionScreenController {
            Answer3.setEditable(true);
            Answer4.setEditable(true);
            EditButton.setText("Save");
+           isEditing = true;
 
        }else{
            LastModified.setEditable(false);
