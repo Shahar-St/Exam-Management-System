@@ -32,6 +32,15 @@ public class Question {
     )
     private List<Exam> containedInExams = new ArrayList<>();
 
+    @ManyToMany
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
+    @JoinTable(
+            name = "questions_executedExams",
+            joinColumns = @JoinColumn(name = "question_id"),
+            inverseJoinColumns = @JoinColumn(name = "executedExam_id")
+    )
+    private List<ExecutedExam> containedInExecutedExams = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @Cascade(CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "course_id")
@@ -51,9 +60,8 @@ public class Question {
         this.questionContent = questionContent;
         this.answersArray = answersArray;
         this.correctAnswer = correctAnswer;
-        this.course = course;
+        course.addQuestion(this);
         author.addQuestion(this);
-        //this.author = author;
         updateLastModified();
 
         // handle empty queue
@@ -67,6 +75,14 @@ public class Question {
 
         if (!exam.getQuestionsList().contains(this))
             exam.getQuestionsList().add(this);
+    }
+
+    public void addExecutedExam(ExecutedExam executedExam) {
+        if (!containedInExecutedExams.contains(executedExam))
+            containedInExecutedExams.add(executedExam);
+
+        if (!executedExam.getQuestionsList().contains(this))
+            executedExam.getQuestionsList().add(this);
     }
 
     //Group setters and getters

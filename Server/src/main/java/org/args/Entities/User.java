@@ -1,13 +1,14 @@
 package org.args.Entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.text.DecimalFormat;
 
-@Entity
+@MappedSuperclass
 public abstract class User {
 
     @Id
-    private int socialId;
+    @Column(nullable = false, unique = true)
+    private String socialId;
 
     private String firstName, lastName, password, userName;
 
@@ -15,7 +16,8 @@ public abstract class User {
     public User() { }
 
     public User(int socialId, String firstName, String lastName, String password, String userName) {
-        this.socialId = socialId;
+        DecimalFormat decimalFormat = new DecimalFormat("000000000");
+        this.socialId = decimalFormat.format(socialId);
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
@@ -23,7 +25,7 @@ public abstract class User {
     }
 
     //Group setters and getters
-    public int getSocialId() {
+    public String getSocialId() {
         return socialId;
     }
 

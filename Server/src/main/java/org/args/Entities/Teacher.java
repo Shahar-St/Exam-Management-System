@@ -69,7 +69,7 @@ public class Teacher extends User {
     }
 
     public void addQuestion(Question question) {
-        if (questionsList.contains(question))
+        if (!questionsList.contains(question))
         {
             questionsList.add(question);
             question.setAuthor(this);
@@ -77,7 +77,7 @@ public class Teacher extends User {
     }
 
     public void addExecutedExam(ExecutedExam executedExam) {
-        if (executedExamsList.contains(executedExam))
+        if (!executedExamsList.contains(executedExam))
         {
             executedExamsList.add(executedExam);
             executedExam.setAuthor(this);
