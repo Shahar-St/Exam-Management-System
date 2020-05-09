@@ -22,6 +22,7 @@ public class EMSserver extends AbstractServer {
         if (msg instanceof DatabaseRequest)
         {
             DatabaseRequestHandler handler = new DatabaseRequestHandler((DatabaseRequest) msg);
+            //handler.parse()
             try
             {
                 client.sendToClient(handler.getResponse());
