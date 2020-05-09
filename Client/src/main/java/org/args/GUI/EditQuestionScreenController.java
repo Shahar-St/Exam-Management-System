@@ -17,6 +17,8 @@ public class EditQuestionScreenController {
 
     private ClientApp clientApp=null;
 
+    private boolean isEditing=false;
+
     @FXML
     private  TextField LastModified;
 
@@ -77,7 +79,7 @@ public class EditQuestionScreenController {
     @FXML
     void CancelButtonClicked(ActionEvent event) {
         try {
-            ClientApp.setRoot("TeacherMainScreen");
+            ClientApp.setRoot("QuestionManagementScreen");
         }
         catch (IOException e){
             e.printStackTrace();
@@ -87,6 +89,27 @@ public class EditQuestionScreenController {
 
     @FXML
     void EditButtonClicked(ActionEvent event) {
+       if(!isEditing){
+           LastModified.setEditable(true);
+           Author.setEditable(true);
+           Content.setEditable(true);
+           Answer1.setEditable(true);
+           Answer2.setEditable(true);
+           Answer3.setEditable(true);
+           Answer4.setEditable(true);
+           EditButton.setText("Save");
+
+       }else{
+           LastModified.setEditable(false);
+           Author.setEditable(false);
+           Content.setEditable(false);
+           Answer1.setEditable(false);
+           Answer2.setEditable(false);
+           Answer3.setEditable(false);
+           Answer4.setEditable(false);
+           EditButton.setText("Edit");
+       }
+
 
     }
 
