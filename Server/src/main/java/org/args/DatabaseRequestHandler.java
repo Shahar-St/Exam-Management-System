@@ -1,8 +1,6 @@
 package org.args;
 
-import DatabaseAccess.Requests.AllQuestionsRequest;
-import DatabaseAccess.Requests.DatabaseRequest;
-import DatabaseAccess.Requests.LoginRequest;
+import DatabaseAccess.Requests.*;
 import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.LoginResponse;
 import org.args.Entities.User;
@@ -28,16 +26,31 @@ public class DatabaseRequestHandler {
             loginHandler();
         else if (request instanceof AllQuestionsRequest)
             allQuestionHandler();
+        else if (request instanceof EditQuestionRequest)
+            editQuestionHandler();
+        else if (request instanceof QuestionRequest)
+            questionHandler();
+        else if (request instanceof SubjectsAndCoursesRequest)
+            subjectAndCoursesHandler();
     }
-
-
-
 
     public DatabaseResponse getResponse() {
         return response;
     }
 
+    private void subjectAndCoursesHandler() {
+        // Shahar
+    }
+
+    private void questionHandler() {
+        //Gal
+    }
+
+    private void editQuestionHandler() {
+    }
+
     private void loginHandler() {
+        //Shahar
 
     }
 
