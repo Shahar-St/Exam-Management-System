@@ -17,7 +17,6 @@ public class EMSserver extends AbstractServer {
         this.session = session;
     }
 
-
     @Override
     protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 
@@ -33,7 +32,10 @@ public class EMSserver extends AbstractServer {
                 e.printStackTrace();
             }
         }
-
     }
 
+    @Override
+    protected synchronized void clientDisconnected(ConnectionToClient client) {
+        //need to remove from logged in users
+    }
 }

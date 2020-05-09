@@ -1,7 +1,7 @@
 package DatabaseAccess.Requests;
 
 /**
- * This request get the all subjects and courses the user have read access to
+ * This request get all subjects and courses the user have read access to
  *
  * response:
  * Hashmap: key=subject name, value = list of courses

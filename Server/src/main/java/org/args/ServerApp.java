@@ -1,6 +1,8 @@
 package org.args;
 
 
+import DatabaseAccess.Requests.LoginRequest;
+
 import org.args.Entities.*;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -25,7 +27,7 @@ public class ServerApp {
 
     private static SessionFactory getSessionFactory() throws HibernateException {
 
-       // java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
+        // java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
         Configuration configuration = new Configuration();
         configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(Teacher.class);
@@ -64,8 +66,11 @@ public class ServerApp {
             EMSserver server = new EMSserver(port, session);
 
 
+
+
             session.getTransaction().commit();
-            server.listen();
+            //server.listen();
+
 
             session.clear();
         }
@@ -85,10 +90,9 @@ public class ServerApp {
     }
 
 
-    private static void createDummyEntities()
-    {
+    private static void createDummyEntities() {
         //creating Dean
-        Dean dean = new Dean(123456789,"Head", "Teacher", "passDean", "deanUN");
+        Dean dean = new Dean(123456789, "Head", "Teacher", "passDean", "deanUN");
         session.save(dean);
         session.flush();
 
@@ -104,7 +108,7 @@ public class ServerApp {
         //creating teachers and connecting with subjects
         for (int i = 0; i < NUM_OF_TEACHERS; i++)
         {
-            Teacher teacher = new Teacher(i, "Teacher ", "num"+i, "passTeacher" + i, "teacherUN" + i);
+            Teacher teacher = new Teacher(i, "Teacher ", "num" + i, "passTeacher" + i, "teacherUN" + i);
             session.save(teacher);
             subjects.get(i % NUM_OF_SUBJECTS).addTeacher(teacher);
             session.update(teacher);
@@ -116,7 +120,7 @@ public class ServerApp {
         for (int i = 0; i < NUM_OF_COURSES; i++)
         {
             Course course = new Course(i, "course_" + i, subjects.get(i % NUM_OF_SUBJECTS),
-                            teachers.get(i % NUM_OF_TEACHERS));
+                    teachers.get(i % NUM_OF_TEACHERS));
             session.save(course);
         }
         session.flush();
@@ -125,7 +129,7 @@ public class ServerApp {
         //creating students and connecting with courses
         for (int i = 0; i < NUM_OF_STUDENTS; i++)
         {
-            if(i%2 == 0)
+            if (i % 2 == 0)
             {
                 Student student = new Student(100 + i, "Student ", "num" + i, "passStudent" + i, "studentUN", false);
                 session.save(student);
@@ -147,7 +151,7 @@ public class ServerApp {
         for (int i = 0; i < NUM_OF_EXAMS; i++)
         {
             Exam exam = new Exam(courses.get(i % NUM_OF_COURSES), teachers.get(i % NUM_OF_TEACHERS),
-                        120, "good luck", "my secret note");
+                    120, "good luck", "my secret note");
             session.save(exam);
         }
         session.flush();
@@ -157,8 +161,8 @@ public class ServerApp {
         String[] ansArr = {"its a", "its b", "its c", "its d"};
         for (int i = 0; i < 36; i++)
         {
-            Question question = new Question("question"+i, ansArr, i % NUM_OF_ANSWERS,
-                                courses.get(i % NUM_OF_COURSES), teachers.get(i % NUM_OF_TEACHERS));
+            Question question = new Question("question" + i, ansArr, i % NUM_OF_ANSWERS,
+                    courses.get(i % NUM_OF_COURSES), teachers.get(i % NUM_OF_TEACHERS));
             session.save(question);
             exams.get(i % NUM_OF_EXAMS).addQuestion(question);
             session.update(question);
@@ -169,7 +173,7 @@ public class ServerApp {
         for (int i = 0; i < 18; i++)
         {
             ExecutedExam executedExam = new ExecutedExam(exams.get(i % NUM_OF_EXAMS),
-                                        students.get(i % NUM_OF_STUDENTS));
+                    students.get(i % NUM_OF_STUDENTS));
             session.save(executedExam);
         }
         session.flush();

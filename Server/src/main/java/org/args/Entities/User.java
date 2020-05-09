@@ -3,7 +3,7 @@ package org.args.Entities;
 import javax.persistence.*;
 import java.text.DecimalFormat;
 
-@MappedSuperclass
+@Entity
 public abstract class User {
 
     @Id
