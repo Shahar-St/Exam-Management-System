@@ -52,19 +52,9 @@ public class ServerApp {
             session.beginTransaction();
             createDummyEntities();
 
-            Student student = new Student(4, "shahar",
-                    "stahi", "123", "sha", false);
-            session.save(student);
-            session.flush();
-            session.clear();
-
-            DatabaseRequest request = new LoginRequest("sha", "123");
-            DatabaseRequestHandler requestHandler = new DatabaseRequestHandler(request, session);
-
-
             EMSserver server = new EMSserver(port, session);
             server.listen();
-//            session.getTransaction().commit();
+            session.getTransaction().commit();
             session.clear();
         }
         catch (Exception exception)
