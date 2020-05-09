@@ -14,6 +14,8 @@ import java.io.IOException;
 
 public class LoginScreenController {
 
+    private ClientApp clientApp=null;
+
     @FXML // fx:id="loginButton"
     private Button loginButton; // Value injected by FXMLLoader
 
@@ -31,7 +33,14 @@ public class LoginScreenController {
 //        LoginRequest request = new LoginRequest(userName,password);
 //        ClientApp.sendRequest(request);
 
-        ClientApp.loginSuccess();
+        clientApp.loginSuccess();
+    }
+
+    public void setClientApp(ClientApp clientApp) {
+        if(this.clientApp == null){
+            this.clientApp = clientApp;
+        }
+
     }
 
 }

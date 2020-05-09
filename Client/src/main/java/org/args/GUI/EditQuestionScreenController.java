@@ -15,35 +15,37 @@ import java.io.IOException;
 
 public class EditQuestionScreenController {
 
-    @FXML
-    private static TextField LastModified;
+    private ClientApp clientApp=null;
 
     @FXML
-    private static TextField Author;
+    private  TextField LastModified;
 
     @FXML
-    private static TextArea Content;
+    private  TextField Author;
 
     @FXML
-    private static TextField Answer1;
+    private  TextArea Content;
 
     @FXML
-    private static TextField Answer2;
+    private  TextField Answer1;
 
     @FXML
-    private static TextField Answer3;
+    private  TextField Answer2;
 
     @FXML
-    private static TextField Answer4;
+    private  TextField Answer3;
 
     @FXML
-    private static Button CancelButton;
+    private  TextField Answer4;
 
     @FXML
-    private static Button EditButton;
+    private  Button CancelButton;
+
+    @FXML
+    private  Button EditButton;
 
 
-    public static void initScreen(String lastModified, String author, String content, String[] answers, int correctAnswer) {
+    public void initScreen(String lastModified, String author, String content, String[] answers, int correctAnswer) {
         LastModified.setText(lastModified);
         Author.setText(author);
         Content.setText(content);
@@ -88,4 +90,10 @@ public class EditQuestionScreenController {
 
     }
 
+    public void setClientApp(ClientApp clientApp) {
+        if(this.clientApp == null){
+            this.clientApp = clientApp;
+        }
+
+    }
 }

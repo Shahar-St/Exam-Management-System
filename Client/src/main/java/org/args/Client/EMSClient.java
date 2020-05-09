@@ -144,7 +144,7 @@ public class EMSClient extends AbstractClient {
             LoginRequest request = (LoginRequest) response.getRequest();
             this.userName = request.getUserName();
             this.password = request.getPassword();
-            ClientApp.loginSuccess();
+            app.loginSuccess();
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
@@ -159,7 +159,12 @@ public class EMSClient extends AbstractClient {
 
 
     public void viewQuestionSuccessful(QuestionResponse response) {
-        ClientApp.fillEditQuestionScreen(response);
+        try{
+            app.fillEditQuestionScreen(response);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
 
     }
 

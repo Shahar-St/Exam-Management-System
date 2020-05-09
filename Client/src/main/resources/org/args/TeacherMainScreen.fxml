@@ -8,8 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="611.0" prefWidth="868.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="611.0" prefWidth="868.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.TeacherMainScreenController">
    <top>
       <AnchorPane prefHeight="98.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -24,17 +23,17 @@
    <center>
       <VBox prefHeight="203.0" prefWidth="468.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="questionManagementButton" alignment="CENTER" mnemonicParsing="false" onAction="#switchToQuestionEditScreen" prefHeight="50.0" prefWidth="200.0" text="Question Management">
+            <Button fx:id="questionManagementButton" alignment="CENTER" mnemonicParsing="false" onAction="#switchToQuestionManagement" prefHeight="50.0" prefWidth="200.0" text="Question Management">
                <VBox.margin>
                   <Insets left="100.0" top="50.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="testManagementButton" alignment="CENTER" mnemonicParsing="false" onAction="#switchToTestsManagementScreen" prefHeight="50.0" prefWidth="200.0" text="Tests Management">
+            <Button fx:id="testManagementButton" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="Tests Management">
                <VBox.margin>
                   <Insets left="100.0" top="50.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="statsButton" alignment="CENTER" mnemonicParsing="false" onAction="#switchToStatisticalAnalysisScreen" prefHeight="50.0" prefWidth="200.0" text="Statistical Analysis">
+            <Button fx:id="statsButton" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="Statistical Analysis">
                <VBox.margin>
                   <Insets left="100.0" top="50.0" />
                </VBox.margin>

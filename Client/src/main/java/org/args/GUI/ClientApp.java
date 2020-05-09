@@ -12,7 +12,6 @@ import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import org.args.Client.EMSClient;
 
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -39,34 +38,6 @@ public class ClientApp extends Application {
         return fxmlLoader.load();
     }
 
-    @Override
-    public void init() throws Exception {
-        try {
-            super.init();
-            client = new EMSClient(this.host, this.port, this);
-            scene.getStylesheets().add("bootstrapfx.css"); //trying to add bootstrap!
-        } catch (Exception e) {
-            System.out.println("Failed to init app.. exiting");
-            e.printStackTrace();
-            System.exit(1);
-        }
-
-    }
-
-    @Override
-    public void start(Stage stage) throws Exception {
-        try {
-            scene = new Scene(loadFXML("LoginScreen"), 640, 480);
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            System.out.println("Failed to start the app.. exiting");
-            e.printStackTrace();
-            System.exit(1);
-        }
-
-    }
-
     public static void sendRequest(Object data) {
         try {
             client.sendToServer(data);
@@ -76,32 +47,6 @@ public class ClientApp extends Application {
             System.exit(1);
         }
 
-    }
-
-    public static void loginSuccess() throws IOException {
-        try {
-            setRoot("TeacherMainScreen");
-        } catch (IOException e) {
-            System.out.println("Failed to switch scene on login success");
-            e.printStackTrace();
-            System.exit(1);
-        }
-
-    }
-
-    public static void fillEditQuestionScreen(QuestionResponse response) {
-
-        String lastModified = response.getLastModified().toString();
-
-        String author = response.getAuthor();
-
-        String content = response.getQuestionContent();
-
-        String[] answers = response.getAnswers();
-
-        int correctAnswer = response.getCorrectAnswer();
-
-        EditQuestionScreenController.initScreen(lastModified, author, content, answers, correctAnswer);
     }
 
     public static void fillSubjectsDropdown(SubjectsAndCoursesResponse response) {
@@ -121,8 +66,7 @@ public class ClientApp extends Application {
 
         HashMap<Integer, Pair<LocalDateTime, String>> questions = response.getQuestionList(); //Response: hashmap: key = question id, value = pair{date modified, description}
 
-        for (Map.Entry<Integer, Pair<LocalDateTime, String>> question : questions.entrySet())
-        {
+        for (Map.Entry<Integer, Pair<LocalDateTime, String>> question : questions.entrySet()) {
             String questionId = Integer.toString(question.getKey());
             String questionDescription = question.getValue().getSecond();
             String menuItemText = "#" + questionId + ": " + questionDescription;
@@ -135,9 +79,78 @@ public class ClientApp extends Application {
         launch();
     }
 
+    public FXMLLoader fxmlLoader(String fxml) {
+        return new FXMLLoader(getClass().getResource("/org/args/" + fxml + ".fxml"));
+    }
 
+    @Override
+    public void init() throws Exception {
+        try {
+            super.init();
+            client = new EMSClient(this.host, this.port, this);
+        } catch (Exception e) {
+            System.out.println("Failed to init app.. exiting");
+            e.printStackTrace();
+            System.exit(1);
+        }
 
+    }
 
+    @Override
+    public void start(Stage stage) throws Exception {
+        try {
+            FXMLLoader loader = fxmlLoader("LoginScreen");
+            scene = new Scene(loader.load(), 640, 480);
+            LoginScreenController screenController = loader.getController();
+            screenController.setClientApp(this);
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            System.out.println("Failed to start the app.. exiting");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+    }
+
+    public void loginSuccess() throws IOException {
+        try {
+//            setRoot(fxmlLoader("TeacherMainScreen").load());
+            FXMLLoader loader = fxmlLoader("TeacherMainScreen");
+            scene.setRoot(loader.load());
+        } catch (IOException e) {
+            System.out.println("Failed to switch scene on login success");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+    }
+
+    public void fillEditQuestionScreen(QuestionResponse response) throws IOException {
+
+        String lastModified = response.getLastModified().toString();
+
+        String author = response.getAuthor();
+
+        String content = response.getQuestionContent();
+
+        String[] answers = response.getAnswers();
+
+        int correctAnswer = response.getCorrectAnswer();
+
+        FXMLLoader loader = fxmlLoader("EditQuestionScreen");
+
+        Parent screen = loader.load();
+
+        EditQuestionScreenController screenController = loader.getController();
+
+        screenController.setClientApp(this);
+
+        screenController.initScreen(lastModified, author, content, answers, correctAnswer);
+
+        scene.setRoot(screen);
+
+    }
 
 
 }
