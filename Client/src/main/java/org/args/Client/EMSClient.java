@@ -26,7 +26,6 @@ public class EMSClient extends AbstractClient {
     public EMSClient(String host, int port, ClientApp clientApp) throws IOException {
         super(host, port);
         this.app = clientApp;
-        this.openConnection();
     }
 
     public boolean isLoggedIn() {
@@ -55,24 +54,32 @@ public class EMSClient extends AbstractClient {
 
     @Override
     public void sendToServer(Object msg) throws IOException {
+        // check if the client is not connected to the server then connect
+        // good for initial connection and for disconnections
+        if(!super.isConnected()){
+            super.openConnection();
+        }
         super.sendToServer(msg);
-        System.out.println("message has been sent to the server");
+        System.out.println("Message Has Been Sent To The Server");
         System.out.println(msg.toString());
     }
 
     @Override
     protected void connectionClosed() {
         super.connectionClosed();
+        System.out.println("Disconnected From Server");
     }
 
     @Override
     protected void connectionException(Exception exception) {
         super.connectionException(exception);
+        System.out.println("Connection Exception : "+exception.toString());
     }
 
     @Override
     protected void connectionEstablished() {
         super.connectionEstablished();
+        System.out.println("Established Connection To Server ");
         this.isRunning = true;
     }
 

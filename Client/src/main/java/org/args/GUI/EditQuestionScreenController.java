@@ -1,5 +1,6 @@
 package org.args.GUI;
 
+import DatabaseAccess.Requests.EditQuestionRequest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -109,6 +110,9 @@ public class EditQuestionScreenController {
            Answer3.setEditable(false);
            Answer4.setEditable(false);
            EditButton.setText("Edit");
+           isEditing = false;
+           EditQuestionRequest request = new EditQuestionRequest(1,"new content",new String[]{"1","2","3","4"},1);
+           ClientApp.sendRequest(request);
        }
 
 
