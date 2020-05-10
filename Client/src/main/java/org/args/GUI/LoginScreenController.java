@@ -4,6 +4,7 @@
 
 package org.args.GUI;
 
+import DatabaseAccess.Requests.LoginRequest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -27,13 +28,12 @@ public class LoginScreenController {
 
     @FXML
     void loginAttempt(ActionEvent event) throws IOException {
-        // the actual code
-//        String userName = usernameField.getText();
-//        String password = passwordField.getText();
-//        LoginRequest request = new LoginRequest(userName,password);
-//        ClientApp.sendRequest(request);
+        String userName = usernameField.getText();
+        String password = passwordField.getText();
+        LoginRequest request = new LoginRequest(userName,password);
+        ClientApp.sendRequest(request);
 
-        clientApp.loginSuccess();
+
     }
 
     public void setClientApp(ClientApp clientApp) {
