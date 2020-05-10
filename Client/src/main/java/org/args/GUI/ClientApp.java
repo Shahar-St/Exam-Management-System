@@ -5,6 +5,9 @@ import DatabaseAccess.Responses.Pair;
 import DatabaseAccess.Responses.QuestionResponse;
 import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,7 +18,9 @@ import org.args.Client.EMSClient;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 /**
  * JavaFX App
@@ -69,19 +74,21 @@ public class ClientApp extends Application {
 
     public void fillQuestionsList(AllQuestionsResponse response) throws IOException {
 
-        HashMap<Integer, Pair<LocalDateTime, String>> questions = response.getQuestionList();
-        FXMLLoader loader = fxmlLoader("EditQuestionScreen");
+        FXMLLoader loader = fxmlLoader("QuestionManagementScreen");
         loader.load();
         QuestionManagementScreenController screenController = loader.getController();
         screenController.setClientApp(this);
+        HashMap<Integer, Pair<LocalDateTime, String>> questions = response.getQuestionList();
+        ObservableList<String> observableSet = FXCollections.observableArrayList();
 
         for (Map.Entry<Integer, Pair<LocalDateTime, String>> question : questions.entrySet()) {
             String questionId = Integer.toString(question.getKey());
             String questionDescription = question.getValue().getSecond();
             String menuItemText = "#" + questionId + ": " + questionDescription;
-
-            screenController.addQuestionToQuestionsList(menuItemText);
+            observableSet.add(menuItemText);
         }
+
+        screenController.addToList(observableSet);
     }
 
     public static void main(String[] args) {
@@ -125,7 +132,6 @@ public class ClientApp extends Application {
 
     public void loginSuccess() throws IOException {
         try {
-//            setRoot(fxmlLoader("TeacherMainScreen").load());
             FXMLLoader loader = fxmlLoader("TeacherMainScreen");
             scene.setRoot(loader.load());
         } catch (IOException e) {

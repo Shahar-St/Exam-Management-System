@@ -5,16 +5,15 @@
 package org.args.GUI;
 
 import DatabaseAccess.Requests.AllQuestionsRequest;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxListCell;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class QuestionManagementScreenController {
 
@@ -35,6 +34,8 @@ public class QuestionManagementScreenController {
 
     private static HashMap<String, List<String>> subjectsAndCourses;
 
+    private static List<String> questions = new Vector<>();
+
     @FXML
     public void addCourseToDropdown(String coursename) {
         MenuItem course = new MenuItem(coursename);
@@ -42,16 +43,12 @@ public class QuestionManagementScreenController {
             @Override
             public void handle(ActionEvent event) {
                 coursesDropdown.setText(((MenuItem) event.getSource()).getText());
+                ClientApp.sendRequest(new AllQuestionsRequest(((MenuItem) event.getSource()).getText()));
             }
         });
         coursesDropdown.getItems().add(course);
     }
 
-    @FXML
-    public void addQuestionToQuestionsList(String questionDescription) {
-        questionsList.getItems().add(questionDescription);
-
-    }
 
     @FXML
     public void addSubjectToSubjectDropdown (MenuItem subject){
@@ -64,6 +61,8 @@ public class QuestionManagementScreenController {
         public void handle(ActionEvent event) {
             if (coursesDropdown.isDisabled())
                 coursesDropdown.setDisable(false);
+            if (coursesDropdown.getItems().size() > 0)
+                coursesDropdown.getItems().clear();
             String currentSubject = ((MenuItem) event.getSource()).getText();
             subjectsDropdown.setText(currentSubject);
             List<String> coursesToAdd = subjectsAndCourses.get(currentSubject);
@@ -79,7 +78,9 @@ public class QuestionManagementScreenController {
 
     @FXML
     void getQuestionsList(ActionEvent event) {
-        ClientApp.sendRequest(new AllQuestionsRequest(coursesDropdown.getText()));
+        if (questionsList.getItems().size() > 0)
+            questionsList.getItems().clear();
+        questionsList.getItems().addAll(questions);
     }
 
     @FXML
@@ -94,6 +95,23 @@ public class QuestionManagementScreenController {
         subjectsAndCourses = mapFromResponse;
     }
 
+
+
+    @FXML
+    public void addToList(ObservableList<String> observableSet) {
+        questions = observableSet;
+    }
+
+
+
+
+    public void setClientApp(ClientApp clientApp) {
+        if(this.clientApp == null){
+            this.clientApp = clientApp;
+        }
+
+    }
+
     @FXML
     void switchToStatisticalAnalysisScreen(ActionEvent event) {
 
@@ -103,13 +121,5 @@ public class QuestionManagementScreenController {
     void switchToTestsManagementScreen(ActionEvent event) {
 
     }
-
-    public void setClientApp(ClientApp clientApp) {
-        if(this.clientApp == null){
-            this.clientApp = clientApp;
-        }
-
-    }
-
 
 }
