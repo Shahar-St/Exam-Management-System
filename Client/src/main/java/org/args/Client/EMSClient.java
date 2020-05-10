@@ -104,7 +104,7 @@ public class EMSClient extends AbstractClient {
         } else if (msg instanceof AllQuestionsResponse) {
             AllQuestionsResponse response = (AllQuestionsResponse) msg;
             if (response.getStatus()) {
-
+                getAllQuestionsSuccessful(response);
 
             } else {
 
