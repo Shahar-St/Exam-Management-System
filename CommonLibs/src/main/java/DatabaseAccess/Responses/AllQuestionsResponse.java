@@ -17,9 +17,11 @@ public class AllQuestionsResponse extends DatabaseResponse {
                                 HashMap<Integer, Pair<LocalDateTime, String>> questions, String errorMsg) {
         super(status, request, errorMsg);
         questionList = questions;
+
     }
 
     public HashMap<Integer, Pair<LocalDateTime, String>> getQuestionList() {
         return questionList;
     }
 }
+

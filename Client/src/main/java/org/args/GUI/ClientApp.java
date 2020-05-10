@@ -51,7 +51,7 @@ public class ClientApp extends Application {
 
     public void fillSubjectsDropdown(SubjectsAndCoursesResponse response) throws IOException {
 
-        FXMLLoader loader = fxmlLoader("EditQuestionScreen");
+        FXMLLoader loader = fxmlLoader("QuestionManagementScreen");
         Parent questionManagementScreenToLoad =  loader.load();
         QuestionManagementScreenController screenController = loader.getController();
         screenController.setClientApp(this);
