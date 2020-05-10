@@ -13,8 +13,6 @@ public class EMSClient extends AbstractClient {
 
     private boolean isLoggedIn = false;
 
-    private boolean isRunning = false;
-
     private String userName;
 
     private String password;
@@ -30,10 +28,6 @@ public class EMSClient extends AbstractClient {
 
     public boolean isLoggedIn() {
         return isLoggedIn;
-    }
-
-    public boolean isRunning() {
-        return isRunning;
     }
 
     public String getUserName() {
@@ -56,7 +50,7 @@ public class EMSClient extends AbstractClient {
     public void sendToServer(Object msg) throws IOException {
         // check if the client is not connected to the server then connect
         // good for initial connection and for disconnections
-        if(!super.isConnected()){
+        if (!super.isConnected()) {
             super.openConnection();
         }
         super.sendToServer(msg);
@@ -73,28 +67,24 @@ public class EMSClient extends AbstractClient {
     @Override
     protected void connectionException(Exception exception) {
         super.connectionException(exception);
-        System.out.println("Connection Exception : "+exception.toString());
+        System.out.println("Connection Exception : " + exception.toString());
+        exception.printStackTrace();
     }
 
     @Override
     protected void connectionEstablished() {
         super.connectionEstablished();
         System.out.println("Established Connection To Server ");
-        this.isRunning = true;
     }
 
     @Override
-    protected void handleMessageFromServer(Object msg) throws IOException {
+    protected void handleMessageFromServer(Object msg) {
 
         if (msg instanceof LoginResponse) {
             LoginResponse response = (LoginResponse) msg;
             if (response.getStatus()) {
-                try {
-                    loginSuccessful(response);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    System.exit(1);
-                }
+
+                loginSuccessful(response);
 
 
             } else {
@@ -114,7 +104,6 @@ public class EMSClient extends AbstractClient {
         } else if (msg instanceof AllQuestionsResponse) {
             AllQuestionsResponse response = (AllQuestionsResponse) msg;
             if (response.getStatus()) {
-                app.fillQuestionsList(response);
 
 
             } else {
@@ -145,7 +134,7 @@ public class EMSClient extends AbstractClient {
     }
 
 
-    public void loginSuccessful(LoginResponse response) throws IOException {
+    public void loginSuccessful(LoginResponse response) {
         try {
             this.isLoggedIn = true;
             this.permission = response.getPermission();
@@ -154,8 +143,9 @@ public class EMSClient extends AbstractClient {
             this.password = request.getPassword();
             app.loginSuccess();
         } catch (IOException e) {
+            System.out.println("Exception while handling login success");
             e.printStackTrace();
-            System.exit(1);
+
         }
 
 
@@ -167,46 +157,54 @@ public class EMSClient extends AbstractClient {
 
 
     public void viewQuestionSuccessful(QuestionResponse response) {
-        try{
+        try {
             app.fillEditQuestionScreen(response);
-        }catch (IOException e){
+        } catch (IOException e) {
+            System.out.println("Exception while handling view question success");
             e.printStackTrace();
         }
 
 
     }
 
-    public void viewQuestionFailed(QuestionResponse response){
+    public void viewQuestionFailed(QuestionResponse response) {
 
     }
 
-    public void getSubjectsAndCoursesSuccess(SubjectsAndCoursesResponse response){
+    public void getSubjectsAndCoursesSuccess(SubjectsAndCoursesResponse response) {
         try {
             app.fillSubjectsDropdown(response);
         } catch (IOException e) {
+            System.out.println("Exception while handling view subjects and courses success");
             e.printStackTrace();
         }
 
 
     }
 
-    public void getSubjectsAndCoursesFailed(SubjectsAndCoursesResponse response){
+    public void getSubjectsAndCoursesFailed(SubjectsAndCoursesResponse response) {
 
     }
 
-    public void editQuestionSuccessful(EditQuestionResponse response){
+    public void editQuestionSuccessful(EditQuestionResponse response) {
 
     }
 
-    public void editQuestionFailed(EditQuestionResponse response){
+    public void editQuestionFailed(EditQuestionResponse response) {
 
     }
 
-    public void getAllQuestionsSuccessful(AllQuestionsResponse response){
+    public void getAllQuestionsSuccessful(AllQuestionsResponse response) {
+        try {
+            app.fillQuestionsList(response);
+        } catch (IOException e) {
+            System.out.println("Exception while handling get all questions success");
+            e.printStackTrace();
+        }
 
     }
 
-    public void getAllQuestionsFailed(AllQuestionsResponse response){
+    public void getAllQuestionsFailed(AllQuestionsResponse response) {
 
     }
 

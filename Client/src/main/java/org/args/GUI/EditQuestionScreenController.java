@@ -57,23 +57,24 @@ public class EditQuestionScreenController {
         Answer3.setText(answers[2]);
         Answer4.setText(answers[3]);
         // set backgroud color of the correct answer to green
-        switch (correctAnswer) {
-            case 0:
-                Answer1.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
-                break;
-            case 1:
-                Answer2.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
-                break;
-            case 2:
-                Answer3.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
-                break;
-            case 3:
-                Answer4.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
-                break;
-            default:
-                System.out.println("Undefined correct answer");
-                break;
-        }
+//        switch (correctAnswer) {
+//            case 0:
+//                Answer1.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
+//                break;
+//            case 1:
+//                Answer2.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
+//                break;
+//            case 2:
+//                Answer3.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
+//                break;
+//            case 3:
+//                Answer4.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
+//                break;
+//            default:
+//                System.out.println("Undefined correct answer");
+//                break;
+//        }
+        Answer1.setStyle("-color: #00ff00 ;");
 
     }
 

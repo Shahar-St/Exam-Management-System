@@ -51,7 +51,7 @@ public class ClientApp extends Application {
         } catch (Exception e) {
             System.out.println("Failed to init app.. exiting");
             e.printStackTrace();
-            System.exit(1);
+
         }
 
     }
@@ -69,7 +69,7 @@ public class ClientApp extends Application {
         } catch (Exception e) {
             System.out.println("Failed to start the app.. exiting");
             e.printStackTrace();
-            System.exit(1);
+
         }
 
     }
@@ -88,7 +88,7 @@ public class ClientApp extends Application {
         } catch (IOException e) {
             System.out.println("Failed to send request to server");
             e.printStackTrace();
-            System.exit(1);
+
         }
 
     }
@@ -138,7 +138,7 @@ public class ClientApp extends Application {
         } catch (IOException e) {
             System.out.println("Failed to switch scene on login success");
             e.printStackTrace();
-            System.exit(1);
+
         }
 
     }
