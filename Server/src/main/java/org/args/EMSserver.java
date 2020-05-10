@@ -31,6 +31,8 @@ public class EMSserver extends AbstractServer {
             {
                 e.printStackTrace();
             }
+            session.flush();
+            session.clear();
         }
     }
 
