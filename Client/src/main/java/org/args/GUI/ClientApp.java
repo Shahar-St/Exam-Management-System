@@ -43,6 +43,45 @@ public class ClientApp extends Application {
         return fxmlLoader.load();
     }
 
+    @Override
+    public void init() throws Exception {
+        try {
+            super.init();
+            client = new EMSClient(this.host, this.port, this);
+        } catch (Exception e) {
+            System.out.println("Failed to init app.. exiting");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        try {
+            FXMLLoader loader = fxmlLoader("LoginScreen");
+            scene = new Scene(loader.load(), 850, 450);
+            LoginScreenController screenController = loader.getController();
+            screenController.setClientApp(this);
+            scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            System.out.println("Failed to start the app.. exiting");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+    }
+
+    public static void main(String[] args) {
+        launch();
+    }
+
+    public FXMLLoader fxmlLoader(String fxml) {
+        return new FXMLLoader(getClass().getResource("/org/args/" + fxml + ".fxml"));
+    }
+
     public static void sendRequest(Object data) {
         try {
             client.sendToServer(data);
@@ -67,6 +106,7 @@ public class ClientApp extends Application {
             subject.setOnAction(screenController.displayCoursesFromSubject);
             screenController.addSubjectToSubjectDropdown(subject);
         }
+
         scene.setRoot(screen);
 
 
@@ -89,45 +129,6 @@ public class ClientApp extends Application {
         }
 
         screenController.addToList(observableSet);
-    }
-
-    public static void main(String[] args) {
-        launch();
-    }
-
-    public FXMLLoader fxmlLoader(String fxml) {
-        return new FXMLLoader(getClass().getResource("/org/args/" + fxml + ".fxml"));
-    }
-
-    @Override
-    public void init() throws Exception {
-        try {
-            super.init();
-            client = new EMSClient(this.host, this.port, this);
-        } catch (Exception e) {
-            System.out.println("Failed to init app.. exiting");
-            e.printStackTrace();
-            System.exit(1);
-        }
-
-    }
-
-    @Override
-    public void start(Stage stage) throws Exception {
-        try {
-            FXMLLoader loader = fxmlLoader("LoginScreen");
-            scene = new Scene(loader.load(), 640, 480);
-            LoginScreenController screenController = loader.getController();
-            screenController.setClientApp(this);
-            scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            System.out.println("Failed to start the app.. exiting");
-            e.printStackTrace();
-            System.exit(1);
-        }
-
     }
 
     public void loginSuccess() throws IOException {
