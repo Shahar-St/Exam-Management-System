@@ -5,6 +5,7 @@
 package org.args.GUI;
 
 import DatabaseAccess.Requests.AllQuestionsRequest;
+import DatabaseAccess.Requests.QuestionRequest;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -73,9 +74,6 @@ public class QuestionManagementScreenController {
         }
     };
 
-
-
-
     @FXML
     void getQuestionsList(ActionEvent event) {
         if (questionsList.getItems().size() > 0)
@@ -85,9 +83,10 @@ public class QuestionManagementScreenController {
 
     @FXML
     void switchToQuestionEditScreen(ActionEvent event) throws IOException {
-
+        int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
+        int questionId = Integer.parseInt(questionsList.getSelectionModel().getSelectedItem().substring(1,indexOfColon));
+        ClientApp.sendRequest(new QuestionRequest(questionId));
         ClientApp.setRoot("EditQuestionScreen");
-
     }
 
     public void setSubjectsAndCoursesState (HashMap<String,List<String>> mapFromResponse)
@@ -101,8 +100,6 @@ public class QuestionManagementScreenController {
     public void addToList(ObservableList<String> observableSet) {
         questions = observableSet;
     }
-
-
 
 
     public void setClientApp(ClientApp clientApp) {
