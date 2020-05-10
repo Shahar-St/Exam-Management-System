@@ -5,6 +5,7 @@
 package org.args.GUI;
 
 import DatabaseAccess.Requests.AllQuestionsRequest;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -36,7 +37,14 @@ public class QuestionManagementScreenController {
 
     @FXML
     public void addCourseToDropdown(String coursename) {
-        coursesDropdown.getItems().add(new MenuItem(coursename));
+        MenuItem course = new MenuItem(coursename);
+        course.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                coursesDropdown.setText(((MenuItem) event.getSource()).getText());
+            }
+        });
+        coursesDropdown.getItems().add(course);
     }
 
     @FXML
@@ -56,11 +64,12 @@ public class QuestionManagementScreenController {
         public void handle(ActionEvent event) {
             if (coursesDropdown.isDisabled())
                 coursesDropdown.setDisable(false);
-            String currentSubject = subjectsDropdown.getText();
+            String currentSubject = ((MenuItem) event.getSource()).getText();
+            subjectsDropdown.setText(currentSubject);
             List<String> coursesToAdd = subjectsAndCourses.get(currentSubject);
             for (String course : coursesToAdd)
             {
-                coursesDropdown.getItems().add(new MenuItem(course));
+                addCourseToDropdown(course);
             }
         }
     };
