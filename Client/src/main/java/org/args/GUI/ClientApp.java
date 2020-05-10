@@ -51,8 +51,8 @@ public class ClientApp extends Application {
 
     public void fillSubjectsDropdown(SubjectsAndCoursesResponse response) throws IOException {
 
-        FXMLLoader loader = fxmlLoader("EditQuestionScreen");
-        loader.load();
+        FXMLLoader loader = fxmlLoader("QuestionManagementScreen");
+        Parent screen = loader.load();
         QuestionManagementScreenController screenController = loader.getController();
         screenController.setClientApp(this);
         screenController.setSubjectsAndCoursesState(response.getSubjectsAndCourses()); //set the hashmap in the controllers state to later fill the courses dropdown list according to selected subject
@@ -62,6 +62,7 @@ public class ClientApp extends Application {
             subject.setOnAction(screenController.displayCoursesFromSubject);
             screenController.addSubjectToSubjectDropdown(subject);
         }
+        scene.setRoot(screen);
 
 
     }

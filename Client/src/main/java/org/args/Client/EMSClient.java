@@ -126,7 +126,8 @@ public class EMSClient extends AbstractClient {
         } else if (msg instanceof SubjectsAndCoursesResponse) {
             SubjectsAndCoursesResponse response = (SubjectsAndCoursesResponse) msg;
             if (response.getStatus()) {
-                app.fillSubjectsDropdown(response);
+                getSubjectsAndCoursesSuccess(response);
+
             } else {
 
             }
@@ -173,6 +174,11 @@ public class EMSClient extends AbstractClient {
     }
 
     public void getSubjectsAndCoursesSuccess(SubjectsAndCoursesResponse response){
+        try {
+            app.fillSubjectsDropdown(response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
     }
