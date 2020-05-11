@@ -21,11 +21,14 @@ public class DatabaseRequestHandler {
     private DatabaseResponse response;
     private final Session session;
     private final ConnectionToClient client;
+    private final List<String> loggedInUsers;
 
-    public DatabaseRequestHandler(DatabaseRequest request, ConnectionToClient client, Session session) {
+    public DatabaseRequestHandler(DatabaseRequest request, ConnectionToClient client,
+                                  Session session, List<String> loggedInUsers) {
         this.request = request;
         this.session = session;
         this.client = client;
+        this.loggedInUsers = loggedInUsers;
 
         if (request instanceof LoginRequest)
             loginHandler();
@@ -131,8 +134,13 @@ public class DatabaseRequestHandler {
 
         LoginRequest request = (LoginRequest) this.request;
         User user = getUser(request.getUserName());
-
-        if (user == null)
+        if (loggedInUsers.contains(request.getUserName()))
+        {
+            this.response = new LoginResponse(false, request,
+                    "Your'e currently logged in from a different terminal");
+            return;
+        }
+        else if (user == null)
         {
             this.response = new LoginResponse(false, request, "username wasn't found");
             return;
@@ -144,6 +152,7 @@ public class DatabaseRequestHandler {
         }
 
         this.client.setInfo("userName", user.getUserName());
+        loggedInUsers.add(user.getUserName());
         this.response = new LoginResponse(true, request, user.getClass().getSimpleName().toLowerCase());
     }
 

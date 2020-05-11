@@ -6,11 +6,14 @@ import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class EMSserver extends AbstractServer {
 
     private final Session session;
+    List<String> loggedInUsers = new ArrayList<>();
 
     public EMSserver(int port, Session session) {
         super(port);
@@ -22,7 +25,8 @@ public class EMSserver extends AbstractServer {
 
         if (msg instanceof DatabaseRequest)
         {
-            DatabaseRequestHandler handler = new DatabaseRequestHandler((DatabaseRequest) msg, client, session);
+            DatabaseRequestHandler handler =
+                    new DatabaseRequestHandler((DatabaseRequest) msg, client, session, loggedInUsers);
             try
             {
                 client.sendToClient(handler.getResponse());
@@ -38,6 +42,6 @@ public class EMSserver extends AbstractServer {
 
     @Override
     protected synchronized void clientDisconnected(ConnectionToClient client) {
-        //need to remove from logged in users
+        loggedInUsers.remove((String) client.getInfo("userName"));
     }
 }

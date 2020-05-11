@@ -62,5 +62,4 @@ public class QuestionResponse extends DatabaseResponse {
     public LocalDateTime getLastModified() {
         return lastModified;
     }
-
 }
