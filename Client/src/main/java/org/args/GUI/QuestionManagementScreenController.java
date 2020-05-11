@@ -37,6 +37,33 @@ public class QuestionManagementScreenController {
 
     private static List<String> questions = new Vector<>();
 
+    private static String currentSubject = null;
+
+    public void setClientApp(ClientApp clientApp) {
+        if(this.clientApp == null){
+            this.clientApp = clientApp;
+        }
+
+    }
+
+    @FXML
+    public void initialize() {
+        if (questions.size() > 0)
+            questionsList.getItems().addAll(questions);
+
+        if (subjectsAndCourses != null)
+        {
+            for (String subjectName : subjectsAndCourses.keySet()) //iterate through every subject in the hashmap
+            {
+                MenuItem subject = new MenuItem(subjectName);
+                subject.setOnAction(displayCoursesFromSubject);
+                addSubjectToSubjectDropdown(subject);
+            }
+            subjectsDropdown.setText(currentSubject);
+            initializeCoursesdropdown();
+            fillCoursesDropdown(currentSubject);
+        }
+    }
 
     @FXML
     public void addCourseToDropdown(String coursename) {
@@ -51,6 +78,24 @@ public class QuestionManagementScreenController {
         coursesDropdown.getItems().add(course);
     }
 
+    @FXML
+    void initializeCoursesdropdown() {
+        if (coursesDropdown.isDisabled())
+            coursesDropdown.setDisable(false);
+        if (coursesDropdown.getItems().size() > 0)
+            coursesDropdown.getItems().clear();
+    }
+
+    @FXML
+    void fillCoursesDropdown (String subject)
+    {
+        List<String> coursesToAdd = subjectsAndCourses.get(subject);
+        for (String course : coursesToAdd)
+        {
+            addCourseToDropdown(course);
+        }
+    }
+
 
     @FXML
     public void addSubjectToSubjectDropdown (MenuItem subject){
@@ -61,17 +106,10 @@ public class QuestionManagementScreenController {
     public EventHandler<ActionEvent> displayCoursesFromSubject = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-            if (coursesDropdown.isDisabled())
-                coursesDropdown.setDisable(false);
-            if (coursesDropdown.getItems().size() > 0)
-                coursesDropdown.getItems().clear();
-            String currentSubject = ((MenuItem) event.getSource()).getText();
+            initializeCoursesdropdown();
+            currentSubject = ((MenuItem) event.getSource()).getText();
             subjectsDropdown.setText(currentSubject);
-            List<String> coursesToAdd = subjectsAndCourses.get(currentSubject);
-            for (String course : coursesToAdd)
-            {
-                addCourseToDropdown(course);
-            }
+            fillCoursesDropdown(currentSubject);
         }
     };
 
@@ -82,19 +120,12 @@ public class QuestionManagementScreenController {
         questionsList.getItems().addAll(questions);
     }
 
-    @FXML
-    void switchToQuestionEditScreen(ActionEvent event) throws IOException {
-        int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
-        int questionId = Integer.parseInt(questionsList.getSelectionModel().getSelectedItem().substring(1,indexOfColon));
-        ClientApp.sendRequest(new QuestionRequest(questionId));
-        ClientApp.setRoot("EditQuestionScreen");
-    }
+
 
     public void setSubjectsAndCoursesState (HashMap<String,List<String>> mapFromResponse)
     {
         subjectsAndCourses = mapFromResponse;
     }
-
 
 
     @FXML
@@ -103,11 +134,12 @@ public class QuestionManagementScreenController {
     }
 
 
-    public void setClientApp(ClientApp clientApp) {
-        if(this.clientApp == null){
-            this.clientApp = clientApp;
-        }
-
+    @FXML
+    void switchToQuestionEditScreen(ActionEvent event) throws IOException {
+        int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
+        int questionId = Integer.parseInt(questionsList.getSelectionModel().getSelectedItem().substring(1,indexOfColon));
+        ClientApp.sendRequest(new QuestionRequest(questionId));
+        ClientApp.setRoot("EditQuestionScreen");
     }
 
     @FXML
