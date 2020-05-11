@@ -24,6 +24,13 @@ public class DatabaseRequestHandler {
     private final ConnectionToClient client;
     private final List<String> loggedInUsers;
 
+    // error codes
+    private final int SUCCESS = 0;
+    private final int UNAUTHORIZED = 1;
+    private final int NOT_FOUND = 2;
+    private final int NO_ACCESS = 3;
+    private final int WRONG_INFO = 4;
+
     public DatabaseRequestHandler(DatabaseRequest request, ConnectionToClient client,
                                   Session session, List<String> loggedInUsers) {
         this.request = request;
@@ -53,8 +60,7 @@ public class DatabaseRequestHandler {
 
         if (client.getInfo("userName") == null)
         {
-            this.response = new SubjectsAndCoursesResponse(false, request,
-                    "unauthorized access - user isn't logged in");
+            this.response = new SubjectsAndCoursesResponse(UNAUTHORIZED, request);
             return;
         }
 
@@ -84,7 +90,7 @@ public class DatabaseRequestHandler {
                 map.put(course.getSubject().getName(), subjectCourses);
             }
         }
-        this.response = new SubjectsAndCoursesResponse(true, request, map);
+        this.response = new SubjectsAndCoursesResponse(SUCCESS, request, map);
     }
 
     private void questionHandler() {
@@ -97,11 +103,11 @@ public class DatabaseRequestHandler {
         }
         catch (NoResultException e)
         {
-            this.response = new QuestionResponse(false, request, "Question wasn't found");
+            this.response = new QuestionResponse(NOT_FOUND, request);
             return;
         }
 
-        this.response = new QuestionResponse(true, request, question.getQuestionContent(),
+        this.response = new QuestionResponse(SUCCESS, request, question.getQuestionContent(),
                 question.getAnswersArray(), question.getCorrectAnswer(), question.getCourse().getName(),
                 question.getAuthor().getFullName(), question.getLastModified());
     }
@@ -114,13 +120,12 @@ public class DatabaseRequestHandler {
 
         if (question == null)
         {
-            this.response = new EditQuestionResponse(false, request, "Question wasn't found");
+            this.response = new EditQuestionResponse(NOT_FOUND, request);
             return;
         }
         else if (question.getAuthor() != getUser((String) client.getInfo("userName")))
         {
-            this.response = new QuestionResponse(false, request,
-                    "You can't edit a question that wasn't written by you");
+            this.response = new EditQuestionResponse(NO_ACCESS, request);
             return;
         }
 
@@ -130,7 +135,7 @@ public class DatabaseRequestHandler {
         question.setLastModified(LocalDateTime.now());
         session.update(question);
 
-        this.response = new EditQuestionResponse(true, request);
+        this.response = new EditQuestionResponse(SUCCESS, request);
     }
 
     private void loginHandler() {
@@ -143,25 +148,24 @@ public class DatabaseRequestHandler {
         }
         catch (NoResultException e)
         {
-            this.response = new LoginResponse(false, request, "username wasn't found");
+            this.response = new LoginResponse(NOT_FOUND, request);
             return;
         }
 
         if (loggedInUsers.contains(request.getUserName()))
         {
-            this.response = new LoginResponse(false, request,
-                    "Your'e currently logged in from a different terminal");
+            this.response = new LoginResponse(NO_ACCESS, request);
             return;
         }
         else if (!user.getPassword().equals(request.getPassword()))
         {
-            this.response = new LoginResponse(false, request, "wrong password");
+            this.response = new LoginResponse(WRONG_INFO, request);
             return;
         }
 
         this.client.setInfo("userName", user.getUserName());
         loggedInUsers.add(user.getUserName());
-        this.response = new LoginResponse(true, user.getClass().getSimpleName().toLowerCase(), request);
+        this.response = new LoginResponse(SUCCESS, user.getClass().getSimpleName().toLowerCase(), request);
     }
 
     private void allQuestionsHandler() {
@@ -171,8 +175,7 @@ public class DatabaseRequestHandler {
 
         if (client.getInfo("userName") == null)
         {
-            this.response = new AllQuestionsResponse(false, request,
-                    "unauthorized access - user isn't logged in");
+            this.response = new AllQuestionsResponse(UNAUTHORIZED, request);
             return;
         }
 
@@ -204,7 +207,7 @@ public class DatabaseRequestHandler {
                     new Pair<>(question.getLastModified(), question.getQuestionContent()));
         }
 
-        this.response = new AllQuestionsResponse(true, request, map);
+        this.response = new AllQuestionsResponse(SUCCESS, request, map);
     }
 
     private User getUser(String userName) throws NoResultException {
