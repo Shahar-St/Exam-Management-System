@@ -1,4 +1,4 @@
-package org.args;
+package org.args.GUI;
 
 public class HelperApp {
 
