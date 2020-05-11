@@ -1,4 +1,7 @@
 package DatabaseAccess.Requests;
 
-public abstract class DatabaseRequest {
+import java.io.Serializable;
+
+public abstract class DatabaseRequest implements Serializable {
+
 }

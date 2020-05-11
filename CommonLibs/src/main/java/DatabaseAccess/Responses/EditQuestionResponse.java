@@ -8,6 +8,12 @@ import DatabaseAccess.Requests.DatabaseRequest;
  */
 public class EditQuestionResponse extends DatabaseResponse {
 
+    // successful request
+    public EditQuestionResponse(boolean status, DatabaseRequest request) {
+        super(status, request, null);
+    }
+
+    // unsuccessful request
     public EditQuestionResponse(boolean status, DatabaseRequest request, String errorMsg) {
         super(status, request, errorMsg);
     }

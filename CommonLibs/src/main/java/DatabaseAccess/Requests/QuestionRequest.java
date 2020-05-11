@@ -2,7 +2,7 @@ package DatabaseAccess.Requests;
 
 /**
  * Request: asks for a question's full details
- * Response: a string contains the question's full details
+ * Response: the question's full details
  */
 public class QuestionRequest extends DatabaseRequest{
 

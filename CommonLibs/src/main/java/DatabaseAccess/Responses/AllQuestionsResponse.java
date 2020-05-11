@@ -14,11 +14,15 @@ public class AllQuestionsResponse extends DatabaseResponse {
     private final HashMap<Integer, Pair<LocalDateTime, String>> questionList;
 
     public AllQuestionsResponse(boolean status, DatabaseRequest request,
-                                HashMap<Integer, Pair<LocalDateTime, String>> questions, String errorMsg) {
-        super(status, request, errorMsg);
+                                HashMap<Integer, Pair<LocalDateTime, String>> questions) {
+        super(status, request, null);
         questionList = questions;
     }
 
+    public AllQuestionsResponse(boolean status, DatabaseRequest request, String errorMsg) {
+        super(status, request, errorMsg);
+        this.questionList = null;
+    }
     public HashMap<Integer, Pair<LocalDateTime, String>> getQuestionList() {
         return questionList;
     }
