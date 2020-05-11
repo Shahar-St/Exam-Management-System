@@ -3,7 +3,7 @@ package org.args.Entities;
 import javax.persistence.*;
 import java.text.DecimalFormat;
 
-@MappedSuperclass
+@Entity
 public abstract class User {
 
     @Id
@@ -13,7 +13,8 @@ public abstract class User {
     private String firstName, lastName, password, userName;
 
     //Group c'tors
-    public User() { }
+    public User() {
+    }
 
     public User(int socialId, String firstName, String lastName, String password, String userName) {
         DecimalFormat decimalFormat = new DecimalFormat("000000000");
@@ -55,5 +56,9 @@ public abstract class User {
     }
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getFullName() {
+        return this.firstName + this.lastName;
     }
 }

@@ -5,7 +5,7 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <datasource-mapping>
-          <factory-entry name="Server" />
+          <factory-entry name="Server" value="b57499b6-3862-4427-9871-805a0b9b9da6" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>
