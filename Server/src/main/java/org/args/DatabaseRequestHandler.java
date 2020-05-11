@@ -90,10 +90,12 @@ public class DatabaseRequestHandler {
     private void questionHandler() {
 
         QuestionRequest request = (QuestionRequest) this.request;
-
-        Question question = getQuestion(String.valueOf(request.getQuestionID()));
-
-        if (question == null)
+        Question question;
+        try
+        {
+            question = getQuestion(String.valueOf(request.getQuestionID()));
+        }
+        catch (NoResultException e)
         {
             this.response = new QuestionResponse(false, request, "Question wasn't found");
             return;
@@ -166,7 +168,6 @@ public class DatabaseRequestHandler {
 
         AllQuestionsRequest request = (AllQuestionsRequest) this.request;
         HashMap<Integer, Pair<LocalDateTime, String>> map = new HashMap<>();
-
 
         if (client.getInfo("userName") == null)
         {
