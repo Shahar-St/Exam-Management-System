@@ -1,5 +1,6 @@
 package org.args.GUI;
 
+import DatabaseAccess.Requests.EditQuestionRequest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -56,23 +57,24 @@ public class EditQuestionScreenController {
         Answer3.setText(answers[2]);
         Answer4.setText(answers[3]);
         // set backgroud color of the correct answer to green
-        switch (correctAnswer) {
-            case 0:
-                Answer1.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
-                break;
-            case 1:
-                Answer2.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
-                break;
-            case 2:
-                Answer3.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
-                break;
-            case 3:
-                Answer4.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
-                break;
-            default:
-                System.out.println("Undefined correct answer");
-                break;
-        }
+//        switch (correctAnswer) {
+//            case 0:
+//                Answer1.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
+//                break;
+//            case 1:
+//                Answer2.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
+//                break;
+//            case 2:
+//                Answer3.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
+//                break;
+//            case 3:
+//                Answer4.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
+//                break;
+//            default:
+//                System.out.println("Undefined correct answer");
+//                break;
+//        }
+        Answer1.setStyle("-color: #00ff00 ;");
 
     }
 
@@ -109,6 +111,9 @@ public class EditQuestionScreenController {
            Answer3.setEditable(false);
            Answer4.setEditable(false);
            EditButton.setText("Edit");
+           isEditing = false;
+           EditQuestionRequest request = new EditQuestionRequest(1,"new content",new String[]{"1","2","3","4"},1);
+           ClientApp.sendRequest(request);
        }
 
 
