@@ -32,7 +32,7 @@ public class ClientApp extends Application {
     // specify the server details
     private final String host = "127.0.0.1";
 
-    private final int port = 1337;
+    private final int port = 3000;
 
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));

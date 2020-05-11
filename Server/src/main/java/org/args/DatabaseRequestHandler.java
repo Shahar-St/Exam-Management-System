@@ -7,6 +7,7 @@ import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -133,16 +134,21 @@ public class DatabaseRequestHandler {
     private void loginHandler() {
 
         LoginRequest request = (LoginRequest) this.request;
-        User user = getUser(request.getUserName());
+        User user;
+        try
+        {
+            user = getUser(request.getUserName());
+        }
+        catch (NoResultException e)
+        {
+            this.response = new LoginResponse(false, request, "username wasn't found");
+            return;
+        }
+
         if (loggedInUsers.contains(request.getUserName()))
         {
             this.response = new LoginResponse(false, request,
                     "Your'e currently logged in from a different terminal");
-            return;
-        }
-        else if (user == null)
-        {
-            this.response = new LoginResponse(false, request, "username wasn't found");
             return;
         }
         else if (!user.getPassword().equals(request.getPassword()))
@@ -153,7 +159,7 @@ public class DatabaseRequestHandler {
 
         this.client.setInfo("userName", user.getUserName());
         loggedInUsers.add(user.getUserName());
-        this.response = new LoginResponse(true, request, user.getClass().getSimpleName().toLowerCase());
+        this.response = new LoginResponse(true, user.getClass().getSimpleName().toLowerCase(), request);
     }
 
     private void allQuestionsHandler() {
@@ -200,7 +206,8 @@ public class DatabaseRequestHandler {
         this.response = new AllQuestionsResponse(true, request, map);
     }
 
-    private User getUser(String userName) {
+    private User getUser(String userName) throws NoResultException {
+
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> root = criteriaQuery.from(User.class);

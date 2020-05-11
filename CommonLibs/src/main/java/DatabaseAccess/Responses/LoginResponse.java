@@ -12,13 +12,13 @@ public class LoginResponse extends DatabaseResponse {
 
     // successful request
     public LoginResponse(boolean status, String permission, DatabaseRequest request) {
-        super(true, request, null);
+        super(status, request, null);
         this.permission = permission;
     }
 
     // unsuccessful request
     public LoginResponse(boolean status, DatabaseRequest request, String errorMsg) {
-        super(false, request, errorMsg);
+        super(status, request, errorMsg);
         this.permission = null;
     }
     public String getPermission() {

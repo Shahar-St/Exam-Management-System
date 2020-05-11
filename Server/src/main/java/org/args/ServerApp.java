@@ -1,24 +1,17 @@
 package org.args;
 
-
-import DatabaseAccess.Requests.LoginRequest;
-
 import org.args.Entities.*;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.criterion.Example;
 import org.hibernate.service.ServiceRegistry;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import java.text.DecimalFormat;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
-import java.util.logging.Level;
 
 
 public class ServerApp {
@@ -54,7 +47,7 @@ public class ServerApp {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter port number:");
+        System.out.print("Enter port number:");
         int port = scanner.nextInt();
         try
         {
@@ -65,12 +58,8 @@ public class ServerApp {
 
             EMSserver server = new EMSserver(port, session);
 
-
-
-
             session.getTransaction().commit();
-            //server.listen();
-
+            server.listen();
 
             session.clear();
         }
@@ -81,8 +70,6 @@ public class ServerApp {
 
             System.err.println("An error occurred, changes have been rolled back.");
             exception.printStackTrace();
-        } finally
-        {
             assert session != null;
             session.close();
             session.getSessionFactory().close();

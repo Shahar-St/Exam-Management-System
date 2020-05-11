@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class EMSserver extends AbstractServer {
@@ -18,11 +19,14 @@ public class EMSserver extends AbstractServer {
     public EMSserver(int port, Session session) {
         super(port);
         this.session = session;
+        Thread serverCommands = new Thread(this::serverCommands);
+        serverCommands.start();
     }
 
     @Override
     protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 
+        System.out.println("connected");
         if (msg instanceof DatabaseRequest)
         {
             DatabaseRequestHandler handler =
@@ -43,5 +47,31 @@ public class EMSserver extends AbstractServer {
     @Override
     protected synchronized void clientDisconnected(ConnectionToClient client) {
         loggedInUsers.remove((String) client.getInfo("userName"));
+    }
+
+    private void serverCommands() {
+
+        Scanner scanner = new Scanner(System.in);
+
+        while (true)
+        {
+            System.out.print(">>");
+            String input = scanner.nextLine();
+            if (input.equals("exit"))
+            {
+                assert session != null;
+                session.close();
+                session.getSessionFactory().close();
+                try
+                {
+                    this.close();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+                return;
+            }
+        }
     }
 }
