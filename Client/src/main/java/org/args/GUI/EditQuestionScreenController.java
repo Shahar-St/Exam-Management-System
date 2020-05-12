@@ -1,51 +1,62 @@
 package org.args.GUI;
 
 import DatabaseAccess.Requests.EditQuestionRequest;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Paint;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
+
 
 import java.io.IOException;
 
 public class EditQuestionScreenController {
 
-    private ClientApp clientApp=null;
 
-    private boolean isEditing=false;
+    private boolean isEditing = false;
 
-    @FXML
-    private  TextField LastModified;
+    private int correctAnswer;
 
-    @FXML
-    private  TextField Author;
+    private static ObservableList choiceItems;
 
     @FXML
-    private  TextArea Content;
+    private TextField LastModified;
 
     @FXML
-    private  TextField Answer1;
+    private TextField Author;
 
     @FXML
-    private  TextField Answer2;
+    private TextArea Content;
 
     @FXML
-    private  TextField Answer3;
+    private TextField Answer1;
 
     @FXML
-    private  TextField Answer4;
+    private TextField Answer2;
 
     @FXML
-    private  Button CancelButton;
+    private TextField Answer3;
 
     @FXML
-    private  Button EditButton;
+    private TextField Answer4;
+
+    @FXML
+    private ChoiceBox<String> correctAnswerChoice;
+
+    @FXML
+    private Button CancelButton;
+
+    @FXML
+    private Button EditButton;
 
 
     public void initScreen(String lastModified, String author, String content, String[] answers, int correctAnswer) {
@@ -56,73 +67,156 @@ public class EditQuestionScreenController {
         Answer2.setText(answers[1]);
         Answer3.setText(answers[2]);
         Answer4.setText(answers[3]);
-        // set backgroud color of the correct answer to green
-//        switch (correctAnswer) {
-//            case 0:
-//                Answer1.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
-//                break;
-//            case 1:
-//                Answer2.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
-//                break;
-//            case 2:
-//                Answer3.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
-//                break;
-//            case 3:
-//                Answer4.setBackground(new Background(new BackgroundFill(Paint.valueOf("00FF00"), CornerRadii.EMPTY, Insets.EMPTY)));
-//                break;
-//            default:
-//                System.out.println("Undefined correct answer");
-//                break;
-//        }
-        Answer1.setStyle("-color: #00ff00 ;");
+        this.correctAnswer = correctAnswer;
 
     }
 
     @FXML
-    void CancelButtonClicked(ActionEvent event) {
+    private void initialize(){
+        if(choiceItems==null){
+            String[] answers = {"Answer 1","Answer 2","Answer 3","Answer 4"};
+            choiceItems = FXCollections.observableArrayList(answers);
+
+
+        }
+        correctAnswerChoice.getItems().addAll(choiceItems);
+        switch (this.correctAnswer) {
+            case 0:
+                Answer1.setStyle("-fx-background-color: #00ff00 ;");
+                correctAnswerChoice.setValue("Answer 1");
+                break;
+            case 1:
+                Answer2.setStyle("-fx-background-color: #00ff00 ;");
+                correctAnswerChoice.setValue("Answer 2");
+                break;
+            case 2:
+                Answer3.setStyle("-fx-background-color: #00ff00 ;");
+                correctAnswerChoice.setValue("Answer 3");
+                break;
+            case 3:
+                Answer4.setStyle("-fx-background-color: #00ff00 ;");
+                correctAnswerChoice.setValue("Answer 4");
+                break;
+            default:
+                System.out.println("Undefined correct answer");
+                break;
+        }
+
+
+
+    }
+
+    public void editSuccess(){
         try {
-            ClientApp.setRoot("QuestionManagementScreen");
-        }
-        catch (IOException e){
+            Scene scene = new Scene(ClientApp.loadFXML("AlertPopUp"));
+            Stage popup = new Stage();
+            popup.setScene(scene);
+            popup.show();
+        } catch (IOException e) {
             e.printStackTrace();
-            System.exit(1);
         }
+
+    }
+
+    public void editFailed(){
+
+    }
+
+    @FXML
+    void choiceBoxClicked(MouseEvent event) {
+        correctAnswerChoice.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                switch (t1.intValue()) {
+                    case 0:
+                        Answer1.setStyle("-fx-background-color: #00ff00 ;");
+                        Answer2.setStyle("-fx-background-color: #ffffff ;");
+                        Answer3.setStyle("-fx-background-color: #ffffff ;");
+                        Answer4.setStyle("-fx-background-color: #ffffff ;");
+                        correctAnswer = 0;
+                        break;
+                    case 1:
+                        Answer1.setStyle("-fx-background-color: #ffffff ;");
+                        Answer2.setStyle("-fx-background-color: #00ff00 ;");
+                        Answer3.setStyle("-fx-background-color: #ffffff ;");
+                        Answer4.setStyle("-fx-background-color: #ffffff ;");
+                        correctAnswer = 1;
+                        break;
+                    case 2:
+                        Answer1.setStyle("-fx-background-color: #ffffff ;");
+                        Answer2.setStyle("-fx-background-color: #ffffff ;");
+                        Answer3.setStyle("-fx-background-color: #00ff00 ;");
+                        Answer4.setStyle("-fx-background-color: #ffffff ;");
+                        correctAnswer = 2;
+                        break;
+                    case 3:
+                        Answer1.setStyle("-fx-background-color: #ffffff ;");
+                        Answer2.setStyle("-fx-background-color: #ffffff ;");
+                        Answer3.setStyle("-fx-background-color: #ffffff ;");
+                        Answer4.setStyle("-fx-background-color: #00ff00 ;");
+                        correctAnswer = 3;
+                        break;
+                    default:
+                        System.out.println("Undefined correct answer");
+                        break;
+                }
+            }
+        });
+    }
+
+
+    @FXML
+    void CancelButtonClicked(ActionEvent event) {
+        ClientApp.setRoot("QuestionManagementScreen");
     }
 
     @FXML
     void EditButtonClicked(ActionEvent event) {
-       if(!isEditing){
-           LastModified.setEditable(true);
-           Author.setEditable(true);
-           Content.setEditable(true);
-           Answer1.setEditable(true);
-           Answer2.setEditable(true);
-           Answer3.setEditable(true);
-           Answer4.setEditable(true);
-           EditButton.setText("Save");
-           isEditing = true;
+        if (!isEditing) {
+            LastModified.setEditable(true);
+            Author.setEditable(true);
+            Content.setEditable(true);
+            Answer1.setEditable(true);
+            Answer2.setEditable(true);
+            Answer3.setEditable(true);
+            Answer4.setEditable(true);
+            EditButton.setText("Save");
+            isEditing = true;
+            correctAnswerChoice.setDisable(false);
+            switch (this.correctAnswer) {
+                case 0:
+                    Answer1.setStyle("-fx-background-color: #ffffff ;");
+                    break;
+                case 1:
+                    Answer2.setStyle("-fx-background-color: #ffffff ;");
+                    break;
+                case 2:
+                    Answer3.setStyle("-fx-background-color: #ffffff ;");
+                    break;
+                case 3:
+                    Answer4.setStyle("-fx-background-color: #ffffff ;");
+                    break;
+                default:
+                    System.out.println("Undefined correct answer");
+                    break;
+            }
 
-       }else{
-           LastModified.setEditable(false);
-           Author.setEditable(false);
-           Content.setEditable(false);
-           Answer1.setEditable(false);
-           Answer2.setEditable(false);
-           Answer3.setEditable(false);
-           Answer4.setEditable(false);
-           EditButton.setText("Edit");
-           isEditing = false;
-           EditQuestionRequest request = new EditQuestionRequest(1,"new content",new String[]{"1","2","3","4"},1);
-           ClientApp.sendRequest(request);
-       }
-
-
-    }
-
-    public void setClientApp(ClientApp clientApp) {
-        if(this.clientApp == null){
-            this.clientApp = clientApp;
+        } else {
+            LastModified.setEditable(false);
+            Author.setEditable(false);
+            Content.setEditable(false);
+            Answer1.setEditable(false);
+            Answer2.setEditable(false);
+            Answer3.setEditable(false);
+            Answer4.setEditable(false);
+            EditButton.setText("Edit");
+            isEditing = false;
+            correctAnswerChoice.setDisable(true);
+            EditQuestionRequest request = new EditQuestionRequest("007", Content.getText(), new String[]{Answer1.getText(),Answer2.getText(),Answer3.getText(),Answer4.getText()}, correctAnswer);
+            ClientApp.sendRequest(request);
         }
-
     }
+
+
+
 }

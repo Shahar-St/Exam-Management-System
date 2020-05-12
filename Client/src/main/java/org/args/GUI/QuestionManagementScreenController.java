@@ -10,15 +10,20 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.ComboBoxListCell;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Vector;
 
 public class QuestionManagementScreenController {
 
-    private ClientApp clientApp=null;
 
     @FXML // fx:id="coursesDropdown"
     private MenuButton coursesDropdown; // Value injected by FXMLLoader
@@ -33,26 +38,24 @@ public class QuestionManagementScreenController {
     @FXML // fx:id="questionDetailsButton"
     private Button questionDetailsButton; // Value injected by FXMLLoader
 
+    @FXML //fx:id="backButton"
+    private ImageView backButton;
+
     private static HashMap<String, List<String>> subjectsAndCourses;
 
     private static List<String> questions = new Vector<>();
 
     private static String currentSubject = null;
 
-    public void setClientApp(ClientApp clientApp) {
-        if(this.clientApp == null){
-            this.clientApp = clientApp;
-        }
+    private static int selectedIndex;
 
-    }
 
     @FXML
     public void initialize() {
         if (questions.size() > 0)
             questionsList.getItems().addAll(questions);
 
-        if (subjectsAndCourses != null)
-        {
+        if (currentSubject != null && !subjectsAndCourses.isEmpty()) {
             for (String subjectName : subjectsAndCourses.keySet()) //iterate through every subject in the hashmap
             {
                 MenuItem subject = new MenuItem(subjectName);
@@ -87,18 +90,16 @@ public class QuestionManagementScreenController {
     }
 
     @FXML
-    void fillCoursesDropdown (String subject)
-    {
+    void fillCoursesDropdown(String subject) {
         List<String> coursesToAdd = subjectsAndCourses.get(subject);
-        for (String course : coursesToAdd)
-        {
+        for (String course : coursesToAdd) {
             addCourseToDropdown(course);
         }
     }
 
 
     @FXML
-    public void addSubjectToSubjectDropdown (MenuItem subject){
+    public void addSubjectToSubjectDropdown(MenuItem subject) {
         subjectsDropdown.getItems().add(subject);
     }
 
@@ -121,10 +122,14 @@ public class QuestionManagementScreenController {
     }
 
 
-
-    public void setSubjectsAndCoursesState (HashMap<String,List<String>> mapFromResponse)
-    {
+    public void setSubjectsAndCoursesState(HashMap<String, List<String>> mapFromResponse) {
         subjectsAndCourses = mapFromResponse;
+    }
+
+    public void changeQuestionContent(String newContent) {
+        String oldContent = questions.get(selectedIndex);
+        String finalContent = oldContent.substring(0,oldContent.indexOf(':')+2) + newContent;
+        questions.set(selectedIndex, finalContent);
     }
 
 
@@ -136,8 +141,9 @@ public class QuestionManagementScreenController {
 
     @FXML
     void switchToQuestionEditScreen(ActionEvent event) throws IOException {
+        selectedIndex = questions.indexOf(questionsList.getSelectionModel().getSelectedItem());
         int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
-        int questionId = Integer.parseInt(questionsList.getSelectionModel().getSelectedItem().substring(1,indexOfColon));
+        String questionId = questionsList.getSelectionModel().getSelectedItem().substring(1, indexOfColon);
         ClientApp.sendRequest(new QuestionRequest(questionId));
         ClientApp.setRoot("EditQuestionScreen");
     }
@@ -150,6 +156,11 @@ public class QuestionManagementScreenController {
     @FXML
     void switchToTestsManagementScreen(ActionEvent event) {
 
+    }
+
+    @FXML
+    void switchToTeacherMainScreen(MouseEvent event) throws IOException {
+        ClientApp.setRoot("TeacherMainScreen");
     }
 
 }

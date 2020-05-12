@@ -15,7 +15,23 @@
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
 
-<!--    <dependencies>-->
+    <dependencies>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.20</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.4.12.Final</version>
+        </dependency>
+
+    </dependencies>
+
+
+    <!--    <dependencies>-->
 <!--        <dependency>-->
 <!--            <groupId>junit</groupId>-->
 <!--            <artifactId>junit</artifactId>-->

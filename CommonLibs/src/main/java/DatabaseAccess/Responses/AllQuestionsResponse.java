@@ -32,4 +32,3 @@ public class AllQuestionsResponse extends DatabaseResponse {
         return questionList;
     }
 }
-

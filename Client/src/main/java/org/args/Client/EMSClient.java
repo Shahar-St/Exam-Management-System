@@ -1,5 +1,6 @@
 package org.args.Client;
 
+import DatabaseAccess.Requests.EditQuestionRequest;
 import DatabaseAccess.Requests.LoginRequest;
 import DatabaseAccess.Responses.*;
 import org.args.GUI.ClientApp;
@@ -82,9 +83,9 @@ public class EMSClient extends AbstractClient {
 
         if (msg instanceof LoginResponse) {
             LoginResponse response = (LoginResponse) msg;
-            if (response.getStatus()) {
+            if (response.getStatus() == 0) {
 
-                loginSuccessful(response);
+                loginSuccess(response);
 
 
             } else {
@@ -93,39 +94,38 @@ public class EMSClient extends AbstractClient {
 
         } else if (msg instanceof EditQuestionResponse) {
             EditQuestionResponse response = (EditQuestionResponse) msg;
-            if (response.getStatus()) {
-                // edit successful
-                // switch to other scene and
+            if (response.getStatus() == 0) {
+                editQuestionSuccess(response);
 
             } else {
-
+                editQuestionFailed(response);
             }
 
         } else if (msg instanceof AllQuestionsResponse) {
             AllQuestionsResponse response = (AllQuestionsResponse) msg;
-            if (response.getStatus()) {
-                getAllQuestionsSuccessful(response);
+            if (response.getStatus() == 0) {
+                getAllQuestionsSuccess(response);
 
             } else {
-
+                getAllQuestionsFailed(response);
             }
 
         } else if (msg instanceof QuestionResponse) {
             QuestionResponse response = (QuestionResponse) msg;
-            if (response.getStatus()) {
-                viewQuestionSuccessful(response);
+            if (response.getStatus() == 0) {
+                viewQuestionSuccess(response);
 
             } else {
-
+                viewQuestionFailed(response);
             }
 
         } else if (msg instanceof SubjectsAndCoursesResponse) {
             SubjectsAndCoursesResponse response = (SubjectsAndCoursesResponse) msg;
-            if (response.getStatus()) {
+            if (response.getStatus() == 0) {
                 getSubjectsAndCoursesSuccess(response);
 
             } else {
-
+                getSubjectsAndCoursesFailed(response);
             }
 
         }
@@ -134,77 +134,62 @@ public class EMSClient extends AbstractClient {
     }
 
 
-    public void loginSuccessful(LoginResponse response) {
-        try {
-            this.isLoggedIn = true;
-            this.permission = response.getPermission();
-            LoginRequest request = (LoginRequest) response.getRequest();
-            this.userName = request.getUserName();
-            this.password = request.getPassword();
-            app.loginSuccess();
-        } catch (IOException e) {
-            System.out.println("Exception while handling login success");
-            e.printStackTrace();
-
-        }
+    public void loginSuccess(LoginResponse response) {
+        this.isLoggedIn = true;
+        this.permission = response.getPermission();
+        LoginRequest request = (LoginRequest) response.getRequest();
+        this.userName = request.getUserName();
+        this.password = request.getPassword();
+        app.loginSuccess(response.getName());
 
 
     }
 
     public void loginFailed(LoginResponse response) {
-        // call app function to notify the user
+        app.popupAlert("Login Failed, Please Try Again. "+response.getStatus());
     }
 
 
-    public void viewQuestionSuccessful(QuestionResponse response) {
-        try {
-            app.fillEditQuestionScreen(response);
-        } catch (IOException e) {
-            System.out.println("Exception while handling view question success");
-            e.printStackTrace();
-        }
+    public void viewQuestionSuccess(QuestionResponse response) {
+        app.fillEditQuestionScreen(response);
 
 
     }
 
     public void viewQuestionFailed(QuestionResponse response) {
+        app.popupAlert("Failed To Fetch The Question, Please Try Again."+response.getStatus());
 
     }
 
     public void getSubjectsAndCoursesSuccess(SubjectsAndCoursesResponse response) {
-        try {
-            app.fillSubjectsDropdown(response);
-        } catch (IOException e) {
-            System.out.println("Exception while handling view subjects and courses success");
-            e.printStackTrace();
-        }
+        app.fillSubjectsDropdown(response);
 
 
     }
 
     public void getSubjectsAndCoursesFailed(SubjectsAndCoursesResponse response) {
+        app.popupAlert("Failed To Fetch The Subjects And Courses, Please Try Again."+response.getStatus());
 
     }
 
-    public void editQuestionSuccessful(EditQuestionResponse response) {
+    public void editQuestionSuccess(EditQuestionResponse response) {
+        app.popupAlert("Edit Question Success");
+        app.updateEditedQuestionOnQuestionManagementScreen(((EditQuestionRequest)response.getRequest()).getNewDescription());
 
     }
 
     public void editQuestionFailed(EditQuestionResponse response) {
+        app.popupAlert("Edit Question Failed, Please Try Again."+response.getStatus());
 
     }
 
-    public void getAllQuestionsSuccessful(AllQuestionsResponse response) {
-        try {
-            app.fillQuestionsList(response);
-        } catch (IOException e) {
-            System.out.println("Exception while handling get all questions success");
-            e.printStackTrace();
-        }
+    public void getAllQuestionsSuccess(AllQuestionsResponse response) {
+        app.fillQuestionsList(response);
 
     }
 
     public void getAllQuestionsFailed(AllQuestionsResponse response) {
+        app.popupAlert("Failed To Fetch Question List, Please Try Again. "+response.getStatus());
 
     }
 
