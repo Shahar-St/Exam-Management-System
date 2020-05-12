@@ -6,13 +6,13 @@ package DatabaseAccess.Requests;
  */
 public class QuestionRequest extends DatabaseRequest{
 
-    private final int questionID;
+    private final String questionID;
 
-    public QuestionRequest(int questionID) {
+    public QuestionRequest(String questionID) {
         this.questionID = questionID;
     }
 
-    public int getQuestionID() {
+    public String getQuestionID() {
         return questionID;
     }
 }
