@@ -5,6 +5,7 @@ import DatabaseAccess.Responses.Pair;
 import DatabaseAccess.Responses.QuestionResponse;
 import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
@@ -13,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.args.Client.EMSClient;
 
 import java.io.IOException;
@@ -65,6 +67,7 @@ public class ClientApp extends Application {
             screenController.setClientApp(this);
             scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
             stage.setScene(scene);
+            stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
             stage.show();
         } catch (Exception e) {
             System.out.println("Failed to start the app.. exiting");
@@ -72,6 +75,16 @@ public class ClientApp extends Application {
 
         }
 
+    }
+
+    private void closeWindowEvent(WindowEvent event) {
+        System.out.println("Window close request ...");
+        try {
+            client.closeConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Platform.exit();
     }
 
     public static void main(String[] args) {
