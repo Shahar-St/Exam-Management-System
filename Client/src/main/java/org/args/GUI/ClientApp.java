@@ -125,11 +125,11 @@ public class ClientApp extends Application {
         FXMLLoader loader = fxmlLoader("QuestionManagementScreen");
         loader.load();
         QuestionManagementScreenController screenController = loader.getController();
-        HashMap<Integer, Pair<LocalDateTime, String>> questions = response.getQuestionList();
+        HashMap<String, Pair<LocalDateTime, String>> questions = response.getQuestionList();
         ObservableList<String> observableSet = FXCollections.observableArrayList();
 
-        for (Map.Entry<Integer, Pair<LocalDateTime, String>> question : questions.entrySet()) {
-            String questionId = Integer.toString(question.getKey());
+        for (Map.Entry<String, Pair<LocalDateTime, String>> question : questions.entrySet()) {
+            String questionId = question.getKey();
             String questionDescription = question.getValue().getSecond();
             String menuItemText = "#" + questionId + ": " + questionDescription;
             observableSet.add(menuItemText);

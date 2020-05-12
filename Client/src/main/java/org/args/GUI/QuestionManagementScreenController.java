@@ -141,7 +141,7 @@ public class QuestionManagementScreenController {
     void switchToQuestionEditScreen(ActionEvent event) throws IOException {
         selectedIndex = questions.indexOf(questionsList.getSelectionModel().getSelectedItem());
         int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
-        int questionId = Integer.parseInt(questionsList.getSelectionModel().getSelectedItem().substring(1, indexOfColon));
+        String questionId = questionsList.getSelectionModel().getSelectedItem().substring(1, indexOfColon);
         ClientApp.sendRequest(new QuestionRequest(questionId));
         ClientApp.setRoot("EditQuestionScreen");
     }
