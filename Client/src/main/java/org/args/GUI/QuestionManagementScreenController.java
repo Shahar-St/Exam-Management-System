@@ -127,7 +127,9 @@ public class QuestionManagementScreenController {
     }
 
     public void changeQuestionContent(String newContent) {
-        questions.set(selectedIndex, newContent);
+        String oldContent = questions.get(selectedIndex);
+        String finalContent = oldContent.substring(0,oldContent.indexOf(':')+2) + newContent;
+        questions.set(selectedIndex, finalContent);
     }
 
 
