@@ -47,6 +47,8 @@ public class QuestionManagementScreenController {
 
     private static String currentSubject = null;
 
+    private static int selectedIndex;
+
 
     @FXML
     public void initialize() {
@@ -124,8 +126,8 @@ public class QuestionManagementScreenController {
         subjectsAndCourses = mapFromResponse;
     }
 
-    public void changeQuestionDescription(String oldDescription, String newDescription) {
-        questions.set(questions.indexOf(oldDescription), newDescription);
+    public void changeQuestionContent(String newContent) {
+        questions.set(selectedIndex, newContent);
     }
 
 
@@ -137,6 +139,7 @@ public class QuestionManagementScreenController {
 
     @FXML
     void switchToQuestionEditScreen(ActionEvent event) throws IOException {
+        selectedIndex = questions.indexOf(questionsList.getSelectionModel().getSelectedItem());
         int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
         int questionId = Integer.parseInt(questionsList.getSelectionModel().getSelectedItem().substring(1, indexOfColon));
         ClientApp.sendRequest(new QuestionRequest(questionId));
