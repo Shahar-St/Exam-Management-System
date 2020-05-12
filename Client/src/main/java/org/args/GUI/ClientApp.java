@@ -12,7 +12,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.args.Client.EMSClient;
@@ -29,6 +28,7 @@ public class ClientApp extends Application {
 
     private static Scene scene;
     private static EMSClient client;
+    private static String fullName;
     // specify the server details
     private final String host = "127.0.0.1";
 
@@ -144,7 +144,8 @@ public class ClientApp extends Application {
             FXMLLoader loader = fxmlLoader("TeacherMainScreen");
             Parent screen = loader.load();
             TeacherMainScreenController screenController = loader.getController();
-            screenController.setFullName(name);
+            screenController.setGreeting();
+            fullName = name;
             scene.setRoot(screen);
         } catch (IOException e) {
             System.out.println("Failed to switch scene on login success");
@@ -181,6 +182,7 @@ public class ClientApp extends Application {
                 try {
                     FXMLLoader loader = fxmlLoader("AlertPopUp");
                     Scene scene = new Scene(loader.load());
+                    scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
                     AlertPopUpController popUpController = loader.getController();
                     popUpController.setShowText(message);
                     Stage popup = new Stage();
@@ -194,5 +196,7 @@ public class ClientApp extends Application {
 
     }
 
-
+    public static String getFullName() {
+        return fullName;
+    }
 }

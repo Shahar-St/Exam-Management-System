@@ -35,7 +35,7 @@ public class TeacherMainScreenController {
     }
 
 
-    public void setFullName(String name) {
+    public void setGreeting() {
         Date dt = new Date();
         int hours = dt.getHours();
         String greeting = null;
@@ -48,7 +48,7 @@ public class TeacherMainScreenController {
         } else if (hours >= 21 && hours <= 24) {
             greeting = "Good Night";
         }
-        fullGreeting = greeting + ", " + name;
+        fullGreeting = greeting + ", " + ClientApp.getFullName();
         welcomeLabel.setText(fullGreeting);
 
     }

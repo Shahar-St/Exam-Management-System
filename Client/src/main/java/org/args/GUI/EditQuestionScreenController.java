@@ -216,7 +216,7 @@ public class EditQuestionScreenController {
             EditButton.setText("Edit");
             isEditing = false;
             correctAnswerChoice.setDisable(true);
-            EditQuestionRequest request = new EditQuestionRequest(1, Content.getText(), new String[]{Answer1.getText(),Answer2.getText(),Answer3.getText(),Answer4.getText()}, correctAnswer);
+            EditQuestionRequest request = new EditQuestionRequest("007", Content.getText(), new String[]{Answer1.getText(),Answer2.getText(),Answer3.getText(),Answer4.getText()}, correctAnswer);
             ClientApp.sendRequest(request);
         }
     }
