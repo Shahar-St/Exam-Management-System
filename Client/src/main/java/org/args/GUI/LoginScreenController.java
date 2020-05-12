@@ -6,10 +6,14 @@ package org.args.GUI;
 
 import DatabaseAccess.Requests.LoginRequest;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import java.io.IOException;
 
@@ -28,18 +32,35 @@ public class LoginScreenController {
 
     @FXML
     void loginAttempt(ActionEvent event) throws IOException {
+        loginAttempt();
+
+
+    }
+
+    @FXML
+    void paneKeyPressed(KeyEvent event) {
+        if(event.getCode() == KeyCode.ENTER){
+            loginAttempt();
+        }
+
+    }
+
+    private void loginAttempt(){
         String userName = usernameField.getText();
         String password = passwordField.getText();
         LoginRequest request = new LoginRequest(userName,password);
         ClientApp.sendRequest(request);
-
-
     }
+
 
     public void setClientApp(ClientApp clientApp) {
         if(this.clientApp == null){
             this.clientApp = clientApp;
         }
+
+    }
+
+    public void initialize(){
 
     }
 

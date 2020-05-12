@@ -135,18 +135,12 @@ public class EMSClient extends AbstractClient {
 
 
     public void loginSuccessful(LoginResponse response) {
-        try {
-            this.isLoggedIn = true;
-            this.permission = response.getPermission();
-            LoginRequest request = (LoginRequest) response.getRequest();
-            this.userName = request.getUserName();
-            this.password = request.getPassword();
-            app.loginSuccess();
-        } catch (IOException e) {
-            System.out.println("Exception while handling login success");
-            e.printStackTrace();
-
-        }
+        this.isLoggedIn = true;
+        this.permission = response.getPermission();
+        LoginRequest request = (LoginRequest) response.getRequest();
+        this.userName = request.getUserName();
+        this.password = request.getPassword();
+        app.loginSuccess();
 
 
     }

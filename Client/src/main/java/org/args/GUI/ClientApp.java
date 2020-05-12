@@ -144,7 +144,7 @@ public class ClientApp extends Application {
         screenController.addToList(observableSet);
     }
 
-    public void loginSuccess() throws IOException {
+    public void loginSuccess(){
         try {
             FXMLLoader loader = fxmlLoader("TeacherMainScreen");
             scene.setRoot(loader.load());
@@ -159,25 +159,15 @@ public class ClientApp extends Application {
     public void fillEditQuestionScreen(QuestionResponse response) throws IOException {
 
         String lastModified = response.getLastModified().toString();
-
         String author = response.getAuthor();
-
         String content = response.getQuestionContent();
-
         String[] answers = response.getAnswers();
-
         int correctAnswer = response.getCorrectAnswer();
-
         FXMLLoader loader = fxmlLoader("EditQuestionScreen");
-
         Parent screen = loader.load();
-
         EditQuestionScreenController screenController = loader.getController();
-
         screenController.setClientApp(this);
-
         screenController.initScreen(lastModified, author, content, answers, correctAnswer);
-
         scene.setRoot(screen);
 
     }
