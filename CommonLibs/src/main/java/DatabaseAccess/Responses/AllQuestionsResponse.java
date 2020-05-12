@@ -15,10 +15,10 @@ import java.util.HashMap;
  */
 public class AllQuestionsResponse extends DatabaseResponse {
 
-    private final HashMap<Integer, Pair<LocalDateTime, String>> questionList;
+    private final HashMap<String, Pair<LocalDateTime, String>> questionList;
 
     public AllQuestionsResponse(int status, DatabaseRequest request,
-                                HashMap<Integer, Pair<LocalDateTime, String>> questions) {
+                                HashMap<String, Pair<LocalDateTime, String>> questions) {
         super(status, request);
         questionList = questions;
 
@@ -28,8 +28,7 @@ public class AllQuestionsResponse extends DatabaseResponse {
         super(status, request);
         this.questionList = null;
     }
-    public HashMap<Integer, Pair<LocalDateTime, String>> getQuestionList() {
+    public HashMap<String, Pair<LocalDateTime, String>> getQuestionList() {
         return questionList;
     }
 }
-

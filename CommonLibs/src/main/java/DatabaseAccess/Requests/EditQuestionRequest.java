@@ -6,19 +6,19 @@ package DatabaseAccess.Requests;
  */
 public class EditQuestionRequest extends DatabaseRequest {
 
-    private final int questionID;
+    private final String questionID;
     private final String newDescription;
     private final String[] newAnswers;
     private final int correctAnswer;
 
-    public EditQuestionRequest(int questionID, String newDescription, String[] newAnswers, int correctAnswer) {
+    public EditQuestionRequest(String questionID, String newDescription, String[] newAnswers, int correctAnswer) {
         this.questionID = questionID;
         this.newDescription = newDescription;
         this.newAnswers = newAnswers;
         this.correctAnswer = correctAnswer;
     }
 
-    public int getQuestionID() {
+    public String getQuestionID() {
         return questionID;
     }
     public String getNewDescription() {
