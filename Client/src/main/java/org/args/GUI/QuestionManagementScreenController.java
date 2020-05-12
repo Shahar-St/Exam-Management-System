@@ -55,7 +55,7 @@ public class QuestionManagementScreenController {
         if (questions.size() > 0)
             questionsList.getItems().addAll(questions);
 
-        if (subjectsAndCourses != null) {
+        if (currentSubject != null && !subjectsAndCourses.isEmpty()) {
             for (String subjectName : subjectsAndCourses.keySet()) //iterate through every subject in the hashmap
             {
                 MenuItem subject = new MenuItem(subjectName);

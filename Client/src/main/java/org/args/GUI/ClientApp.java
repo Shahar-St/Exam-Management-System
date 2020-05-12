@@ -124,8 +124,10 @@ public class ClientApp extends Application {
             subject.setOnAction(screenController.displayCoursesFromSubject);
             screenController.addSubjectToSubjectDropdown(subject);
         }
-
-        scene.setRoot(screen);
+        if(screen != null)
+            scene.setRoot(screen);
+        else
+            System.out.println("screen is null on fill subjects");
 
 
     }
