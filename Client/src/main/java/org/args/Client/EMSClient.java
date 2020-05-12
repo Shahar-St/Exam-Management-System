@@ -82,7 +82,7 @@ public class EMSClient extends AbstractClient {
 
         if (msg instanceof LoginResponse) {
             LoginResponse response = (LoginResponse) msg;
-            if (response.getStatus()) {
+            if (response.getStatus() == 0) {
 
                 loginSuccessful(response);
 
@@ -93,7 +93,7 @@ public class EMSClient extends AbstractClient {
 
         } else if (msg instanceof EditQuestionResponse) {
             EditQuestionResponse response = (EditQuestionResponse) msg;
-            if (response.getStatus()) {
+            if (response.getStatus() == 0) {
                 // edit successful
                 // switch to other scene and
 
@@ -103,7 +103,7 @@ public class EMSClient extends AbstractClient {
 
         } else if (msg instanceof AllQuestionsResponse) {
             AllQuestionsResponse response = (AllQuestionsResponse) msg;
-            if (response.getStatus()) {
+            if (response.getStatus() == 0) {
                 getAllQuestionsSuccessful(response);
 
             } else {
@@ -112,7 +112,7 @@ public class EMSClient extends AbstractClient {
 
         } else if (msg instanceof QuestionResponse) {
             QuestionResponse response = (QuestionResponse) msg;
-            if (response.getStatus()) {
+            if (response.getStatus() == 0) {
                 viewQuestionSuccessful(response);
 
             } else {
@@ -121,7 +121,7 @@ public class EMSClient extends AbstractClient {
 
         } else if (msg instanceof SubjectsAndCoursesResponse) {
             SubjectsAndCoursesResponse response = (SubjectsAndCoursesResponse) msg;
-            if (response.getStatus()) {
+            if (response.getStatus() == 0) {
                 getSubjectsAndCoursesSuccess(response);
 
             } else {
@@ -140,7 +140,7 @@ public class EMSClient extends AbstractClient {
         LoginRequest request = (LoginRequest) response.getRequest();
         this.userName = request.getUserName();
         this.password = request.getPassword();
-        app.loginSuccess();
+        app.loginSuccess(response.getName());
 
 
     }

@@ -45,7 +45,7 @@ public class ServerApp extends AbstractServer
         if(msg instanceof LoginRequest){
             LoginRequest request = (LoginRequest)msg;
             try {
-                client.sendToClient(new LoginResponse(true, request, "TeacherPermission", ""));
+                client.sendToClient(new LoginResponse(0, "TeacherPermission","Shimeon KorMaN", request));
             }catch (IOException e){
                 e.printStackTrace();
             }
@@ -53,7 +53,7 @@ public class ServerApp extends AbstractServer
         }else if(msg instanceof QuestionRequest){
             QuestionRequest request = (QuestionRequest)msg;
             try {
-                client.sendToClient(new QuestionResponse(true,request,"how much ?",new String[]{"1", "2", "3", "4"},1,"Eating shit 101","malkishoa", LocalDateTime.now(),""));
+                client.sendToClient(new QuestionResponse(0,request,"how much ?",new String[]{"1", "2", "3", "4"},1,"Eating shit 101","malkishoa", LocalDateTime.now()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -61,7 +61,7 @@ public class ServerApp extends AbstractServer
         }else if(msg instanceof EditQuestionRequest){
             EditQuestionRequest request = (EditQuestionRequest)msg;
             try {
-                client.sendToClient(new EditQuestionResponse(true,request,""));
+                client.sendToClient(new EditQuestionResponse(0,request));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -72,7 +72,7 @@ public class ServerApp extends AbstractServer
             response.put("CS", Arrays.asList("DS", "OS"));
             response.put("Math",Arrays.asList("Linear","AMIFUCKEDYOU"));
             try {
-                client.sendToClient(new SubjectsAndCoursesResponse(true,request,response,""));
+                client.sendToClient(new SubjectsAndCoursesResponse(0,request,response));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -86,7 +86,7 @@ public class ServerApp extends AbstractServer
             response.put(4,new Pair<>(LocalDateTime.now(),"Shela 4"));
 
             try {
-                client.sendToClient(new AllQuestionsResponse(true,request,response,""));
+                client.sendToClient(new AllQuestionsResponse(0,request,response));
             } catch (IOException e) {
                 e.printStackTrace();
             }

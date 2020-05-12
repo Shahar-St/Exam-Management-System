@@ -138,10 +138,13 @@ public class ClientApp extends Application {
         screenController.addToList(observableSet);
     }
 
-    public void loginSuccess() {
+    public void loginSuccess(String name) {
         try {
             FXMLLoader loader = fxmlLoader("TeacherMainScreen");
-            scene.setRoot(loader.load());
+            Parent screen = loader.load();
+            TeacherMainScreenController screenController = loader.getController();
+            screenController.setFullName(name);
+            scene.setRoot(screen);
         } catch (IOException e) {
             System.out.println("Failed to switch scene on login success");
             e.printStackTrace();
