@@ -127,6 +127,11 @@ public class QuestionManagementScreenController {
         subjectsAndCourses = mapFromResponse;
     }
 
+    public void changeQuestionDescription(String oldDescription, String newDescription)
+    {
+        questions.set(questions.indexOf(oldDescription),newDescription);
+    }
+
 
     @FXML
     public void addToList(ObservableList<String> observableSet) {
