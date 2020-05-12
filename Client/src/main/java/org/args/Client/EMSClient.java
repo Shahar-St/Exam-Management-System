@@ -161,12 +161,7 @@ public class EMSClient extends AbstractClient {
     }
 
     public void getSubjectsAndCoursesSuccess(SubjectsAndCoursesResponse response) {
-        try {
-            app.fillSubjectsDropdown(response);
-        } catch (IOException e) {
-            System.out.println("Exception while handling view subjects and courses success");
-            e.printStackTrace();
-        }
+        app.fillSubjectsDropdown(response);
 
 
     }
@@ -177,7 +172,7 @@ public class EMSClient extends AbstractClient {
 
     public void editQuestionSuccessful(EditQuestionResponse response) {
         app.popupAlert("Edit Question Success");
-        app.updateEditedQuestionOnQuestionMangementScreen(((EditQuestionRequest)response.getRequest()).getNewDescription());
+        app.updateEditedQuestionOnQuestionManagementScreen(((EditQuestionRequest)response.getRequest()).getNewDescription());
 
     }
 
@@ -186,12 +181,7 @@ public class EMSClient extends AbstractClient {
     }
 
     public void getAllQuestionsSuccessful(AllQuestionsResponse response) {
-        try {
-            app.fillQuestionsList(response);
-        } catch (IOException e) {
-            System.out.println("Exception while handling get all questions success");
-            e.printStackTrace();
-        }
+        app.fillQuestionsList(response);
 
     }
 

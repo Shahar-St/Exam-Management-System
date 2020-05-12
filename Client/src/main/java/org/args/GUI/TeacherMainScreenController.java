@@ -16,7 +16,7 @@ import java.util.Date;
 
 public class TeacherMainScreenController {
 
-    private static String fullGreeting = null;
+    private static String fullGreeting;
 
     @FXML // fx:id="questionMangementButton"
     private Button questionMangementButton; // Value injected by FXMLLoader
@@ -31,11 +31,6 @@ public class TeacherMainScreenController {
 
     @FXML
     public void initialize() {
-        welcomeLabel.setText(fullGreeting);
-    }
-
-
-    public void setGreeting() {
         Date dt = new Date();
         int hours = dt.getHours();
         String greeting = null;
@@ -50,8 +45,8 @@ public class TeacherMainScreenController {
         }
         fullGreeting = greeting + ", " + ClientApp.getFullName();
         welcomeLabel.setText(fullGreeting);
-
     }
+
 
 
 

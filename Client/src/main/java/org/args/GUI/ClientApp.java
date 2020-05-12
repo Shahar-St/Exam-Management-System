@@ -107,10 +107,15 @@ public class ClientApp extends Application {
 
     }
 
-    public void fillSubjectsDropdown(SubjectsAndCoursesResponse response) throws IOException {
+    public void fillSubjectsDropdown(SubjectsAndCoursesResponse response)  {
 
         FXMLLoader loader = fxmlLoader("QuestionManagementScreen");
-        Parent screen = loader.load();
+        Parent screen = null;
+        try {
+            screen = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         QuestionManagementScreenController screenController = loader.getController();
         screenController.setSubjectsAndCoursesState(response.getSubjectsAndCourses()); //set the hashmap in the controllers state to later fill the courses dropdown list according to selected subject
         for (String subjectName : response.getSubjectsAndCourses().keySet()) //iterate through every subject in the hashmap
@@ -125,10 +130,14 @@ public class ClientApp extends Application {
 
     }
 
-    public void fillQuestionsList(AllQuestionsResponse response) throws IOException {
+    public void fillQuestionsList(AllQuestionsResponse response)  {
 
         FXMLLoader loader = fxmlLoader("QuestionManagementScreen");
-        loader.load();
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         QuestionManagementScreenController screenController = loader.getController();
         HashMap<String, Pair<LocalDateTime, String>> questions = response.getQuestionList();
         ObservableList<String> observableSet = FXCollections.observableArrayList();
@@ -145,11 +154,9 @@ public class ClientApp extends Application {
 
     public void loginSuccess(String name) {
         try {
+            fullName = name;
             FXMLLoader loader = fxmlLoader("TeacherMainScreen");
             Parent screen = loader.load();
-            TeacherMainScreenController screenController = loader.getController();
-            screenController.setGreeting();
-            fullName = name;
             scene.setRoot(screen);
         } catch (IOException e) {
             System.out.println("Failed to switch scene on login success");
@@ -179,7 +186,7 @@ public class ClientApp extends Application {
 
     }
 
-    public void updateEditedQuestionOnQuestionMangementScreen(String newContent){
+    public void updateEditedQuestionOnQuestionManagementScreen(String newContent){
         FXMLLoader loader = fxmlLoader("QuestionManagementScreen");
         try {
             loader.load();
