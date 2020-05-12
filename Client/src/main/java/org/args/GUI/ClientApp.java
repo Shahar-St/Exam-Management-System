@@ -8,7 +8,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -20,9 +19,7 @@ import org.args.Client.EMSClient;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 /**
  * JavaFX App
@@ -46,7 +43,7 @@ public class ClientApp extends Application {
     }
 
     @Override
-    public void init() throws Exception {
+    public void init() {
         try {
             super.init();
             client = new EMSClient(this.host, this.port, this);
@@ -59,12 +56,11 @@ public class ClientApp extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         try {
             FXMLLoader loader = fxmlLoader("LoginScreen");
             scene = new Scene(loader.load(), 850, 450);
             LoginScreenController screenController = loader.getController();
-            screenController.setClientApp(this);
             scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
             stage.setScene(scene);
             stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
@@ -111,7 +107,6 @@ public class ClientApp extends Application {
         FXMLLoader loader = fxmlLoader("QuestionManagementScreen");
         Parent screen = loader.load();
         QuestionManagementScreenController screenController = loader.getController();
-        screenController.setClientApp(this);
         screenController.setSubjectsAndCoursesState(response.getSubjectsAndCourses()); //set the hashmap in the controllers state to later fill the courses dropdown list according to selected subject
         for (String subjectName : response.getSubjectsAndCourses().keySet()) //iterate through every subject in the hashmap
         {
@@ -130,7 +125,6 @@ public class ClientApp extends Application {
         FXMLLoader loader = fxmlLoader("QuestionManagementScreen");
         loader.load();
         QuestionManagementScreenController screenController = loader.getController();
-        screenController.setClientApp(this);
         HashMap<Integer, Pair<LocalDateTime, String>> questions = response.getQuestionList();
         ObservableList<String> observableSet = FXCollections.observableArrayList();
 
@@ -144,7 +138,7 @@ public class ClientApp extends Application {
         screenController.addToList(observableSet);
     }
 
-    public void loginSuccess(){
+    public void loginSuccess() {
         try {
             FXMLLoader loader = fxmlLoader("TeacherMainScreen");
             scene.setRoot(loader.load());
@@ -166,13 +160,10 @@ public class ClientApp extends Application {
         FXMLLoader loader = fxmlLoader("EditQuestionScreen");
         Parent screen = loader.load();
         EditQuestionScreenController screenController = loader.getController();
-        screenController.setClientApp(this);
         screenController.initScreen(lastModified, author, content, answers, correctAnswer);
         scene.setRoot(screen);
 
     }
-
-
 
 
 }

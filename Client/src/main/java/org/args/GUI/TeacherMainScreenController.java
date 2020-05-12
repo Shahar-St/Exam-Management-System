@@ -13,8 +13,7 @@ import java.io.IOException;
 
 public class TeacherMainScreenController {
 
-    private ClientApp clientApp=null;
-    private static String fullName=null;
+    private static String fullName = null;
 
     @FXML // fx:id="questionMangementButton"
     private Button questionMangementButton; // Value injected by FXMLLoader
@@ -24,11 +23,5 @@ public class TeacherMainScreenController {
         ClientApp.sendRequest(new SubjectsAndCoursesRequest());
     }
 
-    public void setClientApp(ClientApp clientApp) {
-        if(this.clientApp == null){
-            this.clientApp = clientApp;
-        }
-
-    }
 
 }

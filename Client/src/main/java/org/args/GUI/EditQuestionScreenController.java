@@ -3,49 +3,43 @@ package org.args.GUI;
 import DatabaseAccess.Requests.EditQuestionRequest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Paint;
 
 import java.io.IOException;
 
 public class EditQuestionScreenController {
 
-    private ClientApp clientApp=null;
 
-    private boolean isEditing=false;
-
-    @FXML
-    private  TextField LastModified;
+    private boolean isEditing = false;
 
     @FXML
-    private  TextField Author;
+    private TextField LastModified;
 
     @FXML
-    private  TextArea Content;
+    private TextField Author;
 
     @FXML
-    private  TextField Answer1;
+    private TextArea Content;
 
     @FXML
-    private  TextField Answer2;
+    private TextField Answer1;
 
     @FXML
-    private  TextField Answer3;
+    private TextField Answer2;
 
     @FXML
-    private  TextField Answer4;
+    private TextField Answer3;
 
     @FXML
-    private  Button CancelButton;
+    private TextField Answer4;
 
     @FXML
-    private  Button EditButton;
+    private Button CancelButton;
+
+    @FXML
+    private Button EditButton;
 
 
     public void initScreen(String lastModified, String author, String content, String[] answers, int correctAnswer) {
@@ -81,8 +75,7 @@ public class EditQuestionScreenController {
     void CancelButtonClicked(ActionEvent event) {
         try {
             ClientApp.setRoot("QuestionManagementScreen");
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -90,38 +83,32 @@ public class EditQuestionScreenController {
 
     @FXML
     void EditButtonClicked(ActionEvent event) {
-       if(!isEditing){
-           LastModified.setEditable(true);
-           Author.setEditable(true);
-           Content.setEditable(true);
-           Answer1.setEditable(true);
-           Answer2.setEditable(true);
-           Answer3.setEditable(true);
-           Answer4.setEditable(true);
-           EditButton.setText("Save");
-           isEditing = true;
+        if (!isEditing) {
+            LastModified.setEditable(true);
+            Author.setEditable(true);
+            Content.setEditable(true);
+            Answer1.setEditable(true);
+            Answer2.setEditable(true);
+            Answer3.setEditable(true);
+            Answer4.setEditable(true);
+            EditButton.setText("Save");
+            isEditing = true;
 
-       }else{
-           LastModified.setEditable(false);
-           Author.setEditable(false);
-           Content.setEditable(false);
-           Answer1.setEditable(false);
-           Answer2.setEditable(false);
-           Answer3.setEditable(false);
-           Answer4.setEditable(false);
-           EditButton.setText("Edit");
-           isEditing = false;
-           EditQuestionRequest request = new EditQuestionRequest(1,"new content",new String[]{"1","2","3","4"},1);
-           ClientApp.sendRequest(request);
-       }
-
-
-    }
-
-    public void setClientApp(ClientApp clientApp) {
-        if(this.clientApp == null){
-            this.clientApp = clientApp;
+        } else {
+            LastModified.setEditable(false);
+            Author.setEditable(false);
+            Content.setEditable(false);
+            Answer1.setEditable(false);
+            Answer2.setEditable(false);
+            Answer3.setEditable(false);
+            Answer4.setEditable(false);
+            EditButton.setText("Edit");
+            isEditing = false;
+            EditQuestionRequest request = new EditQuestionRequest(1, "new content", new String[]{"1", "2", "3", "4"}, 1);
+            ClientApp.sendRequest(request);
         }
 
+
     }
+
 }
