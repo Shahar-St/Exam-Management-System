@@ -77,22 +77,21 @@ public class Course {
     //Group adders and removers
     public void addExam(Exam exam) {
         if (!examsList.contains(exam))
-        {
             examsList.add(exam);
+
+        if (exam.getCourse() != this)
             exam.setCourse(this);
-        }
     }
 
     public void addQuestion(Question question) {
         if (!questionsList.contains(question))
-        {
             questionsList.add(question);
+
+        if(question.getCourse() != this)
             question.setCourse(this);
-        }
     }
 
     public void addStudent(Student student) {
-
         if (!studentsList.contains(student))
             studentsList.add(student);
 
@@ -102,10 +101,10 @@ public class Course {
 
     public void addExecutedExam(ExecutedExam executedExam) {
         if (!executedExamsList.contains(executedExam))
-        {
             executedExamsList.add(executedExam);
+
+        if(executedExam.getCourse() != this)
             executedExam.setCourse(this);
-        }
     }
 
     //Group setters and getters
@@ -119,10 +118,20 @@ public class Course {
     public void setName(String name) { this.name = name; }
 
     public Subject getSubject() { return subject; }
-    public void setSubject(Subject subject) { this.subject = subject; }
+    public void setSubject(Subject subject) {
+
+        this.subject = subject;
+        if(!subject.getCoursesList().contains(this))
+            subject.addCourse(this);
+    }
 
     public Teacher getTeacher() { return teacher; }
-    public void setTeacher(Teacher teacher) { this.teacher = teacher; }
+    public void setTeacher(Teacher teacher) {
+
+        this.teacher = teacher;
+        if(!teacher.getCoursesList().contains(this))
+            teacher.addCourse(this);
+    }
 
     public List<Exam> getExamsList() { return examsList; }
     public void setExamsList(List<Exam> examsList) { this.examsList = examsList; }

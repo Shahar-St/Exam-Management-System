@@ -3,6 +3,7 @@ package DatabaseAccess.Responses;
 import DatabaseAccess.Requests.DatabaseRequest;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Request: asks for a question's full details
@@ -16,14 +17,14 @@ import java.time.LocalDateTime;
 public class QuestionResponse extends DatabaseResponse {
 
     private final String questionContent;
-    private final String[] answers;
+    private final List<String> answers;
     private final int correctAnswer;
     private final String courseName;
     private final String author;
     private final LocalDateTime lastModified;
 
     //successful request
-    public QuestionResponse(int status, DatabaseRequest request, String questionContent, String[] answers,
+    public QuestionResponse(int status, DatabaseRequest request, String questionContent, List<String> answers,
                             int correctAnswer, String courseName, String author, LocalDateTime lastModified) {
         super(status, request);
         this.questionContent = questionContent;
@@ -48,7 +49,7 @@ public class QuestionResponse extends DatabaseResponse {
         return questionContent;
     }
 
-    public String[] getAnswers() {
+    public List<String> getAnswers() {
         return answers;
     }
 

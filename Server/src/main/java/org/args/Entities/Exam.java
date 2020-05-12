@@ -6,7 +6,9 @@ import org.hibernate.annotations.CascadeType;
 import javax.persistence.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 public class Exam {
@@ -29,7 +31,9 @@ public class Exam {
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
     private List<Question> questionsList = new ArrayList<>();
 
-    //private List<Double> questionsScores = new ArrayList<>();
+    @ElementCollection
+    private List<Double> questionsScores = new ArrayList<>();
+   // Map<Question,Double> questionScore = new HashMap< Question,Double>();
 
     private int duration; // in minutes
     private String description;
@@ -64,13 +68,23 @@ public class Exam {
 
     //Group setters and getters
     public Course getCourse() { return course; }
-    protected void setCourse(Course course) { this.course = course; }
+    protected void setCourse(Course course) {
+
+        this.course = course;
+        if (!course.getExamsList().contains(this))
+            course.addExam(this);
+    }
+
+    public Teacher getAuthor() { return author; }
+    protected void setAuthor(Teacher author) {
+
+        this.author = author;
+        if (!author.getExamsList().contains(this))
+            author.addExam(this);
+    }
 
     public List<Question> getQuestionsList() { return questionsList; }
     public void setQuestionsList(List<Question> questionsList) { this.questionsList = questionsList; }
-
-    public Teacher getAuthor() { return author; }
-    protected void setAuthor(Teacher author) { this.author = author; }
 
     public String getId() { return id; }
     protected void setId(String id) { this.id = id; }
@@ -84,7 +98,6 @@ public class Exam {
     public String getTeacherPrivateNotes() { return teacherPrivateNotes; }
     protected void setTeacherPrivateNotes(String privateNotes) { teacherPrivateNotes = privateNotes; }
 
-//    public List<Double> getQuestionsScores() { return questionsScores; }
-//    public void setQuestionsScores(List<Double> questionsScores) { this.questionsScores = questionsScores; }
-
+    public List<Double> getQuestionsScores() { return questionsScores; }
+    public void setQuestionsScores(List<Double> questionsScores) { this.questionsScores = questionsScores; }
 }

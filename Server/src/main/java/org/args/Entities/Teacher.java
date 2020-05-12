@@ -44,7 +44,6 @@ public class Teacher extends User {
 
     //Group adders and removers
     public void addSubject(Subject subject) {
-
         if (!subjectsList.contains(subject))
             subjectsList.add(subject);
 
@@ -54,64 +53,48 @@ public class Teacher extends User {
 
     public void addCourse(Course course) {
         if (!coursesList.contains(course))
-        {
             coursesList.add(course);
+
+        if(course.getTeacher() != this)
             course.setTeacher(this);
-        }
     }
 
     public void addExam(Exam exam) {
         if (!examsList.contains(exam))
-        {
             examsList.add(exam);
+
+        if (exam.getAuthor() != this)
             exam.setAuthor(this);
-        }
     }
 
     public void addQuestion(Question question) {
         if (!questionsList.contains(question))
-        {
             questionsList.add(question);
+
+        if(question.getAuthor() != this)
             question.setAuthor(this);
-        }
     }
 
     public void addExecutedExam(ExecutedExam executedExam) {
         if (!executedExamsList.contains(executedExam))
-        {
             executedExamsList.add(executedExam);
+
+        if(executedExam.getAuthor() != this)
             executedExam.setAuthor(this);
-        }
     }
 
     //Group setters and getters
-    public List<Subject> getSubjectsList() {
-        return subjectsList;
-    }
-    public void setSubjectsList(List<Subject> subjectsList) {
-        this.subjectsList = subjectsList;
-    }
+    public List<Subject> getSubjectsList() { return subjectsList; }
+    public void setSubjectsList(List<Subject> subjectsList) { this.subjectsList = subjectsList; }
 
-    public List<Question> getQuestionsList() {
-        return questionsList;
-    }
-    public void setQuestionsList(List<Question> questionsList) {
-        this.questionsList = questionsList;
-    }
+    public List<Question> getQuestionsList() { return questionsList; }
+    public void setQuestionsList(List<Question> questionsList) { this.questionsList = questionsList; }
 
-    public List<Course> getCoursesList() {
-        return coursesList;
-    }
-    public void setCoursesList(List<Course> coursesList) {
-        this.coursesList = coursesList;
-    }
+    public List<Course> getCoursesList() { return coursesList; }
+    public void setCoursesList(List<Course> coursesList) { this.coursesList = coursesList; }
 
-    public List<Exam> getExamsList() {
-        return examsList;
-    }
-    public void setExamsList(List<Exam> examsList) {
-        this.examsList = examsList;
-    }
+    public List<Exam> getExamsList() { return examsList; }
+    public void setExamsList(List<Exam> examsList) { this.examsList = examsList; }
 
     public List<ExecutedExam> getExecutedExamsList() { return executedExamsList; }
     public void setExecutedExamsList(List<ExecutedExam> execExamsList) { this.executedExamsList = execExamsList; }

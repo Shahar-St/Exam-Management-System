@@ -7,22 +7,22 @@ import javax.persistence.*;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
 public class Question {
-
-    private static DecimalFormat decimalFormat = new DecimalFormat("000");
 
     @Id
     @Column(nullable = false, unique = true)
     private String id;
 
     private String questionContent;
-    private String[] answersArray;  // 4 answers
-    private int correctAnswer; // the index-1 of the correct answer in the answers array
+    private int correctAnswer; // the index-1 of the correct answer in the answersArray
 
-    // not sure it's needed
+    @ElementCollection
+    private List<String> answersArray = new ArrayList<String>();    // 4 answers
+
     @ManyToMany
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
     @JoinTable(
@@ -56,7 +56,7 @@ public class Question {
     //Group c'tors
     public Question() { }
 
-    public Question(String questionContent, String[] answersArray, int correctAnswer, Course course, Teacher author) {
+    public Question(String questionContent, List<String> answersArray, int correctAnswer, Course course, Teacher author) {
         this.questionContent = questionContent;
         this.answersArray = answersArray;
         this.correctAnswer = correctAnswer;
@@ -65,6 +65,7 @@ public class Question {
         updateLastModified();
 
         // handle empty queue
+        DecimalFormat decimalFormat = new DecimalFormat("000");
         this.id = course.getId() + decimalFormat.format(course.getAvailableQuestionCodes().poll());
     }
 
@@ -98,10 +99,10 @@ public class Question {
         this.questionContent = questionContent;
     }
 
-    public String[] getAnswersArray() {
+    public List<String> getAnswersArray() {
         return answersArray;
     }
-    public void setAnswersArray(String[] answersArray) {
+    public void setAnswersArray(List<String> answersArray) {
         this.answersArray = answersArray;
     }
 
@@ -123,14 +124,20 @@ public class Question {
         return course;
     }
     public void setCourse(Course course) {
+
         this.course = course;
+        if(course.getQuestionsList().contains(this))
+            course.addQuestion(this);
     }
 
     public Teacher getAuthor() {
         return author;
     }
     public void setAuthor(Teacher author) {
+
         this.author = author;
+        if(!author.getQuestionsList().contains(this))
+            author.addQuestion(this);
     }
 
     public LocalDateTime getLastModified() {
@@ -146,5 +153,4 @@ public class Question {
     private void updateLastModified() {
         this.lastModified = LocalDateTime.now();
     }
-
 }
