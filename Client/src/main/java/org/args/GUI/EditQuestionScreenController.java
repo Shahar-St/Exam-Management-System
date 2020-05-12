@@ -167,11 +167,7 @@ public class EditQuestionScreenController {
 
     @FXML
     void CancelButtonClicked(ActionEvent event) {
-        try {
-            ClientApp.setRoot("QuestionManagementScreen");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ClientApp.setRoot("QuestionManagementScreen");
     }
 
     @FXML
@@ -220,5 +216,7 @@ public class EditQuestionScreenController {
             ClientApp.sendRequest(request);
         }
     }
+
+
 
 }

@@ -1,5 +1,6 @@
 package org.args.Client;
 
+import DatabaseAccess.Requests.EditQuestionRequest;
 import DatabaseAccess.Requests.LoginRequest;
 import DatabaseAccess.Responses.*;
 import org.args.GUI.ClientApp;
@@ -145,7 +146,7 @@ public class EMSClient extends AbstractClient {
     }
 
     public void loginFailed(LoginResponse response) {
-        // call app function to notify the user
+        app.popupAlert("Login Failed, Please Try Again. "+response.getStatus());
     }
 
 
@@ -176,6 +177,7 @@ public class EMSClient extends AbstractClient {
 
     public void editQuestionSuccessful(EditQuestionResponse response) {
         app.popupAlert("Edit Question Success");
+        app.updateEditedQuestionOnQuestionMangementScreen(((EditQuestionRequest)response.getRequest()).getNewDescription());
 
     }
 

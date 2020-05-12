@@ -34,8 +34,13 @@ public class ClientApp extends Application {
 
     private final int port = 1337;
 
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
+    static void setRoot(String fxml)  {
+        try {
+            scene.setRoot(loadFXML(fxml));
+        } catch (IOException e) {
+            System.out.println("Failed to change the root of the scene");
+            e.printStackTrace();
+        }
     }
 
     public static Parent loadFXML(String fxml) throws IOException {
@@ -172,6 +177,18 @@ public class ClientApp extends Application {
         EditQuestionScreenController screenController = loader.getController();
         screenController.initScreen(lastModified, author, content, answers, correctAnswer);
         scene.setRoot(screen);
+
+    }
+
+    public void updateEditedQuestionOnQuestionMangementScreen(String newContent){
+        FXMLLoader loader = fxmlLoader("QuestionManagementScreen");
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        QuestionManagementScreenController screenController = loader.getController();
+        screenController.changeQuestionContent(newContent);
 
     }
 
