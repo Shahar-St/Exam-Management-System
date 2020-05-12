@@ -85,7 +85,7 @@ public class EMSClient extends AbstractClient {
             LoginResponse response = (LoginResponse) msg;
             if (response.getStatus() == 0) {
 
-                loginSuccessful(response);
+                loginSuccess(response);
 
 
             } else {
@@ -95,28 +95,28 @@ public class EMSClient extends AbstractClient {
         } else if (msg instanceof EditQuestionResponse) {
             EditQuestionResponse response = (EditQuestionResponse) msg;
             if (response.getStatus() == 0) {
-                editQuestionSuccessful(response);
+                editQuestionSuccess(response);
 
             } else {
-
+                editQuestionFailed(response);
             }
 
         } else if (msg instanceof AllQuestionsResponse) {
             AllQuestionsResponse response = (AllQuestionsResponse) msg;
             if (response.getStatus() == 0) {
-                getAllQuestionsSuccessful(response);
+                getAllQuestionsSuccess(response);
 
             } else {
-
+                getAllQuestionsFailed(response);
             }
 
         } else if (msg instanceof QuestionResponse) {
             QuestionResponse response = (QuestionResponse) msg;
             if (response.getStatus() == 0) {
-                viewQuestionSuccessful(response);
+                viewQuestionSuccess(response);
 
             } else {
-
+                viewQuestionFailed(response);
             }
 
         } else if (msg instanceof SubjectsAndCoursesResponse) {
@@ -125,7 +125,7 @@ public class EMSClient extends AbstractClient {
                 getSubjectsAndCoursesSuccess(response);
 
             } else {
-
+                getSubjectsAndCoursesFailed(response);
             }
 
         }
@@ -134,7 +134,7 @@ public class EMSClient extends AbstractClient {
     }
 
 
-    public void loginSuccessful(LoginResponse response) {
+    public void loginSuccess(LoginResponse response) {
         this.isLoggedIn = true;
         this.permission = response.getPermission();
         LoginRequest request = (LoginRequest) response.getRequest();
@@ -150,13 +150,14 @@ public class EMSClient extends AbstractClient {
     }
 
 
-    public void viewQuestionSuccessful(QuestionResponse response) {
+    public void viewQuestionSuccess(QuestionResponse response) {
         app.fillEditQuestionScreen(response);
 
 
     }
 
     public void viewQuestionFailed(QuestionResponse response) {
+        app.popupAlert("Failed To Fetch The Question, Please Try Again."+response.getStatus());
 
     }
 
@@ -167,25 +168,28 @@ public class EMSClient extends AbstractClient {
     }
 
     public void getSubjectsAndCoursesFailed(SubjectsAndCoursesResponse response) {
+        app.popupAlert("Failed To Fetch The Subjects And Courses, Please Try Again."+response.getStatus());
 
     }
 
-    public void editQuestionSuccessful(EditQuestionResponse response) {
+    public void editQuestionSuccess(EditQuestionResponse response) {
         app.popupAlert("Edit Question Success");
         app.updateEditedQuestionOnQuestionManagementScreen(((EditQuestionRequest)response.getRequest()).getNewDescription());
 
     }
 
     public void editQuestionFailed(EditQuestionResponse response) {
+        app.popupAlert("Edit Question Failed, Please Try Again."+response.getStatus());
 
     }
 
-    public void getAllQuestionsSuccessful(AllQuestionsResponse response) {
+    public void getAllQuestionsSuccess(AllQuestionsResponse response) {
         app.fillQuestionsList(response);
 
     }
 
     public void getAllQuestionsFailed(AllQuestionsResponse response) {
+        app.popupAlert("Failed To Fetch Question List, Please Try Again. "+response.getStatus());
 
     }
 
