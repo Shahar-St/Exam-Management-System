@@ -53,7 +53,7 @@ public class ServerApp extends AbstractServer
         }else if(msg instanceof QuestionRequest){
             QuestionRequest request = (QuestionRequest)msg;
             try {
-                client.sendToClient(new QuestionResponse(true,request,"how much ?",new String[]{"1", "2", "3", "4"},0,"Eating shit 101","malkishoa", LocalDateTime.now(),""));
+                client.sendToClient(new QuestionResponse(true,request,"how much ?",new String[]{"1", "2", "3", "4"},1,"Eating shit 101","malkishoa", LocalDateTime.now(),""));
             } catch (IOException e) {
                 e.printStackTrace();
             }
