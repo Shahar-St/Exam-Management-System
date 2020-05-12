@@ -14,6 +14,7 @@ import java.io.IOException;
 public class TeacherMainScreenController {
 
     private ClientApp clientApp=null;
+    private static String fullName=null;
 
     @FXML // fx:id="questionMangementButton"
     private Button questionMangementButton; // Value injected by FXMLLoader
