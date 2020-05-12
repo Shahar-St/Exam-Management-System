@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.AlertPopUpController">
+   <children>
+      <Label fx:id="showText" layoutX="109.0" layoutY="102.0" prefHeight="84.0" prefWidth="308.0" text="showText" />
+      <Button fx:id="okBtn" layoutX="388.0" layoutY="251.0" mnemonicParsing="false" onAction="#okBtnAction" text="OK" />
+   </children>
+</AnchorPane>

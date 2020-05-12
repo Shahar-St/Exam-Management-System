@@ -7,11 +7,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
+
 
 import java.io.IOException;
 
@@ -102,6 +106,22 @@ public class EditQuestionScreenController {
 
     }
 
+    public void editSuccess(){
+        try {
+            Scene scene = new Scene(ClientApp.loadFXML("AlertPopUp"));
+            Stage popup = new Stage();
+            popup.setScene(scene);
+            popup.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void editFailed(){
+
+    }
+
     @FXML
     void choiceBoxClicked(MouseEvent event) {
         correctAnswerChoice.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
@@ -151,7 +171,6 @@ public class EditQuestionScreenController {
             ClientApp.setRoot("QuestionManagementScreen");
         } catch (IOException e) {
             e.printStackTrace();
-            System.exit(1);
         }
     }
 
@@ -200,8 +219,6 @@ public class EditQuestionScreenController {
             EditQuestionRequest request = new EditQuestionRequest(1, Content.getText(), new String[]{Answer1.getText(),Answer2.getText(),Answer3.getText(),Answer4.getText()}, correctAnswer);
             ClientApp.sendRequest(request);
         }
-
-
     }
 
 }

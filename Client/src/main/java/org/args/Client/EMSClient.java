@@ -94,8 +94,7 @@ public class EMSClient extends AbstractClient {
         } else if (msg instanceof EditQuestionResponse) {
             EditQuestionResponse response = (EditQuestionResponse) msg;
             if (response.getStatus() == 0) {
-                // edit successful
-                // switch to other scene and
+                editQuestionSuccessful(response);
 
             } else {
 
@@ -151,12 +150,7 @@ public class EMSClient extends AbstractClient {
 
 
     public void viewQuestionSuccessful(QuestionResponse response) {
-        try {
-            app.fillEditQuestionScreen(response);
-        } catch (IOException e) {
-            System.out.println("Exception while handling view question success");
-            e.printStackTrace();
-        }
+        app.fillEditQuestionScreen(response);
 
 
     }
@@ -181,6 +175,7 @@ public class EMSClient extends AbstractClient {
     }
 
     public void editQuestionSuccessful(EditQuestionResponse response) {
+        app.popupAlert("Edit Question Success");
 
     }
 

@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.args.Client.EMSClient;
@@ -37,7 +38,7 @@ public class ClientApp extends Application {
         scene.setRoot(loadFXML(fxml));
     }
 
-    private static Parent loadFXML(String fxml) throws IOException {
+    public static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ClientApp.class.getResource("/org/args/" + fxml + ".fxml"));
         return fxmlLoader.load();
     }
@@ -153,7 +154,7 @@ public class ClientApp extends Application {
 
     }
 
-    public void fillEditQuestionScreen(QuestionResponse response) throws IOException {
+    public void fillEditQuestionScreen(QuestionResponse response)  {
 
         String lastModified = response.getLastModified().toString();
         String author = response.getAuthor();
@@ -161,10 +162,35 @@ public class ClientApp extends Application {
         String[] answers = response.getAnswers();
         int correctAnswer = response.getCorrectAnswer();
         FXMLLoader loader = fxmlLoader("EditQuestionScreen");
-        Parent screen = loader.load();
+        Parent screen = null;
+        try {
+            screen = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         EditQuestionScreenController screenController = loader.getController();
         screenController.initScreen(lastModified, author, content, answers, correctAnswer);
         scene.setRoot(screen);
+
+    }
+
+    public void popupAlert(String message){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    FXMLLoader loader = fxmlLoader("AlertPopUp");
+                    Scene scene = new Scene(loader.load());
+                    AlertPopUpController popUpController = loader.getController();
+                    popUpController.setShowText(message);
+                    Stage popup = new Stage();
+                    popup.setScene(scene);
+                    popup.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
     }
 
