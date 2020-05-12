@@ -12,24 +12,18 @@ import java.io.Serializable;
  */
 public abstract class DatabaseResponse implements Serializable {
 
-    private final boolean status;
-    private final String errorMsg;
+    private final int status;
     private final DatabaseRequest request;
 
     //Group c'tors
-    public DatabaseResponse(boolean status, DatabaseRequest request, String errorMsg) {
+    public DatabaseResponse(int status, DatabaseRequest request) {
         this.status = status;
         this.request = request;
-        this.errorMsg = errorMsg;
     }
 
     //Group getters and setters
-    public boolean getStatus() {
+    public int getStatus() {
         return status;
-    }
-
-    public String getErrorMsg() {
-        return errorMsg;
     }
 
     public DatabaseRequest getRequest() {

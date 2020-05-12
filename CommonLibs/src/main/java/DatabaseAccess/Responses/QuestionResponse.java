@@ -6,7 +6,12 @@ import java.time.LocalDateTime;
 
 /**
  * Request: asks for a question's full details
- * Response: a string contains the question's full details
+ * Response: the question's full details
+ *
+ * status dictionary:
+ *  0 - success
+ *  1 - unauthorized access - user isn't logged in
+ *  2 - Question wasn't found
  */
 public class QuestionResponse extends DatabaseResponse {
 
@@ -17,10 +22,10 @@ public class QuestionResponse extends DatabaseResponse {
     private final String author;
     private final LocalDateTime lastModified;
 
-    public QuestionResponse(boolean status, DatabaseRequest request, String questionContent, String[] answers,
-                            int correctAnswer, String courseName, String author,
-                            LocalDateTime lastModified, String errorMsg) {
-        super(status, request, errorMsg);
+    //successful request
+    public QuestionResponse(int status, DatabaseRequest request, String questionContent, String[] answers,
+                            int correctAnswer, String courseName, String author, LocalDateTime lastModified) {
+        super(status, request);
         this.questionContent = questionContent;
         this.answers = answers;
         this.correctAnswer = correctAnswer;
@@ -29,6 +34,16 @@ public class QuestionResponse extends DatabaseResponse {
         this.lastModified = lastModified;
     }
 
+    //unsuccessful request
+    public QuestionResponse(int status, DatabaseRequest request) {
+        super(status, request);
+        this.questionContent = null;
+        this.answers = null;
+        this.correctAnswer = -1;
+        this.courseName = null;
+        this.author = null;
+        this.lastModified = null;
+    }
     public String getQuestionContent() {
         return questionContent;
     }
@@ -52,5 +67,4 @@ public class QuestionResponse extends DatabaseResponse {
     public LocalDateTime getLastModified() {
         return lastModified;
     }
-
 }
