@@ -73,7 +73,7 @@ public class ClientApp extends Application {
     public void start(Stage stage) {
         try {
             FXMLLoader loader = fxmlLoader("LoginScreen");
-            scene = new Scene(loader.load(), 850, 450);
+            scene = new Scene(loader.load(), 550, 350);
             scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
             stage.setScene(scene);
             stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
