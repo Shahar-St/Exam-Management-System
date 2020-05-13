@@ -58,13 +58,13 @@ public class Course {
     //Group c'tors
     public Course() { }
 
-    public Course(int id, String name, Subject subject, Teacher teacher) {
+    public Course(int id, String name, Subject subject) {
 
         DecimalFormat decimalFormat = new DecimalFormat("00");
         this.id = decimalFormat.format(id);
         this.name = name;
         this.setSubject(subject);
-        this.setTeacher(teacher);
+        //this.setTeacher(teacher);
 
         for (int i = 0; i < 1000; i++)  // max questions per course
             availableQuestionCodes.add(i);

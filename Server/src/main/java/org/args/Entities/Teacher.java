@@ -84,9 +84,9 @@ public class Teacher extends User {
             executedExam.setAuthor(this);
     }
 
-    public Question createQuestion(String questionContent, List<String> answersArray, int correctAnswer, Course course) {
+    public Question createQuestion(String questionContent, List<String> answersArray, int correctAnswer, Course course){
         Question question = new Question(questionContent, answersArray, correctAnswer, course, this);
-        questionsList.add(question);
+        this.questionsList.add(question);
         return question;
     }
 
@@ -94,7 +94,7 @@ public class Teacher extends User {
                            List<Question> questionsList, List<Double> questionsScores) {
         Exam exam = new Exam(course, this, durationInMinutes, description, teacherPrivateNotes,
                 questionsList, questionsScores);
-        this.addExam(exam);
+        this.examsList.add(exam);
         return exam;
     }
 
