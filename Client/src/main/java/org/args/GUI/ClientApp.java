@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.args.Client.EMSClient;
@@ -37,6 +38,13 @@ public class ClientApp extends Application {
     static void setRoot(String fxml)  {
         try {
             scene.setRoot(loadFXML(fxml));
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    scene.getWindow().setWidth(((Pane)scene.getRoot()).getPrefWidth());
+                    scene.getWindow().setHeight(((Pane)scene.getRoot()).getPrefHeight());
+                }
+            });
         } catch (IOException e) {
             System.out.println("Failed to change the root of the scene");
             e.printStackTrace();
@@ -65,7 +73,7 @@ public class ClientApp extends Application {
     public void start(Stage stage) {
         try {
             FXMLLoader loader = fxmlLoader("LoginScreen");
-            scene = new Scene(loader.load(), 850, 450);
+            scene = new Scene(loader.load(), 550, 350);
             scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
             stage.setScene(scene);
             stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
@@ -124,11 +132,8 @@ public class ClientApp extends Application {
             subject.setOnAction(screenController.displayCoursesFromSubject);
             screenController.addSubjectToSubjectDropdown(subject);
         }
-        if(screen != null)
-            scene.setRoot(screen);
-        else
-            System.out.println("screen is null on fill subjects");
-
+        scene.setRoot(screen);
+        resizeWindow();
 
     }
 
@@ -160,6 +165,7 @@ public class ClientApp extends Application {
             FXMLLoader loader = fxmlLoader("TeacherMainScreen");
             Parent screen = loader.load();
             scene.setRoot(screen);
+            resizeWindow();
         } catch (IOException e) {
             System.out.println("Failed to switch scene on login success");
             e.printStackTrace();
@@ -185,6 +191,7 @@ public class ClientApp extends Application {
         EditQuestionScreenController screenController = loader.getController();
         screenController.initScreen(lastModified, author, content, answers, correctAnswer);
         scene.setRoot(screen);
+        resizeWindow();
 
     }
 
@@ -220,6 +227,18 @@ public class ClientApp extends Application {
         });
 
     }
+
+    public void resizeWindow(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                scene.getWindow().setWidth(((Pane)scene.getRoot()).getPrefWidth());
+                scene.getWindow().setHeight(((Pane)scene.getRoot()).getPrefHeight());
+            }
+        });
+    }
+
+
 
     public static String getFullName() {
         return fullName;
