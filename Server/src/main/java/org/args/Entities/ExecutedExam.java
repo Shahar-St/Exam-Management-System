@@ -42,7 +42,8 @@ public class ExecutedExam {
     private String executedExamDescription, teacherPrivateNotes; // teacherPrivateNotes only for the teacher
 
     //Group c'tors
-    public ExecutedExam() { }
+    public ExecutedExam() {
+    }
 
     public ExecutedExam(Exam exam, Student student) {
 
@@ -50,16 +51,16 @@ public class ExecutedExam {
         for (Question question : exam.getQuestionsList())
             question.addExecutedExam(this);
 
-       this.questionsScores.addAll(exam.getQuestionsScores());
+        this.questionsScores.addAll(exam.getQuestionsScores());
 
         exam.getAuthor().addExecutedExam(this);
         this.examId = exam.getId();
-        this.duration = exam.getDuration();
+        this.duration = exam.getDurationInMinutes();
         this.executedExamDescription = exam.getDescription();
         this.teacherPrivateNotes = exam.getTeacherPrivateNotes();
         student.addExecutedExam(this);
 
-        if(student.getExtensionEligible())
+        if (student.getExtensionEligible())
             setOverTime();
     }
 
@@ -74,7 +75,7 @@ public class ExecutedExam {
     public void setStudent(Student student) {
 
         this.student = student;
-        if(!student.getExecutedExamsList().contains(this))
+        if (!student.getExecutedExamsList().contains(this))
             student.addExecutedExam(this);
     }
 
@@ -84,7 +85,7 @@ public class ExecutedExam {
     public void setCourse(Course course) {
 
         this.course = course;
-        if(!course.getExecutedExamsList().contains(this))
+        if (!course.getExecutedExamsList().contains(this))
             course.addExecutedExam(this);
     }
 
@@ -94,7 +95,7 @@ public class ExecutedExam {
     public void setAuthor(Teacher author) {
 
         this.author = author;
-        if(!author.getExecutedExamsList().contains(this))
+        if (!author.getExecutedExamsList().contains(this))
             author.addExecutedExam(this);
     }
 
@@ -105,8 +106,12 @@ public class ExecutedExam {
         this.questionsList = questionsList;
     }
 
-    public List<Double> getQuestionsScores() { return questionsScores; }
-    public void setQuestionsScores(List<Double> questionsScores) {this.questionsScores = questionsScores; }
+    public List<Double> getQuestionsScores() {
+        return questionsScores;
+    }
+    public void setQuestionsScores(List<Double> questionsScores) {
+        this.questionsScores = questionsScores;
+    }
 
     public String getExamId() {
         return examId;

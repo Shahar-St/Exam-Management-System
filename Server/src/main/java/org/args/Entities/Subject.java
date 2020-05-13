@@ -6,9 +6,7 @@ import org.hibernate.annotations.CascadeType;
 import javax.persistence.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 @Entity
 public class Subject {
@@ -56,12 +54,10 @@ public class Subject {
     }
 
     //Group setters and getters
-    // public static Queue<Integer> getAvailableSubjectId() { return availableSubjectId; }
 
     public String getId() {
         return id;
     }
-    protected void setId(String id) { this.id = id; }
 
     public String getName() {
         return name;

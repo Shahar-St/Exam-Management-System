@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -21,7 +20,7 @@ public class Question {
     private int correctAnswer; // the index-1 of the correct answer in the answersArray
 
     @ElementCollection
-    private List<String> answersArray = new ArrayList<String>();    // 4 answers
+    private List<String> answersArray = new ArrayList<>();    // 4 answers
 
     @ManyToMany
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
@@ -39,7 +38,7 @@ public class Question {
             joinColumns = @JoinColumn(name = "question_id"),
             inverseJoinColumns = @JoinColumn(name = "executedExam_id")
     )
-    private List<ExecutedExam> containedInExecutedExams = new ArrayList<>();
+    private final List<ExecutedExam> containedInExecutedExams = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Cascade(CascadeType.SAVE_UPDATE)
@@ -62,7 +61,7 @@ public class Question {
         this.correctAnswer = correctAnswer;
         course.addQuestion(this);
         author.addQuestion(this);
-        updateLastModified();
+        setLastModified();
 
         // handle empty queue
         DecimalFormat decimalFormat = new DecimalFormat("000");
@@ -90,7 +89,6 @@ public class Question {
     public String getId() {
         return id;
     }
-    protected void setId(String id) { this.id = id; }
 
     public String getQuestionContent() {
         return questionContent;
@@ -143,14 +141,7 @@ public class Question {
     public LocalDateTime getLastModified() {
         return lastModified;
     }
-    public void setLastModified(LocalDateTime lastModified) {
-        this.lastModified = lastModified;
-    }
-
-    //Group other methods
-
-    // update last modified field using current time
-    private void updateLastModified() {
+    public void setLastModified() {
         this.lastModified = LocalDateTime.now();
     }
 }

@@ -6,9 +6,7 @@ import org.hibernate.annotations.CascadeType;
 import javax.persistence.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 public class Exam {
@@ -33,24 +31,23 @@ public class Exam {
 
     @ElementCollection
     private List<Double> questionsScores = new ArrayList<>();
-   // Map<Question,Double> questionScore = new HashMap< Question,Double>();
 
-    private int duration; // in minutes
+    private int durationInMinutes;
     private String description;
     private String teacherPrivateNotes; // only for the teacher
 
     //Group c'tors
-    public Exam() { }
+    public Exam() {
+    }
 
-    public Exam(Course course, Teacher author, int duration, String description, String teacherPrivateNotes) {
+    public Exam(Course course, Teacher author, int durationInMinutes, String description, String teacherPrivateNotes) {
 
-        course.addExam(this);
-        author.addExam(this);
-        this.duration = duration;
+        setCourse(course);
+        setAuthor(author);
+        this.durationInMinutes = durationInMinutes;
         this.description = description;
         this.teacherPrivateNotes = teacherPrivateNotes;
 
-        // handle empty queue
         DecimalFormat decimalFormat = new DecimalFormat("00");
         this.id = course.getSubject().getId() + course.getId() +
                 decimalFormat.format(course.getAvailableExamCodes().poll());
@@ -67,7 +64,9 @@ public class Exam {
     }
 
     //Group setters and getters
-    public Course getCourse() { return course; }
+    public Course getCourse() {
+        return course;
+    }
     protected void setCourse(Course course) {
 
         this.course = course;
@@ -75,7 +74,9 @@ public class Exam {
             course.addExam(this);
     }
 
-    public Teacher getAuthor() { return author; }
+    public Teacher getAuthor() {
+        return author;
+    }
     protected void setAuthor(Teacher author) {
 
         this.author = author;
@@ -83,21 +84,42 @@ public class Exam {
             author.addExam(this);
     }
 
-    public List<Question> getQuestionsList() { return questionsList; }
-    public void setQuestionsList(List<Question> questionsList) { this.questionsList = questionsList; }
+    public List<Question> getQuestionsList() {
+        return questionsList;
+    }
+    public void setQuestionsList(List<Question> questionsList) {
+        this.questionsList = questionsList;
+    }
 
-    public String getId() { return id; }
-    protected void setId(String id) { this.id = id; }
+    public String getId() {
+        return id;
+    }
 
-    public int getDuration() { return duration; }
-    protected void setDuration(int duration) { this.duration = duration; }
+    public int getDurationInMinutes() {
+        return durationInMinutes;
+    }
+    public void setDurationInMinutes(int duration) {
+        this.durationInMinutes = duration;
+    }
 
-    public String getDescription() { return description; }
-    protected void setDescription(String description) { this.description = description; }
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public String getTeacherPrivateNotes() { return teacherPrivateNotes; }
-    protected void setTeacherPrivateNotes(String privateNotes) { teacherPrivateNotes = privateNotes; }
+    public String getTeacherPrivateNotes() {
+        return teacherPrivateNotes;
+    }
+    public void setTeacherPrivateNotes(String privateNotes) {
+        teacherPrivateNotes = privateNotes;
+    }
 
-    public List<Double> getQuestionsScores() { return questionsScores; }
-    public void setQuestionsScores(List<Double> questionsScores) { this.questionsScores = questionsScores; }
+    public List<Double> getQuestionsScores() {
+        return questionsScores;
+    }
+    public void setQuestionsScores(List<Double> questionsScores) {
+        this.questionsScores = questionsScores;
+    }
 }

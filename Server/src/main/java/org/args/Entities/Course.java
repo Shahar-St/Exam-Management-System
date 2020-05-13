@@ -4,7 +4,6 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
-import java.sql.Struct;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -21,9 +20,9 @@ public class Course {
     private String name;
 
     @Transient
-    private Queue<Integer> availableQuestionCodes = new LinkedList<>();
+    private final Queue<Integer> availableQuestionCodes = new LinkedList<>();
     @Transient
-    private Queue<Integer> availableExamCodes = new LinkedList<>();
+    private final Queue<Integer> availableExamCodes = new LinkedList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Cascade(CascadeType.SAVE_UPDATE)
@@ -112,7 +111,6 @@ public class Course {
     public Queue<Integer> getAvailableExamCodes() { return availableExamCodes; }
 
     public String getId() { return id; }
-    protected void setId(String courseId) { this.id = courseId; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
