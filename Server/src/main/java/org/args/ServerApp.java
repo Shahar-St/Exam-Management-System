@@ -11,6 +11,7 @@ import org.hibernate.service.ServiceRegistry;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.*;
+import java.util.logging.Level;
 
 
 public class ServerApp {
@@ -19,7 +20,7 @@ public class ServerApp {
 
     private static SessionFactory getSessionFactory() throws HibernateException {
 
-        // java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
+        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
         Configuration configuration = new Configuration();
         configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(Teacher.class);
@@ -40,10 +41,8 @@ public class ServerApp {
     private static final int NUM_OF_TEACHERS = 4;
     private static final int NUM_OF_STUDENTS = 8;
     private static final int NUM_OF_COURSES = 4;
-    private static final int NUM_OF_EXAMS = 4;
     private static final int  NUM_OF_OPTIONAL_ANSWERS = 4;
     private static final int NUM_OF_QUESTIONS = 8;
-    private static final int NUM_OF_EXECUTED_EXAMS = 8;
 
 
     public static void main(String[] args) {

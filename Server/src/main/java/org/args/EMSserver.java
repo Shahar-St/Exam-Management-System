@@ -35,7 +35,9 @@ public class EMSserver extends AbstractServer {
     @Override
     protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 
-        System.out.println("connected");
+        System.out.println("Interrupted\nreceived message from client " + client.getInetAddress()
+                + " ::" + msg.getClass().getSimpleName());
+
         if (msg instanceof DatabaseRequest)
         {
             DatabaseRequestHandler handler =
@@ -54,7 +56,13 @@ public class EMSserver extends AbstractServer {
     }
 
     @Override
+    protected void clientConnected(ConnectionToClient client) {
+        System.out.println("Interrupted\nClient connected: " + client.getInetAddress());
+    }
+
+    @Override
     protected synchronized void clientDisconnected(ConnectionToClient client) {
+        System.out.println("Interrupted\nClient " + client.getInetAddress() + " Disconnected.");
         loggedInUsers.remove((String) client.getInfo("userName"));
     }
 
