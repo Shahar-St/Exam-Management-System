@@ -166,11 +166,11 @@ public class ServerApp {
         for (int i = 0; i < NUM_OF_QUESTIONS; i++)
         {
             Teacher teacher = teachers.get(i % NUM_OF_TEACHERS);
-            teacher.createQuestion(questionsArr[i], answers[i], i % NUM_OF_OPTIONAL_ANSWERS,
+            Question question = teacher.createQuestion(questionsArr[i], answers[i], i % NUM_OF_OPTIONAL_ANSWERS,
                                    teacher.getCoursesList().get(i %  teacher.getCoursesList().size()));
-
 //            Question question = new Question(questionsArr[i], answers[i], i % NUM_OF_OPTIONAL_ANSWERS,
 //                    courses.get(i % NUM_OF_COURSES), teachers.get(i % NUM_OF_TEACHERS));
+            session.save(question);
             session.update(teacher);
         }
 
