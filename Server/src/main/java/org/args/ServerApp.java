@@ -10,8 +10,7 @@ import org.hibernate.service.ServiceRegistry;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class ServerApp {
@@ -37,12 +36,15 @@ public class ServerApp {
         return configuration.buildSessionFactory(serviceRegistry);
     }
 
-    private static final int NUM_OF_SUBJECTS = 3;
-    private static final int NUM_OF_TEACHERS = 9;
-    private static final int NUM_OF_STUDENTS = 18;
-    private static final int NUM_OF_COURSES = 9;
-    private static final int NUM_OF_EXAMS = 18;
-    private static final int NUM_OF_ANSWERS = 4;
+    private static final int NUM_OF_SUBJECTS = 2;
+    private static final int NUM_OF_TEACHERS = 4;
+    private static final int NUM_OF_STUDENTS = 8;
+    private static final int NUM_OF_COURSES = 4;
+    private static final int NUM_OF_EXAMS = 4;
+    private static final int  NUM_OF_OPTIONAL_ANSWERS = 4;
+    private static final int NUM_OF_QUESTIONS = 8;
+    private static final int NUM_OF_EXECUTED_EXAMS = 8;
+
 
     public static void main(String[] args) {
 
@@ -76,94 +78,100 @@ public class ServerApp {
         }
     }
 
-
     private static void createDummyEntities() {
+
         //creating Dean
         Dean dean = new Dean(123456789, "Head", "Teacher", "passDean", "deanUN");
         session.save(dean);
         session.flush();
 
         //creating subjects
+        String[] subjectsNamesArr = {"Math", "English"};
         for (int i = 0; i < NUM_OF_SUBJECTS; i++)
         {
-            Subject subject = new Subject(i, "subject_" + i);
+            Subject subject = new Subject(i, subjectsNamesArr[i % subjectsNamesArr.length]);
             session.save(subject);
         }
         session.flush();
         List<Subject> subjects = getAllOfType(Subject.class);
 
-        //creating teachers and connecting with subjects
-        for (int i = 0; i < NUM_OF_TEACHERS; i++)
-        {
-            Teacher teacher = new Teacher(i, "Teacher ", "num" + i, "passTeacher" + i, "teacherUN" + i);
-            session.save(teacher);
-            subjects.get(i % NUM_OF_SUBJECTS).addTeacher(teacher);
-            session.update(teacher);
-        }
-        session.flush();
-        List<Teacher> teachers = getAllOfType(Teacher.class);
-
-        //creating courses
+        //creating courses and connecting with subjects
+        String[] coursesNamesArr = {"Level 1", "Beginners", "Level 2", "Advanced"};
         for (int i = 0; i < NUM_OF_COURSES; i++)
         {
-            Course course = new Course(i, "course_" + i, subjects.get(i % NUM_OF_SUBJECTS),
-                    teachers.get(i % NUM_OF_TEACHERS));
+            Course course = new Course(i, coursesNamesArr[i % coursesNamesArr.length], subjects.get(i % NUM_OF_SUBJECTS));
             session.save(course);
         }
         session.flush();
         List<Course> courses = getAllOfType(Course.class);
 
+        //creating teachers and connecting with courses and subjects
+        String[] teacherFirstNamesArr = {"Ronit", "Miri", "Shir", "Neta"};
+        String[] teacherLastNamesArr = {"Cohen", "Haim", "Levi", "Zur"};
+        for (int i = 0; i < NUM_OF_TEACHERS; i++)
+        {
+            Teacher teacher = new Teacher(i, teacherFirstNamesArr[i % teacherFirstNamesArr.length],
+                    teacherLastNamesArr[i % teacherLastNamesArr.length],
+                    teacherFirstNamesArr[i % teacherFirstNamesArr.length],
+                    teacherFirstNamesArr[i] + "_" + teacherLastNamesArr[i]);
+            session.save(teacher);
+
+            courses.get(i % NUM_OF_COURSES).setTeacher(teacher);
+            session.update(teacher);
+            courses.get(i % NUM_OF_COURSES).getSubject().addTeacher(teacher);
+            session.update(teacher);
+        }
+        session.flush();
+        List<Teacher> teachers = getAllOfType(Teacher.class);
+
         //creating students and connecting with courses
+        String[] studentFirstNamesArr = {"Yoni", "Guy", "Niv", "Maayan", "Or", "Ariel", "Shoval", "Tal"};
+        String[] studentLastNamesArr = {"Cohen", "Haim", "Bar-Dayan", "Shitrit"};
         for (int i = 0; i < NUM_OF_STUDENTS; i++)
         {
+            Student student;
+            String userName = studentFirstNamesArr[i % studentFirstNamesArr.length] + "_"
+                                    + studentLastNamesArr[i % studentLastNamesArr.length];
+
             if (i % 2 == 0)
-            {
-                Student student = new Student(100 + i, "Student ", "num" + i, "passStudent" + i, "studentUN", false);
-                session.save(student);
-                courses.get(i % NUM_OF_COURSES).addStudent(student);
-                session.update(student);
-            }
+                student = new Student(NUM_OF_TEACHERS + i, studentFirstNamesArr[i % studentFirstNamesArr.length],
+                       studentLastNamesArr[i % studentLastNamesArr.length],
+                       studentFirstNamesArr[i % studentFirstNamesArr.length], userName, false);
             else
-            {
-                Student student = new Student(100 + i, "Student ", "num" + i, "passStudent" + i, "studentUN", true);
-                session.save(student);
-                courses.get(i % NUM_OF_COURSES).addStudent(student);
-                session.update(student);
-            }
+                student = new Student(NUM_OF_TEACHERS + i, studentFirstNamesArr[i % studentFirstNamesArr.length],
+                       studentLastNamesArr[i % studentLastNamesArr.length],
+                       studentFirstNamesArr[i % studentFirstNamesArr.length], userName, true);
+
+            session.save(student);
+            courses.get((i % NUM_OF_COURSES)).addStudent(student);
         }
         session.flush();
-        List<Student> students = getAllOfType(Student.class);
 
-        //creating exams
-        for (int i = 0; i < NUM_OF_EXAMS; i++)
-        {
-            Exam exam = new Exam(courses.get(i % NUM_OF_COURSES), teachers.get(i % NUM_OF_TEACHERS),
-                    120, "good luck", "my secret note");
-            session.save(exam);
-        }
-        session.flush();
-        List<Exam> exams = getAllOfType(Exam.class);
+        //creating questions by teachers
 
-        //creating questions and connecting with exams
-        String[] ansArr = {"its a", "its b", "its c", "its d"};
-        for (int i = 0; i < 36; i++)
+        String[] questionsArr = {"1 + 0 = ?", "cat is a/an:", "1 + 4 = ?",  "same meaning of happy is:", "0 + 4 = ?",
+                "beautiful is a/an:",  "1 + 1 = ?", "how to spell many people?"};
+        List<String> ansArr1 = Arrays.asList("1", "2", "3", "4");
+        List<String> ansArr2 = Arrays.asList("food", "animal", "product", "emotions");
+        List<String> ansArr3 = Arrays.asList("0", "3", "5", "-3");
+        List<String> ansArr4 = Arrays.asList("sad", "hungry", "afraid", "glad");
+        List<String> ansArr5 = Arrays.asList("4", "2", "1", "0");
+        List<String> ansArr6 = Arrays.asList("verb", "adjective", "noun", "none of above");
+        List<String> ansArr7 =  Arrays.asList("1", "3", "2", "4");
+        List<String> ansArr8 = Arrays.asList("mans", "man","mens", "men");
+        List<List<String>> answers = new ArrayList<>();
+        Collections.addAll(answers, ansArr1, ansArr2, ansArr3, ansArr4, ansArr5, ansArr6, ansArr7, ansArr8);
+
+        for (int i = 0; i < NUM_OF_QUESTIONS; i++)
         {
-            Question question = new Question("question" + i, ansArr, i % NUM_OF_ANSWERS,
-                    courses.get(i % NUM_OF_COURSES), teachers.get(i % NUM_OF_TEACHERS));
+            Teacher teacher = teachers.get(i % NUM_OF_TEACHERS);
+            Question question = teacher.createQuestion(questionsArr[i], answers.get(i), i % NUM_OF_OPTIONAL_ANSWERS,
+                                   teacher.getCoursesList().get(i %  teacher.getCoursesList().size()));
             session.save(question);
-            exams.get(i % NUM_OF_EXAMS).addQuestion(question);
-            session.update(question);
+            session.update(teacher);
         }
         session.flush();
 
-        //creating executedExams
-        for (int i = 0; i < 18; i++)
-        {
-            ExecutedExam executedExam = new ExecutedExam(exams.get(i % NUM_OF_EXAMS),
-                    students.get(i % NUM_OF_STUDENTS));
-            session.save(executedExam);
-        }
-        session.flush();
     }
 
     private static <T> List<T> getAllOfType(Class<T> objectType) {

@@ -4,7 +4,6 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
-import java.sql.Struct;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -21,9 +20,9 @@ public class Course {
     private String name;
 
     @Transient
-    private Queue<Integer> availableQuestionCodes = new LinkedList<>();
+    private final Queue<Integer> availableQuestionCodes = new LinkedList<>();
     @Transient
-    private Queue<Integer> availableExamCodes = new LinkedList<>();
+    private final Queue<Integer> availableExamCodes = new LinkedList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Cascade(CascadeType.SAVE_UPDATE)
@@ -59,13 +58,13 @@ public class Course {
     //Group c'tors
     public Course() { }
 
-    public Course(int id, String name, Subject subject, Teacher teacher) {
+    public Course(int id, String name, Subject subject) {
 
         DecimalFormat decimalFormat = new DecimalFormat("00");
         this.id = decimalFormat.format(id);
         this.name = name;
-        subject.addCourse(this);
-        teacher.addCourse(this);
+        this.setSubject(subject);
+        //this.setTeacher(teacher);
 
         for (int i = 0; i < 1000; i++)  // max questions per course
             availableQuestionCodes.add(i);
@@ -77,22 +76,21 @@ public class Course {
     //Group adders and removers
     public void addExam(Exam exam) {
         if (!examsList.contains(exam))
-        {
             examsList.add(exam);
+
+        if (exam.getCourse() != this)
             exam.setCourse(this);
-        }
     }
 
     public void addQuestion(Question question) {
         if (!questionsList.contains(question))
-        {
             questionsList.add(question);
+
+        if(question.getCourse() != this)
             question.setCourse(this);
-        }
     }
 
     public void addStudent(Student student) {
-
         if (!studentsList.contains(student))
             studentsList.add(student);
 
@@ -102,10 +100,10 @@ public class Course {
 
     public void addExecutedExam(ExecutedExam executedExam) {
         if (!executedExamsList.contains(executedExam))
-        {
             executedExamsList.add(executedExam);
+
+        if(executedExam.getCourse() != this)
             executedExam.setCourse(this);
-        }
     }
 
     //Group setters and getters
@@ -113,16 +111,25 @@ public class Course {
     public Queue<Integer> getAvailableExamCodes() { return availableExamCodes; }
 
     public String getId() { return id; }
-    protected void setId(String courseId) { this.id = courseId; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
     public Subject getSubject() { return subject; }
-    public void setSubject(Subject subject) { this.subject = subject; }
+    public void setSubject(Subject subject) {
+
+        this.subject = subject;
+        if(!subject.getCoursesList().contains(this))
+            subject.addCourse(this);
+    }
 
     public Teacher getTeacher() { return teacher; }
-    public void setTeacher(Teacher teacher) { this.teacher = teacher; }
+    public void setTeacher(Teacher teacher) {
+
+        this.teacher = teacher;
+        if(!teacher.getCoursesList().contains(this))
+            teacher.addCourse(this);
+    }
 
     public List<Exam> getExamsList() { return examsList; }
     public void setExamsList(List<Exam> examsList) { this.examsList = examsList; }

@@ -33,7 +33,8 @@ public class ExecutedExam {
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
     private List<Question> questionsList = new ArrayList<>();
 
-    //private List<Double> questionsScores = new ArrayList<>();
+    @ElementCollection
+    private List<Double> questionsScores = new ArrayList<>();
 
     private String examId;
     private int grade = 0;
@@ -41,25 +42,36 @@ public class ExecutedExam {
     private String executedExamDescription, teacherPrivateNotes; // teacherPrivateNotes only for the teacher
 
     //Group c'tors
-    public ExecutedExam() { }
+    public ExecutedExam() {
+    }
 
     public ExecutedExam(Exam exam, Student student) {
 
-        exam.getCourse().addExecutedExam(this);
+        //exam.getCourse().addExecutedExam(this);
+        this.setCourse(exam.getCourse());
         for (Question question : exam.getQuestionsList())
-            question.addExecutedExam(this);
-
-       // this.questionsScores.addAll(exam.getQuestionsScores());
-
-        exam.getAuthor().addExecutedExam(this);
+           // question.addExecutedExam(this);
+            this.addQuestion(question);
+        this.questionsScores.addAll(exam.getQuestionsScores());
+        //exam.getAuthor().addExecutedExam(this);
+        this.setAuthor(exam.getAuthor());
         this.examId = exam.getId();
-        this.duration = exam.getDuration();
+        this.duration = exam.getDurationInMinutes();
         this.executedExamDescription = exam.getDescription();
         this.teacherPrivateNotes = exam.getTeacherPrivateNotes();
-        student.addExecutedExam(this);
-
-        if(student.getExtensionEligible())
+        //student.addExecutedExam(this);
+        this.setStudent(student);
+        if (student.getExtensionEligible())
             setOverTime();
+    }
+
+    //Group adders and removers
+    public void addQuestion(Question question) {
+        if (!questionsList.contains(question))
+            questionsList.add(question);
+
+        if (!question.getContainedInExecutedExams().contains(this))
+            question.getContainedInExecutedExams().add(this);
     }
 
     //Group setters and getters
@@ -71,21 +83,30 @@ public class ExecutedExam {
         return student;
     }
     public void setStudent(Student student) {
+
         this.student = student;
+        if (!student.getExecutedExamsList().contains(this))
+            student.addExecutedExam(this);
     }
 
     public Course getCourse() {
         return course;
     }
     public void setCourse(Course course) {
+
         this.course = course;
+        if (!course.getExecutedExamsList().contains(this))
+            course.addExecutedExam(this);
     }
 
     public Teacher getAuthor() {
         return author;
     }
     public void setAuthor(Teacher author) {
+
         this.author = author;
+        if (!author.getExecutedExamsList().contains(this))
+            author.addExecutedExam(this);
     }
 
     public List<Question> getQuestionsList() {
@@ -95,8 +116,12 @@ public class ExecutedExam {
         this.questionsList = questionsList;
     }
 
-//    public List<Double> getQuestionsScores() { return questionsScores; }
-//    public void setQuestionsScores(List<Double> questionsScores) {this.questionsScores = questionsScores; }
+    public List<Double> getQuestionsScores() {
+        return questionsScores;
+    }
+    public void setQuestionsScores(List<Double> questionsScores) {
+        this.questionsScores = questionsScores;
+    }
 
     public String getExamId() {
         return examId;
@@ -136,5 +161,4 @@ public class ExecutedExam {
     public void setOverTime() {
         this.duration += 0.25 * this.duration;
     }
-
 }

@@ -141,7 +141,7 @@ public class DatabaseRequestHandler {
         question.setQuestionContent(request.getNewDescription());
         question.setAnswersArray(request.getNewAnswers());
         question.setCorrectAnswer(request.getCorrectAnswer());
-        question.setLastModified(LocalDateTime.now());
+        question.setLastModified();
         session.update(question);
         session.flush();
 

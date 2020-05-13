@@ -36,7 +36,8 @@ public class Teacher extends User {
     private List<ExecutedExam> executedExamsList = new ArrayList<>();
 
     //Group c'tors
-    public Teacher() { }
+    public Teacher() {
+    }
 
     public Teacher(int socialId, String firstName, String lastName, String password, String userName) {
         super(socialId, firstName, lastName, password, userName);
@@ -44,7 +45,6 @@ public class Teacher extends User {
 
     //Group adders and removers
     public void addSubject(Subject subject) {
-
         if (!subjectsList.contains(subject))
             subjectsList.add(subject);
 
@@ -54,34 +54,48 @@ public class Teacher extends User {
 
     public void addCourse(Course course) {
         if (!coursesList.contains(course))
-        {
             coursesList.add(course);
+
+        if (course.getTeacher() != this)
             course.setTeacher(this);
-        }
     }
 
     public void addExam(Exam exam) {
         if (!examsList.contains(exam))
-        {
             examsList.add(exam);
+
+        if (exam.getAuthor() != this)
             exam.setAuthor(this);
-        }
     }
 
     public void addQuestion(Question question) {
         if (!questionsList.contains(question))
-        {
             questionsList.add(question);
+
+        if (question.getAuthor() != this)
             question.setAuthor(this);
-        }
     }
 
     public void addExecutedExam(ExecutedExam executedExam) {
         if (!executedExamsList.contains(executedExam))
-        {
             executedExamsList.add(executedExam);
+
+        if (executedExam.getAuthor() != this)
             executedExam.setAuthor(this);
-        }
+    }
+
+    public Question createQuestion(String questionContent, List<String> answersArray, int correctAnswer, Course course){
+        Question question = new Question(questionContent, answersArray, correctAnswer, course, this);
+        this.questionsList.add(question);
+        return question;
+    }
+
+    public Exam createExam(Course course, int durationInMinutes, String description, String teacherPrivateNotes,
+                           List<Question> questionsList, List<Double> questionsScores) {
+        Exam exam = new Exam(course, this, durationInMinutes, description, teacherPrivateNotes,
+                questionsList, questionsScores);
+        this.examsList.add(exam);
+        return exam;
     }
 
     //Group setters and getters
@@ -113,6 +127,10 @@ public class Teacher extends User {
         this.examsList = examsList;
     }
 
-    public List<ExecutedExam> getExecutedExamsList() { return executedExamsList; }
-    public void setExecutedExamsList(List<ExecutedExam> execExamsList) { this.executedExamsList = execExamsList; }
+    public List<ExecutedExam> getExecutedExamsList() {
+        return executedExamsList;
+    }
+    public void setExecutedExamsList(List<ExecutedExam> execExamsList) {
+        this.executedExamsList = execExamsList;
+    }
 }
