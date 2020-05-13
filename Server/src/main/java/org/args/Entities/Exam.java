@@ -40,13 +40,16 @@ public class Exam {
     public Exam() {
     }
 
-    public Exam(Course course, Teacher author, int durationInMinutes, String description, String teacherPrivateNotes) {
+    public Exam(Course course, Teacher author, int durationInMinutes, String description,
+                String teacherPrivateNotes, List<Question> questionsList, List<Double> questionsScores) {
 
         setCourse(course);
         setAuthor(author);
         this.durationInMinutes = durationInMinutes;
         this.description = description;
         this.teacherPrivateNotes = teacherPrivateNotes;
+        this.questionsList.addAll(questionsList);
+        this.questionsScores.addAll(questionsScores);
 
         DecimalFormat decimalFormat = new DecimalFormat("00");
         this.id = course.getSubject().getId() + course.getId() +

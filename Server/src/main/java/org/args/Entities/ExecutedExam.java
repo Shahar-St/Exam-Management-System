@@ -47,21 +47,31 @@ public class ExecutedExam {
 
     public ExecutedExam(Exam exam, Student student) {
 
-        exam.getCourse().addExecutedExam(this);
+        //exam.getCourse().addExecutedExam(this);
+        this.setCourse(exam.getCourse());
         for (Question question : exam.getQuestionsList())
-            question.addExecutedExam(this);
-
+           // question.addExecutedExam(this);
+            this.addQuestion(question);
         this.questionsScores.addAll(exam.getQuestionsScores());
-
-        exam.getAuthor().addExecutedExam(this);
+        //exam.getAuthor().addExecutedExam(this);
+        this.setAuthor(exam.getAuthor());
         this.examId = exam.getId();
         this.duration = exam.getDurationInMinutes();
         this.executedExamDescription = exam.getDescription();
         this.teacherPrivateNotes = exam.getTeacherPrivateNotes();
-        student.addExecutedExam(this);
-
+        //student.addExecutedExam(this);
+        this.setStudent(student);
         if (student.getExtensionEligible())
             setOverTime();
+    }
+
+    //Group adders and removers
+    public void addQuestion(Question question) {
+        if (!questionsList.contains(question))
+            questionsList.add(question);
+
+        if (!question.getContainedInExecutedExams().contains(this))
+            question.getContainedInExecutedExams().add(this);
     }
 
     //Group setters and getters

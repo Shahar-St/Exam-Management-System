@@ -83,6 +83,19 @@ public class Teacher extends User {
             executedExam.setAuthor(this);
     }
 
+    public Question createQuestion(String questionContent, List<String> answersArray, int correctAnswer, Course course){
+        Question question = new Question(questionContent, answersArray, correctAnswer, course, this);
+        this.addQuestion(question); //update the connection between teacher and question
+        return question;
+    }
+
+    public Exam createExam(Course course, int durationInMinutes, String description, String teacherPrivateNotes,
+                               List<Question> questionsList, List<Double> questionsScores) {
+        Exam exam = new Exam(); //course, this, durationInMinutes, teacherPrivateNotes, questionsList, questionsScores
+        this.addExam(exam);
+        return exam;
+    }
+
     //Group setters and getters
     public List<Subject> getSubjectsList() { return subjectsList; }
     public void setSubjectsList(List<Subject> subjectsList) { this.subjectsList = subjectsList; }
