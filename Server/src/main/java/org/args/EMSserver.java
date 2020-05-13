@@ -10,17 +10,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-
+// server is a singleton
 public class EMSserver extends AbstractServer {
 
+    private static EMSserver singleInstanceServer = null;
     private final Session session;
     List<String> loggedInUsers = new ArrayList<>();
 
-    public EMSserver(int port, Session session) {
+    private EMSserver(int port, Session session) {
         super(port);
         this.session = session;
         Thread serverCommands = new Thread(this::serverCommands);
         serverCommands.start();
+    }
+
+    public static EMSserver getSingleInstance(int port, Session session) {
+
+        if (singleInstanceServer == null)
+            singleInstanceServer = new EMSserver(port, session);
+
+        return singleInstanceServer;
     }
 
     @Override

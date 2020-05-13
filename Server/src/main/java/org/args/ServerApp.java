@@ -56,7 +56,7 @@ public class ServerApp {
             session.beginTransaction();
             createDummyEntities();
 
-            EMSserver server = new EMSserver(port, session);
+            EMSserver server = EMSserver.getSingleInstance(port, session);
 
             session.getTransaction().commit();
             server.listen();
