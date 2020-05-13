@@ -36,7 +36,8 @@ public class Teacher extends User {
     private List<ExecutedExam> executedExamsList = new ArrayList<>();
 
     //Group c'tors
-    public Teacher() { }
+    public Teacher() {
+    }
 
     public Teacher(int socialId, String firstName, String lastName, String password, String userName) {
         super(socialId, firstName, lastName, password, userName);
@@ -55,7 +56,7 @@ public class Teacher extends User {
         if (!coursesList.contains(course))
             coursesList.add(course);
 
-        if(course.getTeacher() != this)
+        if (course.getTeacher() != this)
             course.setTeacher(this);
     }
 
@@ -71,7 +72,7 @@ public class Teacher extends User {
         if (!questionsList.contains(question))
             questionsList.add(question);
 
-        if(question.getAuthor() != this)
+        if (question.getAuthor() != this)
             question.setAuthor(this);
     }
 
@@ -79,36 +80,57 @@ public class Teacher extends User {
         if (!executedExamsList.contains(executedExam))
             executedExamsList.add(executedExam);
 
-        if(executedExam.getAuthor() != this)
+        if (executedExam.getAuthor() != this)
             executedExam.setAuthor(this);
     }
 
-    public Question createQuestion(String questionContent, List<String> answersArray, int correctAnswer, Course course){
+    public Question createQuestion(String questionContent, List<String> answersArray, int correctAnswer, Course course) {
         Question question = new Question(questionContent, answersArray, correctAnswer, course, this);
-        this.addQuestion(question); //update the connection between teacher and question
+        questionsList.add(question);
         return question;
     }
 
     public Exam createExam(Course course, int durationInMinutes, String description, String teacherPrivateNotes,
-                               List<Question> questionsList, List<Double> questionsScores) {
-        Exam exam = new Exam(); //course, this, durationInMinutes, teacherPrivateNotes, questionsList, questionsScores
+                           List<Question> questionsList, List<Double> questionsScores) {
+        Exam exam = new Exam(course, this, durationInMinutes, description, teacherPrivateNotes,
+                questionsList, questionsScores);
         this.addExam(exam);
         return exam;
     }
 
     //Group setters and getters
-    public List<Subject> getSubjectsList() { return subjectsList; }
-    public void setSubjectsList(List<Subject> subjectsList) { this.subjectsList = subjectsList; }
+    public List<Subject> getSubjectsList() {
+        return subjectsList;
+    }
+    public void setSubjectsList(List<Subject> subjectsList) {
+        this.subjectsList = subjectsList;
+    }
 
-    public List<Question> getQuestionsList() { return questionsList; }
-    public void setQuestionsList(List<Question> questionsList) { this.questionsList = questionsList; }
+    public List<Question> getQuestionsList() {
+        return questionsList;
+    }
+    public void setQuestionsList(List<Question> questionsList) {
+        this.questionsList = questionsList;
+    }
 
-    public List<Course> getCoursesList() { return coursesList; }
-    public void setCoursesList(List<Course> coursesList) { this.coursesList = coursesList; }
+    public List<Course> getCoursesList() {
+        return coursesList;
+    }
+    public void setCoursesList(List<Course> coursesList) {
+        this.coursesList = coursesList;
+    }
 
-    public List<Exam> getExamsList() { return examsList; }
-    public void setExamsList(List<Exam> examsList) { this.examsList = examsList; }
+    public List<Exam> getExamsList() {
+        return examsList;
+    }
+    public void setExamsList(List<Exam> examsList) {
+        this.examsList = examsList;
+    }
 
-    public List<ExecutedExam> getExecutedExamsList() { return executedExamsList; }
-    public void setExecutedExamsList(List<ExecutedExam> execExamsList) { this.executedExamsList = execExamsList; }
+    public List<ExecutedExam> getExecutedExamsList() {
+        return executedExamsList;
+    }
+    public void setExecutedExamsList(List<ExecutedExam> execExamsList) {
+        this.executedExamsList = execExamsList;
+    }
 }

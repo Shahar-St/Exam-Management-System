@@ -59,8 +59,8 @@ public class Question {
         this.questionContent = questionContent;
         this.answersArray = answersArray;
         this.correctAnswer = correctAnswer;
+        this.author = author;
         this.setCourse(course);
-        this.setAuthor(author);
         setLastModified();
 
         // handle empty queue
