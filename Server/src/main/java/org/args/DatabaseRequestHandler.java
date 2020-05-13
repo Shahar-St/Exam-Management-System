@@ -96,12 +96,15 @@ public class DatabaseRequestHandler {
     private void questionHandler() {
 
         QuestionRequest request = (QuestionRequest) this.request;
-        Question question;
-        try
+        if (client.getInfo("userName") == null)
         {
-            question = getQuestion(String.valueOf(request.getQuestionID()));
+            this.response = new QuestionResponse(UNAUTHORIZED, request);
+            return;
         }
-        catch (NoResultException e)
+
+        Question question = getQuestion(request.getQuestionID());
+
+        if (question == null)
         {
             this.response = new QuestionResponse(NOT_FOUND, request);
             return;
@@ -115,15 +118,21 @@ public class DatabaseRequestHandler {
     private void editQuestionHandler() {
 
         EditQuestionRequest request = (EditQuestionRequest) this.request;
+        if (client.getInfo("userName") == null)
+        {
+            this.response = new EditQuestionResponse(UNAUTHORIZED, request);
+            return;
+        }
 
-        Question question = getQuestion(String.valueOf(request.getQuestionID()));
+        Question question = getQuestion(request.getQuestionID());
 
         if (question == null)
         {
             this.response = new EditQuestionResponse(NOT_FOUND, request);
             return;
         }
-        else if (question.getAuthor() != getUser((String) client.getInfo("userName")))
+
+        if (question.getAuthor() != getUser((String) client.getInfo("userName")))
         {
             this.response = new EditQuestionResponse(NO_ACCESS, request);
             return;
@@ -134,6 +143,7 @@ public class DatabaseRequestHandler {
         question.setCorrectAnswer(request.getCorrectAnswer());
         question.setLastModified(LocalDateTime.now());
         session.update(question);
+        session.flush();
 
         this.response = new EditQuestionResponse(SUCCESS, request);
     }
@@ -141,12 +151,15 @@ public class DatabaseRequestHandler {
     private void loginHandler() {
 
         LoginRequest request = (LoginRequest) this.request;
-        User user;
-        try
+        if (client.getInfo("userName") == null)
         {
-            user = getUser(request.getUserName());
+            this.response = new LoginResponse(UNAUTHORIZED, request);
+            return;
         }
-        catch (NoResultException e)
+
+        User user = getUser(request.getUserName());
+
+        if (user == null)
         {
             this.response = new LoginResponse(NOT_FOUND, request);
             return;
@@ -157,7 +170,8 @@ public class DatabaseRequestHandler {
             this.response = new LoginResponse(NO_ACCESS, request);
             return;
         }
-        else if (!user.getPassword().equals(request.getPassword()))
+
+        if (!user.getPassword().equals(request.getPassword()))
         {
             this.response = new LoginResponse(WRONG_INFO, request);
             return;
@@ -165,13 +179,14 @@ public class DatabaseRequestHandler {
 
         this.client.setInfo("userName", user.getUserName());
         loggedInUsers.add(user.getUserName());
-        this.response = new LoginResponse(SUCCESS, user.getClass().getSimpleName().toLowerCase(), request);
+        this.response = new LoginResponse(SUCCESS, user.getClass().getSimpleName().toLowerCase(),
+                user.getFullName(), request);
     }
 
     private void allQuestionsHandler() {
 
         AllQuestionsRequest request = (AllQuestionsRequest) this.request;
-        HashMap<Integer, Pair<LocalDateTime, String>> map = new HashMap<>();
+        HashMap<String, Pair<LocalDateTime, String>> map = new HashMap<>();
 
         if (client.getInfo("userName") == null)
         {
@@ -180,6 +195,12 @@ public class DatabaseRequestHandler {
         }
 
         User user = getUser((String) client.getInfo("userName"));
+
+        if (user == null)
+        {
+            this.response = new AllQuestionsResponse(NOT_FOUND, request);
+            return;
+        }
 
         List<Question> questionList = new ArrayList<>();
         if (user instanceof Teacher)
@@ -202,10 +223,8 @@ public class DatabaseRequestHandler {
         }
 
         for (Question question : questionList)
-        {
-            map.put(Integer.valueOf(question.getId()),
+            map.put(question.getId(),
                     new Pair<>(question.getLastModified(), question.getQuestionContent()));
-        }
 
         this.response = new AllQuestionsResponse(SUCCESS, request, map);
     }
@@ -217,7 +236,14 @@ public class DatabaseRequestHandler {
         Root<User> root = criteriaQuery.from(User.class);
         criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("userName"), userName));
         Query<User> query = session.createQuery(criteriaQuery);
-        return query.getSingleResult();
+        try
+        {
+            return query.getSingleResult();
+        }
+        catch (NoResultException e)
+        {
+            return null;
+        }
     }
 
     private Question getQuestion(String questionID) {
@@ -226,6 +252,13 @@ public class DatabaseRequestHandler {
         Root<Question> root = criteriaQuery.from(Question.class);
         criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("id"), questionID));
         Query<Question> query = session.createQuery(criteriaQuery);
-        return query.getSingleResult();
+        try
+        {
+            return query.getSingleResult();
+        }
+        catch (NoResultException e)
+        {
+            return null;
+        }
     }
 }
