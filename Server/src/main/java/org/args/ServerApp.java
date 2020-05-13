@@ -10,10 +10,7 @@ import org.hibernate.service.ServiceRegistry;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class ServerApp {
@@ -80,7 +77,6 @@ public class ServerApp {
             session.getSessionFactory().close();
         }
     }
-
 
     private static void createDummyEntities() {
 
@@ -163,12 +159,13 @@ public class ServerApp {
         List<String> ansArr6 = Arrays.asList("verb", "adjective", "noun", "none of above");
         List<String> ansArr7 =  Arrays.asList("1", "3", "2", "4");
         List<String> ansArr8 = Arrays.asList("mans", "man","mens", "men");
-        List[] answers = new List[]{ansArr1, ansArr2, ansArr3, ansArr4, ansArr5, ansArr6, ansArr7, ansArr8};
+        List<List<String>> answers = new ArrayList<>();
+        Collections.addAll(answers, ansArr1, ansArr2, ansArr3, ansArr4, ansArr5, ansArr6, ansArr7, ansArr8);
 
         for (int i = 0; i < NUM_OF_QUESTIONS; i++)
         {
             Teacher teacher = teachers.get(i % NUM_OF_TEACHERS);
-            Question question = teacher.createQuestion(questionsArr[i], answers[i], i % NUM_OF_OPTIONAL_ANSWERS,
+            Question question = teacher.createQuestion(questionsArr[i], answers.get(i), i % NUM_OF_OPTIONAL_ANSWERS,
                                    teacher.getCoursesList().get(i %  teacher.getCoursesList().size()));
             session.save(question);
             session.update(teacher);
