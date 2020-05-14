@@ -7,19 +7,11 @@
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="712.0" prefWidth="936.0" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.QuestionManagementScreenController">
-    <right>
-        <AnchorPane prefHeight="547.0" prefWidth="225.0" BorderPane.alignment="CENTER">
-            <children>
-                <Button fx:id="questionDetailsButton" layoutX="50.0" layoutY="258.0" mnemonicParsing="false" onAction="#switchToQuestionEditScreen" prefHeight="69.0" prefWidth="126.0" styleClass="info" text="Details" AnchorPane.rightAnchor="49.0" />
-            </children>
-        </AnchorPane>
-    </right>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="712.0" prefWidth="857.0" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.QuestionManagementScreenController">
    <top>
       <TilePane alignment="CENTER" prefHeight="100.0" prefWidth="1199.0" BorderPane.alignment="CENTER">
          <children>
@@ -36,15 +28,22 @@
                         <Font name="Calibri" size="24.0" />
                     </font>
                <TilePane.margin>
-                  <Insets />
+                  <Insets left="-150.0" right="30.0" />
                </TilePane.margin>
                 </Label>
-            <MenuButton fx:id="subjectsDropdown" mnemonicParsing="false" styleClass="primary" text="Subjects" />
-                <MenuButton fx:id="coursesDropdown" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="92.0" styleClass="primary" text="Courses">
+            <MenuButton fx:id="subjectsDropdown" mnemonicParsing="false" styleClass="primary" text="Subjects">
                <TilePane.margin>
                   <Insets left="-200.0" />
                </TilePane.margin></MenuButton>
-                <Button fx:id="showQuestionList" mnemonicParsing="false" onAction="#getQuestionsList" prefHeight="25.0" prefWidth="207.0" styleClass="info" text="Show Questions List" />
+                <MenuButton fx:id="coursesDropdown" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="92.0" styleClass="primary" text="Courses">
+               <TilePane.margin>
+                  <Insets left="-300.0" />
+               </TilePane.margin></MenuButton>
+                <Button fx:id="showQuestionList" mnemonicParsing="false" onAction="#getQuestionsList" prefHeight="25.0" prefWidth="207.0" styleClass="info" text="Show Questions List">
+               <TilePane.margin>
+                  <Insets />
+               </TilePane.margin></Button>
+                <Button fx:id="questionDetailsButton" mnemonicParsing="false" onAction="#switchToQuestionEditScreen" prefHeight="69.0" prefWidth="126.0" styleClass="info" text="Show Details" />
          </children>
          <BorderPane.margin>
             <Insets right="10.0" />
@@ -64,4 +63,7 @@
    <left>
       <TilePane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </left>
+   <right>
+      <TilePane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </right>
 </BorderPane>
