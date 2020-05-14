@@ -36,7 +36,7 @@ public class EMSserver extends AbstractServer {
     protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 
         System.out.println("Interrupted\nreceived message from client " + client.getInetAddress()
-                + " ::" + msg.getClass().getSimpleName());
+                + "::" + msg.getClass().getSimpleName() + "\n>> ");
 
         if (msg instanceof DatabaseRequest)
         {
@@ -44,25 +44,24 @@ public class EMSserver extends AbstractServer {
                     new DatabaseRequestHandler((DatabaseRequest) msg, client, session, loggedInUsers);
             try
             {
+                session.clear();
                 client.sendToClient(handler.getResponse());
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
-            session.flush();
-            session.clear();
         }
     }
 
     @Override
     protected void clientConnected(ConnectionToClient client) {
-        System.out.println("Interrupted\nClient connected: " + client.getInetAddress());
+        System.out.print("Interrupted\nClient connected: " + client.getInetAddress() + "\n>> ");
     }
 
     @Override
     protected synchronized void clientDisconnected(ConnectionToClient client) {
-        System.out.println("Interrupted\nClient " + client.getInetAddress() + " Disconnected.");
+        System.out.println("Interrupted\nClient " + client.getInetAddress() + " Disconnected." + "\n>> ");
         loggedInUsers.remove((String) client.getInfo("userName"));
     }
 
@@ -72,7 +71,7 @@ public class EMSserver extends AbstractServer {
 
         while (true)
         {
-            System.out.print(">>");
+            System.out.print(">> ");
             String input = scanner.nextLine();
             if (input.equals("exit"))
             {

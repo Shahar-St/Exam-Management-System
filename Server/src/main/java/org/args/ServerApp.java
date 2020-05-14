@@ -60,6 +60,7 @@ public class ServerApp {
             EMSserver server = EMSserver.getSingleInstance(port, session);
 
             session.getTransaction().commit();
+            session.beginTransaction();
             server.listen();
 
             session.clear();
