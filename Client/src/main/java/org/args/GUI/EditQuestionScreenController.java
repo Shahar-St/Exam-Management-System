@@ -28,6 +28,8 @@ public class EditQuestionScreenController {
 
     private int correctAnswer;
 
+    private String questionID;
+
     private static ObservableList choiceItems;
 
     @FXML
@@ -61,7 +63,8 @@ public class EditQuestionScreenController {
     private Button EditButton;
 
 
-    public void initScreen(String lastModified, String author, String content, List<String> answers, int correctAnswer) {
+    public void initScreen(String questionId,String lastModified, String author, String content, List<String> answers, int correctAnswer) {
+        this.questionID = questionId;
         LastModified.setText(lastModified);
         Author.setText(author);
         Content.setText(content);
@@ -223,7 +226,7 @@ public class EditQuestionScreenController {
             EditButton.setText("Edit");
             isEditing = false;
             correctAnswerChoice.setDisable(true);
-            EditQuestionRequest request = new EditQuestionRequest("007", Content.getText(),
+            EditQuestionRequest request = new EditQuestionRequest(this.questionID, Content.getText(),
                     Arrays.asList(Answer1.getText(), Answer2.getText(), Answer3.getText(),
                             Answer4.getText()), correctAnswer);
             ClientApp.sendRequest(request);

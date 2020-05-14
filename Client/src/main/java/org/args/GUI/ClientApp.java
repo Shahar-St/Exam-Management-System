@@ -1,5 +1,6 @@
 package org.args.GUI;
 
+import DatabaseAccess.Requests.QuestionRequest;
 import DatabaseAccess.Responses.AllQuestionsResponse;
 import DatabaseAccess.Responses.Pair;
 import DatabaseAccess.Responses.QuestionResponse;
@@ -177,6 +178,7 @@ public class ClientApp extends Application {
 
     public void fillEditQuestionScreen(QuestionResponse response)  {
 
+        String questionId = ((QuestionRequest)response.getRequest()).getQuestionID();
         String lastModified = response.getLastModified().toString();
         String author = response.getAuthor();
         String content = response.getQuestionContent();
