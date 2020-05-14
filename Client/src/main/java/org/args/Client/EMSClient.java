@@ -14,6 +14,13 @@ public class EMSClient extends AbstractClient {
 
     private boolean isLoggedIn = false;
 
+    // error codes
+    private final int SUCCESS = 0;
+    private final int UNAUTHORIZED = 1;
+    private final int NOT_FOUND = 2;
+    private final int NO_ACCESS = 3;
+    private final int WRONG_INFO = 4;
+
     private String userName;
 
     private String password;
@@ -83,7 +90,7 @@ public class EMSClient extends AbstractClient {
 
         if (msg instanceof LoginResponse) {
             LoginResponse response = (LoginResponse) msg;
-            if (response.getStatus() == 0) {
+            if (response.getStatus() == SUCCESS) {
 
                 loginSuccess(response);
 
@@ -94,7 +101,7 @@ public class EMSClient extends AbstractClient {
 
         } else if (msg instanceof EditQuestionResponse) {
             EditQuestionResponse response = (EditQuestionResponse) msg;
-            if (response.getStatus() == 0) {
+            if (response.getStatus() == SUCCESS) {
                 editQuestionSuccess(response);
 
             } else {
@@ -103,7 +110,7 @@ public class EMSClient extends AbstractClient {
 
         } else if (msg instanceof AllQuestionsResponse) {
             AllQuestionsResponse response = (AllQuestionsResponse) msg;
-            if (response.getStatus() == 0) {
+            if (response.getStatus() == SUCCESS) {
                 getAllQuestionsSuccess(response);
 
             } else {
@@ -112,7 +119,7 @@ public class EMSClient extends AbstractClient {
 
         } else if (msg instanceof QuestionResponse) {
             QuestionResponse response = (QuestionResponse) msg;
-            if (response.getStatus() == 0) {
+            if (response.getStatus() == SUCCESS) {
                 viewQuestionSuccess(response);
 
             } else {
@@ -121,7 +128,7 @@ public class EMSClient extends AbstractClient {
 
         } else if (msg instanceof SubjectsAndCoursesResponse) {
             SubjectsAndCoursesResponse response = (SubjectsAndCoursesResponse) msg;
-            if (response.getStatus() == 0) {
+            if (response.getStatus() == SUCCESS) {
                 getSubjectsAndCoursesSuccess(response);
 
             } else {
