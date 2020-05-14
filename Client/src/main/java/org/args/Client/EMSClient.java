@@ -20,6 +20,8 @@ public class EMSClient extends AbstractClient {
     private final int NOT_FOUND = 2;
     private final int NO_ACCESS = 3;
     private final int WRONG_INFO = 4;
+    // used for presenting the error cause to the user.
+    private final String[] errors={"SUCCESS","UNAUTHORIZED","NOT_FOUND","NO_ACCESS","WRONG_INFO"};
 
     private String userName;
 
@@ -140,6 +142,10 @@ public class EMSClient extends AbstractClient {
 
     }
 
+    protected String getErrorMessage(int error_code){
+        return errors[error_code];
+    }
+
 
     public void loginSuccess(LoginResponse response) {
         this.isLoggedIn = true;
@@ -153,7 +159,7 @@ public class EMSClient extends AbstractClient {
     }
 
     public void loginFailed(LoginResponse response) {
-        app.popupAlert("Login Failed, Please Try Again. "+response.getStatus());
+        app.popupAlert("Login Failed, Please Try Again. "+getErrorMessage(response.getStatus()));
     }
 
 
@@ -164,7 +170,7 @@ public class EMSClient extends AbstractClient {
     }
 
     public void viewQuestionFailed(QuestionResponse response) {
-        app.popupAlert("Failed To Fetch The Question, Please Try Again."+response.getStatus());
+        app.popupAlert("Failed To Fetch The Question, Please Try Again."+getErrorMessage(response.getStatus()));
 
     }
 
@@ -175,7 +181,7 @@ public class EMSClient extends AbstractClient {
     }
 
     public void getSubjectsAndCoursesFailed(SubjectsAndCoursesResponse response) {
-        app.popupAlert("Failed To Fetch The Subjects And Courses, Please Try Again."+response.getStatus());
+        app.popupAlert("Failed To Fetch The Subjects And Courses, Please Try Again."+getErrorMessage(response.getStatus()));
 
     }
 
@@ -186,7 +192,7 @@ public class EMSClient extends AbstractClient {
     }
 
     public void editQuestionFailed(EditQuestionResponse response) {
-        app.popupAlert("Edit Question Failed, Please Try Again."+response.getStatus());
+        app.popupAlert("Edit Question Failed, Please Try Again."+getErrorMessage(response.getStatus()));
 
     }
 
@@ -196,7 +202,7 @@ public class EMSClient extends AbstractClient {
     }
 
     public void getAllQuestionsFailed(AllQuestionsResponse response) {
-        app.popupAlert("Failed To Fetch Question List, Please Try Again. "+response.getStatus());
+        app.popupAlert("Failed To Fetch Question List, Please Try Again. "+getErrorMessage(response.getStatus()));
 
     }
 
