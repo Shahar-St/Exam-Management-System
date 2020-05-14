@@ -41,7 +41,7 @@ public class ServerApp {
     private static final int NUM_OF_TEACHERS = 4;
     private static final int NUM_OF_STUDENTS = 8;
     private static final int NUM_OF_COURSES = 4;
-    private static final int  NUM_OF_OPTIONAL_ANSWERS = 4;
+    private static final int NUM_OF_OPTIONAL_ANSWERS = 4;
     private static final int NUM_OF_QUESTIONS = 8;
 
 
@@ -131,16 +131,16 @@ public class ServerApp {
         {
             Student student;
             String userName = studentFirstNamesArr[i % studentFirstNamesArr.length] + "_"
-                                    + studentLastNamesArr[i % studentLastNamesArr.length];
+                    + studentLastNamesArr[i % studentLastNamesArr.length];
 
             if (i % 2 == 0)
                 student = new Student(NUM_OF_TEACHERS + i, studentFirstNamesArr[i % studentFirstNamesArr.length],
-                       studentLastNamesArr[i % studentLastNamesArr.length],
-                       studentFirstNamesArr[i % studentFirstNamesArr.length], userName, false);
+                        studentLastNamesArr[i % studentLastNamesArr.length],
+                        studentFirstNamesArr[i % studentFirstNamesArr.length], userName, false);
             else
                 student = new Student(NUM_OF_TEACHERS + i, studentFirstNamesArr[i % studentFirstNamesArr.length],
-                       studentLastNamesArr[i % studentLastNamesArr.length],
-                       studentFirstNamesArr[i % studentFirstNamesArr.length], userName, true);
+                        studentLastNamesArr[i % studentLastNamesArr.length],
+                        studentFirstNamesArr[i % studentFirstNamesArr.length], userName, true);
 
             session.save(student);
             courses.get((i % NUM_OF_COURSES)).addStudent(student);
@@ -149,16 +149,16 @@ public class ServerApp {
 
         //creating questions by teachers
 
-        String[] questionsArr = {"1 + 0 = ?", "cat is a/an:", "1 + 4 = ?",  "same meaning of happy is:", "0 + 4 = ?",
-                "beautiful is a/an:",  "1 + 1 = ?", "how to spell many people?"};
+        String[] questionsArr = {"1 + 0 = ?", "cat is a/an:", "1 + 4 = ?", "same meaning of happy is:", "0 + 4 = ?",
+                "beautiful is a/an:", "1 + 1 = ?", "how to spell many people?"};
         List<String> ansArr1 = Arrays.asList("1", "2", "3", "4");
         List<String> ansArr2 = Arrays.asList("food", "animal", "product", "emotions");
         List<String> ansArr3 = Arrays.asList("0", "3", "5", "-3");
         List<String> ansArr4 = Arrays.asList("sad", "hungry", "afraid", "glad");
         List<String> ansArr5 = Arrays.asList("4", "2", "1", "0");
         List<String> ansArr6 = Arrays.asList("verb", "adjective", "noun", "none of above");
-        List<String> ansArr7 =  Arrays.asList("1", "3", "2", "4");
-        List<String> ansArr8 = Arrays.asList("mans", "man","mens", "men");
+        List<String> ansArr7 = Arrays.asList("1", "3", "2", "4");
+        List<String> ansArr8 = Arrays.asList("mans", "man", "mens", "men");
         List<List<String>> answers = new ArrayList<>();
         Collections.addAll(answers, ansArr1, ansArr2, ansArr3, ansArr4, ansArr5, ansArr6, ansArr7, ansArr8);
 
@@ -166,7 +166,7 @@ public class ServerApp {
         {
             Teacher teacher = teachers.get(i % NUM_OF_TEACHERS);
             Question question = teacher.createQuestion(questionsArr[i], answers.get(i), i % NUM_OF_OPTIONAL_ANSWERS,
-                                   teacher.getCoursesList().get(i %  teacher.getCoursesList().size()));
+                    teacher.getCoursesList().get(i % teacher.getCoursesList().size()));
             session.save(question);
             session.update(teacher);
         }

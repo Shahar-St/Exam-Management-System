@@ -151,11 +151,6 @@ public class DatabaseRequestHandler {
     private void loginHandler() {
 
         LoginRequest request = (LoginRequest) this.request;
-//        if (client.getInfo("userName") == null)
-//        {
-//            this.response = new LoginResponse(UNAUTHORIZED, request);
-//            return;
-//        }
 
         User user = getUser(request.getUserName());
 
