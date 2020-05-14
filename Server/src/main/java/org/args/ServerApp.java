@@ -1,41 +1,15 @@
 package org.args;
 
 import org.args.Entities.*;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import java.io.IOException;
 import java.util.*;
-import java.util.logging.Level;
 
 
 public class ServerApp {
-
-    private static Session session;
-
-    private static SessionFactory getSessionFactory() throws HibernateException {
-
-        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
-        Configuration configuration = new Configuration();
-        configuration.addAnnotatedClass(User.class);
-        configuration.addAnnotatedClass(Teacher.class);
-        configuration.addAnnotatedClass(Dean.class);
-        configuration.addAnnotatedClass(Student.class);
-        configuration.addAnnotatedClass(Subject.class);
-        configuration.addAnnotatedClass(Course.class);
-        configuration.addAnnotatedClass(Question.class);
-        configuration.addAnnotatedClass(Exam.class);
-        configuration.addAnnotatedClass(ExecutedExam.class);
-
-        ServiceRegistry serviceRegistry =
-                new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-        return configuration.buildSessionFactory(serviceRegistry);
-    }
 
     private static final int NUM_OF_SUBJECTS = 2;
     private static final int NUM_OF_TEACHERS = 4;
@@ -50,35 +24,28 @@ public class ServerApp {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter port number: ");
         int port = scanner.nextInt();
+
+        DatabaseHandler databaseHandler = new DatabaseHandler();
+        Session session = databaseHandler.getSession();
+
+        createDummyEntities(session);
+        session.getTransaction().commit();
+        session.clear();
+        session.beginTransaction();
+
+        EMSserver server = EMSserver.getSingleInstance(port, databaseHandler);
         try
         {
-            SessionFactory sessionFactory = getSessionFactory();
-            session = sessionFactory.openSession();
-            session.beginTransaction();
-            createDummyEntities();
-
-            EMSserver server = EMSserver.getSingleInstance(port, session);
-
-            session.getTransaction().commit();
-            session.beginTransaction();
+            assert server != null;
             server.listen();
-
-            session.clear();
         }
-        catch (Exception exception)
+        catch (IOException e)
         {
-            if (session != null)
-                session.getTransaction().rollback();
-
-            System.err.println("An error occurred, changes have been rolled back.");
-            exception.printStackTrace();
-            assert session != null;
-            session.close();
-            session.getSessionFactory().close();
+            e.printStackTrace();
         }
     }
 
-    private static void createDummyEntities() {
+    private static void createDummyEntities(Session session) {
 
         //creating Dean
         Dean dean = new Dean(123456789, "Head", "Teacher", "passDean", "deanUN");
@@ -93,7 +60,7 @@ public class ServerApp {
             session.save(subject);
         }
         session.flush();
-        List<Subject> subjects = getAllOfType(Subject.class);
+        List<Subject> subjects = getAllOfType(session, Subject.class);
 
         //creating courses and connecting with subjects
         String[] coursesNamesArr = {"Level 1", "Beginners", "Level 2", "Advanced"};
@@ -103,7 +70,7 @@ public class ServerApp {
             session.save(course);
         }
         session.flush();
-        List<Course> courses = getAllOfType(Course.class);
+        List<Course> courses = getAllOfType(session, Course.class);
 
         //creating teachers and connecting with courses and subjects
         String[] teacherFirstNamesArr = {"Ronit", "Miri", "Shir", "Neta"};
@@ -122,7 +89,7 @@ public class ServerApp {
             session.update(teacher);
         }
         session.flush();
-        List<Teacher> teachers = getAllOfType(Teacher.class);
+        List<Teacher> teachers = getAllOfType(session, Teacher.class);
 
         //creating students and connecting with courses
         String[] studentFirstNamesArr = {"Yoni", "Guy", "Niv", "Maayan", "Or", "Ariel", "Shoval", "Tal"};
@@ -174,7 +141,7 @@ public class ServerApp {
 
     }
 
-    private static <T> List<T> getAllOfType(Class<T> objectType) {
+    private static <T> List<T> getAllOfType(Session session, Class<T> objectType) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<T> query = builder.createQuery(objectType);
         query.from(objectType);

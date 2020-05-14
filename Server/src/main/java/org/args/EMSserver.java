@@ -15,21 +15,26 @@ public class EMSserver extends AbstractServer {
 
     private static EMSserver singleInstanceServer = null;
     private final Session session;
+    private final DatabaseHandler databaseHandler;
     List<String> loggedInUsers = new ArrayList<>();
 
-    private EMSserver(int port, Session session) {
+    private EMSserver(int port, DatabaseHandler databaseHandler) {
         super(port);
-        this.session = session;
+        this.databaseHandler = databaseHandler;
+        this.session = databaseHandler.getSession();
+
         Thread serverCommands = new Thread(this::serverCommands);
         serverCommands.start();
     }
 
-    public static EMSserver getSingleInstance(int port, Session session) {
+    public static EMSserver getSingleInstance(int port, DatabaseHandler databaseHandler) {
 
         if (singleInstanceServer == null)
-            singleInstanceServer = new EMSserver(port, session);
-
-        return singleInstanceServer;
+        {
+            singleInstanceServer = new EMSserver(port, databaseHandler);
+            return singleInstanceServer;
+        }
+        return null;
     }
 
     @Override
@@ -40,12 +45,9 @@ public class EMSserver extends AbstractServer {
 
         if (msg instanceof DatabaseRequest)
         {
-            DatabaseRequestHandler handler =
-                    new DatabaseRequestHandler((DatabaseRequest) msg, client, session, loggedInUsers);
             try
             {
-                session.clear();
-                client.sendToClient(handler.getResponse());
+                client.sendToClient(databaseHandler.handle((DatabaseRequest) msg, client, loggedInUsers));
             }
             catch (Exception e)
             {

@@ -4,8 +4,13 @@ import DatabaseAccess.Requests.*;
 import DatabaseAccess.Responses.*;
 import org.args.Entities.*;
 import org.args.OCSF.ConnectionToClient;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import org.hibernate.service.ServiceRegistry;
 
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -15,14 +20,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 
-public class DatabaseRequestHandler {
+public class DatabaseHandler {
 
-    private final DatabaseRequest request;
-    private DatabaseResponse response;
-    private final Session session;
-    private final ConnectionToClient client;
-    private final List<String> loggedInUsers;
+    private Session session;
 
     // error codes
     private final int SUCCESS = 0;
@@ -31,38 +33,72 @@ public class DatabaseRequestHandler {
     private final int NO_ACCESS = 3;
     private final int WRONG_INFO = 4;
 
-    public DatabaseRequestHandler(DatabaseRequest request, ConnectionToClient client,
-                                  Session session, List<String> loggedInUsers) {
-        this.request = request;
-        this.session = session;
-        this.client = client;
-        this.loggedInUsers = loggedInUsers;
+    public DatabaseHandler() {
+        try
+        {
+            SessionFactory sessionFactory = getSessionFactory();
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+        }
+        catch (Exception exception)
+        {
+            if (session != null)
+                session.getTransaction().rollback();
 
-        if (request instanceof LoginRequest)
-            loginHandler();
-        else if (request instanceof AllQuestionsRequest)
-            allQuestionsHandler();
-        else if (request instanceof EditQuestionRequest)
-            editQuestionHandler();
-        else if (request instanceof QuestionRequest)
-            questionHandler();
-        else if (request instanceof SubjectsAndCoursesRequest)
-            subjectsAndCoursesHandler();
+            System.err.println("An error occurred, changes have been rolled back.");
+            exception.printStackTrace();
+            assert session != null;
+            session.close();
+            session.getSessionFactory().close();
+        }
     }
 
-    public DatabaseResponse getResponse() {
+    public Session getSession() {
+        return session;
+    }
+    private static SessionFactory getSessionFactory() throws HibernateException {
+
+        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
+        Configuration configuration = new Configuration();
+        configuration.addAnnotatedClass(User.class);
+        configuration.addAnnotatedClass(Teacher.class);
+        configuration.addAnnotatedClass(Dean.class);
+        configuration.addAnnotatedClass(Student.class);
+        configuration.addAnnotatedClass(Subject.class);
+        configuration.addAnnotatedClass(Course.class);
+        configuration.addAnnotatedClass(Question.class);
+        configuration.addAnnotatedClass(Exam.class);
+        configuration.addAnnotatedClass(ExecutedExam.class);
+
+        ServiceRegistry serviceRegistry =
+                new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+        return configuration.buildSessionFactory(serviceRegistry);
+    }
+
+    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client,
+                                   List<String> loggedInUsers) {
+        DatabaseResponse response;
+
+        if (request instanceof LoginRequest)
+            response = loginHandler((LoginRequest) request, client, loggedInUsers);
+        else if (request instanceof AllQuestionsRequest)
+            response = allQuestionsHandler((AllQuestionsRequest) request, client);
+        else if (request instanceof EditQuestionRequest)
+            response = editQuestionHandler((EditQuestionRequest) request, client);
+        else if (request instanceof QuestionRequest)
+            response = questionHandler((QuestionRequest) request, client);
+        else // request is instanceof SubjectsAndCoursesRequest
+            response = subjectsAndCoursesHandler((SubjectsAndCoursesRequest) request, client);
+
+        this.session.clear();
         return response;
     }
 
-    private void subjectsAndCoursesHandler() {
-
-        SubjectsAndCoursesRequest request = (SubjectsAndCoursesRequest) this.request;
+    private SubjectsAndCoursesResponse subjectsAndCoursesHandler(SubjectsAndCoursesRequest request,
+                                                                 ConnectionToClient client) {
 
         if (client.getInfo("userName") == null)
-        {
-            this.response = new SubjectsAndCoursesResponse(UNAUTHORIZED, request);
-            return;
-        }
+            return new SubjectsAndCoursesResponse(UNAUTHORIZED, request);
 
         HashMap<String, List<String>> map = new HashMap<>();
         User user = getUser((String) client.getInfo("userName"));
@@ -90,53 +126,38 @@ public class DatabaseRequestHandler {
                 map.put(course.getSubject().getName(), subjectCourses);
             }
         }
-        this.response = new SubjectsAndCoursesResponse(SUCCESS, request, map);
+        return new SubjectsAndCoursesResponse(SUCCESS, request, map);
     }
 
-    private void questionHandler() {
+    private QuestionResponse questionHandler(QuestionRequest request, ConnectionToClient client) {
 
-        QuestionRequest request = (QuestionRequest) this.request;
         if (client.getInfo("userName") == null)
-        {
-            this.response = new QuestionResponse(UNAUTHORIZED, request);
-            return;
-        }
+            return new QuestionResponse(UNAUTHORIZED, request);
 
         Question question = getQuestion(request.getQuestionID());
 
         if (question == null)
-        {
-            this.response = new QuestionResponse(NOT_FOUND, request);
-            return;
-        }
+            return new QuestionResponse(NOT_FOUND, request);
+
         List<String> answers = new ArrayList<>(question.getAnswersArray());
-        this.response = new QuestionResponse(SUCCESS, request, question.getQuestionContent(),
+        return new QuestionResponse(SUCCESS, request, question.getQuestionContent(),
                 answers, question.getCorrectAnswer(), question.getCourse().getName(),
                 question.getAuthor().getFullName(), question.getLastModified());
     }
 
-    private void editQuestionHandler() {
+    private EditQuestionResponse editQuestionHandler(EditQuestionRequest request, ConnectionToClient client) {
 
-        EditQuestionRequest request = (EditQuestionRequest) this.request;
         if (client.getInfo("userName") == null)
-        {
-            this.response = new EditQuestionResponse(UNAUTHORIZED, request);
-            return;
-        }
+            return new EditQuestionResponse(UNAUTHORIZED, request);
 
         Question question = getQuestion(request.getQuestionID());
 
         if (question == null)
-        {
-            this.response = new EditQuestionResponse(NOT_FOUND, request);
-            return;
-        }
+            return new EditQuestionResponse(NOT_FOUND, request);
+
 
         if (question.getAuthor() != getUser((String) client.getInfo("userName")))
-        {
-            this.response = new EditQuestionResponse(NO_ACCESS, request);
-            return;
-        }
+            return new EditQuestionResponse(NO_ACCESS, request);
 
         question.setQuestionContent(request.getNewDescription());
         question.setAnswersArray(request.getNewAnswers());
@@ -145,57 +166,41 @@ public class DatabaseRequestHandler {
         session.update(question);
         session.flush();
 
-        this.response = new EditQuestionResponse(SUCCESS, request);
+        return new EditQuestionResponse(SUCCESS, request);
     }
 
-    private void loginHandler() {
-
-        LoginRequest request = (LoginRequest) this.request;
+    private LoginResponse loginHandler(LoginRequest request, ConnectionToClient client, List<String> loggedInUsers) {
 
         User user = getUser(request.getUserName());
 
         if (user == null)
-        {
-            this.response = new LoginResponse(NOT_FOUND, request);
-            return;
-        }
+            return new LoginResponse(NOT_FOUND, request);
 
         if (loggedInUsers.contains(request.getUserName()))
-        {
-            this.response = new LoginResponse(NO_ACCESS, request);
-            return;
-        }
+            return new LoginResponse(NO_ACCESS, request);
 
         if (!user.getPassword().equals(request.getPassword()))
-        {
-            this.response = new LoginResponse(WRONG_INFO, request);
-            return;
-        }
+            return new LoginResponse(WRONG_INFO, request);
 
-        this.client.setInfo("userName", user.getUserName());
+        client.setInfo("userName", user.getUserName());
         loggedInUsers.add(user.getUserName());
-        this.response = new LoginResponse(SUCCESS, user.getClass().getSimpleName().toLowerCase(),
+        return new LoginResponse(SUCCESS, user.getClass().getSimpleName().toLowerCase(),
                 user.getFullName(), request);
     }
 
-    private void allQuestionsHandler() {
+    private AllQuestionsResponse allQuestionsHandler(AllQuestionsRequest request,
+                                                     ConnectionToClient client) {
 
-        AllQuestionsRequest request = (AllQuestionsRequest) this.request;
         HashMap<String, Pair<LocalDateTime, String>> map = new HashMap<>();
 
         if (client.getInfo("userName") == null)
-        {
-            this.response = new AllQuestionsResponse(UNAUTHORIZED, request);
-            return;
-        }
+            return new AllQuestionsResponse(UNAUTHORIZED, request);
 
         User user = getUser((String) client.getInfo("userName"));
 
         if (user == null)
-        {
-            this.response = new AllQuestionsResponse(NOT_FOUND, request);
-            return;
-        }
+            return new AllQuestionsResponse(NOT_FOUND, request);
+
 
         List<Question> questionList = new ArrayList<>();
         if (user instanceof Teacher)
@@ -221,7 +226,7 @@ public class DatabaseRequestHandler {
             map.put(question.getId(),
                     new Pair<>(question.getLastModified(), question.getQuestionContent()));
 
-        this.response = new AllQuestionsResponse(SUCCESS, request, map);
+        return new AllQuestionsResponse(SUCCESS, request, map);
     }
 
     private User getUser(String userName) throws NoResultException {
