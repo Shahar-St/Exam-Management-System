@@ -192,7 +192,7 @@ public class ClientApp extends Application {
             e.printStackTrace();
         }
         EditQuestionScreenController screenController = loader.getController();
-        screenController.initScreen(lastModified, author, content, answers, correctAnswer);
+        screenController.initScreen(questionId,lastModified, author, content, answers, correctAnswer);
         scene.setRoot(screen);
         resizeWindow();
 
