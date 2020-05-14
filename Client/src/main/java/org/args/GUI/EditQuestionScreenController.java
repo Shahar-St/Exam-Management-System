@@ -18,6 +18,8 @@ import javafx.stage.Stage;
 
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class EditQuestionScreenController {
 
@@ -59,28 +61,30 @@ public class EditQuestionScreenController {
     private Button EditButton;
 
 
-    public void initScreen(String lastModified, String author, String content, String[] answers, int correctAnswer) {
+    public void initScreen(String lastModified, String author, String content, List<String> answers, int correctAnswer) {
         LastModified.setText(lastModified);
         Author.setText(author);
         Content.setText(content);
-        Answer1.setText(answers[0]);
-        Answer2.setText(answers[1]);
-        Answer3.setText(answers[2]);
-        Answer4.setText(answers[3]);
+        Answer1.setText(answers.get(0));
+        Answer2.setText(answers.get(1));
+        Answer3.setText(answers.get(2));
+        Answer4.setText(answers.get(3));
         this.correctAnswer = correctAnswer;
 
     }
 
     @FXML
-    private void initialize(){
-        if(choiceItems==null){
-            String[] answers = {"Answer 1","Answer 2","Answer 3","Answer 4"};
+    private void initialize() {
+        if (choiceItems == null)
+        {
+            String[] answers = {"Answer 1", "Answer 2", "Answer 3", "Answer 4"};
             choiceItems = FXCollections.observableArrayList(answers);
 
 
         }
         correctAnswerChoice.getItems().addAll(choiceItems);
-        switch (this.correctAnswer) {
+        switch (this.correctAnswer)
+        {
             case 0:
                 Answer1.setStyle("-fx-background-color: #00ff00 ;");
                 correctAnswerChoice.setValue("Answer 1");
@@ -103,22 +107,24 @@ public class EditQuestionScreenController {
         }
 
 
-
     }
 
-    public void editSuccess(){
-        try {
+    public void editSuccess() {
+        try
+        {
             Scene scene = new Scene(ClientApp.loadFXML("AlertPopUp"));
             Stage popup = new Stage();
             popup.setScene(scene);
             popup.show();
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
 
     }
 
-    public void editFailed(){
+    public void editFailed() {
 
     }
 
@@ -127,7 +133,8 @@ public class EditQuestionScreenController {
         correctAnswerChoice.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                switch (t1.intValue()) {
+                switch (t1.intValue())
+                {
                     case 0:
                         Answer1.setStyle("-fx-background-color: #00ff00 ;");
                         Answer2.setStyle("-fx-background-color: #ffffff ;");
@@ -172,7 +179,8 @@ public class EditQuestionScreenController {
 
     @FXML
     void EditButtonClicked(ActionEvent event) {
-        if (!isEditing) {
+        if (!isEditing)
+        {
             LastModified.setEditable(true);
             Author.setEditable(true);
             Content.setEditable(true);
@@ -183,7 +191,8 @@ public class EditQuestionScreenController {
             EditButton.setText("Save");
             isEditing = true;
             correctAnswerChoice.setDisable(false);
-            switch (this.correctAnswer) {
+            switch (this.correctAnswer)
+            {
                 case 0:
                     Answer1.setStyle("-fx-background-color: #ffffff ;");
                     break;
@@ -201,7 +210,9 @@ public class EditQuestionScreenController {
                     break;
             }
 
-        } else {
+        }
+        else
+        {
             LastModified.setEditable(false);
             Author.setEditable(false);
             Content.setEditable(false);
@@ -212,11 +223,12 @@ public class EditQuestionScreenController {
             EditButton.setText("Edit");
             isEditing = false;
             correctAnswerChoice.setDisable(true);
-            EditQuestionRequest request = new EditQuestionRequest("007", Content.getText(), new String[]{Answer1.getText(),Answer2.getText(),Answer3.getText(),Answer4.getText()}, correctAnswer);
+            EditQuestionRequest request = new EditQuestionRequest("007", Content.getText(),
+                    Arrays.asList(Answer1.getText(), Answer2.getText(), Answer3.getText(),
+                            Answer4.getText()), correctAnswer);
             ClientApp.sendRequest(request);
         }
     }
-
 
 
 }

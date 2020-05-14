@@ -13,6 +13,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -109,9 +110,9 @@ public class DatabaseRequestHandler {
             this.response = new QuestionResponse(NOT_FOUND, request);
             return;
         }
-
+        List<String> answers = new ArrayList<>(question.getAnswersArray());
         this.response = new QuestionResponse(SUCCESS, request, question.getQuestionContent(),
-                question.getAnswersArray(), question.getCorrectAnswer(), question.getCourse().getName(),
+                answers, question.getCorrectAnswer(), question.getCourse().getName(),
                 question.getAuthor().getFullName(), question.getLastModified());
     }
 
@@ -151,11 +152,11 @@ public class DatabaseRequestHandler {
     private void loginHandler() {
 
         LoginRequest request = (LoginRequest) this.request;
-        if (client.getInfo("userName") == null)
-        {
-            this.response = new LoginResponse(UNAUTHORIZED, request);
-            return;
-        }
+//        if (client.getInfo("userName") == null)
+//        {
+//            this.response = new LoginResponse(UNAUTHORIZED, request);
+//            return;
+//        }
 
         User user = getUser(request.getUserName());
 

@@ -20,6 +20,7 @@ import org.args.Client.EMSClient;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -179,7 +180,7 @@ public class ClientApp extends Application {
         String lastModified = response.getLastModified().toString();
         String author = response.getAuthor();
         String content = response.getQuestionContent();
-        String[] answers = response.getAnswers();
+        List<String> answers = response.getAnswers();
         int correctAnswer = response.getCorrectAnswer();
         FXMLLoader loader = fxmlLoader("EditQuestionScreen");
         Parent screen = null;
