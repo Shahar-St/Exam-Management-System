@@ -928,7 +928,3 @@ VBox > .split-menu-button.last > .arrow-button {
 .slider:vertical .track {
 	-fx-pref-width: 5;
 }
-
-#Answer1 {
-	-fx-background-color: #00ff00;
-}
