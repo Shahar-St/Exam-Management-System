@@ -69,14 +69,11 @@ public class QuestionManagementScreenController {
     }
 
     @FXML
-    public void addCourseToDropdown(String coursename) {
-        MenuItem course = new MenuItem(coursename);
-        course.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                coursesDropdown.setText(((MenuItem) event.getSource()).getText());
-                ClientApp.sendRequest(new AllQuestionsRequest(((MenuItem) event.getSource()).getText()));
-            }
+    public void addCourseToDropdown(String courseName) {
+        MenuItem course = new MenuItem(courseName);
+        course.setOnAction(event -> {
+            coursesDropdown.setText(((MenuItem) event.getSource()).getText());
+            ClientApp.sendRequest(new AllQuestionsRequest(((MenuItem) event.getSource()).getText()));
         });
         coursesDropdown.getItems().add(course);
     }
@@ -104,7 +101,7 @@ public class QuestionManagementScreenController {
     }
 
     @FXML
-    public EventHandler<ActionEvent> displayCoursesFromSubject = new EventHandler<ActionEvent>() {
+    public EventHandler<ActionEvent> displayCoursesFromSubject = new EventHandler<>() {
         @Override
         public void handle(ActionEvent event) {
             initializeCoursesDropdown();
@@ -141,6 +138,7 @@ public class QuestionManagementScreenController {
 
     @FXML
     void switchToQuestionEditScreen(ActionEvent event) throws IOException {
+        // check something was selected
         selectedIndex = questions.indexOf(questionsList.getSelectionModel().getSelectedItem());
         int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
         String questionId = questionsList.getSelectionModel().getSelectedItem().substring(1, indexOfColon);

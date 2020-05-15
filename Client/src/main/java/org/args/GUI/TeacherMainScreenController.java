@@ -11,15 +11,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Date;
 
 public class TeacherMainScreenController {
 
     private static String fullGreeting;
 
-    @FXML // fx:id="questionMangementButton"
-    private Button questionMangementButton; // Value injected by FXMLLoader
+    @FXML // fx:id="questionManagementButton"
+    private Button questionManagementButton; // Value injected by FXMLLoader
 
     @FXML
     private Label welcomeLabel;

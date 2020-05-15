@@ -25,7 +25,7 @@
                 <Label text="Answer 2" />
                 <TextField fx:id="Answer2" editable="false" />
                 <Label text="Answer 3" />
-                <TextField fx:id="Answer3" editable="false" />
+                <TextField fx:id="Answer3" editable="false" opacity="0.3" />
                 <Label text="Answer 4" />
                 <TextField fx:id="Answer4" editable="false" />
                 <ButtonBar prefHeight="40.0" prefWidth="200.0">

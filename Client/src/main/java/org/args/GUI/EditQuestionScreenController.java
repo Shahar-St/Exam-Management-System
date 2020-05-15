@@ -13,7 +13,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 
@@ -216,13 +215,14 @@ public class EditQuestionScreenController {
         }
         else
         {
-            LastModified.setEditable(false);
-            Author.setEditable(false);
-            Content.setEditable(false);
-            Answer1.setEditable(false);
-            Answer2.setEditable(false);
-            Answer3.setEditable(false);
-            Answer4.setEditable(false);
+            // false is the def value
+//            LastModified.setEditable(false);
+//            Author.setEditable(false);
+//            Content.setEditable(false);
+//            Answer1.setEditable(false);
+//            Answer2.setEditable(false);
+//            Answer3.setEditable(false);
+//            Answer4.setEditable(false);
             EditButton.setText("Edit");
             isEditing = false;
             correctAnswerChoice.setDisable(true);

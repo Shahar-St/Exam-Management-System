@@ -66,6 +66,7 @@ public class DatabaseHandler {
     public Session getSession() {
         return session;
     }
+
     private static SessionFactory getSessionFactory() throws HibernateException {
 
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
@@ -270,5 +271,10 @@ public class DatabaseHandler {
         {
             return null;
         }
+    }
+    public void close() {
+        assert session != null;
+        session.close();
+        session.getSessionFactory().close();
     }
 }

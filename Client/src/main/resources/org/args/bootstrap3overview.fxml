@@ -4,7 +4,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.web.HTMLEditor?>
 <?import java.lang.*?>
 <ScrollPane prefHeight="3000.0" prefViewportHeight="600.0" prefViewportWidth="800.0" prefWidth="1000.0"
             style="-fx-background-color: white;" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/8"

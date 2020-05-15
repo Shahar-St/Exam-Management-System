@@ -11,7 +11,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.text.Text;
 
 public class AlertPopUpController {
 
@@ -42,6 +41,5 @@ public class AlertPopUpController {
     void initialize() {
         assert showText != null : "fx:id=\"showText\" was not injected: check your FXML file 'AlertPopUp.fxml'.";
         assert okBtn != null : "fx:id=\"okBtn\" was not injected: check your FXML file 'AlertPopUp.fxml'.";
-
     }
 }
