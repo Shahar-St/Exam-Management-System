@@ -27,7 +27,7 @@ public class EMSserver extends AbstractServer {
         serverCommands.start();
     }
 
-    public static EMSserver getSingleInstance(int port, DatabaseHandler databaseHandler) {
+    public static EMSserver EMSserverInit(int port, DatabaseHandler databaseHandler) {
 
         if (singleInstanceServer == null)
         {

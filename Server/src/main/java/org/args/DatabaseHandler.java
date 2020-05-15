@@ -24,6 +24,7 @@ import java.util.logging.Level;
 
 public class DatabaseHandler {
 
+    private static DatabaseHandler databaseHandler = null;
     private Session session;
 
     // error codes
@@ -33,7 +34,7 @@ public class DatabaseHandler {
     private final int NO_ACCESS = 3;
     private final int WRONG_INFO = 4;
 
-    public DatabaseHandler() {
+    private DatabaseHandler() {
         try
         {
             SessionFactory sessionFactory = getSessionFactory();
@@ -51,6 +52,15 @@ public class DatabaseHandler {
             session.close();
             session.getSessionFactory().close();
         }
+    }
+
+    public static DatabaseHandler DatabaseHandlerInit() {
+        if (databaseHandler == null)
+        {
+            databaseHandler = new DatabaseHandler();
+            return databaseHandler;
+        }
+        return null;
     }
 
     public Session getSession() {

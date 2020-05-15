@@ -25,7 +25,8 @@ public class ServerApp {
         System.out.print("Enter port number: ");
         int port = scanner.nextInt();
 
-        DatabaseHandler databaseHandler = new DatabaseHandler();
+        DatabaseHandler databaseHandler = DatabaseHandler.DatabaseHandlerInit();
+        assert databaseHandler != null;
         Session session = databaseHandler.getSession();
 
         createDummyEntities(session);
@@ -33,7 +34,7 @@ public class ServerApp {
         session.clear();
         session.beginTransaction();
 
-        EMSserver server = EMSserver.getSingleInstance(port, databaseHandler);
+        EMSserver server = EMSserver.EMSserverInit(port, databaseHandler);
         try
         {
             assert server != null;
