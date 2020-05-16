@@ -160,7 +160,16 @@ public class QuestionManagementScreenController {
 
     @FXML
     void switchToTeacherMainScreen(MouseEvent event) throws IOException {
+        clearScreen();
         ClientApp.setRoot("TeacherMainScreen");
+    }
+
+    void clearScreen()
+    {
+        questions.clear();
+        subjectsDropdown.getItems().clear();
+        coursesDropdown.getItems().clear();
+        currentSubject = null;
     }
 
 }
