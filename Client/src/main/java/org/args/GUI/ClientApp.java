@@ -32,11 +32,12 @@ public class ClientApp extends Application {
     private static Scene scene;
     private static EMSClient client;
     private static String fullName;
-    // specify the server details
 
+    // specify the server details
+    private final String host = "127.0.0.1";
     private final int port = 3000;
 
-    static void setRoot(String fxml) {
+    static void setRoot(String fxml)  {
         try
         {
             scene.setRoot(loadFXML(fxml));
