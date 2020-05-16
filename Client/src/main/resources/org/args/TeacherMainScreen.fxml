@@ -31,7 +31,7 @@
                   <Font name="SansSerif Regular" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="testManagementButton" alignment="CENTER" mnemonicParsing="false" prefWidth="165.0" styleClass="primary" text="Tests Management">
+            <Button fx:id="testManagementButton" alignment="CENTER" mnemonicParsing="false" prefWidth="165.0" styleClass="primary" text="Exam Management">
                <padding>
                   <Insets bottom="20.0" top="20.0" />
                </padding>
