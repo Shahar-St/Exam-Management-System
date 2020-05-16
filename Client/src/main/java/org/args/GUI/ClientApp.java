@@ -49,8 +49,8 @@ public class ClientApp extends Application {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    scene.getWindow().setWidth(((Pane) scene.getRoot()).getPrefWidth());
-                    scene.getWindow().setHeight(((Pane) scene.getRoot()).getPrefHeight());
+//                    scene.getWindow().setWidth(((Pane) scene.getRoot()).getPrefWidth());
+//                    scene.getWindow().setHeight(((Pane) scene.getRoot()).getPrefHeight());
                 }
             });
         }
@@ -268,8 +268,8 @@ public class ClientApp extends Application {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-//                scene.getWindow().setWidth(685);
-//                scene.getWindow().setHeight(519);
+                scene.getWindow().setWidth(685);
+                scene.getWindow().setHeight(519);
             }
         });
     }

@@ -215,14 +215,13 @@ public class EditQuestionScreenController {
         }
         else
         {
-            // false is the def value
-//            LastModified.setEditable(false);
-//            Author.setEditable(false);
-//            Content.setEditable(false);
-//            Answer1.setEditable(false);
-//            Answer2.setEditable(false);
-//            Answer3.setEditable(false);
-//            Answer4.setEditable(false);
+            LastModified.setEditable(false);
+            Author.setEditable(false);
+            Content.setEditable(false);
+            Answer1.setEditable(false);
+            Answer2.setEditable(false);
+            Answer3.setEditable(false);
+            Answer4.setEditable(false);
             EditButton.setText("Edit");
             isEditing = false;
             correctAnswerChoice.setDisable(true);
