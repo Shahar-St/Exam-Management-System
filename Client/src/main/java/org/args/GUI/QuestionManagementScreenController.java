@@ -141,11 +141,14 @@ public class QuestionManagementScreenController {
 
     @FXML
     void switchToQuestionEditScreen(ActionEvent event) throws IOException {
+        if(questionsList.getSelectionModel().getSelectedItem() != null)
+        {
         selectedIndex = questions.indexOf(questionsList.getSelectionModel().getSelectedItem());
         int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
         String questionId = questionsList.getSelectionModel().getSelectedItem().substring(1, indexOfColon);
         ClientApp.sendRequest(new QuestionRequest(questionId));
         ClientApp.setRoot("EditQuestionScreen");
+        }
     }
 
     @FXML
