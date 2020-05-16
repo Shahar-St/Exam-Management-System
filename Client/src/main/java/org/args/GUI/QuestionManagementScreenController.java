@@ -58,9 +58,7 @@ public class QuestionManagementScreenController {
         if (currentSubject != null && !subjectsAndCourses.isEmpty()) {
             for (String subjectName : subjectsAndCourses.keySet()) //iterate through every subject in the hashmap
             {
-                MenuItem subject = new MenuItem(subjectName);
-                subject.setOnAction(displayCoursesFromSubject);
-                addSubjectToSubjectDropdown(subject);
+                addSubjectToSubjectDropdown(subjectName);
             }
             subjectsDropdown.setText(currentSubject);
             initializeCoursesdropdown();
@@ -99,7 +97,9 @@ public class QuestionManagementScreenController {
 
 
     @FXML
-    public void addSubjectToSubjectDropdown(MenuItem subject) {
+    public void addSubjectToSubjectDropdown(String subjectName) {
+        MenuItem subject = new MenuItem(subjectName);
+        subject.setOnAction(displayCoursesFromSubject);
         subjectsDropdown.getItems().add(subject);
     }
 

@@ -128,9 +128,7 @@ public class ClientApp extends Application {
         screenController.setSubjectsAndCoursesState(response.getSubjectsAndCourses()); //set the hashmap in the controllers state to later fill the courses dropdown list according to selected subject
         for (String subjectName : response.getSubjectsAndCourses().keySet()) //iterate through every subject in the hashmap
         {
-            MenuItem subject = new MenuItem(subjectName);
-            subject.setOnAction(screenController.displayCoursesFromSubject);
-            screenController.addSubjectToSubjectDropdown(subject);
+            screenController.addSubjectToSubjectDropdown(subjectName);
         }
         scene.setRoot(screen);
         resizeWindow();
