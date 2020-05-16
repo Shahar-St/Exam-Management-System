@@ -33,7 +33,7 @@ public class ClientApp extends Application {
     // specify the server details
     private final String host = "127.0.0.1";
 
-    private final int port = 1337;
+    private final int port = 3000;
 
     static void setRoot(String fxml)  {
         try {
@@ -69,7 +69,8 @@ public class ClientApp extends Application {
             scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
             stage.setScene(scene);
             stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
-            stage.setMaximized(true);
+            stage.setResizable(false);
+            stage.setTitle("HSTS");
 
             stage.show();
         } catch (Exception e) {
@@ -156,6 +157,7 @@ public class ClientApp extends Application {
             FXMLLoader loader = fxmlLoader("TeacherMainScreen");
             Parent screen = loader.load();
             scene.setRoot(screen);
+            ((Stage)scene.getWindow()).setResizable(true);
         } catch (IOException e) {
             System.out.println("Failed to switch scene on login success");
             e.printStackTrace();
@@ -207,6 +209,8 @@ public class ClientApp extends Application {
                     AlertPopUpController popUpController = loader.getController();
                     popUpController.setShowText(message);
                     Stage popup = new Stage();
+                    popup.setTitle("Alert");
+                    popup.setResizable(false);
                     popup.setScene(scene);
                     popup.show();
                 } catch (IOException e) {
