@@ -47,6 +47,8 @@ public class QuestionManagementScreenController {
 
     private static String currentSubject = null;
 
+    private static String currentCourse = null;
+
     private static int selectedIndex;
 
 
@@ -58,12 +60,11 @@ public class QuestionManagementScreenController {
         if (currentSubject != null && !subjectsAndCourses.isEmpty()) {
             for (String subjectName : subjectsAndCourses.keySet()) //iterate through every subject in the hashmap
             {
-                MenuItem subject = new MenuItem(subjectName);
-                subject.setOnAction(displayCoursesFromSubject);
-                addSubjectToSubjectDropdown(subject);
+                addSubjectToSubjectDropdown(subjectName);
             }
             subjectsDropdown.setText(currentSubject);
-            initializeCoursesDropdown();
+            coursesDropdown.setText(currentCourse);
+            initializeCoursesdropdown();
             fillCoursesDropdown(currentSubject);
         }
     }
@@ -75,6 +76,7 @@ public class QuestionManagementScreenController {
             @Override
             public void handle(ActionEvent event) {
                 coursesDropdown.setText(((MenuItem) event.getSource()).getText());
+                currentCourse = ((MenuItem) event.getSource()).getText();
                 ClientApp.sendRequest(new AllQuestionsRequest(((MenuItem) event.getSource()).getText()));
             }
         });
@@ -82,7 +84,7 @@ public class QuestionManagementScreenController {
     }
 
     @FXML
-    void initializeCoursesDropdown() {
+    void initializeCoursesdropdown() {
         if (coursesDropdown.isDisabled())
             coursesDropdown.setDisable(false);
         if (coursesDropdown.getItems().size() > 0)
@@ -99,7 +101,9 @@ public class QuestionManagementScreenController {
 
 
     @FXML
-    public void addSubjectToSubjectDropdown(MenuItem subject) {
+    public void addSubjectToSubjectDropdown(String subjectName) {
+        MenuItem subject = new MenuItem(subjectName);
+        subject.setOnAction(displayCoursesFromSubject);
         subjectsDropdown.getItems().add(subject);
     }
 
@@ -107,7 +111,7 @@ public class QuestionManagementScreenController {
     public EventHandler<ActionEvent> displayCoursesFromSubject = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-            initializeCoursesDropdown();
+            initializeCoursesdropdown();
             currentSubject = ((MenuItem) event.getSource()).getText();
             subjectsDropdown.setText(currentSubject);
             fillCoursesDropdown(currentSubject);
@@ -141,11 +145,14 @@ public class QuestionManagementScreenController {
 
     @FXML
     void switchToQuestionEditScreen(ActionEvent event) throws IOException {
+        if(questionsList.getSelectionModel().getSelectedItem() != null)
+        {
         selectedIndex = questions.indexOf(questionsList.getSelectionModel().getSelectedItem());
         int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
         String questionId = questionsList.getSelectionModel().getSelectedItem().substring(1, indexOfColon);
         ClientApp.sendRequest(new QuestionRequest(questionId));
         ClientApp.setRoot("EditQuestionScreen");
+        }
     }
 
     @FXML
@@ -160,7 +167,16 @@ public class QuestionManagementScreenController {
 
     @FXML
     void switchToTeacherMainScreen(MouseEvent event) throws IOException {
+        clearScreen();
         ClientApp.setRoot("TeacherMainScreen");
+    }
+
+    void clearScreen()
+    {
+        questions.clear();
+        subjectsDropdown.getItems().clear();
+        coursesDropdown.getItems().clear();
+        currentSubject = null;
     }
 
 }

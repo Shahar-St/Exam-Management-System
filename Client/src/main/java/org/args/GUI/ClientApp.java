@@ -40,13 +40,6 @@ public class ClientApp extends Application {
     static void setRoot(String fxml)  {
         try {
             scene.setRoot(loadFXML(fxml));
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    scene.getWindow().setWidth(((Pane)scene.getRoot()).getPrefWidth());
-                    scene.getWindow().setHeight(((Pane)scene.getRoot()).getPrefHeight());
-                }
-            });
         } catch (IOException e) {
             System.out.println("Failed to change the root of the scene");
             e.printStackTrace();
@@ -68,17 +61,19 @@ public class ClientApp extends Application {
             e.printStackTrace();
 
         }
-
     }
 
     @Override
     public void start(Stage stage) {
         try {
             FXMLLoader loader = fxmlLoader("LoginScreen");
-            scene = new Scene(loader.load(), 550, 350);
+            scene = new Scene(loader.load(), 800, 600);
             scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
             stage.setScene(scene);
             stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
+            stage.setResizable(false);
+            stage.setTitle("HSTS");
+
             stage.show();
         } catch (Exception e) {
             System.out.println("Failed to start the app.. exiting");
@@ -114,7 +109,6 @@ public class ClientApp extends Application {
             e.printStackTrace();
 
         }
-
     }
 
     public void fillSubjectsDropdown(SubjectsAndCoursesResponse response)  {
@@ -130,12 +124,10 @@ public class ClientApp extends Application {
         screenController.setSubjectsAndCoursesState(response.getSubjectsAndCourses()); //set the hashmap in the controllers state to later fill the courses dropdown list according to selected subject
         for (String subjectName : response.getSubjectsAndCourses().keySet()) //iterate through every subject in the hashmap
         {
-            MenuItem subject = new MenuItem(subjectName);
-            subject.setOnAction(screenController.displayCoursesFromSubject);
-            screenController.addSubjectToSubjectDropdown(subject);
+            screenController.addSubjectToSubjectDropdown(subjectName);
         }
         scene.setRoot(screen);
-        resizeWindow();
+
 
     }
 
@@ -167,7 +159,9 @@ public class ClientApp extends Application {
             FXMLLoader loader = fxmlLoader("TeacherMainScreen");
             Parent screen = loader.load();
             scene.setRoot(screen);
-            resizeWindow();
+            Platform.runLater(() -> {
+                ((Stage)scene.getWindow()).setResizable(true);
+            });
         } catch (IOException e) {
             System.out.println("Failed to switch scene on login success");
             e.printStackTrace();
@@ -194,7 +188,6 @@ public class ClientApp extends Application {
         EditQuestionScreenController screenController = loader.getController();
         screenController.initScreen(questionId,lastModified, author, content, answers, correctAnswer);
         scene.setRoot(screen);
-        resizeWindow();
 
     }
 
@@ -221,6 +214,8 @@ public class ClientApp extends Application {
                     AlertPopUpController popUpController = loader.getController();
                     popUpController.setShowText(message);
                     Stage popup = new Stage();
+                    popup.setTitle("Alert");
+                    popup.setResizable(false);
                     popup.setScene(scene);
                     popup.show();
                 } catch (IOException e) {
@@ -241,9 +236,9 @@ public class ClientApp extends Application {
         });
     }
 
-
-
     public static String getFullName() {
         return fullName;
     }
+
+
 }
