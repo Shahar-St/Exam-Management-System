@@ -35,7 +35,7 @@
                      </HBox.margin>
                       </Label>
                       <MenuButton fx:id="subjectsDropdown" mnemonicParsing="false" styleClass="primary" text="Subjects" />
-                      <MenuButton fx:id="coursesDropdown" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="92.0" styleClass="primary" text="Courses" />
+                      <MenuButton fx:id="coursesDropdown" disable="true" mnemonicParsing="false" styleClass="primary" text="Courses" />
                </children>
             </HBox>
             <HBox alignment="TOP_CENTER" prefHeight="122.0" prefWidth="1258.0" spacing="50.0">

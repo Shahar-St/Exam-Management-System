@@ -47,6 +47,8 @@ public class QuestionManagementScreenController {
 
     private static String currentSubject = null;
 
+    private static String currentCourse = null;
+
     private static int selectedIndex;
 
 
@@ -61,6 +63,7 @@ public class QuestionManagementScreenController {
                 addSubjectToSubjectDropdown(subjectName);
             }
             subjectsDropdown.setText(currentSubject);
+            coursesDropdown.setText(currentCourse);
             initializeCoursesdropdown();
             fillCoursesDropdown(currentSubject);
         }
@@ -73,6 +76,7 @@ public class QuestionManagementScreenController {
             @Override
             public void handle(ActionEvent event) {
                 coursesDropdown.setText(((MenuItem) event.getSource()).getText());
+                currentCourse = ((MenuItem) event.getSource()).getText();
                 ClientApp.sendRequest(new AllQuestionsRequest(((MenuItem) event.getSource()).getText()));
             }
         });
