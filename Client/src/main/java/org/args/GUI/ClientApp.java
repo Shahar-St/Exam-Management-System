@@ -66,7 +66,6 @@ public class ClientApp extends Application {
             e.printStackTrace();
 
         }
-
     }
 
     @Override
@@ -77,6 +76,7 @@ public class ClientApp extends Application {
             scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
             stage.setScene(scene);
             stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
+            stage.setResizable(false);
             stage.show();
         } catch (Exception e) {
             System.out.println("Failed to start the app.. exiting");
@@ -112,7 +112,6 @@ public class ClientApp extends Application {
             e.printStackTrace();
 
         }
-
     }
 
     public void fillSubjectsDropdown(SubjectsAndCoursesResponse response)  {
@@ -236,9 +235,9 @@ public class ClientApp extends Application {
         });
     }
 
-
-
     public static String getFullName() {
         return fullName;
     }
+
+
 }

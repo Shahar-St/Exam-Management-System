@@ -32,7 +32,7 @@ public class TeacherMainScreenController {
     @FXML
     public void initialize() {
         Date dt = new Date();
-        int hours = dt.getHours();
+        int hours = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         String greeting = null;
         if (hours >= 1 && hours <= 12) {
             greeting = "Good Morning";
@@ -40,14 +40,10 @@ public class TeacherMainScreenController {
             greeting = "Good Afternoon";
         } else if (hours >= 16 && hours <= 21) {
             greeting = "Good Evening";
-        } else if (hours >= 21 && hours <= 24) {
+        } else if (hours >= 21) {
             greeting = "Good Night";
         }
         fullGreeting = greeting + ", " + ClientApp.getFullName();
         welcomeLabel.setText(fullGreeting);
     }
-
-
-
-
 }
