@@ -1,22 +1,16 @@
 package org.args.GUI;
 
 import DatabaseAccess.Requests.EditQuestionRequest;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 
-
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,7 +23,7 @@ public class EditQuestionScreenController {
 
     private String questionID;
 
-    private static ObservableList choiceItems;
+    private static ObservableList<String> choiceItems;
 
     @FXML
     private TextField LastModified;
@@ -111,64 +105,42 @@ public class EditQuestionScreenController {
 
     }
 
-    public void editSuccess() {
-        try
-        {
-            Scene scene = new Scene(ClientApp.loadFXML("AlertPopUp"));
-            Stage popup = new Stage();
-            popup.setScene(scene);
-            popup.show();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void editFailed() {
-
-    }
-
     @FXML
     void choiceBoxClicked(MouseEvent event) {
-        correctAnswerChoice.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                switch (t1.intValue())
-                {
-                    case 0:
-                        Answer1.setStyle("-fx-background-color: #00ff00 ;");
-                        Answer2.setStyle("-fx-background-color: #ffffff ;");
-                        Answer3.setStyle("-fx-background-color: #ffffff ;");
-                        Answer4.setStyle("-fx-background-color: #ffffff ;");
-                        correctAnswer = 0;
-                        break;
-                    case 1:
-                        Answer1.setStyle("-fx-background-color: #ffffff ;");
-                        Answer2.setStyle("-fx-background-color: #00ff00 ;");
-                        Answer3.setStyle("-fx-background-color: #ffffff ;");
-                        Answer4.setStyle("-fx-background-color: #ffffff ;");
-                        correctAnswer = 1;
-                        break;
-                    case 2:
-                        Answer1.setStyle("-fx-background-color: #ffffff ;");
-                        Answer2.setStyle("-fx-background-color: #ffffff ;");
-                        Answer3.setStyle("-fx-background-color: #00ff00 ;");
-                        Answer4.setStyle("-fx-background-color: #ffffff ;");
-                        correctAnswer = 2;
-                        break;
-                    case 3:
-                        Answer1.setStyle("-fx-background-color: #ffffff ;");
-                        Answer2.setStyle("-fx-background-color: #ffffff ;");
-                        Answer3.setStyle("-fx-background-color: #ffffff ;");
-                        Answer4.setStyle("-fx-background-color: #00ff00 ;");
-                        correctAnswer = 3;
-                        break;
-                    default:
-                        System.out.println("Undefined correct answer");
-                        break;
-                }
+        correctAnswerChoice.getSelectionModel().selectedIndexProperty().addListener((observableValue, number, t1) -> {
+            switch (t1.intValue())
+            {
+                case 0:
+                    Answer1.setStyle("-fx-background-color: #00ff00 ;");
+                    Answer2.setStyle("-fx-background-color: #ffffff ;");
+                    Answer3.setStyle("-fx-background-color: #ffffff ;");
+                    Answer4.setStyle("-fx-background-color: #ffffff ;");
+                    correctAnswer = 0;
+                    break;
+                case 1:
+                    Answer1.setStyle("-fx-background-color: #ffffff ;");
+                    Answer2.setStyle("-fx-background-color: #00ff00 ;");
+                    Answer3.setStyle("-fx-background-color: #ffffff ;");
+                    Answer4.setStyle("-fx-background-color: #ffffff ;");
+                    correctAnswer = 1;
+                    break;
+                case 2:
+                    Answer1.setStyle("-fx-background-color: #ffffff ;");
+                    Answer2.setStyle("-fx-background-color: #ffffff ;");
+                    Answer3.setStyle("-fx-background-color: #00ff00 ;");
+                    Answer4.setStyle("-fx-background-color: #ffffff ;");
+                    correctAnswer = 2;
+                    break;
+                case 3:
+                    Answer1.setStyle("-fx-background-color: #ffffff ;");
+                    Answer2.setStyle("-fx-background-color: #ffffff ;");
+                    Answer3.setStyle("-fx-background-color: #ffffff ;");
+                    Answer4.setStyle("-fx-background-color: #00ff00 ;");
+                    correctAnswer = 3;
+                    break;
+                default:
+                    System.out.println("Undefined correct answer");
+                    break;
             }
         });
     }

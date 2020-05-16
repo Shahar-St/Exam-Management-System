@@ -137,7 +137,7 @@ public class QuestionManagementScreenController {
 
 
     @FXML
-    void switchToQuestionEditScreen(ActionEvent event) throws IOException {
+    void switchToQuestionEditScreen(ActionEvent event) {
         // check something was selected
         selectedIndex = questions.indexOf(questionsList.getSelectionModel().getSelectedItem());
         int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
@@ -157,7 +157,7 @@ public class QuestionManagementScreenController {
     }
 
     @FXML
-    void switchToTeacherMainScreen(MouseEvent event) throws IOException {
+    void switchToTeacherMainScreen(MouseEvent event) {
         ClientApp.setRoot("TeacherMainScreen");
     }
 

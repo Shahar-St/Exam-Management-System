@@ -4,7 +4,6 @@
 
 package org.args.GUI;
 
-import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -17,9 +16,6 @@ public class AlertPopUpController {
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
 
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
-    private URL location;
-
     @FXML // fx:id="showText"
     private Label showText; // Value injected by FXMLLoader
 
@@ -29,7 +25,6 @@ public class AlertPopUpController {
     @FXML
     void okBtnAction(ActionEvent event) {
         okBtn.getScene().getWindow().hide();
-
     }
 
     public void setShowText(String message) {

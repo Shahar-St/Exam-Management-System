@@ -35,18 +35,15 @@ public class TeacherMainScreenController {
         String greeting = null;
         if (hours >= 1 && hours <= 12) {
             greeting = "Good Morning";
-        } else if (hours >= 12 && hours <= 16) {
+        } else if (hours >= 12 && hours < 16) {
             greeting = "Good Afternoon";
-        } else if (hours >= 16 && hours <= 21) {
+        } else if (hours >= 16 && hours < 21) {
             greeting = "Good Evening";
-        } else if (hours >= 21 && hours <= 24) {
+        } else {
             greeting = "Good Night";
         }
         fullGreeting = greeting + ", " + ClientApp.getFullName();
         welcomeLabel.setText(fullGreeting);
     }
-
-
-
 
 }

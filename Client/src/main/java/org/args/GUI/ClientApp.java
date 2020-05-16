@@ -36,23 +36,12 @@ public class ClientApp extends Application {
     private static String fullName;
     // specify the server details
 
-    // change ip to be auto generated
-    //private final String host = "127.0.0.1";
-
     private final int port = 3000;
 
     static void setRoot(String fxml) {
         try
         {
             scene.setRoot(loadFXML(fxml));
-            // lambda
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-//                    scene.getWindow().setWidth(((Pane) scene.getRoot()).getPrefWidth());
-//                    scene.getWindow().setHeight(((Pane) scene.getRoot()).getPrefHeight());
-                }
-            });
         }
         catch (IOException e)
         {
@@ -90,15 +79,14 @@ public class ClientApp extends Application {
             stage.setTitle("HSTS");
             stage.setScene(scene);
             stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
+            stage.setResizable(false);
             stage.show();
         }
         catch (Exception e)
         {
             System.out.println("Failed to start the app.. exiting");
             e.printStackTrace();
-
         }
-
     }
 
     private void closeWindowEvent(WindowEvent event) {
@@ -157,7 +145,6 @@ public class ClientApp extends Application {
             screenController.addSubjectToSubjectDropdown(subject);
         }
         scene.setRoot(screen);
-        //resizeWindow();
     }
 
     public void fillQuestionsList(AllQuestionsResponse response) {
@@ -193,7 +180,11 @@ public class ClientApp extends Application {
             Parent screen = loader.load();
             scene.setRoot(screen);
 
-            resizeWindow();
+            Platform.runLater(() -> {
+                scene.getWindow().setWidth(685);
+                scene.getWindow().setHeight(519);
+                ((Stage) scene.getWindow()).setResizable(true);
+            });
         }
         catch (IOException e)
         {
@@ -252,6 +243,8 @@ public class ClientApp extends Application {
                     AlertPopUpController popUpController = loader.getController();
                     popUpController.setShowText(message);
                     Stage popup = new Stage();
+                    popup.setResizable(false);
+                    popup.setTitle("Alert");
                     popup.setScene(scene);
                     popup.show();
                 }
@@ -262,16 +255,6 @@ public class ClientApp extends Application {
             }
         });
 
-    }
-
-    public void resizeWindow() {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                scene.getWindow().setWidth(685);
-                scene.getWindow().setHeight(519);
-            }
-        });
     }
 
     public static String getFullName() {
