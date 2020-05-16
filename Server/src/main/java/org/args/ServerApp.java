@@ -27,12 +27,25 @@ public class ServerApp {
 
         DatabaseHandler databaseHandler = DatabaseHandler.DatabaseHandlerInit();
         assert databaseHandler != null;
-        Session session = databaseHandler.getSession();
 
-        createDummyEntities(session);
-        session.getTransaction().commit();
-        session.clear();
-        session.beginTransaction();
+        String ans = "";
+        System.out.println("Build dummy database? (y/n)");
+        System.out.println("//enter y only if database is empty//");
+        while (!ans.equals("y") && !ans.equals("n"))
+        {
+            scanner.nextLine();
+            ans = scanner.nextLine();
+            if (!ans.equals("y") && !ans.equals("n"))
+                System.out.println("wrong input, try again");
+        }
+        if (ans.equals("y"))
+        {
+            Session session = databaseHandler.getSession();
+            createDummyEntities(session);
+            session.getTransaction().commit();
+            session.clear();
+            session.beginTransaction();
+        }
 
         EMSserver server = EMSserver.EMSserverInit(port, databaseHandler);
         try
