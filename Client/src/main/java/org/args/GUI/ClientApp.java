@@ -18,9 +18,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.args.Client.EMSClient;
 
-import java.awt.*;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -57,22 +55,20 @@ public class ClientApp extends Application {
 
     @Override
     public void init() {
-        try
-        {
+        try {
             super.init();
-            client = new EMSClient(InetAddress.getLocalHost().getHostAddress(), this.port, this);
-        }
-        catch (Exception e)
-        {
+            client = new EMSClient(this.host, this.port, this);
+        } catch (Exception e) {
             System.out.println("Failed to init app.. exiting");
             e.printStackTrace();
+
         }
+
     }
 
     @Override
     public void start(Stage stage) {
-        try
-        {
+        try {
             FXMLLoader loader = fxmlLoader("LoginScreen");
             scene = new Scene(loader.load());
             scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
@@ -81,22 +77,19 @@ public class ClientApp extends Application {
             stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
             stage.setResizable(false);
             stage.show();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println("Failed to start the app.. exiting");
             e.printStackTrace();
+
         }
+
     }
 
     private void closeWindowEvent(WindowEvent event) {
         System.out.println("Window close request ...");
-        try
-        {
+        try {
             client.closeConnection();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         Platform.exit();
@@ -111,12 +104,9 @@ public class ClientApp extends Application {
     }
 
     public static void sendRequest(Object data) {
-        try
-        {
+        try {
             client.sendToServer(data);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             System.out.println("Failed to send request to server");
             e.printStackTrace();
 
@@ -124,57 +114,50 @@ public class ClientApp extends Application {
 
     }
 
-    public void fillSubjectsDropdown(SubjectsAndCoursesResponse response) {
+    public void fillSubjectsDropdown(SubjectsAndCoursesResponse response)  {
 
         FXMLLoader loader = fxmlLoader("QuestionManagementScreen");
         Parent screen = null;
-        try
-        {
+        try {
             screen = loader.load();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         QuestionManagementScreenController screenController = loader.getController();
         screenController.setSubjectsAndCoursesState(response.getSubjectsAndCourses()); //set the hashmap in the controllers state to later fill the courses dropdown list according to selected subject
         for (String subjectName : response.getSubjectsAndCourses().keySet()) //iterate through every subject in the hashmap
         {
-            MenuItem subject = new MenuItem(subjectName);
-            subject.setOnAction(screenController.displayCoursesFromSubject);
-            screenController.addSubjectToSubjectDropdown(subject);
+            screenController.addSubjectToSubjectDropdown(subjectName);
         }
         scene.setRoot(screen);
+
+
     }
 
-    public void fillQuestionsList(AllQuestionsResponse response) {
+    public void fillQuestionsList(AllQuestionsResponse response)  {
 
         FXMLLoader loader = fxmlLoader("QuestionManagementScreen");
-        try
-        {
+        try {
             loader.load();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         QuestionManagementScreenController screenController = loader.getController();
         HashMap<String, Pair<LocalDateTime, String>> questions = response.getQuestionList();
         ObservableList<String> observableSet = FXCollections.observableArrayList();
 
-        for (Map.Entry<String, Pair<LocalDateTime, String>> question : questions.entrySet())
-        {
+        for (Map.Entry<String, Pair<LocalDateTime, String>> question : questions.entrySet()) {
             String questionId = question.getKey();
             String questionDescription = question.getValue().getSecond();
             String menuItemText = "#" + questionId + ": " + questionDescription;
             observableSet.add(menuItemText);
         }
+
         screenController.addToList(observableSet);
     }
 
     public void loginSuccess(String name) {
-        try
-        {
+        try {
             fullName = name;
             FXMLLoader loader = fxmlLoader("TeacherMainScreen");
             Parent screen = loader.load();
@@ -190,12 +173,14 @@ public class ClientApp extends Application {
         {
             System.out.println("Failed to switch scene on login success");
             e.printStackTrace();
+
         }
+
     }
 
-    public void fillEditQuestionScreen(QuestionResponse response) {
+    public void fillEditQuestionScreen(QuestionResponse response)  {
 
-        String questionId = ((QuestionRequest) response.getRequest()).getQuestionID();
+        String questionId = ((QuestionRequest)response.getRequest()).getQuestionID();
         String lastModified = response.getLastModified().toString();
         String author = response.getAuthor();
         String content = response.getQuestionContent();
@@ -203,53 +188,45 @@ public class ClientApp extends Application {
         int correctAnswer = response.getCorrectAnswer();
         FXMLLoader loader = fxmlLoader("EditQuestionScreen");
         Parent screen = null;
-        try
-        {
+        try {
             screen = loader.load();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         EditQuestionScreenController screenController = loader.getController();
-        screenController.initScreen(questionId, lastModified, author, content, answers, correctAnswer);
+        screenController.initScreen(questionId,lastModified, author, content, answers, correctAnswer);
         scene.setRoot(screen);
-        //resizeWindow();
+
     }
 
-    public void updateEditedQuestionOnQuestionManagementScreen(String newContent) {
+    public void updateEditedQuestionOnQuestionManagementScreen(String newContent){
         FXMLLoader loader = fxmlLoader("QuestionManagementScreen");
-        try
-        {
+        try {
             loader.load();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         QuestionManagementScreenController screenController = loader.getController();
         screenController.changeQuestionContent(newContent);
+
     }
 
-    public void popupAlert(String message) {
+    public void popupAlert(String message){
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                try
-                {
+                try {
                     FXMLLoader loader = fxmlLoader("AlertPopUp");
                     Scene scene = new Scene(loader.load());
                     scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
                     AlertPopUpController popUpController = loader.getController();
                     popUpController.setShowText(message);
                     Stage popup = new Stage();
-                    popup.setResizable(false);
                     popup.setTitle("Alert");
+                    popup.setResizable(false);
                     popup.setScene(scene);
                     popup.show();
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
