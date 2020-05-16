@@ -33,7 +33,7 @@ public class ClientApp extends Application {
     // specify the server details
     private final String host = "127.0.0.1";
 
-    private final int port = 3000;
+    private final int port = 1337;
 
     static void setRoot(String fxml)  {
         try {
@@ -157,7 +157,9 @@ public class ClientApp extends Application {
             FXMLLoader loader = fxmlLoader("TeacherMainScreen");
             Parent screen = loader.load();
             scene.setRoot(screen);
-            ((Stage)scene.getWindow()).setResizable(true);
+            Platform.runLater(() -> {
+                ((Stage)scene.getWindow()).setResizable(true);
+            });
         } catch (IOException e) {
             System.out.println("Failed to switch scene on login success");
             e.printStackTrace();
