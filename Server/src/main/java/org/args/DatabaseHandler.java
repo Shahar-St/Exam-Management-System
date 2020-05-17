@@ -196,7 +196,7 @@ public class DatabaseHandler {
 
         User user = getUser(request.getUserName());
 
-        if (user == null)
+        if (user == null || !user.getUserName().equals(request.getUserName()))
             return new LoginResponse(NOT_FOUND, request);
 
         if (loggedInUsers.contains(request.getUserName()))
