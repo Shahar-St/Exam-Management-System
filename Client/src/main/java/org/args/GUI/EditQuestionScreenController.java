@@ -155,8 +155,6 @@ public class EditQuestionScreenController {
     void EditButtonClicked(ActionEvent event) {
         if (!isEditing)
         {
-            LastModified.setEditable(true);
-            Author.setEditable(true);
             Content.setEditable(true);
             Answer1.setEditable(true);
             Answer2.setEditable(true);
@@ -187,8 +185,6 @@ public class EditQuestionScreenController {
         }
         else
         {
-            LastModified.setEditable(false);
-            Author.setEditable(false);
             Content.setEditable(false);
             Answer1.setEditable(false);
             Answer2.setEditable(false);

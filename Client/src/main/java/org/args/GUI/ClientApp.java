@@ -1,5 +1,6 @@
 package org.args.GUI;
 
+import DatabaseAccess.Requests.QuestionRequest;
 import DatabaseAccess.Responses.AllQuestionsResponse;
 import DatabaseAccess.Responses.Pair;
 import DatabaseAccess.Responses.QuestionResponse;
@@ -20,6 +21,7 @@ import org.args.Client.EMSClient;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -222,16 +224,6 @@ public class ClientApp extends Application {
             }
         });
 
-    }
-
-    public void resizeWindow(){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                scene.getWindow().setWidth(((Pane)scene.getRoot()).getPrefWidth());
-                scene.getWindow().setHeight(((Pane)scene.getRoot()).getPrefHeight());
-            }
-        });
     }
 
     public static String getFullName() {
