@@ -25,12 +25,26 @@
             <artifactId>javafx-fxml</artifactId>
             <version>14</version>
         </dependency>
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
             <version>14</version>
             <classifier>win</classifier>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>14</version>
+            <classifier>linux</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>14</version>
+            <classifier>mac</classifier>
+        </dependency>
+
         <dependency>
             <groupId>org.args</groupId>
             <artifactId>CommonLibs</artifactId>
@@ -103,12 +117,17 @@
                 </executions>
             </plugin>
         </plugins>
+
         <resources>
             <resource>
                 <directory>src/main/java</directory>
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>org/args/bootstrap2overview.fxml</exclude>
+                    <exclude>org/args/bootstrap3overview.fxml</exclude>
+                </excludes>
             </resource>
         </resources>
     </build>
