@@ -15,7 +15,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
@@ -179,6 +178,4 @@ public class QuestionManagementScreenController {
         coursesDropdown.getItems().clear();
         currentSubject = null;
     }
-
-
 }
