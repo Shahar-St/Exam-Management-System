@@ -17,6 +17,7 @@ public abstract class User {
     }
 
     public User(int socialId, String firstName, String lastName, String password, String userName) {
+
         DecimalFormat decimalFormat = new DecimalFormat("000000000");
         this.socialId = decimalFormat.format(socialId);
         this.firstName = firstName;
@@ -59,6 +60,6 @@ public abstract class User {
     }
 
     public String getFullName() {
-        return this.firstName + this.lastName;
+        return this.firstName + " " + this.lastName;
     }
 }

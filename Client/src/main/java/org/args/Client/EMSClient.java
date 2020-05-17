@@ -9,10 +9,20 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 public class EMSClient extends AbstractClient {
+
     private static final Logger LOGGER =
             Logger.getLogger(EMSClient.class.getName());
 
     private boolean isLoggedIn = false;
+
+    // error codes
+    private final int SUCCESS = 0;
+    private final int UNAUTHORIZED = 1;
+    private final int NOT_FOUND = 2;
+    private final int NO_ACCESS = 3;
+    private final int WRONG_INFO = 4;
+    // used for presenting the error cause to the user.
+    private final String[] errors = {"SUCCESS", "UNAUTHORIZED", "NOT_FOUND", "NO_ACCESS", "WRONG_INFO"};
 
     private String userName;
 
@@ -51,7 +61,8 @@ public class EMSClient extends AbstractClient {
     public void sendToServer(Object msg) throws IOException {
         // check if the client is not connected to the server then connect
         // good for initial connection and for disconnections
-        if (!super.isConnected()) {
+        if (!super.isConnected())
+        {
             super.openConnection();
         }
         super.sendToServer(msg);
@@ -81,56 +92,84 @@ public class EMSClient extends AbstractClient {
     @Override
     protected void handleMessageFromServer(Object msg) {
 
-        if (msg instanceof LoginResponse) {
+        if (msg instanceof LoginResponse)
+        {
             LoginResponse response = (LoginResponse) msg;
-            if (response.getStatus() == 0) {
+            if (response.getStatus() == SUCCESS)
+            {
 
                 loginSuccess(response);
 
 
-            } else {
+            }
+            else
+            {
                 loginFailed(response);
             }
 
-        } else if (msg instanceof EditQuestionResponse) {
+        }
+        else if (msg instanceof EditQuestionResponse)
+        {
             EditQuestionResponse response = (EditQuestionResponse) msg;
-            if (response.getStatus() == 0) {
+            if (response.getStatus() == SUCCESS)
+            {
                 editQuestionSuccess(response);
 
-            } else {
+            }
+            else
+            {
                 editQuestionFailed(response);
             }
 
-        } else if (msg instanceof AllQuestionsResponse) {
+        }
+        else if (msg instanceof AllQuestionsResponse)
+        {
             AllQuestionsResponse response = (AllQuestionsResponse) msg;
-            if (response.getStatus() == 0) {
+            if (response.getStatus() == SUCCESS)
+            {
                 getAllQuestionsSuccess(response);
 
-            } else {
+            }
+            else
+            {
                 getAllQuestionsFailed(response);
             }
 
-        } else if (msg instanceof QuestionResponse) {
+        }
+        else if (msg instanceof QuestionResponse)
+        {
             QuestionResponse response = (QuestionResponse) msg;
-            if (response.getStatus() == 0) {
+            if (response.getStatus() == SUCCESS)
+            {
                 viewQuestionSuccess(response);
 
-            } else {
+            }
+            else
+            {
                 viewQuestionFailed(response);
             }
 
-        } else if (msg instanceof SubjectsAndCoursesResponse) {
+        }
+        else if (msg instanceof SubjectsAndCoursesResponse)
+        {
             SubjectsAndCoursesResponse response = (SubjectsAndCoursesResponse) msg;
-            if (response.getStatus() == 0) {
+            if (response.getStatus() == SUCCESS)
+            {
                 getSubjectsAndCoursesSuccess(response);
 
-            } else {
+            }
+            else
+            {
                 getSubjectsAndCoursesFailed(response);
             }
 
         }
 
 
+    }
+
+    protected String getErrorMessage(int error_code) {
+        return errors[error_code];
     }
 
 
@@ -141,12 +180,10 @@ public class EMSClient extends AbstractClient {
         this.userName = request.getUserName();
         this.password = request.getPassword();
         app.loginSuccess(response.getName());
-
-
     }
 
     public void loginFailed(LoginResponse response) {
-        app.popupAlert("Login Failed, Please Try Again. "+response.getStatus());
+        app.popupAlert("Login Failed, Please Try Again. " + getErrorMessage(response.getStatus()));
     }
 
     public void loginFailed() {
@@ -161,7 +198,7 @@ public class EMSClient extends AbstractClient {
     }
 
     public void viewQuestionFailed(QuestionResponse response) {
-        app.popupAlert("Failed To Fetch The Question, Please Try Again."+response.getStatus());
+        app.popupAlert("Failed To Fetch The Question, Please Try Again." + getErrorMessage(response.getStatus()));
 
     }
 
@@ -172,18 +209,18 @@ public class EMSClient extends AbstractClient {
     }
 
     public void getSubjectsAndCoursesFailed(SubjectsAndCoursesResponse response) {
-        app.popupAlert("Failed To Fetch The Subjects And Courses, Please Try Again."+response.getStatus());
+        app.popupAlert("Failed To Fetch The Subjects And Courses, Please Try Again." + getErrorMessage(response.getStatus()));
 
     }
 
     public void editQuestionSuccess(EditQuestionResponse response) {
         app.popupAlert("Edit Question Success");
-        app.updateEditedQuestionOnQuestionManagementScreen(((EditQuestionRequest)response.getRequest()).getNewDescription());
+        app.updateEditedQuestionOnQuestionManagementScreen(((EditQuestionRequest) response.getRequest()).getNewDescription());
 
     }
 
     public void editQuestionFailed(EditQuestionResponse response) {
-        app.popupAlert("Edit Question Failed, Please Try Again."+response.getStatus());
+        app.popupAlert("Edit Question Failed, Please Try Again." + getErrorMessage(response.getStatus()));
 
     }
 
@@ -193,7 +230,7 @@ public class EMSClient extends AbstractClient {
     }
 
     public void getAllQuestionsFailed(AllQuestionsResponse response) {
-        app.popupAlert("Failed To Fetch Question List, Please Try Again. "+response.getStatus());
+        app.popupAlert("Failed To Fetch Question List, Please Try Again. " + getErrorMessage(response.getStatus()));
 
     }
 

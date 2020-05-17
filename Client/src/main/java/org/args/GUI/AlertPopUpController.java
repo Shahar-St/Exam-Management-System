@@ -4,22 +4,17 @@
 
 package org.args.GUI;
 
-import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.text.Text;
 
 public class AlertPopUpController {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
-
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
-    private URL location;
 
     @FXML // fx:id="showText"
     private Label showText; // Value injected by FXMLLoader
@@ -30,7 +25,6 @@ public class AlertPopUpController {
     @FXML
     void okBtnAction(ActionEvent event) {
         okBtn.getScene().getWindow().hide();
-
     }
 
     public void setShowText(String message) {
@@ -42,6 +36,5 @@ public class AlertPopUpController {
     void initialize() {
         assert showText != null : "fx:id=\"showText\" was not injected: check your FXML file 'AlertPopUp.fxml'.";
         assert okBtn != null : "fx:id=\"okBtn\" was not injected: check your FXML file 'AlertPopUp.fxml'.";
-
     }
 }

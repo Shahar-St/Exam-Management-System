@@ -34,9 +34,10 @@ public class Student extends User {
 
     //Group adders and removers
     public void addExecutedExam(ExecutedExam executedExam) {
-
         if (!executedExamsList.contains(executedExam))
             executedExamsList.add(executedExam);
+
+        if(executedExam.getStudent() != this)
             executedExam.setStudent(this);
     }
 

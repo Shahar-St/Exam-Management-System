@@ -29,24 +29,28 @@ public class Exam {
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
     private List<Question> questionsList = new ArrayList<>();
 
-    //private List<Double> questionsScores = new ArrayList<>();
+    @ElementCollection
+    private List<Double> questionsScores = new ArrayList<>();
 
-    private int duration; // in minutes
+    private int durationInMinutes;
     private String description;
     private String teacherPrivateNotes; // only for the teacher
 
     //Group c'tors
-    public Exam() { }
+    public Exam() {
+    }
 
-    public Exam(Course course, Teacher author, int duration, String description, String teacherPrivateNotes) {
+    public Exam(Course course, Teacher author, int durationInMinutes, String description,
+                String teacherPrivateNotes, List<Question> questionsList, List<Double> questionsScores) {
 
-        course.addExam(this);
-        author.addExam(this);
-        this.duration = duration;
+        setCourse(course);
+        setAuthor(author);
+        this.durationInMinutes = durationInMinutes;
         this.description = description;
         this.teacherPrivateNotes = teacherPrivateNotes;
+        this.questionsList.addAll(questionsList);
+        this.questionsScores.addAll(questionsScores);
 
-        // handle empty queue
         DecimalFormat decimalFormat = new DecimalFormat("00");
         this.id = course.getSubject().getId() + course.getId() +
                 decimalFormat.format(course.getAvailableExamCodes().poll());
@@ -63,28 +67,62 @@ public class Exam {
     }
 
     //Group setters and getters
-    public Course getCourse() { return course; }
-    protected void setCourse(Course course) { this.course = course; }
+    public Course getCourse() {
+        return course;
+    }
+    protected void setCourse(Course course) {
 
-    public List<Question> getQuestionsList() { return questionsList; }
-    public void setQuestionsList(List<Question> questionsList) { this.questionsList = questionsList; }
+        this.course = course;
+        if (!course.getExamsList().contains(this))
+            course.addExam(this);
+    }
 
-    public Teacher getAuthor() { return author; }
-    protected void setAuthor(Teacher author) { this.author = author; }
+    public Teacher getAuthor() {
+        return author;
+    }
+    protected void setAuthor(Teacher author) {
 
-    public String getId() { return id; }
-    protected void setId(String id) { this.id = id; }
+        this.author = author;
+        if (!author.getExamsList().contains(this))
+            author.addExam(this);
+    }
 
-    public int getDuration() { return duration; }
-    protected void setDuration(int duration) { this.duration = duration; }
+    public List<Question> getQuestionsList() {
+        return questionsList;
+    }
+    public void setQuestionsList(List<Question> questionsList) {
+        this.questionsList = questionsList;
+    }
 
-    public String getDescription() { return description; }
-    protected void setDescription(String description) { this.description = description; }
+    public String getId() {
+        return id;
+    }
 
-    public String getTeacherPrivateNotes() { return teacherPrivateNotes; }
-    protected void setTeacherPrivateNotes(String privateNotes) { teacherPrivateNotes = privateNotes; }
+    public int getDurationInMinutes() {
+        return durationInMinutes;
+    }
+    public void setDurationInMinutes(int duration) {
+        this.durationInMinutes = duration;
+    }
 
-//    public List<Double> getQuestionsScores() { return questionsScores; }
-//    public void setQuestionsScores(List<Double> questionsScores) { this.questionsScores = questionsScores; }
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
+    public String getTeacherPrivateNotes() {
+        return teacherPrivateNotes;
+    }
+    public void setTeacherPrivateNotes(String privateNotes) {
+        teacherPrivateNotes = privateNotes;
+    }
+
+    public List<Double> getQuestionsScores() {
+        return questionsScores;
+    }
+    public void setQuestionsScores(List<Double> questionsScores) {
+        this.questionsScores = questionsScores;
+    }
 }

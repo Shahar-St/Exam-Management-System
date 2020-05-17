@@ -31,9 +31,9 @@ public class ClientApp extends Application {
     private static EMSClient client;
     private static String fullName;
     // specify the server details
-    private static String host = "127.0.0.1";
+    private final String host = "127.0.0.1";
 
-    private static int port = 1337;
+    private final int port = 3000;
 
     static void setRoot(String fxml)  {
         try {
@@ -53,7 +53,7 @@ public class ClientApp extends Application {
     public void init() {
         try {
             super.init();
-            client = new EMSClient(host, port, this);
+            client = new EMSClient(this.host, this.port, this);
         } catch (Exception e) {
             System.out.println("Failed to init app.. exiting");
             e.printStackTrace();
@@ -71,8 +71,8 @@ public class ClientApp extends Application {
             stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
             stage.setResizable(false);
             stage.setTitle("HSTS");
-            stage.show();
 
+            stage.show();
         } catch (Exception e) {
             System.out.println("Failed to start the app.. exiting");
             e.printStackTrace();
@@ -104,7 +104,6 @@ public class ClientApp extends Application {
             client.sendToServer(data);
         } catch (IOException e) {
             System.out.println("Failed to send request to server");
-            client.loginFailed(); //hack until model is properly created.
             e.printStackTrace();
 
         }
@@ -171,10 +170,11 @@ public class ClientApp extends Application {
 
     public void fillEditQuestionScreen(QuestionResponse response)  {
 
+        String questionId = ((QuestionRequest)response.getRequest()).getQuestionID();
         String lastModified = response.getLastModified().toString();
         String author = response.getAuthor();
         String content = response.getQuestionContent();
-        String[] answers = response.getAnswers();
+        List<String> answers = response.getAnswers();
         int correctAnswer = response.getCorrectAnswer();
         FXMLLoader loader = fxmlLoader("EditQuestionScreen");
         Parent screen = null;
@@ -184,7 +184,7 @@ public class ClientApp extends Application {
             e.printStackTrace();
         }
         EditQuestionScreenController screenController = loader.getController();
-        screenController.initScreen(lastModified, author, content, answers, correctAnswer);
+        screenController.initScreen(questionId,lastModified, author, content, answers, correctAnswer);
         scene.setRoot(screen);
 
     }
@@ -238,21 +238,5 @@ public class ClientApp extends Application {
         return fullName;
     }
 
-    public static void setHost(String host) {
-        ClientApp.host = host;
-        client.setHost(host);
-    }
 
-    public static void setPort(int port) {
-        ClientApp.port = port;
-        client.setPort(port);
-    }
-
-    public static String getHost() {
-        return host;
-    }
-
-    public static int getPort() {
-        return port;
-    }
 }

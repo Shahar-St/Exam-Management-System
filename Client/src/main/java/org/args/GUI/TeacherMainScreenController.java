@@ -11,15 +11,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Date;
 
 public class TeacherMainScreenController {
 
     private static String fullGreeting;
 
-    @FXML // fx:id="questionMangementButton"
-    private Button questionMangementButton; // Value injected by FXMLLoader
+    @FXML // fx:id="questionManagementButton"
+    private Button questionManagementButton; // Value injected by FXMLLoader
 
     @FXML
     private Label welcomeLabel;
@@ -32,18 +31,19 @@ public class TeacherMainScreenController {
     @FXML
     public void initialize() {
         Date dt = new Date();
-        int hours = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        int hours = dt.getHours();
         String greeting = null;
         if (hours >= 1 && hours <= 12) {
             greeting = "Good Morning";
-        } else if (hours >= 12 && hours <= 16) {
+        } else if (hours >= 12 && hours < 16) {
             greeting = "Good Afternoon";
-        } else if (hours >= 16 && hours <= 21) {
+        } else if (hours >= 16 && hours < 21) {
             greeting = "Good Evening";
-        } else if (hours >= 21) {
+        } else {
             greeting = "Good Night";
         }
         fullGreeting = greeting + ", " + ClientApp.getFullName();
         welcomeLabel.setText(fullGreeting);
     }
+
 }

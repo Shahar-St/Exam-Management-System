@@ -3,49 +3,65 @@ package org.args;
 import DatabaseAccess.Requests.DatabaseRequest;
 import org.args.OCSF.AbstractServer;
 import org.args.OCSF.ConnectionToClient;
-import org.hibernate.Session;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-
+// server is a singleton
 public class EMSserver extends AbstractServer {
 
-    private final Session session;
+    private static EMSserver singleInstanceServer = null;
+
+    private final DatabaseHandler databaseHandler;
     List<String> loggedInUsers = new ArrayList<>();
 
-    public EMSserver(int port, Session session) {
+    private EMSserver(int port, DatabaseHandler databaseHandler) {
         super(port);
-        this.session = session;
+        this.databaseHandler = databaseHandler;
+
         Thread serverCommands = new Thread(this::serverCommands);
         serverCommands.start();
+    }
+
+    public static EMSserver EMSserverInit(int port, DatabaseHandler databaseHandler) {
+
+        if (singleInstanceServer == null)
+        {
+            singleInstanceServer = new EMSserver(port, databaseHandler);
+            return singleInstanceServer;
+        }
+        return null;
     }
 
     @Override
     protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 
-        System.out.println("connected");
+        System.out.print("Interrupted\nreceived message from client " + client.getInetAddress()
+                + "::" + msg.getClass().getSimpleName() + "\n>> ");
+
         if (msg instanceof DatabaseRequest)
         {
-            DatabaseRequestHandler handler =
-                    new DatabaseRequestHandler((DatabaseRequest) msg, client, session, loggedInUsers);
             try
             {
-                client.sendToClient(handler.getResponse());
+                client.sendToClient(databaseHandler.handle((DatabaseRequest) msg, client, loggedInUsers));
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
-            session.flush();
-            session.clear();
         }
     }
 
     @Override
+    protected void clientConnected(ConnectionToClient client) {
+        System.out.print("Interrupted\nClient connected: " + client.getInetAddress() + "\n>> ");
+    }
+
+    @Override
     protected synchronized void clientDisconnected(ConnectionToClient client) {
+        System.out.print("Interrupted\nClient disconnected." + "\n>> ");
         loggedInUsers.remove((String) client.getInfo("userName"));
     }
 
@@ -55,13 +71,11 @@ public class EMSserver extends AbstractServer {
 
         while (true)
         {
-            System.out.print(">>");
+            System.out.print(">> ");
             String input = scanner.nextLine();
             if (input.equals("exit"))
             {
-                assert session != null;
-                session.close();
-                session.getSessionFactory().close();
+                databaseHandler.close();
                 try
                 {
                     this.close();
