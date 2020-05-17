@@ -65,7 +65,7 @@ public class ClientApp extends Application {
     public void start(Stage stage) {
         try {
             FXMLLoader loader = fxmlLoader("LoginScreen");
-            scene = new Scene(loader.load());
+            scene = new Scene(loader.load(), 800, 600);
             scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
             stage.setScene(scene);
             stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
@@ -158,7 +158,6 @@ public class ClientApp extends Application {
             FXMLLoader loader = fxmlLoader("TeacherMainScreen");
             Parent screen = loader.load();
             scene.setRoot(screen);
-
             Platform.runLater(() -> {
                 ((Stage)scene.getWindow()).setResizable(true);
             });
