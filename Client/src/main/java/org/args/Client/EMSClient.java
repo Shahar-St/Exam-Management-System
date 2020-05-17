@@ -186,6 +186,10 @@ public class EMSClient extends AbstractClient {
         app.popupAlert("Login Failed, Please Try Again. " + getErrorMessage(response.getStatus()));
     }
 
+    public void loginFailed() {
+        app.popupAlert("Login Failed, Please Try Again.");
+    }
+
 
     public void viewQuestionSuccess(QuestionResponse response) {
         app.fillEditQuestionScreen(response);

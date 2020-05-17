@@ -178,5 +178,4 @@ public class QuestionManagementScreenController {
         coursesDropdown.getItems().clear();
         currentSubject = null;
     }
-
 }

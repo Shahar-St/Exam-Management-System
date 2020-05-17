@@ -66,19 +66,6 @@ public class EditQuestionScreenController {
         Answer3.setText(answers.get(2));
         Answer4.setText(answers.get(3));
         this.correctAnswer = correctAnswer;
-
-    }
-
-    @FXML
-    private void initialize() {
-        if (choiceItems == null)
-        {
-            String[] answers = {"Answer 1", "Answer 2", "Answer 3", "Answer 4"};
-            choiceItems = FXCollections.observableArrayList(answers);
-
-
-        }
-        correctAnswerChoice.getItems().addAll(choiceItems);
         switch (this.correctAnswer)
         {
             case 0:
@@ -101,6 +88,20 @@ public class EditQuestionScreenController {
                 System.out.println("Undefined correct answer");
                 break;
         }
+
+    }
+
+    @FXML
+    private void initialize() {
+        if (choiceItems == null)
+        {
+            String[] answers = {"Answer 1", "Answer 2", "Answer 3", "Answer 4"};
+            choiceItems = FXCollections.observableArrayList(answers);
+
+
+        }
+        correctAnswerChoice.getItems().addAll(choiceItems);
+
 
 
     }
@@ -155,8 +156,6 @@ public class EditQuestionScreenController {
     void EditButtonClicked(ActionEvent event) {
         if (!isEditing)
         {
-            LastModified.setEditable(true);
-            Author.setEditable(true);
             Content.setEditable(true);
             Answer1.setEditable(true);
             Answer2.setEditable(true);
@@ -187,8 +186,6 @@ public class EditQuestionScreenController {
         }
         else
         {
-            LastModified.setEditable(false);
-            Author.setEditable(false);
             Content.setEditable(false);
             Answer1.setEditable(false);
             Answer2.setEditable(false);

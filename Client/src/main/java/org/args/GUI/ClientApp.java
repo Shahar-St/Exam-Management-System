@@ -12,8 +12,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuItem;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.args.Client.EMSClient;
@@ -32,20 +30,17 @@ public class ClientApp extends Application {
     private static Scene scene;
     private static EMSClient client;
     private static String fullName;
+    // specify the server defaults
+    private static String host = "127.0.0.1";
 
-    // specify the server details
-    private final String host = "127.0.0.1";
-    private final int port = 3000;
+    private static int port = 3000;
 
     static void setRoot(String fxml)  {
-        try
-        {
+        try {
             scene.setRoot(loadFXML(fxml));
-        }
-        catch (IOException e)
-        {
-            System.out.println("Failed to change the root of the scene");
-            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Failed to change the root of the scene: "+e.toString());
+
         }
     }
 
@@ -58,13 +53,12 @@ public class ClientApp extends Application {
     public void init() {
         try {
             super.init();
-            client = new EMSClient(this.host, this.port, this);
+            client = new EMSClient(host, port, this);
         } catch (Exception e) {
             System.out.println("Failed to init app.. exiting");
             e.printStackTrace();
 
         }
-
     }
 
     @Override
@@ -73,14 +67,15 @@ public class ClientApp extends Application {
             FXMLLoader loader = fxmlLoader("LoginScreen");
             scene = new Scene(loader.load());
             scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
-            stage.setTitle("HSTS");
             stage.setScene(scene);
             stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
             stage.setResizable(false);
+            stage.setTitle("HSTS");
+
             stage.show();
         } catch (Exception e) {
-            System.out.println("Failed to start the app.. exiting");
-            e.printStackTrace();
+            System.out.println("Failed to start the app.. exiting: "+e.toString());
+
 
         }
 
@@ -109,10 +104,10 @@ public class ClientApp extends Application {
             client.sendToServer(data);
         } catch (IOException e) {
             System.out.println("Failed to send request to server");
+            client.loginFailed(); //hack until model is properly created.
             e.printStackTrace();
 
         }
-
     }
 
     public void fillSubjectsDropdown(SubjectsAndCoursesResponse response)  {
@@ -165,13 +160,9 @@ public class ClientApp extends Application {
             scene.setRoot(screen);
 
             Platform.runLater(() -> {
-                scene.getWindow().setWidth(685);
-                scene.getWindow().setHeight(519);
-                ((Stage) scene.getWindow()).setResizable(true);
+                ((Stage)scene.getWindow()).setResizable(true);
             });
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             System.out.println("Failed to switch scene on login success");
             e.printStackTrace();
 
@@ -237,5 +228,23 @@ public class ClientApp extends Application {
 
     public static String getFullName() {
         return fullName;
+    }
+
+    public static void setHost(String host) {
+        ClientApp.host = host;
+        client.setHost(host);
+    }
+
+    public static void setPort(int port) {
+        ClientApp.port = port;
+        client.setPort(port);
+    }
+
+    public static String getHost() {
+        return host;
+    }
+
+    public static int getPort() {
+        return port;
     }
 }

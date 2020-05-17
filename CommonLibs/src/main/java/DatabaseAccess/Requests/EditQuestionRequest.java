@@ -10,7 +10,6 @@ public class EditQuestionRequest extends DatabaseRequest {
 
     private final String questionID;
     private final String newDescription;
-    // talk with Roni and Adar
     private final List<String> newAnswers;
     private final int correctAnswer;
 
