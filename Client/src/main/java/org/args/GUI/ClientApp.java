@@ -12,8 +12,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuItem;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.args.Client.EMSClient;
@@ -32,17 +30,17 @@ public class ClientApp extends Application {
     private static Scene scene;
     private static EMSClient client;
     private static String fullName;
-    // specify the server details
-    private final String host = "127.0.0.1";
+    // specify the server defaults
+    private static String host = "127.0.0.1";
 
-    private final int port = 3000;
+    private static int port = 3000;
 
     static void setRoot(String fxml)  {
         try {
             scene.setRoot(loadFXML(fxml));
         } catch (IOException e) {
-            System.out.println("Failed to change the root of the scene");
-            e.printStackTrace();
+            System.out.println("Failed to change the root of the scene: "+e.toString());
+
         }
     }
 
@@ -55,7 +53,7 @@ public class ClientApp extends Application {
     public void init() {
         try {
             super.init();
-            client = new EMSClient(this.host, this.port, this);
+            client = new EMSClient(host, port, this);
         } catch (Exception e) {
             System.out.println("Failed to init app.. exiting");
             e.printStackTrace();
@@ -76,8 +74,8 @@ public class ClientApp extends Application {
 
             stage.show();
         } catch (Exception e) {
-            System.out.println("Failed to start the app.. exiting");
-            e.printStackTrace();
+            System.out.println("Failed to start the app.. exiting: "+e.toString());
+
 
         }
 
@@ -106,6 +104,7 @@ public class ClientApp extends Application {
             client.sendToServer(data);
         } catch (IOException e) {
             System.out.println("Failed to send request to server");
+            client.loginFailed(); //hack until model is properly created.
             e.printStackTrace();
 
         }
@@ -230,5 +229,21 @@ public class ClientApp extends Application {
         return fullName;
     }
 
+    public static void setHost(String host) {
+        ClientApp.host = host;
+        client.setHost(host);
+    }
 
+    public static void setPort(int port) {
+        ClientApp.port = port;
+        client.setPort(port);
+    }
+
+    public static String getHost() {
+        return host;
+    }
+
+    public static int getPort() {
+        return port;
+    }
 }

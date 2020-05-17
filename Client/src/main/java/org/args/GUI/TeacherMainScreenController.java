@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 
 public class TeacherMainScreenController {
@@ -31,7 +32,7 @@ public class TeacherMainScreenController {
     @FXML
     public void initialize() {
         Date dt = new Date();
-        int hours = dt.getHours();
+        int hours = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         String greeting = null;
         if (hours >= 1 && hours <= 12) {
             greeting = "Good Morning";
