@@ -51,8 +51,13 @@
       </VBox>
    </center>
    <bottom>
-      <TilePane alignment="CENTER" prefHeight="74.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <TilePane alignment="CENTER" hgap="30.0" prefHeight="74.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
+            <Button fx:id="networkButton" alignment="CENTER" mnemonicParsing="false" onAction="#switchToNetworkConfigScreen" prefHeight="32.0" prefWidth="180.0" styleClass="primary" stylesheets="@bootstrap3.css" text="Network Configuration">
+               <font>
+                  <Font name="Bell MT" size="24.0" />
+               </font>
+            </Button>
               <Button fx:id="loginButton" alignment="CENTER" mnemonicParsing="false" onAction="#loginAttempt" prefHeight="59.0" prefWidth="122.0" styleClass="primary" stylesheets="@bootstrap3.css" text="Login">
                   <font>
                       <Font name="Bell MT" size="24.0" />

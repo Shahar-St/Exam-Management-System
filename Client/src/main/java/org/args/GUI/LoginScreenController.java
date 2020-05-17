@@ -21,6 +21,10 @@ public class LoginScreenController {
     @FXML // fx:id="loginButton"
     private Button loginButton; // Value injected by FXMLLoader
 
+
+    @FXML
+    private Button networkButton;
+
     @FXML // fx:id="usernameField"
     private TextField usernameField; // Value injected by FXMLLoader
 
@@ -39,6 +43,14 @@ public class LoginScreenController {
         if (event.getCode() == KeyCode.ENTER) {
             loginAttempt();
         }
+
+    }
+
+    @FXML
+    void switchToNetworkConfigScreen(ActionEvent event) {
+
+        ClientApp.setRoot("NetworkConfigScreen");
+
 
     }
 
