@@ -64,14 +64,14 @@ public class QuestionManagementScreenController {
             }
             subjectsDropdown.setText(currentSubject);
             coursesDropdown.setText(currentCourse);
-            initializeCoursesdropdown();
+            initializeCoursesDropdown();
             fillCoursesDropdown(currentSubject);
         }
     }
 
     @FXML
-    public void addCourseToDropdown(String coursename) {
-        MenuItem course = new MenuItem(coursename);
+    public void addCourseToDropdown(String courseName) {
+        MenuItem course = new MenuItem(courseName);
         course.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -84,7 +84,7 @@ public class QuestionManagementScreenController {
     }
 
     @FXML
-    void initializeCoursesdropdown() {
+    void initializeCoursesDropdown() {
         if (coursesDropdown.isDisabled())
             coursesDropdown.setDisable(false);
         if (coursesDropdown.getItems().size() > 0)
@@ -111,7 +111,7 @@ public class QuestionManagementScreenController {
     public EventHandler<ActionEvent> displayCoursesFromSubject = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-            initializeCoursesdropdown();
+            initializeCoursesDropdown();
             currentSubject = ((MenuItem) event.getSource()).getText();
             subjectsDropdown.setText(currentSubject);
             fillCoursesDropdown(currentSubject);

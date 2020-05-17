@@ -13,7 +13,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-import java.io.IOException;
 
 public class LoginScreenController {
 
@@ -32,7 +31,7 @@ public class LoginScreenController {
     private PasswordField passwordField; // Value injected by FXMLLoader
 
     @FXML
-    void loginAttempt(ActionEvent event) throws IOException {
+    void loginAttempt(ActionEvent event) {
         loginAttempt();
 
 

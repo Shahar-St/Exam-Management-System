@@ -1,5 +1,6 @@
 package org.args.GUI;
 
+import DatabaseAccess.Requests.QuestionRequest;
 import DatabaseAccess.Responses.AllQuestionsResponse;
 import DatabaseAccess.Responses.Pair;
 import DatabaseAccess.Responses.QuestionResponse;
@@ -11,8 +12,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuItem;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.args.Client.EMSClient;
@@ -20,6 +19,7 @@ import org.args.Client.EMSClient;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,17 +30,17 @@ public class ClientApp extends Application {
     private static Scene scene;
     private static EMSClient client;
     private static String fullName;
-    // specify the server details
+    // specify the server defaults
     private static String host = "127.0.0.1";
 
-    private static int port = 1337;
+    private static int port = 3000;
 
     static void setRoot(String fxml)  {
         try {
             scene.setRoot(loadFXML(fxml));
         } catch (IOException e) {
-            System.out.println("Failed to change the root of the scene");
-            e.printStackTrace();
+            System.out.println("Failed to change the root of the scene: "+e.toString());
+
         }
     }
 
@@ -71,11 +71,11 @@ public class ClientApp extends Application {
             stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
             stage.setResizable(false);
             stage.setTitle("HSTS");
-            stage.show();
 
+            stage.show();
         } catch (Exception e) {
-            System.out.println("Failed to start the app.. exiting");
-            e.printStackTrace();
+            System.out.println("Failed to start the app.. exiting: "+e.toString());
+
 
         }
 
@@ -171,10 +171,11 @@ public class ClientApp extends Application {
 
     public void fillEditQuestionScreen(QuestionResponse response)  {
 
+        String questionId = ((QuestionRequest)response.getRequest()).getQuestionID();
         String lastModified = response.getLastModified().toString();
         String author = response.getAuthor();
         String content = response.getQuestionContent();
-        String[] answers = response.getAnswers();
+        List<String> answers = response.getAnswers();
         int correctAnswer = response.getCorrectAnswer();
         FXMLLoader loader = fxmlLoader("EditQuestionScreen");
         Parent screen = null;
@@ -184,7 +185,7 @@ public class ClientApp extends Application {
             e.printStackTrace();
         }
         EditQuestionScreenController screenController = loader.getController();
-        screenController.initScreen(lastModified, author, content, answers, correctAnswer);
+        screenController.initScreen(questionId,lastModified, author, content, answers, correctAnswer);
         scene.setRoot(screen);
 
     }
@@ -222,16 +223,6 @@ public class ClientApp extends Application {
             }
         });
 
-    }
-
-    public void resizeWindow(){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                scene.getWindow().setWidth(((Pane)scene.getRoot()).getPrefWidth());
-                scene.getWindow().setHeight(((Pane)scene.getRoot()).getPrefHeight());
-            }
-        });
     }
 
     public static String getFullName() {
