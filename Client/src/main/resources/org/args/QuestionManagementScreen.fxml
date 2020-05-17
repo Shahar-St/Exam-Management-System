@@ -51,7 +51,7 @@
       </VBox>
         <TilePane alignment="CENTER" prefHeight="524.0" prefWidth="811.0">
             <children>
-                <ListView fx:id="questionsList" editable="true" prefHeight="392.0" prefWidth="740.0" stylesheets="@bootstrap3.css">
+                <ListView fx:id="questionsList" editable="true" onMouseClicked="#doubleClickOnQuestion" prefHeight="392.0" prefWidth="740.0" stylesheets="@bootstrap3.css">
                <TilePane.margin>
                   <Insets bottom="30.0" />
                </TilePane.margin></ListView>
