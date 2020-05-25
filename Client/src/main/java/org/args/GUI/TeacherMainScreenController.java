@@ -9,14 +9,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import org.args.Client.IMainScreenData;
 
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
-public class TeacherMainScreenController {
-
-    private static String fullGreeting;
+public class TeacherMainScreenController{
 
     @FXML // fx:id="questionManagementButton"
     private Button questionManagementButton; // Value injected by FXMLLoader
@@ -26,15 +25,24 @@ public class TeacherMainScreenController {
 
     @FXML
     void switchToQuestionManagement(ActionEvent event) throws IOException {
-        ClientApp.sendRequest(new SubjectsAndCoursesRequest());
+        model.loadSubjects();
+    }
+
+    private IMainScreenData model;
+
+    public void setModel(IMainScreenData dataModel)
+    {
+        if(model == null)
+            this.model = dataModel;
     }
 
     @FXML
     public void initialize() {
+        setModel(ClientApp.getModel());
         Date dt = new Date();
         int hours = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         String greeting = null;
-        if (hours >= 1 && hours <= 12) {
+        if (hours >= 5 && hours <= 12) {
             greeting = "Good Morning";
         } else if (hours >= 12 && hours < 16) {
             greeting = "Good Afternoon";
@@ -43,7 +51,7 @@ public class TeacherMainScreenController {
         } else {
             greeting = "Good Night";
         }
-        fullGreeting = greeting + ", " + ClientApp.getFullName();
+        String fullGreeting = greeting + ", " + model.getName();
         welcomeLabel.setText(fullGreeting);
     }
 

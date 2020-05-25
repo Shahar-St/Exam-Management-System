@@ -10,6 +10,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import org.args.Client.IEditQuestionScreenData;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,11 +20,14 @@ public class EditQuestionScreenController {
 
     private boolean isEditing = false;
 
+    private IEditQuestionScreenData model;
     private int correctAnswer;
 
-    private String questionID;
-
-    private static ObservableList<String> choiceItems;
+    public void setModel(IEditQuestionScreenData dataModel)
+    {
+        if (model == null)
+            this.model = dataModel;
+    }
 
     @FXML
     private TextField LastModified;
@@ -56,17 +60,27 @@ public class EditQuestionScreenController {
     private Button EditButton;
 
 
-    public void initScreen(String questionId,String lastModified, String author, String content, List<String> answers, int correctAnswer) {
-        this.questionID = questionId;
-        LastModified.setText(lastModified);
-        Author.setText(author);
-        Content.setText(content);
+    @FXML
+    private void initialize() {
+        setModel(ClientApp.getModel());
+        ObservableList<String> choiceItems = model.getChoiceItems();
+        if (choiceItems == null)
+        {
+            String[] answers = {"Answer 1", "Answer 2", "Answer 3", "Answer 4"};
+            model.setChoiceItems(FXCollections.observableArrayList(answers));
+            choiceItems = model.getChoiceItems();
+        }
+        correctAnswerChoice.getItems().addAll(choiceItems);
+        LastModified.setText(model.getLastModified());
+        Author.setText(model.getAuthor());
+        Content.setText(model.getContent());
+        List<String> answers = model.getAnswers();
         Answer1.setText(answers.get(0));
         Answer2.setText(answers.get(1));
         Answer3.setText(answers.get(2));
         Answer4.setText(answers.get(3));
-        this.correctAnswer = correctAnswer;
-        switch (this.correctAnswer)
+        correctAnswer = model.getCorrectAnswer();
+        switch (correctAnswer)
         {
             case 0:
                 Answer1.setStyle("-fx-background-color: #00ff00 ;");
@@ -88,19 +102,6 @@ public class EditQuestionScreenController {
                 System.out.println("Undefined correct answer");
                 break;
         }
-
-    }
-
-    @FXML
-    private void initialize() {
-        if (choiceItems == null)
-        {
-            String[] answers = {"Answer 1", "Answer 2", "Answer 3", "Answer 4"};
-            choiceItems = FXCollections.observableArrayList(answers);
-
-
-        }
-        correctAnswerChoice.getItems().addAll(choiceItems);
 
 
 
@@ -194,10 +195,8 @@ public class EditQuestionScreenController {
             EditButton.setText("Edit");
             isEditing = false;
             correctAnswerChoice.setDisable(true);
-            EditQuestionRequest request = new EditQuestionRequest(this.questionID, Content.getText(),
-                    Arrays.asList(Answer1.getText(), Answer2.getText(), Answer3.getText(),
-                            Answer4.getText()), correctAnswer);
-            ClientApp.sendRequest(request);
+            String questionId = model.getQuestionId();
+            model.saveQuestion(questionId,Answer1.getText(),Answer2.getText(),Answer3.getText(),Answer4.getText(),Content.getText());
         }
     }
 
