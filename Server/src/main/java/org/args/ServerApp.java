@@ -30,7 +30,7 @@ public class ServerApp extends AbstractServer
     public static void main(String[] args )
     {
         try {
-            ServerApp serverApp = new ServerApp(1337);
+            ServerApp serverApp = new ServerApp(3000);
             serverApp.listen();
         }catch (IOException e){
             e.printStackTrace();
@@ -53,7 +53,7 @@ public class ServerApp extends AbstractServer
         }else if(msg instanceof QuestionRequest){
             QuestionRequest request = (QuestionRequest)msg;
             try {
-                client.sendToClient(new QuestionResponse(0,request,"Shela 1",new String[]{"1", "2", "3", "4"},1,"Eating shit 101","malkishoa", LocalDateTime.now()));
+                client.sendToClient(new QuestionResponse(0,request,"Shela 1",Arrays.asList("1", "2", "3", "4"),1,"Eating shit 101","malkishoa", LocalDateTime.now()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
