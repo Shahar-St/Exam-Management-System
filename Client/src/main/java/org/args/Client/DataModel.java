@@ -11,7 +11,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class DataModel implements IMainScreenData, IQuestionManagementData,IEditQuestionScreenData {
+public class DataModel implements IMainScreenData, IQuestionManagementData, IQuestionData {
 
     public DataModel() {
         EventBus.getDefault().register(this);
@@ -157,6 +157,16 @@ public class DataModel implements IMainScreenData, IQuestionManagementData,IEdit
     private String content ;
     private List<String> answers ;
     private int correctAnswer ;
+    private boolean isCreating;
+
+    @Override
+    public boolean isCreating() {
+        return isCreating;
+    }
+
+    public void setCreating(boolean creating) {
+        isCreating = creating;
+    }
 
     private ObservableList<String> choiceItems;
 

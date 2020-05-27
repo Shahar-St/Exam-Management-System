@@ -233,7 +233,7 @@ public class ClientApp extends Application {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            EditQuestionScreenController screenController = loader.getController();
+            QuestionController screenController = loader.getController();
             scene.setRoot(screen);
         } else {
             popupAlert("Failed To Fetch The Question, Please Try Again." + getErrorMessage(response.getStatus()));

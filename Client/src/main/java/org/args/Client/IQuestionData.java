@@ -4,7 +4,7 @@ import javafx.collections.ObservableList;
 
 import java.util.List;
 
-public interface IEditQuestionScreenData {
+public interface IQuestionData {
 
     String getCurrentCourse();
 
@@ -35,6 +35,10 @@ public interface IEditQuestionScreenData {
     ObservableList<String> getChoiceItems();
 
     void setChoiceItems(ObservableList<String> choiceItems);
+
+    boolean isCreating();
+
+    void setCreating(boolean creating);
 
     void saveQuestion(String questionId, String answer_1, String answer_2, String answer_3, String answer_4, String newContent);
 }
