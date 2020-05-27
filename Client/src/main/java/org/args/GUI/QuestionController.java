@@ -160,10 +160,15 @@ public class QuestionController {
 
     @FXML
     void EditButtonClicked(ActionEvent event) {
-        if (!model.isCreating()) {
+        if (model.isCreating()) {
             // null as question id indicates of new question being created
-            model.saveQuestion(null, Answer1.getText(), Answer2.getText(), Answer3.getText(), Answer4.getText(), Content.getText());
-            model.setCreating(false);
+            if(!Answer1.getText().equals("") && !Answer2.getText().equals("") && !Answer3.getText().equals("") && !Answer4.getText().equals("") && !Content.getText().equals("") && correctAnswerChoice.getValue() != null){
+                model.saveQuestion(null, Answer1.getText(), Answer2.getText(), Answer3.getText(), Answer4.getText(), Content.getText());
+                model.setCreating(false);
+            }else{
+                model.alert("Invalid Question Or Some Data Fields May Be Missing.");
+            }
+
         } else {
             if (!isEditing) {
                 Content.setEditable(true);

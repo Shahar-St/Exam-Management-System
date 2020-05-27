@@ -13,7 +13,9 @@ import java.util.*;
 
 public class DataModel implements IMainScreenData, IQuestionManagementData, IQuestionData {
 
-    public DataModel() {
+    private ClientApp app;
+    public DataModel(ClientApp clientApp) {
+        app = clientApp;
         EventBus.getDefault().register(this);
     }
 
@@ -172,6 +174,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     public void setCreating(boolean creating) {
         isCreating = creating;
+    }
+
+    @Override
+    public void alert(String message) {
+        app.popupAlert(message);
     }
 
     private ObservableList<String> choiceItems;

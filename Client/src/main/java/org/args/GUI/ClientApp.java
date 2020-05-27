@@ -59,7 +59,7 @@ public class ClientApp extends Application {
         try {
             super.init();
             client = new EMSClient(host, port, this);
-            model = new DataModel();
+            model = new DataModel(this);
         } catch (Exception e) {
             System.out.println("Failed to init app.. exiting");
             e.printStackTrace();
