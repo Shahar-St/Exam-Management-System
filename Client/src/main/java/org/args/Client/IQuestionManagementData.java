@@ -1,6 +1,7 @@
 package org.args.Client;
 
 import DatabaseAccess.Responses.Pair;
+import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -28,6 +29,8 @@ public interface IQuestionManagementData {
     boolean dataWasAlreadyInitialized();
 
     void addQuestion();
+
+    BooleanProperty isCourseSelected();
 
     //questions list data
 

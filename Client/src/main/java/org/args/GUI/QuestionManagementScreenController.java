@@ -56,6 +56,7 @@ public class QuestionManagementScreenController{
     public void initialize() {
         setModel(ClientApp.getModel());
         questionsList.setItems(model.getObservableQuestionsList());
+        bindButtonVisibility();
         if (model.dataWasAlreadyInitialized()) {
             for (String subjectName : model.getSubjects()) //iterate through every subject in the hashmap
             {
@@ -67,6 +68,13 @@ public class QuestionManagementScreenController{
             fillCoursesDropdown(model.getCurrentSubject());
             model.fillQuestionsList(model.getCurrentCourse());
         }
+    }
+
+    private void bindButtonVisibility() {
+        deleteButton.visibleProperty().bind(model.isCourseSelected());
+        addButton.visibleProperty().bind(model.isCourseSelected());
+        questionDetailsButton.visibleProperty().bind(model.isCourseSelected());
+
     }
 
     @FXML

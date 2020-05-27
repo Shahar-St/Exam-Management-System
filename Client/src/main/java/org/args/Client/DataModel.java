@@ -2,6 +2,9 @@ package org.args.Client;
 
 import DatabaseAccess.Requests.*;
 import DatabaseAccess.Responses.*;
+import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.args.GUI.ClientApp;
@@ -62,6 +65,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private String currentCourse;
 
+    private BooleanProperty courseSelected = new SimpleBooleanProperty(false);
+
     public void setSubjectsAndCourses(HashMap<String, List<String>> mapFromResponse) {
         subjectsAndCourses = mapFromResponse;
     }
@@ -69,6 +74,14 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void addQuestion() {
         setCreating(true);
         ClientApp.setRoot("QuestionScreen");
+    }
+
+    public BooleanProperty isCourseSelected() {
+        return courseSelected;
+    }
+
+    public BooleanProperty courseSelectedProperty() {
+        return courseSelected;
     }
 
     public Set<String> getSubjects()
@@ -95,6 +108,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     public void setCurrentCourse(String currentCourse) {
         this.currentCourse = currentCourse;
+        courseSelected.setValue(true);
     }
 
     public boolean dataWasAlreadyInitialized()
@@ -109,7 +123,15 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         if (response.getStatus() == 0)
         {
             if(observableQuestionsList.size() > 0)
-                observableQuestionsList.clear();
+            {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        observableQuestionsList.clear();
+                    }
+                });
+
+            }
             generateQuestionDescriptors(response.getQuestionList());
         }
     }
@@ -128,7 +150,12 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private void addToObservableList(String text)
     {
-        observableQuestionsList.add(text);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                observableQuestionsList.add(text);
+            }
+        });
     }
 
     public void generateQuestionDescriptors(HashMap<String, Pair<LocalDateTime, String>> questionList) {
