@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.args.Client.IQuestionData;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class QuestionController {
@@ -101,6 +102,8 @@ public class QuestionController {
 
         }else{
             // when creating new question set the edit button to save from the beginning
+            Author.setText(model.getName());
+            LastModified.setText(LocalDateTime.now().toString());
             Content.setEditable(true);
             Answer1.setEditable(true);
             Answer2.setEditable(true);
