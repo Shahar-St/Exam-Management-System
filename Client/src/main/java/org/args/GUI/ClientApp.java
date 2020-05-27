@@ -36,7 +36,7 @@ public class ClientApp extends Application {
         return errors[error_code];
     }
 
-    static void setRoot(String fxml) {
+    public static void setRoot(String fxml) {
         try {
             scene.setRoot(loadFXML(fxml));
         } catch (IOException e) {

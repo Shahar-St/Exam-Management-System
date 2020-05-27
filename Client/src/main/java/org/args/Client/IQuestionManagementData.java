@@ -25,8 +25,9 @@ public interface IQuestionManagementData {
 
     void setCurrentCourse(String currentCourse);
 
-
     boolean dataWasAlreadyInitialized();
+
+    void addQuestion();
 
     //questions list data
 

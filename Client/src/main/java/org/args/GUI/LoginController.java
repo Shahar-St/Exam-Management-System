@@ -14,7 +14,7 @@ import javafx.scene.input.KeyEvent;
 import org.args.Client.IMainScreenData;
 
 
-public class LoginScreenController {
+public class LoginController {
 
 
     private IMainScreenData model;

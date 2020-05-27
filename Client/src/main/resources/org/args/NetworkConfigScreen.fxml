@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<BorderPane maxHeight="350.0" maxWidth="550.0" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#paneKeyPressed" prefHeight="350.0" prefWidth="550.0" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.NetworkConfigScreenController">
+<BorderPane maxHeight="350.0" maxWidth="550.0" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#paneKeyPressed" prefHeight="350.0" prefWidth="550.0" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.NetworkConfigController">
     <top>
         <Label alignment="CENTER" text="Welcome to the HSTS system!" textAlignment="CENTER" BorderPane.alignment="CENTER">
             <font>

@@ -38,6 +38,12 @@ public class QuestionManagementScreenController{
     @FXML //fx:id="backButton"
     private ImageView backButton;
 
+    @FXML
+    private Button addButton;
+
+    @FXML
+    private Button deleteButton;
+
     private IQuestionManagementData model;
 
     public void setModel(IQuestionManagementData dataModel)
@@ -126,14 +132,15 @@ public class QuestionManagementScreenController{
     }
 
     @FXML
-    void switchToStatisticalAnalysisScreen(ActionEvent event) {
+    void deleteQuestion(ActionEvent event) {
 
     }
 
     @FXML
-    void switchToTestsManagementScreen(ActionEvent event) {
-
+    void switchToAddQuestionScreen(ActionEvent event) {
+        model.addQuestion();
     }
+
 
     @FXML
     void switchToTeacherMainScreen(MouseEvent event) throws IOException {

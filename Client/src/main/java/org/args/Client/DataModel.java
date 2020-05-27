@@ -63,6 +63,12 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void setSubjectsAndCourses(HashMap<String, List<String>> mapFromResponse) {
         subjectsAndCourses = mapFromResponse;
     }
+
+    public void addQuestion() {
+        setCreating(true);
+        ClientApp.setRoot("QuestionScreen");
+    }
+
     public Set<String> getSubjects()
     {
         return subjectsAndCourses.keySet();
