@@ -9,4 +9,6 @@ public interface IMainScreenData {
     void login(String userName,String password);
 
     void loadSubjects();
+
+    String getPermission();
 }

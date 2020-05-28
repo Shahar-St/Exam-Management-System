@@ -187,7 +187,7 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleLoginResponse(LoginResponse response) {
         if (response.getStatus() == 0) {
-            FXMLLoader loader = fxmlLoader("TeacherMainScreen");
+            FXMLLoader loader = fxmlLoader("MainScreen");
             Parent screen = null;
             try {
                 screen = loader.load();

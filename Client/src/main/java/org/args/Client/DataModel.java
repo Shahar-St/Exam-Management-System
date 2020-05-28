@@ -31,11 +31,14 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void handleLoginResponse(LoginResponse response) {
         if (response.getStatus() == 0) {
             setName(response.getName());
+            permission = response.getPermission();
         }
 
     }
 
     private String name;
+
+    private String permission;
 
     public String getName() {
         return name;
@@ -52,6 +55,10 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Override
     public void loadSubjects() {
         ClientApp.sendRequest(new SubjectsAndCoursesRequest());
+    }
+
+    public String getPermission() {
+        return permission;
     }
 
     //question management screen data - subjects and courses dropdowns
