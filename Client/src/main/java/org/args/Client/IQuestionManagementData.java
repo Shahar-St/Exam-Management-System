@@ -34,11 +34,9 @@ public interface IQuestionManagementData {
 
     //questions list data
 
-    ObservableList<String> observableQuestionsList = FXCollections.observableArrayList();
 
-    private void addToObservableList(String text) {
-        observableQuestionsList.add(text);
-    }
+
+
 
     void generateQuestionDescriptors(HashMap<String, Pair<LocalDateTime, String>> questionList);
 

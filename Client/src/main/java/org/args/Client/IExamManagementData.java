@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface IExamManagementData {
-    List getExams(String subjectName);
+    List getExams(String courseName);
     void editExam(String examId);
     void deleteExam(String examId);
     void addExam(List questionList);

@@ -226,7 +226,7 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleQuestionResponse(QuestionResponse response) {
         if (response.getStatus() == 0) {
-            FXMLLoader loader = fxmlLoader("EditQuestionScreen");
+            FXMLLoader loader = fxmlLoader("QuestionScreen");
             Parent screen = null;
             try {
                 screen = loader.load();

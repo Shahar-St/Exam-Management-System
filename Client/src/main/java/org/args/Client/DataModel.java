@@ -222,7 +222,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private final ObservableList<String> observableQuestionsList = FXCollections.observableArrayList();
 
-    private void addToObservableList(String text) {
+    private void addToObservableQuestionsList(String text) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -236,7 +236,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
             String questionId = question.getKey();
             String questionDescription = question.getValue().getSecond();
             String menuItemText = "#" + questionId + ": " + questionDescription;
-            addToObservableList(menuItemText); //add to observable list upon generation
+            addToObservableQuestionsList(menuItemText); //add to observable list upon generation
         }
 
     }
@@ -258,7 +258,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         observableQuestionsList.clear();
     }
 
-    //editquestionscreen section
+    //question screen section
     private String questionId;
     private String lastModified;
     private String author;

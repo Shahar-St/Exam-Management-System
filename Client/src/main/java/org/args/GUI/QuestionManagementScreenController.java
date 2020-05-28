@@ -151,9 +151,9 @@ public class QuestionManagementScreenController{
 
 
     @FXML
-    void switchToTeacherMainScreen(MouseEvent event) throws IOException {
+    void switchToMainScreen(MouseEvent event) throws IOException {
         clearScreen();
-        ClientApp.setRoot("TeacherMainScreen");
+        ClientApp.setRoot("MainScreen");
     }
 
     @FXML
