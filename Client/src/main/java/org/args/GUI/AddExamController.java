@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 
-public class AddExamScreen {
+public class AddExamController {
 
     @FXML
     private ListView<?> subjectQuestionsListView;
