@@ -4,9 +4,6 @@
 
 package org.args.GUI;
 
-import DatabaseAccess.Requests.AllQuestionsRequest;
-import DatabaseAccess.Requests.QuestionRequest;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,13 +13,13 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import org.args.Client.IQuestionManagementData;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Vector;
+import java.util.Set;
 
-public class QuestionManagementScreenController {
+public class QuestionManagementScreenController{
 
 
     @FXML // fx:id="coursesDropdown"
@@ -41,32 +38,43 @@ public class QuestionManagementScreenController {
     @FXML //fx:id="backButton"
     private ImageView backButton;
 
-    private static HashMap<String, List<String>> subjectsAndCourses;
+    @FXML
+    private Button addButton;
 
-    private static List<String> questions = new Vector<>();
+    @FXML
+    private Button deleteButton;
 
-    private static String currentSubject = null;
+    private IQuestionManagementData model;
 
-    private static String currentCourse = null;
-
-    private static int selectedIndex;
-
+    public void setModel(IQuestionManagementData dataModel)
+    {
+        if (model == null)
+            this.model = dataModel;
+    }
 
     @FXML
     public void initialize() {
-        if (questions.size() > 0)
-            questionsList.getItems().addAll(questions);
-
-        if (currentSubject != null && !subjectsAndCourses.isEmpty()) {
-            for (String subjectName : subjectsAndCourses.keySet()) //iterate through every subject in the hashmap
+        setModel(ClientApp.getModel());
+        questionsList.setItems(model.getObservableQuestionsList());
+        bindButtonVisibility();
+        if (model.dataWasAlreadyInitialized()) {
+            for (String subjectName : model.getSubjects()) //iterate through every subject in the hashmap
             {
                 addSubjectToSubjectDropdown(subjectName);
             }
-            subjectsDropdown.setText(currentSubject);
-            coursesDropdown.setText(currentCourse);
+            subjectsDropdown.setText(model.getCurrentSubject());
+            coursesDropdown.setText(model.getCurrentCourse());
             initializeCoursesDropdown();
-            fillCoursesDropdown(currentSubject);
+            fillCoursesDropdown(model.getCurrentSubject());
+            model.fillQuestionsList(model.getCurrentCourse());
         }
+    }
+
+    private void bindButtonVisibility() {
+        deleteButton.visibleProperty().bind(model.isCourseSelected());
+        addButton.visibleProperty().bind(model.isCourseSelected());
+        questionDetailsButton.visibleProperty().bind(model.isCourseSelected());
+
     }
 
     @FXML
@@ -76,8 +84,8 @@ public class QuestionManagementScreenController {
             @Override
             public void handle(ActionEvent event) {
                 coursesDropdown.setText(((MenuItem) event.getSource()).getText());
-                currentCourse = ((MenuItem) event.getSource()).getText();
-                ClientApp.sendRequest(new AllQuestionsRequest(((MenuItem) event.getSource()).getText()));
+                model.setCurrentCourse(((MenuItem) event.getSource()).getText());
+                model.fillQuestionsList(((MenuItem) event.getSource()).getText());
             }
         });
         coursesDropdown.getItems().add(course);
@@ -93,7 +101,7 @@ public class QuestionManagementScreenController {
 
     @FXML
     void fillCoursesDropdown(String subject) {
-        List<String> coursesToAdd = subjectsAndCourses.get(subject);
+        List<String> coursesToAdd = model.getCoursesOfSubject(subject);
         for (String course : coursesToAdd) {
             addCourseToDropdown(course);
         }
@@ -112,69 +120,55 @@ public class QuestionManagementScreenController {
         @Override
         public void handle(ActionEvent event) {
             initializeCoursesDropdown();
-            currentSubject = ((MenuItem) event.getSource()).getText();
-            subjectsDropdown.setText(currentSubject);
-            fillCoursesDropdown(currentSubject);
+            model.setCurrentSubject(((MenuItem) event.getSource()).getText());
+            subjectsDropdown.setText(model.getCurrentSubject());
+            fillCoursesDropdown(model.getCurrentSubject());
         }
     };
-
-    @FXML
-    void getQuestionsList(ActionEvent event) {
-        if (questionsList.getItems().size() > 0)
-            questionsList.getItems().clear();
-        questionsList.getItems().addAll(questions);
-    }
-
-
-    public void setSubjectsAndCoursesState(HashMap<String, List<String>> mapFromResponse) {
-        subjectsAndCourses = mapFromResponse;
-    }
-
-    public void changeQuestionContent(String newContent) {
-        String oldContent = questions.get(selectedIndex);
-        String finalContent = oldContent.substring(0,oldContent.indexOf(':')+2) + newContent;
-        questions.set(selectedIndex, finalContent);
-    }
-
-
-    @FXML
-    public void addToList(ObservableList<String> observableSet) {
-        questions = observableSet;
-    }
 
 
     @FXML
     void switchToQuestionEditScreen(ActionEvent event) throws IOException {
         if(questionsList.getSelectionModel().getSelectedItem() != null)
         {
-        selectedIndex = questions.indexOf(questionsList.getSelectionModel().getSelectedItem());
-        int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
-        String questionId = questionsList.getSelectionModel().getSelectedItem().substring(1, indexOfColon);
-        ClientApp.sendRequest(new QuestionRequest(questionId));
+            int selectedItemIndex = model.getObservableQuestionsList().indexOf(questionsList.getSelectionModel().getSelectedItem());
+            model.setSelectedIndex(selectedItemIndex);
+            int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
+            String questionId = questionsList.getSelectionModel().getSelectedItem().substring(1, indexOfColon);
+            model.saveQuestionDetails(questionId);
         }
     }
 
     @FXML
-    void switchToStatisticalAnalysisScreen(ActionEvent event) {
+    void deleteQuestion(ActionEvent event) {
 
     }
 
     @FXML
-    void switchToTestsManagementScreen(ActionEvent event) {
-
+    void switchToAddQuestionScreen(ActionEvent event) {
+        model.addQuestion();
     }
 
+
     @FXML
-    void switchToTeacherMainScreen(MouseEvent event) throws IOException {
+    void switchToMainScreen(MouseEvent event) throws IOException {
         clearScreen();
-        ClientApp.setRoot("TeacherMainScreen");
+        ClientApp.setRoot("MainScreen");
     }
 
+    @FXML
     void clearScreen()
     {
-        questions.clear();
         subjectsDropdown.getItems().clear();
         coursesDropdown.getItems().clear();
-        currentSubject = null;
+        model.setCurrentSubject(null);
+        model.clearQuestionsList();
+    }
+
+    public void fillSubjectsDropDown(Set<String> subjects) {
+        for (String subject : subjects) //iterate through every subject in the hashmap
+        {
+            addSubjectToSubjectDropdown(subject);
+        }
     }
 }

@@ -4,7 +4,6 @@
 
 package org.args.GUI;
 
-import DatabaseAccess.Requests.LoginRequest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,10 +11,13 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import org.args.Client.IMainScreenData;
 
 
-public class LoginScreenController {
+public class LoginController {
 
+
+    private IMainScreenData model;
 
     @FXML // fx:id="loginButton"
     private Button loginButton; // Value injected by FXMLLoader
@@ -33,8 +35,6 @@ public class LoginScreenController {
     @FXML
     void loginAttempt(ActionEvent event) {
         loginAttempt();
-
-
     }
 
     @FXML
@@ -42,26 +42,29 @@ public class LoginScreenController {
         if (event.getCode() == KeyCode.ENTER) {
             loginAttempt();
         }
-
     }
 
     @FXML
     void switchToNetworkConfigScreen(ActionEvent event) {
 
         ClientApp.setRoot("NetworkConfigScreen");
+    }
 
-
+    public void setModel(IMainScreenData dataModel)
+    {
+        if (model == null)
+            this.model = dataModel;
     }
 
     private void loginAttempt() {
         String userName = usernameField.getText();
         String password = passwordField.getText();
-        LoginRequest request = new LoginRequest(userName, password);
-        ClientApp.sendRequest(request);
+        model.login(userName,password);
     }
 
 
     public void initialize() {
+        setModel(ClientApp.getModel());
 
     }
 

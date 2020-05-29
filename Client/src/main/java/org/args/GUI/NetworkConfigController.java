@@ -6,7 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public class NetworkConfigScreenController {
+public class NetworkConfigController {
 
     @FXML
     private TextField ipField;

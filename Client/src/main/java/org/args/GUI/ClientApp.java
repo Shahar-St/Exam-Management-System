@@ -1,26 +1,21 @@
 package org.args.GUI;
 
-import DatabaseAccess.Requests.QuestionRequest;
-import DatabaseAccess.Responses.AllQuestionsResponse;
-import DatabaseAccess.Responses.Pair;
-import DatabaseAccess.Responses.QuestionResponse;
-import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
+
+import DatabaseAccess.Responses.*;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import org.args.Client.DataModel;
 import org.args.Client.EMSClient;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 
 /**
  * JavaFX App
@@ -29,17 +24,23 @@ public class ClientApp extends Application {
 
     private static Scene scene;
     private static EMSClient client;
-    private static String fullName;
+    private static DataModel model;
     // specify the server defaults
     private static String host = "127.0.0.1";
 
     private static int port = 3000;
 
-    static void setRoot(String fxml)  {
+    private final String[] errors = {"SUCCESS", "UNAUTHORIZED", "NOT_FOUND", "NO_ACCESS", "WRONG_INFO"};
+
+    protected String getErrorMessage(int error_code) {
+        return errors[error_code];
+    }
+
+    public static void setRoot(String fxml) {
         try {
             scene.setRoot(loadFXML(fxml));
         } catch (IOException e) {
-            System.out.println("Failed to change the root of the scene: "+e.toString());
+            System.out.println("Failed to change the root of the scene: " + e.toString());
 
         }
     }
@@ -49,11 +50,16 @@ public class ClientApp extends Application {
         return fxmlLoader.load();
     }
 
+    public static DataModel getModel() {
+        return model;
+    }
+
     @Override
     public void init() {
         try {
             super.init();
             client = new EMSClient(host, port, this);
+            model = new DataModel(this);
         } catch (Exception e) {
             System.out.println("Failed to init app.. exiting");
             e.printStackTrace();
@@ -64,6 +70,7 @@ public class ClientApp extends Application {
     @Override
     public void start(Stage stage) {
         try {
+            EventBus.getDefault().register(this);
             FXMLLoader loader = fxmlLoader("LoginScreen");
             scene = new Scene(loader.load());
             scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
@@ -74,11 +81,17 @@ public class ClientApp extends Application {
 
             stage.show();
         } catch (Exception e) {
-            System.out.println("Failed to start the app.. exiting: "+e.toString());
+            System.out.println("Failed to start the app.. exiting: " + e.toString());
 
 
         }
 
+    }
+
+    @Override
+    public void stop() throws Exception {
+        EventBus.getDefault().unregister(this);
+        super.stop();
     }
 
     private void closeWindowEvent(WindowEvent event) {
@@ -104,108 +117,31 @@ public class ClientApp extends Application {
             client.sendToServer(data);
         } catch (IOException e) {
             System.out.println("Failed to send request to server");
-            client.loginFailed(); //hack until model is properly created.
             e.printStackTrace();
 
         }
     }
 
-    public void fillSubjectsDropdown(SubjectsAndCoursesResponse response)  {
-
-        FXMLLoader loader = fxmlLoader("QuestionManagementScreen");
-        Parent screen = null;
-        try {
-            screen = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        QuestionManagementScreenController screenController = loader.getController();
-        screenController.setSubjectsAndCoursesState(response.getSubjectsAndCourses()); //set the hashmap in the controllers state to later fill the courses dropdown list according to selected subject
-        for (String subjectName : response.getSubjectsAndCourses().keySet()) //iterate through every subject in the hashmap
-        {
-            screenController.addSubjectToSubjectDropdown(subjectName);
-        }
-        scene.setRoot(screen);
-
-
-    }
-
-    public void fillQuestionsList(AllQuestionsResponse response)  {
-
-        FXMLLoader loader = fxmlLoader("QuestionManagementScreen");
-        try {
-            loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        QuestionManagementScreenController screenController = loader.getController();
-        HashMap<String, Pair<LocalDateTime, String>> questions = response.getQuestionList();
-        ObservableList<String> observableSet = FXCollections.observableArrayList();
-
-        for (Map.Entry<String, Pair<LocalDateTime, String>> question : questions.entrySet()) {
-            String questionId = question.getKey();
-            String questionDescription = question.getValue().getSecond();
-            String menuItemText = "#" + questionId + ": " + questionDescription;
-            observableSet.add(menuItemText);
-        }
-
-        screenController.addToList(observableSet);
-    }
-
-    public void loginSuccess(String name) {
-        try {
-            fullName = name;
-            FXMLLoader loader = fxmlLoader("TeacherMainScreen");
-            Parent screen = loader.load();
+    @Subscribe
+    public void handleSubjectsAndCoursesResponse(SubjectsAndCoursesResponse response) {
+        if (response.getStatus() == 0) {
+            FXMLLoader loader = fxmlLoader("QuestionManagementScreen");
+            Parent screen = null;
+            try {
+                screen = loader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            QuestionManagementScreenController screenController = loader.getController();
+            screenController.fillSubjectsDropDown(model.getSubjects());
             scene.setRoot(screen);
-            Platform.runLater(() -> {
-                ((Stage)scene.getWindow()).setResizable(true);
-                scene.getWindow().setWidth(800);
-                scene.getWindow().setHeight(600);
-                scene.getWindow().centerOnScreen();
-            });
-        } catch (IOException e) {
-            System.out.println("Failed to switch scene on login success");
-            e.printStackTrace();
-
-        }
+        } else
+            popupAlert("Failed To Fetch The Subjects And Courses, Please Try Again." + getErrorMessage(response.getStatus()));
 
     }
 
-    public void fillEditQuestionScreen(QuestionResponse response)  {
 
-        String questionId = ((QuestionRequest)response.getRequest()).getQuestionID();
-        String lastModified = response.getLastModified().toString();
-        String author = response.getAuthor();
-        String content = response.getQuestionContent();
-        List<String> answers = response.getAnswers();
-        int correctAnswer = response.getCorrectAnswer();
-        FXMLLoader loader = fxmlLoader("EditQuestionScreen");
-        Parent screen = null;
-        try {
-            screen = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        EditQuestionScreenController screenController = loader.getController();
-        screenController.initScreen(questionId,lastModified, author, content, answers, correctAnswer);
-        scene.setRoot(screen);
-
-    }
-
-    public void updateEditedQuestionOnQuestionManagementScreen(String newContent){
-        FXMLLoader loader = fxmlLoader("QuestionManagementScreen");
-        try {
-            loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        QuestionManagementScreenController screenController = loader.getController();
-        screenController.changeQuestionContent(newContent);
-
-    }
-
-    public void popupAlert(String message){
+    public void popupAlert(String message) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -228,9 +164,6 @@ public class ClientApp extends Application {
 
     }
 
-    public static String getFullName() {
-        return fullName;
-    }
 
     public static void setHost(String host) {
         ClientApp.host = host;
@@ -242,6 +175,7 @@ public class ClientApp extends Application {
         client.setPort(port);
     }
 
+
     public static String getHost() {
         return host;
     }
@@ -249,4 +183,63 @@ public class ClientApp extends Application {
     public static int getPort() {
         return port;
     }
+
+    @Subscribe
+    public void handleLoginResponse(LoginResponse response) {
+        if (response.getStatus() == 0) {
+            FXMLLoader loader = fxmlLoader("MainScreen");
+            Parent screen = null;
+            try {
+                screen = loader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            scene.setRoot(screen);
+            Platform.runLater(() -> {
+                ((Stage) scene.getWindow()).setResizable(true);
+                scene.getWindow().setWidth(800);
+                scene.getWindow().setHeight(600);
+                scene.getWindow().centerOnScreen();
+            });
+        } else {
+            popupAlert("Login Failed, Please Try Again.");
+        }
+
+    }
+
+    @Subscribe
+    public void handleAllQuestionsResponse(AllQuestionsResponse response) {
+        if (response.getStatus() != 0)
+            popupAlert("Failed To Fetch Question List, Please Try Again. " + getErrorMessage(response.getStatus()));
+    }
+
+    @Subscribe
+    public void handleEditQuestionResponse(EditQuestionResponse response) {
+        if (response.getStatus() == 0) {
+            popupAlert("Edit Question Success");
+        } else {
+            popupAlert("Edit Question Failed, Please Try Again." + getErrorMessage(response.getStatus()));
+        }
+
+    }
+
+    @Subscribe
+    public void handleQuestionResponse(QuestionResponse response) {
+        if (response.getStatus() == 0) {
+            FXMLLoader loader = fxmlLoader("QuestionScreen");
+            Parent screen = null;
+            try {
+                screen = loader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            QuestionController screenController = loader.getController();
+            scene.setRoot(screen);
+        } else {
+            popupAlert("Failed To Fetch The Question, Please Try Again." + getErrorMessage(response.getStatus()));
+        }
+
+    }
+
+
 }
