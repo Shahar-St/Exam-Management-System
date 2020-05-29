@@ -1,12 +1,13 @@
-# Exam-Management-System
+# Exam-Management-System 
+*currently in development*
 
 Developers: [Shahar-St](https://github.com/Shahar-St), [GalMirovsky](https://github.com/GalMirovsky), [adar2](https://github.com/adar2) and [ronnieshafran](https://github.com/ronnieshafran).
 
 ## What is this project?
 
 This project is a university system to manage and execute exams.
-* *Teachers* can create and edit questions and then combine a few into an exam. They can execute exams online and view past exams statistics.
-* *Students* can take exams online or download them to their local machine. They cam also watch their prev exams and grades.
+* *Teachers* can create and edit questions and then combine a few into an exam. They can execute exams online and view past exams' statistics.
+* *Students* can take exams online or download them to their local machine. They can also watch their prev exams and grades.
 * *Dean* can watch different types of statistical reports and approve time extension during exams.
 
 ## How was it built?
@@ -18,10 +19,11 @@ The project was built in a server-client architecture and is separated into 3 mo
 * Thin *Client* that is being managed by `EventBus`.
 * *CommonLibs* holds the requests and responses classes, as well as classes for "light" entities.
 
-## How do I run it?
+## How can I run it?
 *you need to have MySql installed on your machine.*
 1) Download server.jar and client.jar from the main dir.
-2) Open the archive file and open the `hibernate.properties` file and make the required changes.
-3) run server.jar from the command line and follow the instructions until it "Server connected" message appears.
-4) run client.jar, you can lookup usernames and passwords in the DB.
+2) Inside the archive server file, open `hibernate.properties` and make the required changes.
+3) run server.jar from the command line and follow the instructions until "Server connected" message appears.
+4) run client.jar (we recommend via cmd, but a simple double-click will do).
+5) For login info you can lookup usernames and passwords in the DB.
 
