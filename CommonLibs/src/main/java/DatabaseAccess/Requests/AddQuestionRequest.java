@@ -2,16 +2,10 @@ package DatabaseAccess.Requests;
 
 import LightEntities.LightQuestion;
 
-import java.util.List;
-
-/**
- * Request: asks to edit a question
- * Response: just status
- */
-public class EditQuestionRequest extends DatabaseRequest {
+public class AddQuestionRequest extends DatabaseRequest {
     private LightQuestion lightQuestion;
 
-    public EditQuestionRequest(LightQuestion lightQuestion) {
+    public AddQuestionRequest(LightQuestion lightQuestion) {
         this.lightQuestion = lightQuestion;
     }
 
