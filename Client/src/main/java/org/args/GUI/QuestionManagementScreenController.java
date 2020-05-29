@@ -38,6 +38,12 @@ public class QuestionManagementScreenController{
     @FXML //fx:id="backButton"
     private ImageView backButton;
 
+    @FXML
+    private Button addButton;
+
+    @FXML
+    private Button deleteButton;
+
     private IQuestionManagementData model;
 
     public void setModel(IQuestionManagementData dataModel)
@@ -50,6 +56,7 @@ public class QuestionManagementScreenController{
     public void initialize() {
         setModel(ClientApp.getModel());
         questionsList.setItems(model.getObservableQuestionsList());
+        bindButtonVisibility();
         if (model.dataWasAlreadyInitialized()) {
             for (String subjectName : model.getSubjects()) //iterate through every subject in the hashmap
             {
@@ -61,6 +68,13 @@ public class QuestionManagementScreenController{
             fillCoursesDropdown(model.getCurrentSubject());
             model.fillQuestionsList(model.getCurrentCourse());
         }
+    }
+
+    private void bindButtonVisibility() {
+        deleteButton.visibleProperty().bind(model.isCourseSelected());
+        addButton.visibleProperty().bind(model.isCourseSelected());
+        questionDetailsButton.visibleProperty().bind(model.isCourseSelected());
+
     }
 
     @FXML
@@ -126,19 +140,20 @@ public class QuestionManagementScreenController{
     }
 
     @FXML
-    void switchToStatisticalAnalysisScreen(ActionEvent event) {
+    void deleteQuestion(ActionEvent event) {
 
     }
 
     @FXML
-    void switchToTestsManagementScreen(ActionEvent event) {
-
+    void switchToAddQuestionScreen(ActionEvent event) {
+        model.addQuestion();
     }
 
+
     @FXML
-    void switchToTeacherMainScreen(MouseEvent event) throws IOException {
+    void switchToMainScreen(MouseEvent event) throws IOException {
         clearScreen();
-        ClientApp.setRoot("TeacherMainScreen");
+        ClientApp.setRoot("MainScreen");
     }
 
     @FXML

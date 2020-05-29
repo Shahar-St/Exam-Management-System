@@ -36,7 +36,7 @@ public class ClientApp extends Application {
         return errors[error_code];
     }
 
-    static void setRoot(String fxml) {
+    public static void setRoot(String fxml) {
         try {
             scene.setRoot(loadFXML(fxml));
         } catch (IOException e) {
@@ -59,7 +59,7 @@ public class ClientApp extends Application {
         try {
             super.init();
             client = new EMSClient(host, port, this);
-            model = new DataModel();
+            model = new DataModel(this);
         } catch (Exception e) {
             System.out.println("Failed to init app.. exiting");
             e.printStackTrace();
@@ -187,7 +187,7 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleLoginResponse(LoginResponse response) {
         if (response.getStatus() == 0) {
-            FXMLLoader loader = fxmlLoader("TeacherMainScreen");
+            FXMLLoader loader = fxmlLoader("MainScreen");
             Parent screen = null;
             try {
                 screen = loader.load();
@@ -226,14 +226,14 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleQuestionResponse(QuestionResponse response) {
         if (response.getStatus() == 0) {
-            FXMLLoader loader = fxmlLoader("EditQuestionScreen");
+            FXMLLoader loader = fxmlLoader("QuestionScreen");
             Parent screen = null;
             try {
                 screen = loader.load();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            EditQuestionScreenController screenController = loader.getController();
+            QuestionController screenController = loader.getController();
             scene.setRoot(screen);
         } else {
             popupAlert("Failed To Fetch The Question, Please Try Again." + getErrorMessage(response.getStatus()));

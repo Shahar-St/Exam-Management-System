@@ -1,6 +1,7 @@
 package org.args.Client;
 
 import DatabaseAccess.Responses.Pair;
+import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -25,16 +26,17 @@ public interface IQuestionManagementData {
 
     void setCurrentCourse(String currentCourse);
 
-
     boolean dataWasAlreadyInitialized();
+
+    void addQuestion();
+
+    BooleanProperty isCourseSelected();
 
     //questions list data
 
-    ObservableList<String> observableQuestionsList = FXCollections.observableArrayList();
 
-    private void addToObservableList(String text) {
-        observableQuestionsList.add(text);
-    }
+
+
 
     void generateQuestionDescriptors(HashMap<String, Pair<LocalDateTime, String>> questionList);
 
