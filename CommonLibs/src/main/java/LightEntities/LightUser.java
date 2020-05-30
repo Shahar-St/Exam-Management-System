@@ -2,16 +2,16 @@ package LightEntities;
 
 public class LightUser {
     private String id;
-    private String firstName;
-    private String lastName;
+    private String name;
+    private String permission;
 
     public LightUser() {
     }
 
-    public LightUser(String id, String firstName, String lastName) {
+    public LightUser(String id, String name, String permission) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
+        this.permission = permission;
     }
 
     public String getId() {
@@ -22,19 +22,19 @@ public class LightUser {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getPermission() {
+        return permission;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setPermission(String permission) {
+        this.permission = permission;
     }
 }

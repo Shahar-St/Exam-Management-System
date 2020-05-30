@@ -2,6 +2,7 @@ package org.args.Client;
 
 import DatabaseAccess.Requests.*;
 import DatabaseAccess.Responses.*;
+import LightEntities.LightQuestion;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -30,8 +31,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Subscribe
     public void handleLoginResponse(LoginResponse response) {
         if (response.getStatus() == 0) {
-            setName(response.getName());
-            permission = response.getPermission();
+            setName(response.getLightUser().getName());
+            permission = response.getLightUser().getPermission();
         }
 
     }
@@ -340,9 +341,10 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     public void saveQuestion(String questionId, String answer_1, String answer_2, String answer_3, String answer_4, String newContent) {
-        EditQuestionRequest request = new EditQuestionRequest(questionId, newContent,
-                Arrays.asList(answer_1, answer_2, answer_3,
-                        answer_4), correctAnswer);
+
+        LightQuestion question = new LightQuestion(newContent,Arrays.asList(answer_1, answer_2, answer_3,
+                answer_4),correctAnswer,getName(),LocalDateTime.now());
+        EditQuestionRequest request = new EditQuestionRequest(question);
         ClientApp.sendRequest(request);
     }
 
@@ -351,11 +353,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void handleQuestionResponse(QuestionResponse response) {
         if (response.getStatus() == 0) {
             setQuestionId(((QuestionRequest) response.getRequest()).getQuestionID());
-            setLastModified(response.getLastModified().toString());
-            setAuthor(response.getAuthor());
-            setContent(response.getQuestionContent());
-            setAnswers(response.getAnswers());
-            setCorrectAnswer(response.getCorrectAnswer());
+            setLastModified(response.getQuestion().getLastModified().toString());
+            setAuthor(response.getQuestion().getAuthor());
+            setContent(response.getQuestion().getQuestionContent());
+            setAnswers(response.getQuestion().getAnswers());
+            setCorrectAnswer(response.getQuestion().getCorrectAnswer());
         }
 
     }
