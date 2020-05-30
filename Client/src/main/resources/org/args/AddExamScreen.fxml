@@ -13,8 +13,8 @@
    <children>
       <Pane prefHeight="600.0" prefWidth="408.0">
          <children>
-            <ListView fx:id="subjectQuestionsListView" layoutX="13.0" layoutY="110.0" prefHeight="380.0" prefWidth="270.0" />
-            <Label layoutX="55.0" layoutY="33.0" prefHeight="53.0" prefWidth="186.0" text="Questions in Subject X">
+            <ListView fx:id="courseQuestionsListView" layoutX="13.0" layoutY="110.0" prefHeight="380.0" prefWidth="270.0" />
+            <Label layoutX="55.0" layoutY="33.0" prefHeight="53.0" prefWidth="186.0" text="Questions in Course X">
                <font>
                   <Font name="SansSerif Regular" size="18.0" />
                </font>
@@ -35,7 +35,7 @@
                   <Font name="SansSerif Regular" size="18.0" />
                </font>
             </Label>
-            <ListView layoutX="13.0" layoutY="110.0" prefHeight="380.0" prefWidth="270.0" />
+            <ListView fx:id="examQuestionsListView" layoutX="13.0" layoutY="110.0" prefHeight="380.0" prefWidth="270.0" />
             <Button fx:id="doneButton" layoutX="218.0" layoutY="554.0" mnemonicParsing="false" onAction="#allQuestionsAdded" prefHeight="32.0" prefWidth="90.0" styleClass="primary" text="Done" />
             <Button fx:id="cancelButton" layoutX="119.0" layoutY="554.0" mnemonicParsing="false" onAction="#cancel" prefHeight="32.0" prefWidth="90.0" styleClass="danger" text="Cancel" />
          </children>

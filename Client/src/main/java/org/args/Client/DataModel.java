@@ -2,7 +2,7 @@ package org.args.Client;
 
 import DatabaseAccess.Requests.*;
 import DatabaseAccess.Responses.*;
-import LightEntities.LightQuestion;
+import LightEntities.*;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class DataModel implements IMainScreenData, IQuestionManagementData, IQuestionData, IStudentExamExecutionData,
-        IDeanViewStatsData, IStudentViewStatsData, IExamData, ITeacherExamExecutionData,IDeanExamExecutionData,
+        IDeanViewStatsData, IStudentViewStatsData, IExamData, IAddExamData, ITeacherExamExecutionData,IDeanExamExecutionData,
         ITeacherViewStatsData,IExamManagementData,IExamReviewData {
 
     private ClientApp app;
@@ -95,78 +95,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return courseSelected;
     }
 
-    //TODO: implement IStudentViewStatsData methods
 
-    @Override
-    public List getExams(String courseName) {
-        return null;
-    }
-
-    @Override
-    public void confirmGrade(String examId) {
-
-    }
-
-    @Override
-    public void changeGrade(double newGrade, String reason, String examId) {
-
-    }
-
-    @Override
-    public void editExam(String examId) {
-
-    }
-
-    @Override
-    public void deleteExam(String examId) {
-
-    }
-
-    @Override
-    public void addExam(List questionList) {
-
-    }
-
-    // TODO: decide if the function return void or list, conflict between istudentexam and iexammanagement
-    @Override
-    public void viewExam(String examId) {
-
-    }
-
-    @Override
-    public void addNote(String note) {
-
-    }
-
-    // TODO: implement method for ITeacherViewStatsData
-    @Override
-    public List getTeacherExams() {
-        return null;
-    }
-
-    public Set<String> getSubjects() {
-        return subjectsAndCourses.keySet();
-    }
-
-    @Override
-    public List getCourses(String subjectName) {
-        return null;
-    }
-
-    @Override
-    public double getAverageGrade(String courseName) {
-        return 0;
-    }
-
-    @Override
-    public void viewExamStatistics(String examId) {
-
-    }
-
-    @Override
-    public void viewReport(String report) {
-
-    }
 
     public List<String> getCoursesOfSubject(String subject) {
         return subjectsAndCourses.get(subject);
@@ -362,6 +291,52 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     }
 
+    //Add Exam data
+
+    private final ObservableList<String> observableExamQuestionsList = FXCollections.observableArrayList();
+
+    @Override
+    public void addToExamQuestionsList(String question) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                observableExamQuestionsList.add(question);
+            }
+        });
+
+    }
+
+    @Override
+    public void removeFromExamQuestionsList(String question) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                observableExamQuestionsList.remove(question);
+            }
+        });
+
+    }
+
+    public ObservableList<String> getObservableExamQuestionsList() {
+        return observableExamQuestionsList;
+    }
+
+    @Override
+    public void showQuestionInfo(String questionId) {
+
+    }
+
+    @Override
+    public void done() {
+
+    }
+
+    @Override
+    public void cancel() {
+        observableQuestionsList.clear();
+        observableExamQuestionsList.clear();
+    }
+
     //TODO: implement IStudentExamExecutionData methods
     @Override
     public void storeAnswer(int questionNumber, int answerNumber) {
@@ -403,6 +378,82 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     //TODO: implement IDeanExamExecutionData method NOTE: the request should be other type then String!!
     @Override
     public void handleTimeExtensionRequest(String request) {
+
+    }
+
+
+
+
+    //TODO: implement IStudentViewStatsData methods
+
+    @Override
+    public List getExams(String courseName) {
+        return null;
+    }
+
+    @Override
+    public void confirmGrade(String examId) {
+
+    }
+
+    @Override
+    public void changeGrade(double newGrade, String reason, String examId) {
+
+    }
+
+    @Override
+    public void editExam(String examId) {
+
+    }
+
+    @Override
+    public void deleteExam(String examId) {
+
+    }
+
+    @Override
+    public void addExam(List questionList) {
+
+    }
+
+    // TODO: decide if the function return void or list, conflict between istudentexam and iexammanagement
+    @Override
+    public void viewExam(String examId) {
+
+    }
+
+    @Override
+    public void addNote(String note) {
+
+    }
+
+    // TODO: implement method for ITeacherViewStatsData
+    @Override
+    public List getTeacherExams() {
+        return null;
+    }
+
+    public Set<String> getSubjects() {
+        return subjectsAndCourses.keySet();
+    }
+
+    @Override
+    public List getCourses(String subjectName) {
+        return null;
+    }
+
+    @Override
+    public double getAverageGrade(String courseName) {
+        return 0;
+    }
+
+    @Override
+    public void viewExamStatistics(String examId) {
+
+    }
+
+    @Override
+    public void viewReport(String report) {
 
     }
 }
