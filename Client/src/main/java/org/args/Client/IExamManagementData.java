@@ -23,4 +23,5 @@ public interface IExamManagementData {
     BooleanProperty isCourseSelected();
     List<String> getCoursesOfSubject(String subjectName);
     void saveExamDetails(String examId);
+    void clearExamList();
 }

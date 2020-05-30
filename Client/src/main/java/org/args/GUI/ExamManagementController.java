@@ -146,7 +146,9 @@ public class ExamManagementController {
     }
 
     @FXML
-    void switchToTeacherMainScreen(MouseEvent event) {
+    void switchToMainScreen(MouseEvent event) {
+        clearScreen();
+        ClientApp.setRoot("MainScreen");
 
     }
 
@@ -155,6 +157,15 @@ public class ExamManagementController {
         {
             addSubjectToSubjectDropdown(subject);
         }
+    }
+
+    @FXML
+    void clearScreen()
+    {
+        subjectsDropdown.getItems().clear();
+        coursesDropdown.getItems().clear();
+        model.setCurrentSubject(null);
+        model.clearExamList();
     }
 
 }

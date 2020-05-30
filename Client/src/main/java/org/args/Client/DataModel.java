@@ -495,6 +495,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.setRoot("ViewExamScreen");
     }
 
+    @Override
+    public void clearExamList() {
+        observableExamList.clear();
+    }
+
     // TODO: decide if the function return void or list, conflict between istudentexam and iexammanagement
     @Override
     public void viewExam(String examId) {
