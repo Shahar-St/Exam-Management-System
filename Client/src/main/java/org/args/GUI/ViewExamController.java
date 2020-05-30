@@ -10,6 +10,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import org.args.Client.IExamData;
 
@@ -35,6 +37,15 @@ public class ViewExamController {
 
     @FXML // fx:id="pageView"
     private Pagination pageView; // Value injected by FXMLLoader
+
+    @FXML
+    private ImageView backButton;
+
+    @FXML
+    void onBackClick(MouseEvent event) {
+        ClientApp.setRoot("ExamManagementScreen");
+
+    }
 
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
@@ -102,6 +113,29 @@ public class ViewExamController {
             answer3.setEditable(false);
             answer4.setEditable(false);
             score.setEditable(false);
+
+
+            switch (questionList.get(pageIndex).getCorrectAnswer()) {
+                case 0:
+                    answer1.setStyle("-fx-background-color: #00ff00 ;");
+
+                    break;
+                case 1:
+                    answer2.setStyle("-fx-background-color: #00ff00 ;");
+
+                    break;
+                case 2:
+                    answer3.setStyle("-fx-background-color: #00ff00 ;");
+
+                    break;
+                case 3:
+                    answer4.setStyle("-fx-background-color: #00ff00 ;");
+
+                    break;
+                default:
+                    System.out.println("Undefined correct answer");
+                    break;
+            }
 
             return new VBox(description_label, description, privateNotes_label, privateNotes, duration_label, duration,
                     date_label, lastModified, author_label, author, content_label, content, ans1_label, answer1, ans2_label,
