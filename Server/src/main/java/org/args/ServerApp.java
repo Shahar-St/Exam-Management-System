@@ -99,10 +99,10 @@ public class ServerApp extends AbstractServer
 
         }else if(msg instanceof ViewExamRequest){
             List<LightQuestion> questionList = new ArrayList<>();
-            questionList.add(new LightQuestion("question1",Arrays.asList("ans1","ans2","ans3","ans4"),0,"malki",LocalDateTime.now()));
-            questionList.add(new LightQuestion("question2",Arrays.asList("ans1","ans2","ans3","ans4"),0,"malki",LocalDateTime.now()));
-            questionList.add(new LightQuestion("question3",Arrays.asList("ans1","ans2","ans3","ans4"),0,"malki",LocalDateTime.now()));
-            questionList.add(new LightQuestion("question4",Arrays.asList("ans1","ans2","ans3","ans4"),0,"malki",LocalDateTime.now()));
+            questionList.add(new LightQuestion("1 + 0 = ? ",Arrays.asList("1","2","3","4"),0,"malki",LocalDateTime.now()));
+            questionList.add(new LightQuestion("0 + 4 = ? ",Arrays.asList("11","12","13","14"),0,"malki",LocalDateTime.now()));
+            questionList.add(new LightQuestion("cat is a/an:",Arrays.asList("shit","shitty","a","an"),0,"malki",LocalDateTime.now()));
+            questionList.add(new LightQuestion("same meaning of happy is:",Arrays.asList("shimon","shimon","shimon","shimon"),0,"malki",LocalDateTime.now()));
             LightExam exam = new LightExam("1111","malki",questionList,Arrays.asList(25.0,25.0,25.0,25.0),90,"exampleTest","malkishoa notes");
             ViewExamRequest request = (ViewExamRequest)msg;
             ViewExamResponse response = new ViewExamResponse(0,request,exam);
