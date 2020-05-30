@@ -7,6 +7,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.args.Client.DataModel;
@@ -73,7 +74,7 @@ public class ClientApp extends Application {
             EventBus.getDefault().register(this);
             FXMLLoader loader = fxmlLoader("LoginScreen");
             scene = new Scene(loader.load());
-            scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
+            //scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
             stage.setScene(scene);
             stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
             stage.setResizable(false);
@@ -142,24 +143,12 @@ public class ClientApp extends Application {
 
 
     public void popupAlert(String message) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    FXMLLoader loader = fxmlLoader("AlertPopUp");
-                    Scene scene = new Scene(loader.load());
-                    scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
-                    AlertPopUpController popUpController = loader.getController();
-                    popUpController.setShowText(message);
-                    Stage popup = new Stage();
-                    popup.setTitle("Alert");
-                    popup.setResizable(false);
-                    popup.setScene(scene);
-                    popup.show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+        Platform.runLater(()->{
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Alert");
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
         });
 
     }
