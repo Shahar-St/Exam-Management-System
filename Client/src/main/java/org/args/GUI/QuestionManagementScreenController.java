@@ -68,6 +68,10 @@ public class QuestionManagementScreenController {
             fillCoursesDropdown(model.getCurrentSubject());
             model.fillQuestionsList(model.getCurrentCourse());
         }
+        else
+        {
+            fillSubjectsDropDown(model.getSubjects());
+        }
     }
 
     private void bindButtonVisibility() {

@@ -123,24 +123,6 @@ public class ClientApp extends Application {
         }
     }
 
-    @Subscribe
-    public void handleSubjectsAndCoursesResponse(SubjectsAndCoursesResponse response) {
-        if (response.getStatus() == 0) {
-            FXMLLoader loader = fxmlLoader("QuestionManagementScreen");
-            Parent screen = null;
-            try {
-                screen = loader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            QuestionManagementScreenController screenController = loader.getController();
-            screenController.fillSubjectsDropDown(model.getSubjects());
-            scene.setRoot(screen);
-        } else
-            popupAlert("Failed To Fetch The Subjects And Courses, Please Try Again." + getErrorMessage(response.getStatus()));
-
-    }
-
 
     public void popupAlert(String message) {
         Platform.runLater(()->{

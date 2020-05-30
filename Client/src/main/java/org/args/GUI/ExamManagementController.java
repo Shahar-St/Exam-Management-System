@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import org.args.Client.IExamManagementData;
 
 import java.util.List;
+import java.util.Set;
 
 public class ExamManagementController {
 
@@ -64,6 +65,10 @@ public class ExamManagementController {
             initializeCoursesDropdown();
             fillCoursesDropdown(model.getCurrentSubject());
             model.fillExamList(model.getCurrentCourse());
+        }
+        else
+        {
+            fillSubjectsDropDown(model.getSubjects());
         }
 
     }
@@ -143,6 +148,13 @@ public class ExamManagementController {
     @FXML
     void switchToTeacherMainScreen(MouseEvent event) {
 
+    }
+
+    public void fillSubjectsDropDown(Set<String> subjects) {
+        for (String subject : subjects) //iterate through every subject in the hashmap
+        {
+            addSubjectToSubjectDropdown(subject);
+        }
     }
 
 }

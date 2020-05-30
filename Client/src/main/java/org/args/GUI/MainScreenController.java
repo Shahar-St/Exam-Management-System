@@ -6,6 +6,7 @@ package org.args.GUI;
 
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -32,12 +33,12 @@ public class MainScreenController {
     @FXML
     void switchToQuestionManagement(ActionEvent event) throws IOException {
         model.loadSubjects();
+        ClientApp.setRoot("QuestionManagementScreen");
     }
 
     @FXML
     void onAction(ActionEvent event) {
         model.viewExam();
-
     }
 
     private IMainScreenData model;
@@ -66,31 +67,44 @@ public class MainScreenController {
         welcomeLabel.setText(fullGreeting);
     }
 
-    private void initTeacher()
+    private void initTeacher() throws IOException
     {
         button1.setText("Question Management Screen");
+        button1.setOnAction(event -> {
+            try {
+                switchToQuestionManagement(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
         button2.setText("Statistical Analysis");
+        button2.setOnAction(this::switchToStatsScreen);
         button3.setText("Exam Management");
+        button3.setOnAction(this::switchToExamManagementScreen);
     }
 
     private void initStudent()
     {
         button1.setText("Exam Execution");
+        button1.setOnAction(this::switchToStudentExamExecutionScreen);
         button2.setText("Past Exams");
+        button2.setOnAction(this::switchToStatsScreen);
         button3.setVisible(false);
     }
 
     private void initDean()
     {
         button1.setText("Statistical Analysis");
+        button1.setOnAction(this::switchToStatsScreen);
         button2.setText("View Reports");
+        button2.setOnAction(this::switchToReportsScreen);
         button3.setText("Pending Requests");
+        button3.setOnAction(this::switchToExtensionRequestsScreen);
     }
 
 
 
-    private void initAccordingToPermission()
-    {
+    private void initAccordingToPermission() throws IOException {
         switch (model.getPermission()){
             case "Teacher":
                 initTeacher();
@@ -102,16 +116,40 @@ public class MainScreenController {
                 initDean();
                 break;
         }
-
     }
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
         setModel(ClientApp.getModel());
         generateGreeting();
         initAccordingToPermission();
+    }
 
-
+    @FXML
+    void switchToExamManagementScreen (ActionEvent event)
+    {
+        model.loadSubjects();
+        ClientApp.setRoot("ExamManagementScreen");
+    }
+    @FXML
+    void switchToStatsScreen (ActionEvent event)
+    {
+        ClientApp.setRoot("StatsAnalysisScreen");
+    }
+    @FXML
+    void switchToStudentExamExecutionScreen (ActionEvent event)
+    {
+        ClientApp.setRoot("StudentExamExecutionScreen");
+    }
+    @FXML
+    void switchToReportsScreen (ActionEvent event)
+    {
+        ClientApp.setRoot("ReportsScreen");
+    }
+    @FXML
+    void switchToExtensionRequestsScreen (ActionEvent event)
+    {
+        ClientApp.setRoot("ExtensionRequestsScreen");
     }
 
 }
