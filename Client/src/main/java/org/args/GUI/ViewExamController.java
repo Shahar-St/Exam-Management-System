@@ -94,9 +94,18 @@ public class ViewExamController {
 
             TextField score = new TextField(questionsScores.get(pageIndex).toString());
 
-            return new VBox(description_label,description,privateNotes_label,privateNotes,duration_label,duration,
-                    date_label,lastModified,author_label,author,content_label,content,ans1_label,answer1,ans2_label,
-                    answer2,ans3_label,answer3,ans4_label,answer4,score_label,score);
+            description.setEditable(false);
+            privateNotes.setEditable(false);
+            duration.setEditable(false);
+            answer1.setEditable(false);
+            answer2.setEditable(false);
+            answer3.setEditable(false);
+            answer4.setEditable(false);
+            score.setEditable(false);
+
+            return new VBox(description_label, description, privateNotes_label, privateNotes, duration_label, duration,
+                    date_label, lastModified, author_label, author, content_label, content, ans1_label, answer1, ans2_label,
+                    answer2, ans3_label, answer3, ans4_label, answer4, score_label, score);
 
         });
 

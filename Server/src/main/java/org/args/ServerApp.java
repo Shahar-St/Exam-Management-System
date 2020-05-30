@@ -111,6 +111,19 @@ public class ServerApp extends AbstractServer
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else if(msg instanceof AllExamsRequest){
+            AllExamsRequest request = (AllExamsRequest)msg;
+            HashMap<String, Pair<LocalDateTime, String>> examList = new HashMap<>();
+            examList.put("exam1",new Pair<>(LocalDateTime.now(),"Content1"));
+            examList.put("exam2",new Pair<>(LocalDateTime.now(),"Content2"));
+            examList.put("exam3",new Pair<>(LocalDateTime.now(),"Content3"));
+            examList.put("exam4",new Pair<>(LocalDateTime.now(),"Content4"));
+            AllExamsResponse response = new AllExamsResponse(0,request,examList);
+            try {
+                client.sendToClient(response);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }
