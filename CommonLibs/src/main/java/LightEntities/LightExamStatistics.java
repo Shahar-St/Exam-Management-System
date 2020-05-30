@@ -1,8 +1,9 @@
 package LightEntities;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class LightExamStatistics {
+public class LightExamStatistics implements Serializable {
     private LightExam lightExam;
     private int averageGrade;
     private int median;

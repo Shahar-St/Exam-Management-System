@@ -2,6 +2,7 @@ package org.args.Client;
 
 import DatabaseAccess.Requests.*;
 import DatabaseAccess.Responses.*;
+import LightEntities.LightExam;
 import LightEntities.LightQuestion;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -16,8 +17,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class DataModel implements IMainScreenData, IQuestionManagementData, IQuestionData, IStudentExamExecutionData,
-        IDeanViewStatsData, IStudentViewStatsData, IExamData, ITeacherExamExecutionData,IDeanExamExecutionData,
-        ITeacherViewStatsData,IExamManagementData,IExamReviewData {
+        IDeanViewStatsData, IStudentViewStatsData, IExamData, ITeacherExamExecutionData, IDeanExamExecutionData,
+        ITeacherViewStatsData, IExamManagementData, IExamReviewData {
 
     private ClientApp app;
 
@@ -342,8 +343,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     public void saveQuestion(String questionId, String answer_1, String answer_2, String answer_3, String answer_4, String newContent) {
 
-        LightQuestion question = new LightQuestion(newContent,Arrays.asList(answer_1, answer_2, answer_3,
-                answer_4),correctAnswer,getName(),LocalDateTime.now());
+        LightQuestion question = new LightQuestion(newContent, Arrays.asList(answer_1, answer_2, answer_3,
+                answer_4), correctAnswer, getName(), LocalDateTime.now());
         EditQuestionRequest request = new EditQuestionRequest(question);
         ClientApp.sendRequest(request);
     }
@@ -404,5 +405,21 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Override
     public void handleTimeExtensionRequest(String request) {
 
+    }
+
+    private LightExam currentExam;
+
+    public List<LightQuestion> getLightQuestionListFromCurrentExam(){
+        return currentExam.getLightQuestionList();
+    }
+
+    public void viewExam() {
+        ClientApp.sendRequest(new ViewExamRequest("1111"));
+
+    }
+
+    @Subscribe
+    public void handleViewExamResponse(ViewExamResponse response){
+        currentExam = response.getLightExam();
     }
 }

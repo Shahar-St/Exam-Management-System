@@ -1,8 +1,9 @@
 package LightEntities;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class LightExam {
+public class LightExam implements Serializable {
     private String id;
     private String author;
     private List<LightQuestion> lightQuestionList;

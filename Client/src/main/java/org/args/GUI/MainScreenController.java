@@ -34,6 +34,12 @@ public class MainScreenController {
         model.loadSubjects();
     }
 
+    @FXML
+    void onAction(ActionEvent event) {
+        model.viewExam();
+
+    }
+
     private IMainScreenData model;
 
     public void setModel(IMainScreenData dataModel)

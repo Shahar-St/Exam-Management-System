@@ -1,9 +1,10 @@
 package LightEntities;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class LightQuestion {
+public class LightQuestion implements Serializable {
     private String questionContent;
     private List<String> answers;
     private int correctAnswer;

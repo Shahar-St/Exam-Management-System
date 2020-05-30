@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="org.args.GUI.ViewExamController">
+   <content>
+      <VBox prefHeight="600.0" prefWidth="800.0">
+         <children>
+            <Pagination fx:id="pageView" prefHeight="600.0" prefWidth="800.0" />
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>

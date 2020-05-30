@@ -241,5 +241,23 @@ public class ClientApp extends Application {
 
     }
 
+    @Subscribe
+    public void handleViewExamResponse(ViewExamResponse response){
+        if(response.getStatus()==0){
+            FXMLLoader loader = fxmlLoader("ViewExamScreen");
+            Parent screen = null;
+            try {
+                screen = loader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ViewExamController screenController = loader.getController();
+            scene.setRoot(screen);
+        }
+        else{
+            popupAlert("Failed to Fetch Exam");
+        }
+    }
+
 
 }

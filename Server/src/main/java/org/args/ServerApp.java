@@ -1,6 +1,9 @@
 package org.args;
 
 
+import LightEntities.LightExam;
+import LightEntities.LightQuestion;
+import LightEntities.LightUser;
 import org.args.server.AbstractServer;
 import org.args.server.ConnectionToClient;
 import DatabaseAccess.Requests.*;
@@ -8,6 +11,7 @@ import DatabaseAccess.Responses.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +51,7 @@ public class ServerApp extends AbstractServer
         if(msg instanceof LoginRequest){
             LoginRequest request = (LoginRequest)msg;
             try {
-                client.sendToClient(new LoginResponse(0, "Teacher","Shimon KorMaN", request));
+                client.sendToClient(new LoginResponse(0,request,new LightUser("1111","Shimon Korman","Teacher")));
             }catch (IOException e){
                 e.printStackTrace();
             }
@@ -55,7 +59,7 @@ public class ServerApp extends AbstractServer
         }else if(msg instanceof QuestionRequest){
             QuestionRequest request = (QuestionRequest)msg;
             try {
-                client.sendToClient(new QuestionResponse(0,request,"Shela 1",Arrays.asList("1", "2", "3", "4"),1,"Eating shit 101","malkishoa", LocalDateTime.now()));
+                client.sendToClient(new QuestionResponse(0,request,new LightQuestion("shela1",Arrays.asList("ans1","ans2","ans3","ans4"),0,"Shimon Korman",LocalDateTime.now())));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -93,6 +97,20 @@ public class ServerApp extends AbstractServer
                 e.printStackTrace();
             }
 
+        }else if(msg instanceof ViewExamRequest){
+            List<LightQuestion> questionList = new ArrayList<>();
+            questionList.add(new LightQuestion("question1",Arrays.asList("ans1","ans2","ans3","ans4"),0,"malki",LocalDateTime.now()));
+            questionList.add(new LightQuestion("question2",Arrays.asList("ans1","ans2","ans3","ans4"),0,"malki",LocalDateTime.now()));
+            questionList.add(new LightQuestion("question3",Arrays.asList("ans1","ans2","ans3","ans4"),0,"malki",LocalDateTime.now()));
+            questionList.add(new LightQuestion("question4",Arrays.asList("ans1","ans2","ans3","ans4"),0,"malki",LocalDateTime.now()));
+            LightExam exam = new LightExam("1111","malki",questionList,Arrays.asList(25.0,25.0,25.0,25.0),90,"exampleTest","malkishoa notes");
+            ViewExamRequest request = (ViewExamRequest)msg;
+            ViewExamResponse response = new ViewExamResponse(0,request,exam);
+            try {
+                client.sendToClient(response);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }
