@@ -56,7 +56,7 @@ public class ViewExamController {
         String examDescription = model.getCurrentExamDescription();
         String examTeacherPrivateNotes = model.getCurrentExamTeacherPrivateNotes();
         String examDuration = Integer.toString(model.getCurrentExamDurationOnMinutes());
-        assert pageView != null : "fx:id=\"pageView\" was not injected: check your FXML file 'ViewExamScreen.fxml'.";
+        assert pageView != null;
         pageView.setPageCount(questionList.size());
         pageView.setCurrentPageIndex(0);
         pageView.setMaxPageIndicatorCount(5);

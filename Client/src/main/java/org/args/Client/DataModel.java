@@ -4,7 +4,6 @@ import DatabaseAccess.Requests.*;
 import DatabaseAccess.Responses.*;
 import LightEntities.LightExam;
 import LightEntities.LightQuestion;
-import LightEntities.*;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -213,7 +212,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void alert(String message) {
-        app.popupAlert(message);
+        app.popUpAlert(message);
     }
 
     private ObservableList<String> choiceItems;

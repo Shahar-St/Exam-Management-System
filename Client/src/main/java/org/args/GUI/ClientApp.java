@@ -124,7 +124,7 @@ public class ClientApp extends Application {
     }
 
 
-    public void popupAlert(String message) {
+    public void popUpAlert(String message) {
         Platform.runLater(()->{
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Alert");
@@ -173,7 +173,7 @@ public class ClientApp extends Application {
                 scene.getWindow().centerOnScreen();
             });
         } else {
-            popupAlert("Login Failed, Please Try Again.");
+            popUpAlert("Login Failed, Please Try Again.");
         }
 
     }
@@ -181,15 +181,15 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleAllQuestionsResponse(AllQuestionsResponse response) {
         if (response.getStatus() != 0)
-            popupAlert("Failed To Fetch Question List, Please Try Again. " + getErrorMessage(response.getStatus()));
+            popUpAlert("Failed To Fetch Question List, Please Try Again. " + getErrorMessage(response.getStatus()));
     }
 
     @Subscribe
     public void handleEditQuestionResponse(EditQuestionResponse response) {
         if (response.getStatus() == 0) {
-            popupAlert("Edit Question Success");
+            popUpAlert("Edit Question Success");
         } else {
-            popupAlert("Edit Question Failed, Please Try Again." + getErrorMessage(response.getStatus()));
+            popUpAlert("Edit Question Failed, Please Try Again." + getErrorMessage(response.getStatus()));
         }
 
     }
@@ -207,7 +207,7 @@ public class ClientApp extends Application {
             QuestionController screenController = loader.getController();
             scene.setRoot(screen);
         } else {
-            popupAlert("Failed To Fetch The Question, Please Try Again." + getErrorMessage(response.getStatus()));
+            popUpAlert("Failed To Fetch The Question, Please Try Again." + getErrorMessage(response.getStatus()));
         }
 
     }
@@ -226,7 +226,7 @@ public class ClientApp extends Application {
             scene.setRoot(screen);
         }
         else{
-            popupAlert("Failed to Fetch Exam");
+            popUpAlert("Failed to Fetch Exam");
         }
     }
 
