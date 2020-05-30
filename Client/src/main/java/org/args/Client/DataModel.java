@@ -10,6 +10,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import org.args.GUI.ClientApp;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -18,8 +20,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class DataModel implements IMainScreenData, IQuestionManagementData, IQuestionData, IStudentExamExecutionData,
-        IDeanViewStatsData, IStudentViewStatsData, IExamData, IAddExamData, ITeacherExamExecutionData,IDeanExamExecutionData,
-        ITeacherViewStatsData,IExamManagementData,IExamReviewData {
+        IDeanViewStatsData, IStudentViewStatsData, IExamData, IAddExamData, ITeacherExamExecutionData, IDeanExamExecutionData,
+        ITeacherViewStatsData, IExamManagementData, IExamReviewData {
 
     private ClientApp app;
 
@@ -96,7 +98,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public BooleanProperty courseSelectedProperty() {
         return courseSelected;
     }
-
 
 
     public List<String> getCoursesOfSubject(String subject) {
@@ -324,6 +325,13 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     @Override
+    public void saveExamDetails(String examId) {
+        ClientApp.sendRequest(new ViewExamRequest(examId));
+    }
+
+
+
+    @Override
     public void showQuestionInfo(String questionId) {
 
     }
@@ -385,21 +393,18 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private LightExam currentExam;
 
-    public List<LightQuestion> getLightQuestionListFromCurrentExam(){
+    public List<LightQuestion> getLightQuestionListFromCurrentExam() {
         return currentExam.getLightQuestionList();
     }
 
     public void viewExam() {
         ClientApp.sendRequest(new ViewExamRequest("1111"));
-
     }
 
     @Subscribe
-    public void handleViewExamResponse(ViewExamResponse response){
+    public void handleViewExamResponse(ViewExamResponse response) {
         currentExam = response.getLightExam();
     }
-
-
 
 
     //TODO: implement IStudentViewStatsData methods
@@ -419,25 +424,38 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     }
 
-    @Override
-    public void editExam(String examId) {
+    //exam management data
 
-    }
+    private final ObservableList<String> observableExamList = FXCollections.observableArrayList();
+
 
     @Override
     public void deleteExam(String examId) {
-
+        Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmDelete.setContentText("Are you sure you want to delete exam number " + examId + "?");
+        Optional<ButtonType> result = confirmDelete.showAndWait();
+        if (result.get() == ButtonType.OK)
+            ClientApp.sendRequest(new DeleteExamRequest(examId));
     }
 
     @Override
-    public void addExam(List questionList) {
-
+    public void addExam() {
+        ClientApp.setRoot("ViewExamScreen");
     }
 
     // TODO: decide if the function return void or list, conflict between istudentexam and iexammanagement
     @Override
     public void viewExam(String examId) {
+        ClientApp.sendRequest(new ViewExamRequest(examId));
+    }
 
+    public ObservableList<String> getObservableExamList() {
+        return observableExamList;
+    }
+
+    @Override
+    public void fillExamList(String courseName) {
+        ClientApp.sendRequest(new AllExamsRequest(courseName));
     }
 
     @Override

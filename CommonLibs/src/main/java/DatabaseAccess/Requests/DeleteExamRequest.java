@@ -3,17 +3,17 @@ package DatabaseAccess.Requests;
 import LightEntities.LightExam;
 
 public class DeleteExamRequest  extends DatabaseRequest {
-    private LightExam lightExam;
+    private String examId;
 
-    public DeleteExamRequest(LightExam lightExam) {
-        this.lightExam = lightExam;
+    public DeleteExamRequest(String examId) {
+        this.examId = examId;
     }
 
-    public LightExam getLightExam() {
-        return lightExam;
+    public String getExamId() {
+        return examId;
     }
 
-    public void setLightExam(LightExam lightExam) {
-        this.lightExam = lightExam;
+    public void setExamId(String examId) {
+        this.examId = examId;
     }
 }
