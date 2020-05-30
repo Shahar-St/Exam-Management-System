@@ -174,6 +174,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     }
 
+
+
     public ObservableList<String> getObservableQuestionsList() {
         return observableQuestionsList;
     }
@@ -443,6 +445,41 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     //exam management data
 
     private final ObservableList<String> observableExamList = FXCollections.observableArrayList();
+
+    @Subscribe
+    public void handleAllExamsResponse(AllExamsResponse response) {
+        if (response.getStatus() == 0) {
+            if (observableExamList.size() > 0) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        observableExamList.clear();
+                    }
+                });
+
+            }
+            generateExamDescriptors(response.getExamList());
+        }
+    }
+
+    public void generateExamDescriptors(HashMap<String, Pair<LocalDateTime, String>> examList) {
+        for (Map.Entry<String, Pair<LocalDateTime, String>> exam : examList.entrySet()) {
+            String examId = exam.getKey();
+            String examDescription = exam.getValue().getSecond();
+            String menuItemText = "#" + examId + ": " + examDescription;
+            addToObservableExamList(menuItemText); //add to observable list upon generation
+        }
+
+    }
+
+    private void addToObservableExamList(String text) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                observableExamList.add(text);
+            }
+        });
+    }
 
 
     @Override
