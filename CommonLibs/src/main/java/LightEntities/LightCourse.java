@@ -1,6 +1,8 @@
 package LightEntities;
 
-public class LightCourse {
+import java.io.Serializable;
+
+public class LightCourse implements Serializable {
     private String id;
     private String name;
 

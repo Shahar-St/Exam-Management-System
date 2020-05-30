@@ -1,11 +1,13 @@
 package LightEntities;
 
-public class LightUser {
+import java.io.Serializable;
+
+public class LightUser implements Serializable {
     private String id;
     private String name;
     private String permission;
 
-    public LightUser() {
+    public LightUser()  {
     }
 
     public LightUser(String id, String name, String permission) {
