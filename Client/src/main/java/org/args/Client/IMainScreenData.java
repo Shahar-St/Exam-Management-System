@@ -11,4 +11,6 @@ public interface IMainScreenData {
     void loadSubjects();
 
     String getPermission();
+
+    void viewExam();// added for testing it may not be required
 }

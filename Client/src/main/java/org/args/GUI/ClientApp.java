@@ -7,6 +7,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.args.Client.DataModel;
@@ -15,6 +16,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
+import java.util.Stack;
 
 
 /**
@@ -32,18 +34,26 @@ public class ClientApp extends Application {
 
     private final String[] errors = {"SUCCESS", "UNAUTHORIZED", "NOT_FOUND", "NO_ACCESS", "WRONG_INFO"};
 
+    private static Stack<Parent> lastScenes;
+
     protected String getErrorMessage(int error_code) {
         return errors[error_code];
     }
 
     public static void setRoot(String fxml) {
         try {
+            pushLastScene(scene.getRoot());
             scene.setRoot(loadFXML(fxml));
         } catch (IOException e) {
             System.out.println("Failed to change the root of the scene: " + e.toString());
 
         }
     }
+
+    public static void backToLastScene(){
+        scene.setRoot(popLastScene());
+    }
+
 
     public static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ClientApp.class.getResource("/org/args/" + fxml + ".fxml"));
@@ -60,6 +70,7 @@ public class ClientApp extends Application {
             super.init();
             client = new EMSClient(host, port, this);
             model = new DataModel(this);
+            lastScenes = new Stack<>();
         } catch (Exception e) {
             System.out.println("Failed to init app.. exiting");
             e.printStackTrace();
@@ -75,6 +86,7 @@ public class ClientApp extends Application {
             scene = new Scene(loader.load());
             scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
             stage.setScene(scene);
+            pushLastScene(scene.getRoot());
             stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
             stage.setResizable(false);
             stage.setTitle("HSTS");
@@ -122,44 +134,14 @@ public class ClientApp extends Application {
         }
     }
 
-    @Subscribe
-    public void handleSubjectsAndCoursesResponse(SubjectsAndCoursesResponse response) {
-        if (response.getStatus() == 0) {
-            FXMLLoader loader = fxmlLoader("QuestionManagementScreen");
-            Parent screen = null;
-            try {
-                screen = loader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            QuestionManagementScreenController screenController = loader.getController();
-            screenController.fillSubjectsDropDown(model.getSubjects());
-            scene.setRoot(screen);
-        } else
-            popupAlert("Failed To Fetch The Subjects And Courses, Please Try Again." + getErrorMessage(response.getStatus()));
 
-    }
-
-
-    public void popupAlert(String message) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    FXMLLoader loader = fxmlLoader("AlertPopUp");
-                    Scene scene = new Scene(loader.load());
-                    scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
-                    AlertPopUpController popUpController = loader.getController();
-                    popUpController.setShowText(message);
-                    Stage popup = new Stage();
-                    popup.setTitle("Alert");
-                    popup.setResizable(false);
-                    popup.setScene(scene);
-                    popup.show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+    public void popUpAlert(String message) {
+        Platform.runLater(()->{
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Alert");
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
         });
 
     }
@@ -187,6 +169,7 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleLoginResponse(LoginResponse response) {
         if (response.getStatus() == 0) {
+            pushLastScene(scene.getRoot());
             FXMLLoader loader = fxmlLoader("MainScreen");
             Parent screen = null;
             try {
@@ -202,7 +185,7 @@ public class ClientApp extends Application {
                 scene.getWindow().centerOnScreen();
             });
         } else {
-            popupAlert("Login Failed, Please Try Again.");
+            popUpAlert("Login Failed, Please Try Again.");
         }
 
     }
@@ -210,15 +193,15 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleAllQuestionsResponse(AllQuestionsResponse response) {
         if (response.getStatus() != 0)
-            popupAlert("Failed To Fetch Question List, Please Try Again. " + getErrorMessage(response.getStatus()));
+            popUpAlert("Failed To Fetch Question List, Please Try Again. " + getErrorMessage(response.getStatus()));
     }
 
     @Subscribe
     public void handleEditQuestionResponse(EditQuestionResponse response) {
         if (response.getStatus() == 0) {
-            popupAlert("Edit Question Success");
+            popUpAlert("Edit Question Success");
         } else {
-            popupAlert("Edit Question Failed, Please Try Again." + getErrorMessage(response.getStatus()));
+            popUpAlert("Edit Question Failed, Please Try Again." + getErrorMessage(response.getStatus()));
         }
 
     }
@@ -226,20 +209,47 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleQuestionResponse(QuestionResponse response) {
         if (response.getStatus() == 0) {
+            pushLastScene(scene.getRoot());
             FXMLLoader loader = fxmlLoader("QuestionScreen");
             Parent screen = null;
             try {
                 screen = loader.load();
+                scene.setRoot(screen);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            QuestionController screenController = loader.getController();
-            scene.setRoot(screen);
+
         } else {
-            popupAlert("Failed To Fetch The Question, Please Try Again." + getErrorMessage(response.getStatus()));
+            popUpAlert("Failed To Fetch The Question, Please Try Again." + getErrorMessage(response.getStatus()));
         }
 
     }
 
+    @Subscribe
+    public void handleViewExamResponse(ViewExamResponse response){
+        if(response.getStatus()==0){
+            pushLastScene(scene.getRoot());
+            FXMLLoader loader = fxmlLoader("ViewExamScreen");
+            Parent screen = null;
+            try {
+                screen = loader.load();
+                scene.setRoot(screen);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            popUpAlert("Failed to Fetch Exam");
+        }
+    }
 
+    public static Parent popLastScene() {
+        if(!lastScenes.empty())
+            return lastScenes.pop();
+        return null;
+    }
+
+    public static void pushLastScene(Parent lastScene) {
+        lastScenes.push(lastScene);
+    }
 }

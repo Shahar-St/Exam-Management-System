@@ -28,6 +28,7 @@ public class AllQuestionsResponse extends DatabaseResponse {
         super(status, request);
         this.questionList = null;
     }
+
     public HashMap<String, Pair<LocalDateTime, String>> getQuestionList() {
         return questionList;
     }

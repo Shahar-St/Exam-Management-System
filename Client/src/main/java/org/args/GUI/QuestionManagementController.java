@@ -12,6 +12,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.args.Client.IQuestionManagementData;
 
@@ -19,7 +20,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-public class QuestionManagementScreenController{
+public class QuestionManagementController {
 
 
     @FXML // fx:id="coursesDropdown"
@@ -41,13 +42,10 @@ public class QuestionManagementScreenController{
     @FXML
     private Button addButton;
 
-    @FXML
-    private Button deleteButton;
 
     private IQuestionManagementData model;
 
-    public void setModel(IQuestionManagementData dataModel)
-    {
+    public void setModel(IQuestionManagementData dataModel) {
         if (model == null)
             this.model = dataModel;
     }
@@ -67,11 +65,12 @@ public class QuestionManagementScreenController{
             initializeCoursesDropdown();
             fillCoursesDropdown(model.getCurrentSubject());
             model.fillQuestionsList(model.getCurrentCourse());
+        } else {
+            fillSubjectsDropDown(model.getSubjects());
         }
     }
 
     private void bindButtonVisibility() {
-        deleteButton.visibleProperty().bind(model.isCourseSelected());
         addButton.visibleProperty().bind(model.isCourseSelected());
         questionDetailsButton.visibleProperty().bind(model.isCourseSelected());
 
@@ -129,24 +128,14 @@ public class QuestionManagementScreenController{
 
     @FXML
     void switchToQuestionEditScreen(ActionEvent event) throws IOException {
-        if(questionsList.getSelectionModel().getSelectedItem() != null)
-        {
-            int selectedItemIndex = model.getObservableQuestionsList().indexOf(questionsList.getSelectionModel().getSelectedItem());
-            model.setSelectedIndex(selectedItemIndex);
-            int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
-            String questionId = questionsList.getSelectionModel().getSelectedItem().substring(1, indexOfColon);
-            model.saveQuestionDetails(questionId);
-        }
+        viewSelectedQuestionDetails();
     }
 
-    @FXML
-    void deleteQuestion(ActionEvent event) {
-
-    }
 
     @FXML
     void switchToAddQuestionScreen(ActionEvent event) {
-        model.addQuestion();
+        model.prepareAddQuestion();
+        ClientApp.setRoot("QuestionScreen");
     }
 
 
@@ -157,12 +146,12 @@ public class QuestionManagementScreenController{
     }
 
     @FXML
-    void clearScreen()
-    {
+    void clearScreen() {
         subjectsDropdown.getItems().clear();
         coursesDropdown.getItems().clear();
         model.setCurrentSubject(null);
         model.clearQuestionsList();
+        model.setCourseSelected(false);
     }
 
     public void fillSubjectsDropDown(Set<String> subjects) {
@@ -171,4 +160,25 @@ public class QuestionManagementScreenController{
             addSubjectToSubjectDropdown(subject);
         }
     }
+
+
+    @FXML
+    void handleMouseEvent(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            viewSelectedQuestionDetails();
+        }
+
+
+    }
+
+    private void viewSelectedQuestionDetails() {
+        if (questionsList.getSelectionModel().getSelectedItem() != null) {
+            int selectedItemIndex = model.getObservableQuestionsList().indexOf(questionsList.getSelectionModel().getSelectedItem());
+            model.setSelectedIndex(selectedItemIndex);
+            int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
+            String questionId = questionsList.getSelectionModel().getSelectedItem().substring(1, indexOfColon);
+            model.saveQuestionDetails(questionId);
+        }
+    }
+
 }

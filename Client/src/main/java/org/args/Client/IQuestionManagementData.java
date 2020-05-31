@@ -28,9 +28,11 @@ public interface IQuestionManagementData {
 
     boolean dataWasAlreadyInitialized();
 
-    void addQuestion();
+    void prepareAddQuestion();
 
     BooleanProperty isCourseSelected();
+
+    void setCourseSelected(boolean courseSelected);
 
     //questions list data
 

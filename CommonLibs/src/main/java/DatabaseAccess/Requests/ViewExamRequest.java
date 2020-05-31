@@ -1,11 +1,9 @@
 package DatabaseAccess.Requests;
 
-import LightEntities.LightExam;
-
-public class DeleteExamRequest  extends DatabaseRequest {
+public class ViewExamRequest extends DatabaseRequest{
     private String examId;
 
-    public DeleteExamRequest(String examId) {
+    public ViewExamRequest(String examId) {
         this.examId = examId;
     }
 
