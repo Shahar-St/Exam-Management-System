@@ -66,7 +66,7 @@ public class AddExamController {
     @FXML
     void cancel(ActionEvent event) {
         model.cancelExamAddition();
-        ClientApp.setRoot("ExamManagementScreen");
+        ClientApp.backToLastScene();
     }
 
     @FXML
