@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-public class QuestionManagementScreenController {
+public class QuestionManagementController {
 
 
     @FXML // fx:id="coursesDropdown"

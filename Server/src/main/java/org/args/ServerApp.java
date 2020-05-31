@@ -59,7 +59,7 @@ public class ServerApp extends AbstractServer
         }else if(msg instanceof QuestionRequest){
             QuestionRequest request = (QuestionRequest)msg;
             try {
-                client.sendToClient(new QuestionResponse(0,request,new LightQuestion("shela1",Arrays.asList("ans1","ans2","ans3","ans4"),0,"Shimon Korman",LocalDateTime.now())));
+                client.sendToClient(new QuestionResponse(0,request,new LightQuestion("shela1",Arrays.asList("ans1","ans2","ans3","ans4"),0,"malki kaki",LocalDateTime.now())));
             } catch (IOException e) {
                 e.printStackTrace();
             }

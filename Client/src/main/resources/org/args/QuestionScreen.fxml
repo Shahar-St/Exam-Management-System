@@ -33,6 +33,7 @@
                   <Label text="Choose correct answer:" />
                   <ChoiceBox fx:id="correctAnswerChoice" disable="true" onMouseClicked="#choiceBoxClicked" prefWidth="150.0" />
                   <Button fx:id="CancelButton" mnemonicParsing="false" onAction="#CancelButtonClicked" text="Cancel" />
+                  <Button fx:id="DeleteButton" layoutX="240.0" layoutY="17.0" mnemonicParsing="false" onAction="#deleteButtonClicked" text="Delete" />
                   <Button fx:id="EditButton" mnemonicParsing="false" onAction="#EditButtonClicked" text="Edit" />
                </buttons>
                <VBox.margin>
