@@ -459,6 +459,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         }
     }
 
+    @Override
+    public void deployExam(String examId,String examCode) {
+
+    }
+
     public void generateExamDescriptors(HashMap<String, Pair<LocalDateTime, String>> examList) {
         for (Map.Entry<String, Pair<LocalDateTime, String>> exam : examList.entrySet()) {
             String examId = exam.getKey();
