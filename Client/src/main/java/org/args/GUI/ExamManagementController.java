@@ -8,6 +8,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.args.Client.IExamManagementData;
 
@@ -135,15 +136,7 @@ public class ExamManagementController {
 
     @FXML
     void switchToExamScreen(ActionEvent event) {
-        if (examListView.getSelectionModel().getSelectedItem() != null) {
-            String currentItem = examListView.getSelectionModel().getSelectedItem();
-            int selectedItemIndex = model.getObservableExamList().indexOf(examListView.getSelectionModel().getSelectedItem());
-            int indexOfColon = currentItem.indexOf(':');
-            String examId = currentItem.substring(1, indexOfColon);
-            model.saveExamDetails(examId);
-        }
-
-
+        viewSelectedExamDetails();
     }
 
     @FXML
@@ -169,6 +162,24 @@ public class ExamManagementController {
         model.setCourseSelected(false);
         model.clearExamList();
 
+    }
+
+
+    @FXML
+    void handleMouseEvent(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2)
+        {
+            viewSelectedExamDetails();
+        }
+    }
+
+    private void viewSelectedExamDetails() {
+        if (examListView.getSelectionModel().getSelectedItem() != null) {
+            String currentItem = examListView.getSelectionModel().getSelectedItem();
+            int indexOfColon = currentItem.indexOf(':');
+            String examId = currentItem.substring(1, indexOfColon);
+            model.saveExamDetails(examId);
+        }
     }
 
 }
