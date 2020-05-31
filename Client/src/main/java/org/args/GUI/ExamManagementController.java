@@ -38,6 +38,14 @@ public class ExamManagementController {
     @FXML
     private ListView<String> examListView;
 
+    @FXML
+    private Button executeButton;
+
+    @FXML
+    private Button editButton;
+
+
+
     private IExamManagementData model;
 
     public void setModel(IExamManagementData model) {
@@ -180,6 +188,17 @@ public class ExamManagementController {
             String examId = currentItem.substring(1, indexOfColon);
             model.saveExamDetails(examId);
         }
+    }
+
+
+    @FXML
+    void editExam(ActionEvent event) {
+
+    }
+
+    @FXML
+    void executeExam(ActionEvent event) {
+
     }
 
 }
