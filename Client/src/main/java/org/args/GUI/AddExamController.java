@@ -4,7 +4,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import org.args.Client.IAddExamData;
 
 public class AddExamController {
@@ -43,7 +46,7 @@ public class AddExamController {
     public void initialize()
     {
         setModel(ClientApp.getModel());
-        questionsListTitle.setText("Questions from course "+model.getCurrentCourse());
+        questionsListTitle.setText("Questions from "+model.getCurrentCourse() +" course");
         courseQuestionsListView.setItems(model.getObservableQuestionsList());
         examQuestionsListView.setItems(model.getObservableExamQuestionsList());
     }
@@ -60,7 +63,7 @@ public class AddExamController {
 
     @FXML
     void cancel(ActionEvent event) {
-        model.cancel();
+        model.cancelExamAddition();
         ClientApp.setRoot("ExamManagementScreen");
     }
 
@@ -77,6 +80,24 @@ public class AddExamController {
             String questionId = courseQuestionsListView.getSelectionModel().getSelectedItem().substring(1, indexOfColon);
             model.saveQuestionDetails(questionId);
         }
+    }
+
+    @FXML
+    void handleMouseEventCourseQuestionsList(MouseEvent event) {
+        if(!removeButton.isDisabled())
+            removeButton.setDisable(true);
+        if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2 &&
+                event.getTarget() instanceof ListCell)
+            model.addToExamQuestionsList(courseQuestionsListView.getSelectionModel().getSelectedItem());
+
+
+    }
+
+    @FXML
+    void handleMouseEventExamQuestionsList(MouseEvent event) {
+        if (removeButton.isDisabled())
+            removeButton.setDisable(false);
+
     }
 
 }

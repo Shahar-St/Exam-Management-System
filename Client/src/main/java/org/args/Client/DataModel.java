@@ -342,7 +342,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     @Override
-    public void cancel() {
+    public void cancelExamAddition() {
         observableQuestionsList.clear();
         observableExamQuestionsList.clear();
     }

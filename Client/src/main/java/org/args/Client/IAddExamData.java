@@ -7,7 +7,7 @@ public interface IAddExamData {
     void removeFromExamQuestionsList (String question);
     void showQuestionInfo(String questionId);
     void done();
-    void cancel();
+    void cancelExamAddition();
     ObservableList<String> getObservableQuestionsList();
     ObservableList<String> getObservableExamQuestionsList();
     void saveQuestionDetails(String questionId);
