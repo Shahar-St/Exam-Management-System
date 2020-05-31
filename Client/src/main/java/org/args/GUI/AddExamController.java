@@ -3,10 +3,14 @@ package org.args.GUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import org.args.Client.IAddExamData;
 
 public class AddExamController {
+
+    @FXML
+    private Label questionsListTitle;
 
     @FXML
     private ListView<String> courseQuestionsListView;
@@ -39,6 +43,7 @@ public class AddExamController {
     public void initialize()
     {
         setModel(ClientApp.getModel());
+        questionsListTitle.setText("Questions from course "+model.getCurrentCourse());
         courseQuestionsListView.setItems(model.getObservableQuestionsList());
         examQuestionsListView.setItems(model.getObservableExamQuestionsList());
     }

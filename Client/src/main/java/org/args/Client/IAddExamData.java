@@ -10,6 +10,8 @@ public interface IAddExamData {
     void cancel();
     ObservableList<String> getObservableQuestionsList();
     ObservableList<String> getObservableExamQuestionsList();
-    public void saveQuestionDetails(String questionId);
+    void saveQuestionDetails(String questionId);
+    String getCurrentCourse();
+
 
 }

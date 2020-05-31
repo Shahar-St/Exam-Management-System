@@ -129,7 +129,8 @@ public class ExamManagementController {
 
     @FXML
     void switchToAddExamScreen(ActionEvent event) {
-
+        model.fillQuestionsList(model.getCurrentCourse());
+        ClientApp.setRoot("AddExamScreen");
     }
 
     @FXML

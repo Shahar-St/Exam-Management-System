@@ -141,8 +141,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         }
     }
 
-    public void fillQuestionsList(String text) {
-        ClientApp.sendRequest(new AllQuestionsRequest(text));
+    public void fillQuestionsList(String courseName) {
+        ClientApp.sendRequest(new AllQuestionsRequest(courseName));
     }
 
     public void saveQuestionDetails(String questionId) {
