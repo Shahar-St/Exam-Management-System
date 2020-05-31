@@ -108,6 +108,9 @@ public class ViewExamController {
             description.setEditable(false);
             privateNotes.setEditable(false);
             duration.setEditable(false);
+            lastModified.setEditable(false);
+            author.setEditable(false);
+            content.setEditable(false);
             answer1.setEditable(false);
             answer2.setEditable(false);
             answer3.setEditable(false);
