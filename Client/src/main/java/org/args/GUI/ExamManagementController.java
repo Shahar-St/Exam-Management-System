@@ -165,7 +165,9 @@ public class ExamManagementController {
         subjectsDropdown.getItems().clear();
         coursesDropdown.getItems().clear();
         model.setCurrentSubject(null);
+        model.setCourseSelected(false);
         model.clearExamList();
+
     }
 
 }

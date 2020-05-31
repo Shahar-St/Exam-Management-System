@@ -167,6 +167,7 @@ public class QuestionManagementScreenController {
         coursesDropdown.getItems().clear();
         model.setCurrentSubject(null);
         model.clearQuestionsList();
+        model.setCourseSelected(false);
     }
 
     public void fillSubjectsDropDown(Set<String> subjects) {

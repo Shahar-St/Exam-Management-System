@@ -94,10 +94,9 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return courseSelected;
     }
 
-    public BooleanProperty courseSelectedProperty() {
-        return courseSelected;
+    public void setCourseSelected(boolean courseSelected) {
+        this.courseSelected.set(courseSelected);
     }
-
 
     public List<String> getCoursesOfSubject(String subject) {
         return subjectsAndCourses.get(subject);

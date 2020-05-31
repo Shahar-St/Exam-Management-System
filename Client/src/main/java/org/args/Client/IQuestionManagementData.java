@@ -32,6 +32,8 @@ public interface IQuestionManagementData {
 
     BooleanProperty isCourseSelected();
 
+    void setCourseSelected(boolean courseSelected);
+
     //questions list data
 
 
