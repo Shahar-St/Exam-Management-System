@@ -149,7 +149,7 @@ public class ExamManagementController {
     @FXML
     void switchToMainScreen(MouseEvent event) {
         clearScreen();
-        ClientApp.setRoot("MainScreen");
+        ClientApp.backToLastScene();
 
     }
 

@@ -43,7 +43,7 @@ public class ViewExamController {
 
     @FXML
     void onBackClick(MouseEvent event) {
-        ClientApp.setRoot("ExamManagementScreen");
+        ClientApp.backToLastScene();
 
     }
 
