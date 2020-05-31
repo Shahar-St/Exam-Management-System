@@ -41,8 +41,6 @@ public class QuestionManagementController {
     @FXML
     private Button addButton;
 
-    @FXML
-    private Button deleteButton;
 
     private IQuestionManagementData model;
 
@@ -75,7 +73,6 @@ public class QuestionManagementController {
     }
 
     private void bindButtonVisibility() {
-        deleteButton.visibleProperty().bind(model.isCourseSelected());
         addButton.visibleProperty().bind(model.isCourseSelected());
         questionDetailsButton.visibleProperty().bind(model.isCourseSelected());
 
@@ -143,10 +140,6 @@ public class QuestionManagementController {
         }
     }
 
-    @FXML
-    void deleteQuestion(ActionEvent event) {
-
-    }
 
     @FXML
     void switchToAddQuestionScreen(ActionEvent event) {
