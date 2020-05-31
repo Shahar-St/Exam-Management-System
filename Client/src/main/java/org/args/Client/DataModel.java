@@ -85,9 +85,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         subjectsAndCourses = mapFromResponse;
     }
 
-    public void addQuestion() {
+    public void prepareAddQuestion() {
         setCreating(true);
-        ClientApp.setRoot("QuestionScreen");
     }
 
     public BooleanProperty isCourseSelected() {
@@ -489,10 +488,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
             ClientApp.sendRequest(new DeleteExamRequest(examId));
     }
 
-    @Override
-    public void addExam() {
-        ClientApp.setRoot("ViewExamScreen");
-    }
 
     @Override
     public void clearExamList() {

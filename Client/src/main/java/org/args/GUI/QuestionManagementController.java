@@ -143,7 +143,8 @@ public class QuestionManagementController {
 
     @FXML
     void switchToAddQuestionScreen(ActionEvent event) {
-        model.addQuestion();
+        model.prepareAddQuestion();
+        ClientApp.setRoot("QuestionScreen");
     }
 
 

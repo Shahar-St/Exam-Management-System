@@ -9,7 +9,6 @@ import java.util.Set;
 public interface IExamManagementData {
     List getExams(String courseName);
     void deleteExam(String examId);
-    void addExam();
     Set<String> getSubjects();
     List getCourses(String subjectName);
     void viewExam(String examId);
