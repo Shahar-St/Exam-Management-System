@@ -57,6 +57,8 @@ public class ExamManagementController {
         deleteButton.visibleProperty().bind(model.isCourseSelected());
         addButton.visibleProperty().bind(model.isCourseSelected());
         detailsButton.visibleProperty().bind(model.isCourseSelected());
+        executeButton.visibleProperty().bind(model.isCourseSelected());
+        editButton.visibleProperty().bind(model.isCourseSelected());
     }
 
     @FXML
