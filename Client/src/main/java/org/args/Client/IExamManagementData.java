@@ -25,4 +25,5 @@ public interface IExamManagementData {
     void saveExamDetails(String examId);
     void clearExamList();
     void fillQuestionsList(String courseName);
+    void deployExam(String examId,String examCode);
 }
