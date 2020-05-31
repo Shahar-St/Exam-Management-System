@@ -168,7 +168,7 @@ public class QuestionController {
     void CancelButtonClicked(ActionEvent event) {
         if(model.isCreating())
             model.setCreating(false);
-        ClientApp.setRoot("QuestionManagementScreen");
+        ClientApp.backToLastScene();
     }
 
     @FXML
