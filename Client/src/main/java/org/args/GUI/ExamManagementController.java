@@ -141,6 +141,7 @@ public class ExamManagementController {
 
     @FXML
     void switchToExamScreen(ActionEvent event) {
+        model.setViewMode("VIEW");
         viewSelectedExamDetails();
     }
 
@@ -194,7 +195,8 @@ public class ExamManagementController {
 
     @FXML
     void editExam(ActionEvent event) {
-
+        model.setViewMode("EDIT");
+        viewSelectedExamDetails();
     }
 
     @FXML

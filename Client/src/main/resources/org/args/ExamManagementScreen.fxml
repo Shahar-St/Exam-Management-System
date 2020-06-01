@@ -45,7 +45,7 @@
                                 <MenuButton fx:id="coursesDropdown" disable="true" mnemonicParsing="false" styleClass="primary" text="Courses" />
                             </children>
                         </HBox>
-                        <HBox alignment="TOP_CENTER" prefHeight="49.0" prefWidth="1258.0" spacing="30.0">
+                        <HBox alignment="TOP_CENTER" prefHeight="76.0" prefWidth="1258.0" spacing="30.0">
                             <children>
                                 <Button fx:id="detailsButton" mnemonicParsing="false" onAction="#switchToExamScreen" prefHeight="77.0" prefWidth="192.0" styleClass="info" text="Show Details" />
                         <Button fx:id="editButton" mnemonicParsing="false" onAction="#editExam" prefHeight="77.0" prefWidth="192.0" styleClass="info" text="Edit" />

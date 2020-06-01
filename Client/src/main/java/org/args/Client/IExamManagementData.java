@@ -26,4 +26,6 @@ public interface IExamManagementData {
     void clearExamList();
     void fillQuestionsList(String courseName);
     void deployExam(String examId,String examCode);
+    String getViewMode();
+    void setViewMode(String viewMode);
 }

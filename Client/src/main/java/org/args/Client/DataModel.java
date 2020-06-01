@@ -289,6 +289,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Subscribe
     public void handleQuestionResponse(QuestionResponse response) {
+
         if (response.getStatus() == 0) {
             setQuestionId(((QuestionRequest) response.getRequest()).getQuestionID());
             setLastModified(response.getLastModified().toString());
@@ -304,20 +305,33 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Subscribe
     public void handleViewExamResponse(ViewExamResponse response) {
-        currentExam = response.getLightExam();
+        if(viewMode.equals("VIEW"))
+            currentExam = response.getLightExam();
+        else if (viewMode.equals("EDIT"))
+            startExamEdit(response.getLightExam());
     }
 
-    public void startExamEdit()
+    public void startExamEdit(LightExam exam)
     {
-//        LightExam exam = response.getLightExam();
-//        setCurrentExamTitle(exam.getTitle());
-//        setCurrentExamStudentNotes(exam.getStudentNotes());
-//        setCurrentExamTeacherNotes(exam.getTeacherNotes());
-//        setCurrentExamDuration(Integer.toString(exam.getDurationInMinutes()));
-//        observableExamQuestionsList.clear();
-//        for (LightQuestion question : exam.getLightQuestionList())
-//            observableExamQuestionsList.add(question.toString());
-//        //add support for grades list
+        setCurrentExamTitle(exam.getTitle());
+        setCurrentExamStudentNotes(exam.getStudentNotes());
+        setCurrentExamTeacherNotes(exam.getTeacherNotes());
+        setCurrentExamDuration(Integer.toString(exam.getDurationInMinutes()));
+        observableExamQuestionsList.clear();
+        for (LightQuestion question : exam.getLightQuestionList())
+            observableExamQuestionsList.add(question.toString());
+        //add support for grades list
+    }
+
+    String viewMode;
+
+    @Override
+    public String getViewMode() {
+        return viewMode;
+    }
+
+    public void setViewMode(String viewMode) {
+        this.viewMode = viewMode;
     }
 
     private final ObservableList<String> observableExamQuestionsList = FXCollections.observableArrayList();

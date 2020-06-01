@@ -175,6 +175,7 @@ public class ClientApp extends Application {
         if (response.getStatus() == 0) {
             pushLastScene(scene.getRoot());
             FXMLLoader loader = fxmlLoader("MainScreen");
+
             Parent screen = null;
             try {
                 screen = loader.load();
@@ -233,7 +234,7 @@ public class ClientApp extends Application {
     public void handleViewExamResponse(ViewExamResponse response){
         if(response.getStatus()==0){
             pushLastScene(scene.getRoot());
-            FXMLLoader loader = fxmlLoader("AddExamDetailsScreen");
+            FXMLLoader loader = model.getViewMode().equals("EDIT") ? fxmlLoader("AddExamDetailsScreen") : fxmlLoader("ViewExamScreen");
             Parent screen = null;
             try {
                 screen = loader.load();
