@@ -33,5 +33,11 @@ public interface IAddExamData {
 
     public void setCurrentExamStudentNotes(String currentExamStudentNotes);
 
+    double calcQuestionsScoringListValue();
+
+    void initQuestionsScoringList();
+
+    ObservableList<String> getObservableQuestionsScoringList();
+
 
 }

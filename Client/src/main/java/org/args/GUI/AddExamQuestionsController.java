@@ -60,6 +60,7 @@ public class AddExamQuestionsController {
 
     @FXML
     void allQuestionsAdded(ActionEvent event) {
+        ClientApp.setRoot("ExamScoringScreen");
 
     }
 

@@ -307,9 +307,28 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     //Add Exam data
 
     private final ObservableList<String> observableExamQuestionsList = FXCollections.observableArrayList();
+    private final ObservableList<String> observableQuestionsScoringList = FXCollections.observableArrayList();
     private String currentExamTitle;
     private String currentExamTeacherNotes;
     private String currentExamStudentNotes;
+
+    public ObservableList<String> getObservableQuestionsScoringList() {
+        return observableQuestionsScoringList;
+    }
+
+    public void initQuestionsScoringList(){
+        for(String str:observableExamQuestionsList){
+            observableQuestionsScoringList.add("0");
+        }
+    }
+
+    public double calcQuestionsScoringListValue(){
+        double sum = 0;
+        for(String str:observableExamQuestionsList){
+            sum+= Double.parseDouble(str);
+        }
+        return sum;
+    }
 
     public String getCurrentExamTitle() {
         return currentExamTitle;
