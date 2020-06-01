@@ -1,5 +1,7 @@
 package org.args.Client;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
 public interface IAddExamData {
@@ -21,17 +23,29 @@ public interface IAddExamData {
 
     String getCurrentCourse();
 
-    public String getCurrentExamTitle();
+    String getCurrentExamTitle();
 
-    public void setCurrentExamTitle(String currentExamTitle);
+    StringProperty currentExamTitleProperty();
 
-    public String getCurrentExamTeacherNotes();
+    String getCurrentExamDuration();
 
-    public void setCurrentExamTeacherNotes(String currentExamTeacherNotes);
+    StringProperty currentExamDurationProperty();
 
-    public String getCurrentExamStudentNotes();
+    String getCurrentExamTeacherNotes();
 
-    public void setCurrentExamStudentNotes(String currentExamStudentNotes);
+    StringProperty currentExamTeacherNotesProperty();
+
+    String getCurrentExamStudentNotes();
+
+    StringProperty currentExamStudentNotesProperty();
+
+    void setCurrentExamTitle(String currentExamTitle);
+
+    void setCurrentExamTeacherNotes(String currentExamTeacherNotes);
+
+    void setCurrentExamStudentNotes(String currentExamStudentNotes);
+
+    void setCurrentExamDuration(String duration);
 
     double calcQuestionsScoringListValue();
 

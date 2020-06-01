@@ -14,6 +14,9 @@ public class AddExamDetailsController {
     private TextField titleTextField;
 
     @FXML
+    private TextField durationText;
+
+    @FXML
     private TextArea studentNoteText;
 
     @FXML
@@ -35,6 +38,15 @@ public class AddExamDetailsController {
     public void initialize()
     {
         setModel(ClientApp.getModel());
+        bindTextFields();
+    }
+
+
+    private void bindTextFields() {
+            titleTextField.textProperty().bindBidirectional(model.currentExamTitleProperty());
+            studentNoteText.textProperty().bindBidirectional(model.currentExamStudentNotesProperty());
+            teacherNoteText.textProperty().bindBidirectional(model.currentExamTeacherNotesProperty());
+            durationText.textProperty().bindBidirectional(model.currentExamDurationProperty());
     }
 
     @FXML
@@ -44,20 +56,31 @@ public class AddExamDetailsController {
 
     @FXML
     void verifyAndProceed(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Error");
         if (titleTextField.getText().isEmpty())
         {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error");
             alert.setContentText("Title field can't be empty!");
+            alert.showAndWait();
+        }
+        else if (!isNumeric(durationText.getText()))
+        {
+            alert.setContentText("Duration field must contain a number!");
             alert.showAndWait();
         }
         else
         {
-            model.setCurrentExamTitle(titleTextField.getText());
-            model.setCurrentExamStudentNotes(studentNoteText.getText());
-            model.setCurrentExamTeacherNotes(teacherNoteText.getText());
             ClientApp.setRoot("AddExamQuestionsScreen");
+        }
+    }
+
+    private boolean isNumeric(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
         }
     }
 }

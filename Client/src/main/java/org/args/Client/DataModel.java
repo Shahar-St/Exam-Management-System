@@ -17,8 +17,7 @@ import LightEntities.LightExam;
 import LightEntities.LightQuestion;
 import Util.Pair;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -183,8 +182,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     }
 
-
-
     public ObservableList<String> getObservableQuestionsList() {
         return observableQuestionsList;
     }
@@ -285,7 +282,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     public void saveQuestion(String questionId, String answer_1, String answer_2, String answer_3, String answer_4, String newContent) {
 
-
         EditQuestionRequest request = new EditQuestionRequest(questionId,newContent, Arrays.asList(answer_1, answer_2, answer_3,answer_4), correctAnswer);
         ClientApp.sendRequest(request);
     }
@@ -306,11 +302,30 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     //Add Exam data
 
+    @Subscribe
+    public void handleViewExamResponse(ViewExamResponse response) {
+        currentExam = response.getLightExam();
+    }
+
+    public void startExamEdit()
+    {
+//        LightExam exam = response.getLightExam();
+//        setCurrentExamTitle(exam.getTitle());
+//        setCurrentExamStudentNotes(exam.getStudentNotes());
+//        setCurrentExamTeacherNotes(exam.getTeacherNotes());
+//        setCurrentExamDuration(Integer.toString(exam.getDurationInMinutes()));
+//        observableExamQuestionsList.clear();
+//        for (LightQuestion question : exam.getLightQuestionList())
+//            observableExamQuestionsList.add(question.toString());
+//        //add support for grades list
+    }
+
     private final ObservableList<String> observableExamQuestionsList = FXCollections.observableArrayList();
     private final ObservableList<String> observableQuestionsScoringList = FXCollections.observableArrayList();
-    private String currentExamTitle;
-    private String currentExamTeacherNotes;
-    private String currentExamStudentNotes;
+    private final StringProperty currentExamTitle = new SimpleStringProperty();
+    private final StringProperty currentExamTeacherNotes = new SimpleStringProperty();
+    private final StringProperty currentExamStudentNotes = new SimpleStringProperty();
+    private final StringProperty currentExamDuration = new SimpleStringProperty();
 
     public ObservableList<String> getObservableQuestionsScoringList() {
         return observableQuestionsScoringList;
@@ -330,28 +345,57 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return sum;
     }
 
+    @Override
     public String getCurrentExamTitle() {
+        return currentExamTitle.get();
+    }
+
+    public StringProperty currentExamTitleProperty() {
         return currentExamTitle;
     }
 
-    public void setCurrentExamTitle(String currentExamTitle) {
-        this.currentExamTitle = currentExamTitle;
+    @Override
+    public String getCurrentExamTeacherNotes() {
+        return currentExamTeacherNotes.get();
     }
 
-    public String getCurrentExamTeacherNotes() {
+    public StringProperty currentExamTeacherNotesProperty() {
         return currentExamTeacherNotes;
     }
 
-    public void setCurrentExamTeacherNotes(String currentExamTeacherNotes) {
-        this.currentExamTeacherNotes = currentExamTeacherNotes;
-    }
 
     public String getCurrentExamStudentNotes() {
+        return currentExamStudentNotes.get();
+    }
+
+    public StringProperty currentExamStudentNotesProperty() {
         return currentExamStudentNotes;
     }
 
+    public void setCurrentExamTitle(String currentExamTitle) {
+        this.currentExamTitle.set(currentExamTitle);
+    }
+
+    public void setCurrentExamTeacherNotes(String currentExamTeacherNotes) {
+        this.currentExamTeacherNotes.set(currentExamTeacherNotes);
+    }
+
     public void setCurrentExamStudentNotes(String currentExamStudentNotes) {
-        this.currentExamStudentNotes = currentExamStudentNotes;
+        this.currentExamStudentNotes.set(currentExamStudentNotes);
+    }
+
+    @Override
+    public String getCurrentExamDuration() {
+        return currentExamDuration.get();
+    }
+
+    @Override
+    public StringProperty currentExamDurationProperty() {
+        return currentExamDuration;
+    }
+
+    public void setCurrentExamDuration(String currentExamDuration) {
+        this.currentExamDuration.set(currentExamDuration);
     }
 
     @Override
@@ -456,11 +500,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     public String getCurrentExamDescription(){
-        return currentExam.getDescription();
+        return currentExam.getTitle();
     }
 
     public String getCurrentExamTeacherPrivateNotes(){
-        return currentExam.getTeacherPrivateNotes();
+        return currentExam.getTeacherNotes();
     }
 
     public int getCurrentExamDurationOnMinutes(){
@@ -475,10 +519,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.sendRequest(new ViewExamRequest("1111"));
     }
 
-    @Subscribe
-    public void handleViewExamResponse(ViewExamResponse response) {
-        currentExam = response.getLightExam();
-    }
+
 
 
     //TODO: implement IStudentViewStatsData methods

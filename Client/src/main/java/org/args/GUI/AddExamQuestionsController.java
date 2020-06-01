@@ -101,8 +101,6 @@ public class AddExamQuestionsController {
                 model.addToExamQuestionsList(selectedItem);
 
         }
-
-
     }
 
     @FXML
@@ -118,5 +116,4 @@ public class AddExamQuestionsController {
             model.removeFromExamQuestionsList(examQuestionsListView.getSelectionModel().getSelectedItem());
 
     }
-
 }

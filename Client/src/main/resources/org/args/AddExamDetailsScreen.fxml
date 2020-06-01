@@ -27,6 +27,19 @@
             <TextField fx:id="titleTextField" prefWidth="272.0" />
          </children>
       </HBox>
+      <HBox alignment="CENTER" prefHeight="57.0" prefWidth="802.0">
+         <children>
+            <Label text="Duration: ">
+               <font>
+                  <Font name="Calibri" size="24.0" />
+               </font>
+            </Label>
+            <TextField fx:id="durationText" />
+         </children>
+         <VBox.margin>
+            <Insets right="100.0" />
+         </VBox.margin>
+      </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
          <children>
             <Label text="Notes for students:">

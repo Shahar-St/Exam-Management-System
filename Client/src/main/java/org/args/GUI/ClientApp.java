@@ -233,7 +233,7 @@ public class ClientApp extends Application {
     public void handleViewExamResponse(ViewExamResponse response){
         if(response.getStatus()==0){
             pushLastScene(scene.getRoot());
-            FXMLLoader loader = fxmlLoader("ViewExamScreen");
+            FXMLLoader loader = fxmlLoader("AddExamDetailsScreen");
             Parent screen = null;
             try {
                 screen = loader.load();
