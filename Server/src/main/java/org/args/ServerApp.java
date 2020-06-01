@@ -1,9 +1,20 @@
 package org.args;
 
 
+import DatabaseAccess.Requests.Exams.AllExamsRequest;
+import DatabaseAccess.Requests.Exams.ViewExamRequest;
+import DatabaseAccess.Requests.Questions.AllQuestionsRequest;
+import DatabaseAccess.Requests.Questions.EditQuestionRequest;
+import DatabaseAccess.Requests.Questions.QuestionRequest;
+import DatabaseAccess.Responses.Exams.AllExamsResponse;
+import DatabaseAccess.Responses.Exams.ViewExamResponse;
+import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
+import DatabaseAccess.Responses.Questions.EditQuestionResponse;
+import DatabaseAccess.Responses.Questions.QuestionResponse;
+import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
 import LightEntities.LightExam;
 import LightEntities.LightQuestion;
-import LightEntities.LightUser;
+import Util.Pair;
 import org.args.server.AbstractServer;
 import org.args.server.ConnectionToClient;
 import DatabaseAccess.Requests.*;
@@ -51,7 +62,7 @@ public class ServerApp extends AbstractServer
         if(msg instanceof LoginRequest){
             LoginRequest request = (LoginRequest)msg;
             try {
-                client.sendToClient(new LoginResponse(0,request,new LightUser("1111","Shimon Korman","Teacher")));
+                client.sendToClient(new LoginResponse(0,request,"1111","malki","Teacher"));
             }catch (IOException e){
                 e.printStackTrace();
             }
@@ -59,7 +70,7 @@ public class ServerApp extends AbstractServer
         }else if(msg instanceof QuestionRequest){
             QuestionRequest request = (QuestionRequest)msg;
             try {
-                client.sendToClient(new QuestionResponse(0,request,new LightQuestion("shela1",Arrays.asList("ans1","ans2","ans3","ans4"),0,"malki kaki",LocalDateTime.now())));
+                client.sendToClient(new QuestionResponse(0,request,"exampleQuestion",Arrays.asList("ans1","ans2","ans3","ans4"),0,"shimon",LocalDateTime.now()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -85,7 +96,7 @@ public class ServerApp extends AbstractServer
 
         }else if(msg instanceof AllQuestionsRequest){
             AllQuestionsRequest request = (AllQuestionsRequest)msg;
-            HashMap<String,Pair<LocalDateTime, String>> response = new HashMap<String,Pair<LocalDateTime,String>>();
+            HashMap<String, Pair<LocalDateTime, String>> response = new HashMap<String,Pair<LocalDateTime,String>>();
             response.put("1",new Pair<>(LocalDateTime.now(),"Shela " + counter++));
             response.put("2",new Pair<>(LocalDateTime.now(),"Shela " + counter++));
             response.put("3",new Pair<>(LocalDateTime.now(),"Shela " + counter++));

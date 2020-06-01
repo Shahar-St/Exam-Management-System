@@ -1,8 +1,7 @@
 package org.args.Client;
 
-import DatabaseAccess.Responses.Pair;
+import Util.Pair;
 import javafx.beans.property.BooleanProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDateTime;

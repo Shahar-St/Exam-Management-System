@@ -2,6 +2,10 @@ package org.args.GUI;
 
 
 import DatabaseAccess.Responses.*;
+import DatabaseAccess.Responses.Exams.ViewExamResponse;
+import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
+import DatabaseAccess.Responses.Questions.EditQuestionResponse;
+import DatabaseAccess.Responses.Questions.QuestionResponse;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;

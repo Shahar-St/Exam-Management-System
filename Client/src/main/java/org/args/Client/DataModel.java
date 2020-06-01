@@ -1,9 +1,21 @@
 package org.args.Client;
 
 import DatabaseAccess.Requests.*;
+import DatabaseAccess.Requests.Exams.AllExamsRequest;
+import DatabaseAccess.Requests.Exams.DeleteExamRequest;
+import DatabaseAccess.Requests.Exams.ViewExamRequest;
+import DatabaseAccess.Requests.Questions.AllQuestionsRequest;
+import DatabaseAccess.Requests.Questions.EditQuestionRequest;
+import DatabaseAccess.Requests.Questions.QuestionRequest;
 import DatabaseAccess.Responses.*;
+import DatabaseAccess.Responses.Exams.AllExamsResponse;
+import DatabaseAccess.Responses.Exams.ViewExamResponse;
+import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
+import DatabaseAccess.Responses.Questions.QuestionResponse;
+import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
 import LightEntities.LightExam;
 import LightEntities.LightQuestion;
+import Util.Pair;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -34,8 +46,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Subscribe
     public void handleLoginResponse(LoginResponse response) {
         if (response.getStatus() == 0) {
-            setName(response.getLightUser().getName());
-            permission = response.getLightUser().getPermission();
+            setName(response.getName());
+            permission = response.getPermission();
         }
 
     }
@@ -273,9 +285,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     public void saveQuestion(String questionId, String answer_1, String answer_2, String answer_3, String answer_4, String newContent) {
 
-        LightQuestion question = new LightQuestion(newContent, Arrays.asList(answer_1, answer_2, answer_3,
-                answer_4), correctAnswer, getName(), LocalDateTime.now());
-        EditQuestionRequest request = new EditQuestionRequest(question);
+
+        EditQuestionRequest request = new EditQuestionRequest(questionId,newContent, Arrays.asList(answer_1, answer_2, answer_3,answer_4), correctAnswer);
         ClientApp.sendRequest(request);
     }
 
@@ -284,11 +295,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void handleQuestionResponse(QuestionResponse response) {
         if (response.getStatus() == 0) {
             setQuestionId(((QuestionRequest) response.getRequest()).getQuestionID());
-            setLastModified(response.getQuestion().getLastModified().toString());
-            setAuthor(response.getQuestion().getAuthor());
-            setContent(response.getQuestion().getQuestionContent());
-            setAnswers(response.getQuestion().getAnswers());
-            setCorrectAnswer(response.getQuestion().getCorrectAnswer());
+            setLastModified(response.getLastModified().toString());
+            setAuthor(response.getAuthor());
+            setContent(response.getQuestionContent());
+            setAnswers(response.getAnswers());
+            setCorrectAnswer(response.getCorrectAnswer());
         }
 
     }

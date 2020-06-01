@@ -1,6 +1,7 @@
 package DatabaseAccess.Responses;
 
 import DatabaseAccess.Requests.DatabaseRequest;
+import DatabaseAccess.Responses.DatabaseResponse;
 
 import java.util.HashMap;
 import java.util.List;

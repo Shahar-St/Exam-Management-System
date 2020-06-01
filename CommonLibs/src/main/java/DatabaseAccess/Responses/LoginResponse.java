@@ -1,7 +1,6 @@
 package DatabaseAccess.Responses;
 
 import DatabaseAccess.Requests.DatabaseRequest;
-import LightEntities.LightUser;
 
 /**
  * Request: asks to login a user
@@ -16,18 +15,26 @@ import LightEntities.LightUser;
  */
 public class LoginResponse extends DatabaseResponse {
 
-    private LightUser lightUser;
+    private final String id;
+    private final String name;
+    private final String permission;
 
-    public LoginResponse(int status, DatabaseRequest request, LightUser lightUser) {
+    public LoginResponse(int status, DatabaseRequest request, String id, String name, String permission) {
         super(status, request);
-        this.lightUser = lightUser;
+        this.id = id;
+        this.name = name;
+        this.permission = permission;
     }
 
-    public LightUser getLightUser() {
-        return lightUser;
+    public String getId() {
+        return id;
     }
 
-    public void setLightUser(LightUser lightUser) {
-        this.lightUser = lightUser;
+    public String getName() {
+        return name;
+    }
+
+    public String getPermission() {
+        return permission;
     }
 }
