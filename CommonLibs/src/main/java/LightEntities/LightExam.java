@@ -9,20 +9,22 @@ public class LightExam implements Serializable {
     private List<LightQuestion> lightQuestionList;
     private List<Double> questionsScores;
     private int durationInMinutes;
-    private String description;
-    private String teacherPrivateNotes;
+    private String title;
+    private String teacherNotes;
+    private String studentNotes;
 
     public LightExam() {
     }
 
-    public LightExam(String id, String author, List<LightQuestion> lightQuestionList, List<Double> questionsScores, int durationInMinutes, String description, String teacherPrivateNotes) {
+    public LightExam(String id, String author, List<LightQuestion> lightQuestionList, List<Double> questionsScores, int durationInMinutes, String title, String teacherPrivateNotes, String studentNotes) {
         this.id = id;
         this.author = author;
         this.lightQuestionList = lightQuestionList;
         this.questionsScores = questionsScores;
         this.durationInMinutes = durationInMinutes;
-        this.description = description;
-        this.teacherPrivateNotes = teacherPrivateNotes;
+        this.title = title;
+        this.teacherNotes = teacherPrivateNotes;
+        this.studentNotes = studentNotes;
     }
 
     public String getId() {
@@ -65,19 +67,27 @@ public class LightExam implements Serializable {
         this.durationInMinutes = durationInMinutes;
     }
 
-    public String getDescription() {
-        return description;
+    public String getTitle() {
+        return title;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getTeacherPrivateNotes() {
-        return teacherPrivateNotes;
+    public String getTeacherNotes() {
+        return teacherNotes;
     }
 
-    public void setTeacherPrivateNotes(String teacherPrivateNotes) {
-        this.teacherPrivateNotes = teacherPrivateNotes;
+    public void setTeacherNotes(String teacherNotes) {
+        this.teacherNotes = teacherNotes;
+    }
+
+    public String getStudentNotes() {
+        return studentNotes;
+    }
+
+    public void setStudentNotes(String studentNotes) {
+        this.studentNotes = studentNotes;
     }
 }
