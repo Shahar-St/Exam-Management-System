@@ -57,6 +57,9 @@ public class QuestionController {
     @FXML
     private Button EditButton;
 
+    @FXML
+    private Button DeleteButton;
+
 
     @FXML
     private void initialize() {
@@ -98,6 +101,11 @@ public class QuestionController {
                 default:
                     System.out.println("Undefined correct answer");
                     break;
+            }
+            // if the current logged user is not the author of the question disable edit and delete buttons
+            if(!model.getName().equals(model.getAuthor())){
+                EditButton.setDisable(true);
+                DeleteButton.setDisable(true);
             }
 
         }else{
@@ -158,7 +166,14 @@ public class QuestionController {
 
     @FXML
     void CancelButtonClicked(ActionEvent event) {
-        ClientApp.setRoot("QuestionManagementScreen");
+        if(model.isCreating())
+            model.setCreating(false);
+        ClientApp.backToLastScene();
+    }
+
+    @FXML
+    void deleteButtonClicked(ActionEvent event) {
+
     }
 
     @FXML

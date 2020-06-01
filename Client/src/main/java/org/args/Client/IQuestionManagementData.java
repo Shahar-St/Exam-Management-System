@@ -1,8 +1,7 @@
 package org.args.Client;
 
-import DatabaseAccess.Responses.Pair;
+import Util.Pair;
 import javafx.beans.property.BooleanProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDateTime;
@@ -28,9 +27,11 @@ public interface IQuestionManagementData {
 
     boolean dataWasAlreadyInitialized();
 
-    void addQuestion();
+    void prepareAddQuestion();
 
     BooleanProperty isCourseSelected();
+
+    void setCourseSelected(boolean courseSelected);
 
     //questions list data
 
