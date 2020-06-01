@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox alignment="CENTER" prefHeight="600.0" prefWidth="961.0" spacing="100.0" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.AddExamController">
+<HBox alignment="CENTER" prefHeight="600.0" prefWidth="961.0" spacing="100.0" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.AddExamQuestionsController">
    <children>
       <Pane prefHeight="600.0" prefWidth="408.0">
          <children>

@@ -307,6 +307,33 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     //Add Exam data
 
     private final ObservableList<String> observableExamQuestionsList = FXCollections.observableArrayList();
+    private String currentExamTitle;
+    private String currentExamTeacherNotes;
+    private String currentExamStudentNotes;
+
+    public String getCurrentExamTitle() {
+        return currentExamTitle;
+    }
+
+    public void setCurrentExamTitle(String currentExamTitle) {
+        this.currentExamTitle = currentExamTitle;
+    }
+
+    public String getCurrentExamTeacherNotes() {
+        return currentExamTeacherNotes;
+    }
+
+    public void setCurrentExamTeacherNotes(String currentExamTeacherNotes) {
+        this.currentExamTeacherNotes = currentExamTeacherNotes;
+    }
+
+    public String getCurrentExamStudentNotes() {
+        return currentExamStudentNotes;
+    }
+
+    public void setCurrentExamStudentNotes(String currentExamStudentNotes) {
+        this.currentExamStudentNotes = currentExamStudentNotes;
+    }
 
     @Override
     public void addToExamQuestionsList(String question) {
@@ -338,6 +365,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void saveExamDetails(String examId) {
         ClientApp.sendRequest(new ViewExamRequest(examId));
     }
+
+
 
 
 
