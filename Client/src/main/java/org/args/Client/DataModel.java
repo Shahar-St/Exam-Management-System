@@ -350,6 +350,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void startExamEdit()
     {
         setViewMode("EDIT");
+        if (observableQuestionsList.isEmpty())
+            fillQuestionsList(currentCourse);
         setCurrentExamTitle(currentExam.getTitle());
         setCurrentExamStudentNotes(currentExam.getStudentNotes());
         setCurrentExamTeacherNotes(currentExam.getTeacherNotes());
@@ -511,6 +513,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         currentExamTitle.setValue("");
         currentExamStudentNotes.setValue("");
         currentExamTeacherNotes.setValue("");
+        cancelExamAddition();
     }
 
     @Override

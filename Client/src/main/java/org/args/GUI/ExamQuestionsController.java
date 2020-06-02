@@ -65,7 +65,6 @@ public class ExamQuestionsController {
 
     @FXML
     void cancel(ActionEvent event) {
-        model.cancelExamAddition();
         ClientApp.backToLastScene();
     }
 
