@@ -48,7 +48,7 @@ public class EMSserver extends AbstractServer {
         {
             try
             {
-                client.sendToClient(databaseHandler.handle((DatabaseRequest)msg,client,loggedInUsers));
+                client.sendToClient(databaseHandler.handle((DatabaseRequest) msg, client, loggedInUsers));
             }
             catch (Exception e)
             {
@@ -92,7 +92,6 @@ public class EMSserver extends AbstractServer {
             String input = scanner.nextLine();
             if (input.equals("exit"))
             {
-                databaseHandler.close();
                 try
                 {
                     this.close();
@@ -101,6 +100,7 @@ public class EMSserver extends AbstractServer {
                 {
                     e.printStackTrace();
                 }
+                databaseHandler.close();
                 return;
             }
         }

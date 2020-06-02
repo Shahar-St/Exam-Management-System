@@ -113,69 +113,9 @@ public class DatabaseHandler {
 
         if (request instanceof LoginRequest)
             response = loginHandler((LoginRequest) request, client, loggedInUsers);
-        else if (request instanceof AllQuestionsRequest)
-            response = allQuestionsHandler((AllQuestionsRequest) request, client);
-        else if (request instanceof QuestionRequest)
-            response = questionHandler((QuestionRequest) request, client);
-        else // request is instanceof SubjectsAndCoursesRequest
-            response = subjectsAndCoursesHandler((SubjectsAndCoursesRequest) request, client);
 
         this.session.clear();
         return response;
-    }
-
-    private SubjectsAndCoursesResponse subjectsAndCoursesHandler(SubjectsAndCoursesRequest request,
-                                                                 ConnectionToClient client) {
-
-        if (client.getInfo("userName") == null)
-            return new SubjectsAndCoursesResponse(UNAUTHORIZED, request);
-
-        HashMap<String, List<String>> map = new HashMap<>();
-        User user = getUser((String) client.getInfo("userName"));
-
-        List<Course> courses;
-        if (user instanceof Teacher)
-            courses = ((Teacher) user).getCoursesList();
-        else if (user instanceof Dean) // user is dean, get all courses
-        {
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<Course> criteriaQuery = criteriaBuilder.createQuery(Course.class);
-            criteriaQuery.from(Course.class);
-            Query<Course> query = session.createQuery(criteriaQuery);
-            courses = query.getResultList();
-        }
-        else {  // user is a Student -  need to implement
-            courses = new ArrayList<>();
-        }
-
-        for (Course course : courses)
-        {
-            if (map.containsKey(course.getSubject().getName()))
-                map.get(course.getSubject().getName()).add(course.getName());
-            else
-            {
-                List<String> subjectCourses = new ArrayList<>();
-                subjectCourses.add(course.getName());
-                map.put(course.getSubject().getName(), subjectCourses);
-            }
-        }
-        return new SubjectsAndCoursesResponse(SUCCESS, request, map);
-    }
-
-    private QuestionResponse questionHandler(QuestionRequest request, ConnectionToClient client) {
-
-        if (client.getInfo("userName") == null)
-            return new QuestionResponse(UNAUTHORIZED, request);
-
-        Question question = getQuestion(request.getQuestionID());
-
-        if (question == null)
-            return new QuestionResponse(NOT_FOUND, request);
-
-        List<String> answers = new ArrayList<>(question.getAnswersArray());
-        return new QuestionResponse(SUCCESS, request, question.getQuestionContent(),
-                answers, question.getCorrectAnswer(), question.getAuthor().getFullName(),
-                question.getLastModified());
     }
 
     private LoginResponse loginHandler(LoginRequest request, ConnectionToClient client, List<String> loggedInUsers) {
@@ -195,47 +135,6 @@ public class DatabaseHandler {
         loggedInUsers.add(user.getUserName());
         return new LoginResponse(SUCCESS, user.getClass().getSimpleName().toLowerCase(),
                 user.getFullName(), request);
-    }
-
-    private AllQuestionsResponse allQuestionsHandler(AllQuestionsRequest request,
-                                                     ConnectionToClient client) {
-
-        HashMap<String, Pair<LocalDateTime, String>> map = new HashMap<>();
-
-        if (client.getInfo("userName") == null)
-            return new AllQuestionsResponse(UNAUTHORIZED, request);
-
-        User user = getUser((String) client.getInfo("userName"));
-
-        if (user == null)
-            return new AllQuestionsResponse(NOT_FOUND, request);
-
-
-        List<Question> questionList = new ArrayList<>();
-        if (user instanceof Teacher)
-        {
-            Teacher teacher = (Teacher) user;
-            for (Course tCourse : teacher.getCoursesList())
-            {
-                if (tCourse.getName().equals(request.getCourse()))
-                    questionList.addAll(tCourse.getQuestionsList());
-            }
-        }
-        else    // user is dean
-        {
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<Question> criteriaQuery = criteriaBuilder.createQuery(Question.class);
-            Root<Question> root = criteriaQuery.from(Question.class);
-            criteriaQuery.select(root);
-            Query<Question> query = session.createQuery(criteriaQuery);
-            questionList.addAll(query.getResultList());
-        }
-
-        for (Question question : questionList)
-            map.put(question.getId(),
-                    new Pair<>(question.getLastModified(), question.getQuestionContent()));
-
-        return new AllQuestionsResponse(SUCCESS, request, map);
     }
 
     public void close() {
