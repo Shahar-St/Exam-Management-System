@@ -1,7 +1,10 @@
 package org.args;
 
 import DatabaseAccess.Requests.*;
+import DatabaseAccess.Requests.Questions.*;
 import DatabaseAccess.Responses.*;
+import DatabaseAccess.Responses.Questions.*;
+import Util.Pair;
 import org.args.Entities.*;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.HibernateException;
@@ -164,8 +167,8 @@ public class DatabaseHandler {
 
         List<String> answers = new ArrayList<>(question.getAnswersArray());
         return new QuestionResponse(SUCCESS, request, question.getQuestionContent(),
-                answers, question.getCorrectAnswer(), question.getCourse().getName(),
-                question.getAuthor().getFullName(), question.getLastModified());
+                answers, question.getCorrectAnswer(), question.getAuthor().getFullName(),
+                question.getLastModified());
     }
 
     private EditQuestionResponse editQuestionHandler(EditQuestionRequest request, ConnectionToClient client) {

@@ -15,26 +15,27 @@ import DatabaseAccess.Requests.DatabaseRequest;
  */
 public class LoginResponse extends DatabaseResponse {
 
-    private final String id;
-    private final String name;
     private final String permission;
+    private final String name;
 
-    public LoginResponse(int status, DatabaseRequest request, String id, String name, String permission) {
+    // successful request
+    public LoginResponse(int status, String permission, String name, DatabaseRequest request) {
         super(status, request);
-        this.id = id;
-        this.name = name;
         this.permission = permission;
+        this.name = name;
     }
 
-    public String getId() {
-        return id;
+    // unsuccessful request
+    public LoginResponse(int status, DatabaseRequest request) {
+        super(status, request);
+        this.permission = null;
+        this.name = null;
+    }
+    public String getPermission() {
+        return permission;
     }
 
     public String getName() {
         return name;
-    }
-
-    public String getPermission() {
-        return permission;
     }
 }

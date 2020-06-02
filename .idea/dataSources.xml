@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="ems@localhost" uuid="1dd17899-495b-4e88-b77e-8ae8a2d0f87c">
-      <driver-ref>mysql.8</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/ems</jdbc-url>
-    </data-source>
     <data-source source="LOCAL" name="Server/Hibernate" uuid="864aa628-1300-47e6-9258-24b12e17d116">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
