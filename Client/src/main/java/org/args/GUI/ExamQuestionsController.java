@@ -1,6 +1,5 @@
 package org.args.GUI;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -81,7 +80,7 @@ public class ExamQuestionsController {
         if (courseQuestionsListView.getSelectionModel().getSelectedItem() != null) {
             int indexOfColon = courseQuestionsListView.getSelectionModel().getSelectedItem().indexOf(':');
             String questionId = courseQuestionsListView.getSelectionModel().getSelectedItem().substring(1, indexOfColon);
-            model.saveQuestionDetails(questionId);
+            model.loadQuestionDetails(questionId);
         }
     }
 

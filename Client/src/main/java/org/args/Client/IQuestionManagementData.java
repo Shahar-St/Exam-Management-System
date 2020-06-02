@@ -44,12 +44,9 @@ public interface IQuestionManagementData {
     ObservableList<String> getObservableQuestionsList();
 
 
-    void setSelectedIndex(int selectedIndex);
-
-
     void clearQuestionsList();
 
     void fillQuestionsList(String text);
 
-    void saveQuestionDetails(String questionId);
+    void loadQuestionDetails(String questionId);
 }

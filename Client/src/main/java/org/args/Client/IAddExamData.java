@@ -19,7 +19,7 @@ public interface IAddExamData {
 
     ObservableList<String> getObservableExamQuestionsList();
 
-    void saveQuestionDetails(String questionId);
+    void loadQuestionDetails(String questionId);
 
     String getCurrentCourse();
 

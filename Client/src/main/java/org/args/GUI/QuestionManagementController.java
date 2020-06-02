@@ -173,11 +173,9 @@ public class QuestionManagementController {
 
     private void viewSelectedQuestionDetails() {
         if (questionsList.getSelectionModel().getSelectedItem() != null) {
-            int selectedItemIndex = model.getObservableQuestionsList().indexOf(questionsList.getSelectionModel().getSelectedItem());
-            model.setSelectedIndex(selectedItemIndex);
             int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
             String questionId = questionsList.getSelectionModel().getSelectedItem().substring(1, indexOfColon);
-            model.saveQuestionDetails(questionId);
+            model.loadQuestionDetails(questionId);
         }
     }
 
