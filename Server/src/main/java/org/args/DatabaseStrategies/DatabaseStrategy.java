@@ -26,12 +26,12 @@ public abstract class DatabaseStrategy {
     public abstract DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
                                             List<String> loggedInUsers);
 
-    protected Question getQuestion(String questionID, Session session) {
+    protected <T> T getTypeById(Class<T> objectType, String ID, Session session) {
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Question> criteriaQuery = criteriaBuilder.createQuery(Question.class);
-        Root<Question> root = criteriaQuery.from(Question.class);
-        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("id"), questionID));
-        Query<Question> query = session.createQuery(criteriaQuery);
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(objectType);
+        Root<T> root = criteriaQuery.from(objectType);
+        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("id"), ID));
+        Query<T> query = session.createQuery(criteriaQuery);
         try
         {
             return query.getSingleResult();

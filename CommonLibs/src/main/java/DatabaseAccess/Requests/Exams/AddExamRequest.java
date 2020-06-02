@@ -6,6 +6,7 @@ import LightEntities.LightExam;
 import java.util.List;
 
 public class AddExamRequest extends DatabaseRequest {
+
     private final String examTitle;
     private final List<String> questionsIDs;
     private final List<Double> scoresList;
@@ -13,8 +14,10 @@ public class AddExamRequest extends DatabaseRequest {
     private final String studentNotes;
     private final int durationInMinutes;
     private final String description;
+    private final String courseID;
 
-    public AddExamRequest(String examTitle, List<String> questionsIDs, List<Double> scoresList, String teacherNotes, String studentNotes, int durationInMinutes, String description) {
+    public AddExamRequest(String examTitle, List<String> questionsIDs, List<Double> scoresList, String teacherNotes,
+                          String studentNotes, int durationInMinutes, String description, String courseID) {
         this.examTitle = examTitle;
         this.questionsIDs = questionsIDs;
         this.scoresList = scoresList;
@@ -22,6 +25,7 @@ public class AddExamRequest extends DatabaseRequest {
         this.studentNotes = studentNotes;
         this.durationInMinutes = durationInMinutes;
         this.description = description;
+        this.courseID = courseID;
     }
 
     public String getExamTitle() {

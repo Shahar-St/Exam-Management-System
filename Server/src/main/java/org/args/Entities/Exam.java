@@ -128,10 +128,4 @@ public class Exam {
         this.questionsScores = questionsScores;
     }
 
-    @Override
-    protected LightExam clone() throws CloneNotSupportedException {
-        super.clone();
-
-
-    }
 }

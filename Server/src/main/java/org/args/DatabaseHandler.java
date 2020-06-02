@@ -4,9 +4,7 @@ import DatabaseAccess.Requests.*;
 import DatabaseAccess.Responses.*;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.DatabaseStrategies.LoginStrategy;
-import org.args.DatabaseStrategies.Questions.AllQuestionsStrategy;
-import org.args.DatabaseStrategies.Questions.EditQuestionStrategy;
-import org.args.DatabaseStrategies.Questions.QuestionStrategy;
+import org.args.DatabaseStrategies.Questions.*;
 import org.args.DatabaseStrategies.SubjectAndCoursesStrategy;
 import org.args.Entities.*;
 import org.args.OCSF.ConnectionToClient;
@@ -32,6 +30,8 @@ public class DatabaseHandler {
         this.put("QuestionRequest", new QuestionStrategy());
         this.put("EditQuestionRequest", new EditQuestionStrategy());
         this.put("AllQuestionsRequest", new AllQuestionsStrategy());
+        this.put("DeleteQuestionRequest", new DeleteQuestionStrategy());
+        this.put("AddQuestionRequest", new AddQuestionStrategy());
     }};
 
     public DatabaseHandler() {

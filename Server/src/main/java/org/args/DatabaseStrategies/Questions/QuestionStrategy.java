@@ -23,7 +23,7 @@ public class QuestionStrategy extends DatabaseStrategy {
         if (client.getInfo("userName") == null)
             return new QuestionResponse(UNAUTHORIZED, questionRequest);
 
-        Question question = getQuestion(questionRequest.getQuestionID(), session);
+        Question question = getTypeById(Question.class, questionRequest.getQuestionID(), session);
 
         if (question == null)
             return new QuestionResponse(NOT_FOUND, questionRequest);

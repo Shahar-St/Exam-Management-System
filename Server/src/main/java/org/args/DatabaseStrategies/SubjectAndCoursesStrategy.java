@@ -27,7 +27,7 @@ public class SubjectAndCoursesStrategy extends DatabaseStrategy {
         if (client.getInfo("userName") == null)
             return new SubjectsAndCoursesResponse(UNAUTHORIZED, request);
 
-        HashMap<String, List<String>> map = new HashMap<>();
+        HashMap<String, HashMap<String, String>> map = new HashMap<>();
         User user = getUser((String) client.getInfo("userName"), session);
 
         List<Course> courses;
@@ -49,11 +49,11 @@ public class SubjectAndCoursesStrategy extends DatabaseStrategy {
         for (Course course : courses)
         {
             if (map.containsKey(course.getSubject().getName()))
-                map.get(course.getSubject().getName()).add(course.getName());
+                map.get(course.getSubject().getName()).put(course.getId(), course.getName());
             else
             {
-                List<String> subjectCourses = new ArrayList<>();
-                subjectCourses.add(course.getName());
+                HashMap<String, String> subjectCourses = new HashMap<>();
+                subjectCourses.put(course.getId(), course.getName());
                 map.put(course.getSubject().getName(), subjectCourses);
             }
         }

@@ -20,7 +20,8 @@ public class EditQuestionStrategy extends DatabaseStrategy {
         if (client.getInfo("userName") == null)
             return new EditQuestionResponse(UNAUTHORIZED, request);
 
-        Question question = getQuestion(editRequest.getQuestionID(), session);
+        Question question = getTypeById(Question.class, editRequest.getQuestionID(), session);
+
 
         if (question == null)
             return new EditQuestionResponse(NOT_FOUND, request);
@@ -28,13 +29,20 @@ public class EditQuestionStrategy extends DatabaseStrategy {
         if (question.getAuthor() != getUser((String) client.getInfo("userName"), session))
             return new EditQuestionResponse(NO_ACCESS, request);
 
-        question.setQuestionContent(editRequest.getNewDescription());
-        question.setAnswersArray(editRequest.getNewAnswers());
-        question.setCorrectAnswer(editRequest.getCorrectAnswer());
-        question.setLastModified();
-        session.update(question);
-        session.flush();
-
+        if (!question.getContainedInExams().isEmpty())
+        {
+            Question newQuestion = new Question(question);
+            session.save(newQuestion);
+        }
+        else
+        {
+            question.setQuestionContent(editRequest.getNewDescription());
+            question.setAnswersArray(editRequest.getNewAnswers());
+            question.setCorrectAnswer(editRequest.getCorrectAnswer());
+            question.setLastModified();
+            session.update(question);
+            session.flush();
+        }
         return new EditQuestionResponse(SUCCESS, request);
     }
 }

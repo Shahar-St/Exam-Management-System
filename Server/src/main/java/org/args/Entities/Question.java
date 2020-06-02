@@ -68,6 +68,11 @@ public class Question {
         this.id = course.getId() + decimalFormat.format(course.getAvailableQuestionCodes().poll());
     }
 
+    public Question(Question question) {
+        this(question.questionContent,question.answersArray,question.correctAnswer,question.course,
+                question.getAuthor());
+    }
+
     //Group adders and removers
     public void addExam(Exam exam) {
         if (!containedInExams.contains(exam))
