@@ -391,10 +391,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return true;
     }
 
-    @Override
-    public String getCurrentExamTitle() {
-        return currentExamTitle.get();
-    }
 
     public StringProperty currentExamTitleProperty() {
         return currentExamTitle;
@@ -545,7 +541,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return currentExam.getLightQuestionList();
     }
 
-    public String getCurrentExamDescription(){
+    public String getCurrentExamTitle(){
         return currentExam.getTitle();
     }
 

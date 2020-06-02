@@ -8,8 +8,6 @@ import LightEntities.LightQuestion;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import org.args.Client.IExamData;
 
@@ -56,7 +54,7 @@ public class ViewExamController {
     void deleteExam(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete Exam");
-        alert.setHeaderText("Delete Exam " + model.getCurrentExamDescription());
+        alert.setHeaderText("Delete Exam " + model.getCurrentExamTitle());
         alert.setContentText("Are you sure you want to delete this exam?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
@@ -78,7 +76,7 @@ public class ViewExamController {
         editButton.setDisable(!model.isExamDeletable());
         List<LightQuestion> questionList = model.getLightQuestionListFromCurrentExam();
         List<Double> questionsScores = model.getCurrentExamQuestionsScoreList();
-        String examDescription = model.getCurrentExamDescription();
+        String examDescription = model.getCurrentExamTitle();
         String examTeacherPrivateNotes = model.getCurrentExamTeacherPrivateNotes();
         String examDuration = Integer.toString(model.getCurrentExamDurationOnMinutes());
         assert pageView != null;

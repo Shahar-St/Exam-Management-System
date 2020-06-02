@@ -9,7 +9,7 @@ public interface IExamData {
 
     List<LightQuestion> getLightQuestionListFromCurrentExam();
 
-    String getCurrentExamDescription();
+    String getCurrentExamTitle();
 
     String getCurrentExamTeacherPrivateNotes();
 
