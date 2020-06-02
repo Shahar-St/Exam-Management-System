@@ -1,5 +1,6 @@
 package org.args.Client;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
@@ -55,6 +56,12 @@ public interface IAddExamData {
     String getViewMode();
 
     void setViewMode(String viewMode);
+
+    boolean checkQuestionScoringList();
+
+    StringProperty currentExamTotalScoreProperty();
+
+    void setCurrentExamTotalScore(String currentExamTotalScore);
 
 
 }

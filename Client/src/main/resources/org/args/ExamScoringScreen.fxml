@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
@@ -30,9 +32,14 @@
             </HBox>
             <ButtonBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
               <buttons>
+                  <ImageView fx:id="backArrow" fitHeight="41.0" fitWidth="41.0" onMouseClicked="#backButtonClicked" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../Assets/left-arrow.png" />
+                     </image>
+                  </ImageView>
                   <Label text="Total Score:" />
                   <Label fx:id="scoreLabel" layoutX="230.0" layoutY="22.0" text="Score" />
-                <Button mnemonicParsing="false" text="Button" />
+                <Button fx:id="doneButton" mnemonicParsing="false" onAction="#doneButtonOnAction" text="Done" />
               </buttons>
             </ButtonBar>
          </children>

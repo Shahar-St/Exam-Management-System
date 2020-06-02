@@ -340,23 +340,47 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     private final StringProperty currentExamTeacherNotes = new SimpleStringProperty();
     private final StringProperty currentExamStudentNotes = new SimpleStringProperty();
     private final StringProperty currentExamDuration = new SimpleStringProperty();
+    private StringProperty currentExamTotalScore = new SimpleStringProperty();
+
+    public String getCurrentExamTotalScore() {
+        return currentExamTotalScore.get();
+    }
+
+    @Override
+    public StringProperty currentExamTotalScoreProperty() {
+        return currentExamTotalScore;
+    }
+
+    public void setCurrentExamTotalScore(String currentExamTotalScore) {
+        this.currentExamTotalScore.set(currentExamTotalScore);
+    }
 
     public ObservableList<String> getObservableQuestionsScoringList() {
         return observableQuestionsScoringList;
     }
 
     public void initQuestionsScoringList(){
-        for(String str:observableExamQuestionsList){
-            observableQuestionsScoringList.add("0");
+        if (observableQuestionsScoringList.isEmpty()){
+            for(String str:observableExamQuestionsList){
+                observableQuestionsScoringList.add("0");
+            }
         }
     }
 
     public double calcQuestionsScoringListValue(){
         double sum = 0;
-        for(String str:observableExamQuestionsList){
+        for(String str:observableQuestionsScoringList){
             sum+= Double.parseDouble(str);
         }
         return sum;
+    }
+
+    public boolean checkQuestionScoringList(){
+        for(String str:observableQuestionsScoringList){
+            if(Double.parseDouble(str)==0)
+                return false;
+        }
+        return true;
     }
 
     @Override
