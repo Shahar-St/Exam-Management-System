@@ -1,6 +1,7 @@
 package org.args.Entities;
 
 import LightEntities.LightExam;
+import LightEntities.LightQuestion;
 import org.hibernate.Session;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -27,6 +28,10 @@ public class Exam {
     @JoinColumn(name = "teacher_id")
     private Teacher author;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "exam")
+    @Cascade(CascadeType.SAVE_UPDATE)
+    private List<ExecutedExam> executedExamsList = new ArrayList<>();
+
     @ManyToMany(mappedBy = "containedInExams")
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
     private List<Question> questionsList = new ArrayList<>();
@@ -35,21 +40,23 @@ public class Exam {
     private List<Double> questionsScores = new ArrayList<>();
 
     private int durationInMinutes;
-    private String description;
-    private String teacherPrivateNotes; // only for the teacher
+    private  String title;
+    private String studentNotes;
+    private String teacherNotes; // only for the teacher
 
     //Group c'tors
     public Exam() {
     }
 
-    public Exam(Course course, Teacher author, int durationInMinutes, String description,
-                String teacherPrivateNotes, List<Question> questionsList, List<Double> questionsScores) {
+    public Exam(Course course, Teacher author, int durationInMinutes, String title, String studentNotes,
+                String teacherNotes, List<Question> questionsList, List<Double> questionsScores) {
 
         setCourse(course);
         setAuthor(author);
         this.durationInMinutes = durationInMinutes;
-        this.description = description;
-        this.teacherPrivateNotes = teacherPrivateNotes;
+        this.title = title;
+        this.studentNotes = studentNotes;
+        this.teacherNotes = teacherNotes;
         this.questionsList.addAll(questionsList);
         this.questionsScores.addAll(questionsScores);
 
@@ -66,6 +73,14 @@ public class Exam {
 
         if (!question.getContainedInExams().contains(this))
             question.getContainedInExams().add(this);
+    }
+
+        public void addExecutedExam(ExecutedExam executedExam) {
+        if (!executedExamsList.contains(executedExam))
+            executedExamsList.add(executedExam);
+
+        if(executedExam.getExam() != this)
+            executedExam.setExam(this);
     }
 
     //Group setters and getters
@@ -107,19 +122,18 @@ public class Exam {
         this.durationInMinutes = duration;
     }
 
-    public String getDescription() {
-        return description;
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+
+    public String getStudentNotes() {
+        return studentNotes;
     }
-    public void setDescription(String description) {
-        this.description = description;
+    public void setStudentNotes(String studentNotes) {
+        this.studentNotes = studentNotes;
     }
 
-    public String getTeacherPrivateNotes() {
-        return teacherPrivateNotes;
-    }
-    public void setTeacherPrivateNotes(String privateNotes) {
-        teacherPrivateNotes = privateNotes;
-    }
+    public String getTeacherNotes() { return teacherNotes;}
+    public void setTeacherNotes(String privateNotes) {teacherNotes = privateNotes;}
 
     public List<Double> getQuestionsScores() {
         return questionsScores;
@@ -128,10 +142,17 @@ public class Exam {
         this.questionsScores = questionsScores;
     }
 
+    public List<ExecutedExam> getExecutedExamsList() { return executedExamsList; }
+    public void setExecutedExamsList(List<ExecutedExam> executedExamsList) {this.executedExamsList = executedExamsList;}
+
     @Override
     protected LightExam clone() throws CloneNotSupportedException {
         super.clone();
+        List<LightQuestion> lightQuestionsList = new ArrayList<>();;
+        for (Question question : this.getQuestionsList())
+            lightQuestionsList.add( question.clone() );
 
-
+        return new LightExam(this.id, this.author.getUserName(),lightQuestionsList, this.questionsScores,
+                this.durationInMinutes, this.title, this.teacherNotes, this.studentNotes);
     }
 }

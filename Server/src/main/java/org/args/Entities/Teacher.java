@@ -90,13 +90,13 @@ public class Teacher extends User {
         return question;
     }
 
-    public Exam createExam(Course course, int durationInMinutes, String description, String teacherPrivateNotes,
-                           List<Question> questionsList, List<Double> questionsScores) {
-        Exam exam = new Exam(course, this, durationInMinutes, description, teacherPrivateNotes,
-                questionsList, questionsScores);
-        this.examsList.add(exam);
-        return exam;
-    }
+//    public Exam createExam(Course course, int durationInMinutes, String description, String teacherPrivateNotes,
+//                           List<Question> questionsList, List<Double> questionsScores) {
+//        Exam exam = new Exam(course, this, durationInMinutes, description, teacherPrivateNotes,
+//                questionsList, questionsScores);
+//        this.examsList.add(exam);
+//        return exam;
+//    }
 
     //Group setters and getters
     public List<Subject> getSubjectsList() {
