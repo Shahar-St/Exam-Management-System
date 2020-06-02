@@ -3,7 +3,7 @@ package org.args.GUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import org.args.Client.IAddExamData;
+import org.args.Client.IExamData;
 
 public class ExamDetailsController {
 
@@ -29,9 +29,9 @@ public class ExamDetailsController {
     @FXML
     private Button nextButton;
 
-    private IAddExamData model;
+    private IExamData model;
 
-    public void setModel(IAddExamData model) {
+    public void setModel(IExamData model) {
         this.model = model;
     }
 

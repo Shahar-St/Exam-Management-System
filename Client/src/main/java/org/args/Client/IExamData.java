@@ -1,19 +1,17 @@
 package org.args.Client;
 
 import LightEntities.LightQuestion;
+import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 
 import java.util.List;
 
 public interface IExamData {
-    void saveExam(String title, List<String> questionList, String examId);
+    void saveExam(String title,int duration,String teacherNotes,String studentNotes ,List<String> questionList,List<Double> questionsScoreList ,String examId);
 
     List<LightQuestion> getLightQuestionListFromCurrentExam();
 
     String getCurrentExamTitle();
-
-    String getCurrentExamTeacherPrivateNotes();
-
-    int getCurrentExamDurationOnMinutes();
 
     List<Double> getCurrentExamQuestionsScoreList();
 
@@ -22,5 +20,63 @@ public interface IExamData {
     void deleteExam();
 
     void startExamEdit();
+
+    void addToExamQuestionsList(String question);
+
+    void removeFromExamQuestionsList(String question);
+
+    void showQuestionInfo(String questionId);
+
+    void done();
+
+    void cancelExamAddition();
+
+    ObservableList<String> getObservableQuestionsList();
+
+    ObservableList<String> getObservableExamQuestionsList();
+
+    void loadQuestionDetails(String questionId);
+
+    String getCurrentCourse();
+
+    StringProperty currentExamTitleProperty();
+
+    String getCurrentExamDuration();
+
+    StringProperty currentExamDurationProperty();
+
+    String getCurrentExamTeacherNotes();
+
+    StringProperty currentExamTeacherNotesProperty();
+
+    String getCurrentExamStudentNotes();
+
+    StringProperty currentExamStudentNotesProperty();
+
+    void setCurrentExamTitle(String currentExamTitle);
+
+    void setCurrentExamTeacherNotes(String currentExamTeacherNotes);
+
+    void setCurrentExamStudentNotes(String currentExamStudentNotes);
+
+    void setCurrentExamDuration(String duration);
+
+    double calcQuestionsScoringListValue();
+
+    void initQuestionsScoringList();
+
+    ObservableList<String> getObservableQuestionsScoringList();
+
+    String getViewMode();
+
+    void setViewMode(String viewMode);
+
+    boolean checkQuestionScoringList();
+
+    StringProperty currentExamTotalScoreProperty();
+
+    void setCurrentExamTotalScore(String currentExamTotalScore);
+
+    void clearDetailsScreen();
 
 }

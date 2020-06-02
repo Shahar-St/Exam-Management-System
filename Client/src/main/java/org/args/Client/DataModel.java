@@ -1,15 +1,17 @@
 package org.args.Client;
 
-import DatabaseAccess.Requests.*;
+import DatabaseAccess.Requests.Exams.AddExamRequest;
 import DatabaseAccess.Requests.Exams.AllExamsRequest;
 import DatabaseAccess.Requests.Exams.DeleteExamRequest;
 import DatabaseAccess.Requests.Exams.ViewExamRequest;
+import DatabaseAccess.Requests.LoginRequest;
 import DatabaseAccess.Requests.Questions.AllQuestionsRequest;
 import DatabaseAccess.Requests.Questions.EditQuestionRequest;
 import DatabaseAccess.Requests.Questions.QuestionRequest;
-import DatabaseAccess.Responses.*;
+import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
 import DatabaseAccess.Responses.Exams.AllExamsResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
+import DatabaseAccess.Responses.LoginResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
 import DatabaseAccess.Responses.Questions.QuestionResponse;
 import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
@@ -17,7 +19,10 @@ import LightEntities.LightExam;
 import LightEntities.LightQuestion;
 import Util.Pair;
 import javafx.application.Platform;
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -30,7 +35,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class DataModel implements IMainScreenData, IQuestionManagementData, IQuestionData, IStudentExamExecutionData,
-        IDeanViewStatsData, IStudentViewStatsData, IExamData, IAddExamData, ITeacherExamExecutionData, IDeanExamExecutionData,
+        IDeanViewStatsData, IStudentViewStatsData, IExamData, ITeacherExamExecutionData, IDeanExamExecutionData,
         ITeacherViewStatsData, IExamManagementData, IExamReviewData {
 
     private ClientApp app;
@@ -275,7 +280,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     public void saveQuestion(String questionId, String answer_1, String answer_2, String answer_3, String answer_4, String newContent) {
 
-        EditQuestionRequest request = new EditQuestionRequest(questionId,newContent, Arrays.asList(answer_1, answer_2, answer_3,answer_4), correctAnswer);
+        EditQuestionRequest request = new EditQuestionRequest(questionId, newContent, Arrays.asList(answer_1, answer_2, answer_3, answer_4), correctAnswer);
         ClientApp.sendRequest(request);
     }
 
@@ -297,6 +302,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     //used to determine whether the screen is used for creating an exam or editing one. gets values EDIT and ADD
     String viewMode;
+
     @Override
     public String getViewMode() {
         return viewMode;
@@ -313,19 +319,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return currentExam.getLightQuestionList();
     }
 
-    public String getCurrentExamTitle(){
-        return currentExam.getTitle();
-    }
 
-    public String getCurrentExamTeacherPrivateNotes(){
-        return currentExam.getTeacherNotes();
-    }
-
-    public int getCurrentExamDurationOnMinutes(){
-        return currentExam.getDurationInMinutes();
-    }
-
-    public List<Double> getCurrentExamQuestionsScoreList(){
+    public List<Double> getCurrentExamQuestionsScoreList() {
         return currentExam.getQuestionsScores();
     }
 
@@ -344,27 +339,23 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Subscribe
     public void handleViewExamResponse(ViewExamResponse response) {
-            currentExam = response.getLightExam();
-    }
-
-    public void startExamEdit()
-    {
-        setViewMode("EDIT");
-        if (observableQuestionsList.isEmpty())
-            fillQuestionsList(currentCourse);
+        currentExam = response.getLightExam();
         setCurrentExamTitle(currentExam.getTitle());
         setCurrentExamStudentNotes(currentExam.getStudentNotes());
         setCurrentExamTeacherNotes(currentExam.getTeacherNotes());
         setCurrentExamDuration(Integer.toString(currentExam.getDurationInMinutes()));
         observableExamQuestionsList.clear();
-        for (LightQuestion question : currentExam.getLightQuestionList())
-        {
+        for (LightQuestion question : currentExam.getLightQuestionList()) {
             observableExamQuestionsList.add(question.toString());
         }
-        for (Double score : currentExam.getQuestionsScores())
-        {
+        for (Double score : currentExam.getQuestionsScores()) {
             observableQuestionsScoringList.add(Double.toString(score));
         }
+
+    }
+
+    public void startExamEdit() {
+        setViewMode("EDIT");
     }
 
     @Override
@@ -394,30 +385,30 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return observableQuestionsScoringList;
     }
 
-    public void initQuestionsScoringList(){
-        if (observableQuestionsScoringList.isEmpty() && !observableExamQuestionsList.isEmpty()){
-            for(String str:observableExamQuestionsList){
+    public void initQuestionsScoringList() {
+        if (observableQuestionsScoringList.isEmpty() && !observableExamQuestionsList.isEmpty()) {
+            for (String str : observableExamQuestionsList) {
                 observableQuestionsScoringList.add("0");
             }
-        }else if(observableExamQuestionsList.isEmpty()){
+        } else if (observableExamQuestionsList.isEmpty()) {
             observableQuestionsScoringList.clear();
             setCurrentExamTotalScore("0.0");
         }
     }
 
-    public double calcQuestionsScoringListValue(){
+    public double calcQuestionsScoringListValue() {
         double sum = 0;
-        for(String str:observableQuestionsScoringList){
-            sum+= Double.parseDouble(str);
+        for (String str : observableQuestionsScoringList) {
+            sum += Double.parseDouble(str);
         }
         return sum;
     }
 
-    public boolean checkQuestionScoringList(){
-        if(observableQuestionsScoringList.isEmpty())
+    public boolean checkQuestionScoringList() {
+        if (observableQuestionsScoringList.isEmpty())
             return false;
-        for(String str:observableQuestionsScoringList){
-            if(Double.parseDouble(str)==0)
+        for (String str : observableQuestionsScoringList) {
+            if (Double.parseDouble(str) == 0)
                 return false;
         }
         return true;
@@ -426,6 +417,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     public StringProperty currentExamTitleProperty() {
         return currentExamTitle;
+    }
+
+    @Override
+    public String getCurrentExamTitle() {
+        return currentExamTitle.get();
     }
 
     @Override
@@ -513,7 +509,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         currentExamTitle.setValue("");
         currentExamStudentNotes.setValue("");
         currentExamTeacherNotes.setValue("");
-        cancelExamAddition();
     }
 
     @Override
@@ -525,7 +520,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void done() {
 
     }
-
 
 
     //exam management data
@@ -549,9 +543,10 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     @Override
-    public void deployExam(String examId,String examCode) {
+    public void deployExam(String examId, String examCode) {
 
     }
+
     /*used to represent the exams as strings in the list view in the format: -#id: content-
     (same as questions in question management*/
     public void generateExamDescriptors(HashMap<String, Pair<LocalDateTime, String>> examList) {
@@ -662,7 +657,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     //TODO: implement IExamData Method
     @Override
-    public void saveExam(String title, List<String> questionList, String examId) {
+    public void saveExam(String title, int duration, String teacherNotes, String studentNotes, List<String> questionList, List<Double> questionsScoreList, String examId) {
+        ClientApp.sendRequest(new AddExamRequest(title, questionList, questionsScoreList, teacherNotes, studentNotes, duration));
 
     }
 
@@ -682,7 +678,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void handleTimeExtensionRequest(String request) {
 
     }
-
 
 
     //TODO: implement IStudentViewStatsData methods

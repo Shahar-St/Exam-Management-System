@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import org.args.Client.IAddExamData;
+import org.args.Client.IExamData;
 
 public class ExamQuestionsController {
 
@@ -33,9 +33,9 @@ public class ExamQuestionsController {
     @FXML
     private Button cancelButton;
 
-    private IAddExamData model;
+    private IExamData model;
 
-    public void setModel(IAddExamData model) {
+    public void setModel(IExamData model) {
         this.model = model;
     }
 

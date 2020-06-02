@@ -1,7 +1,6 @@
 package DatabaseAccess.Requests.Exams;
 
 import DatabaseAccess.Requests.DatabaseRequest;
-import LightEntities.LightExam;
 
 import java.util.List;
 
@@ -12,16 +11,14 @@ public class AddExamRequest extends DatabaseRequest {
     private final String teacherNotes;
     private final String studentNotes;
     private final int durationInMinutes;
-    private final String description;
 
-    public AddExamRequest(String examTitle, List<String> questionsIDs, List<Double> scoresList, String teacherNotes, String studentNotes, int durationInMinutes, String description) {
+    public AddExamRequest(String examTitle, List<String> questionsIDs, List<Double> scoresList, String teacherNotes, String studentNotes, int durationInMinutes) {
         this.examTitle = examTitle;
         this.questionsIDs = questionsIDs;
         this.scoresList = scoresList;
         this.teacherNotes = teacherNotes;
         this.studentNotes = studentNotes;
         this.durationInMinutes = durationInMinutes;
-        this.description = description;
     }
 
     public String getExamTitle() {
@@ -46,10 +43,6 @@ public class AddExamRequest extends DatabaseRequest {
 
     public int getDurationInMinutes() {
         return durationInMinutes;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
 

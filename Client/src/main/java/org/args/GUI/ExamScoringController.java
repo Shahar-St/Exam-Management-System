@@ -7,16 +7,16 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.util.Callback;
-import javafx.util.StringConverter;
-import org.args.Client.IAddExamData;
+import org.args.Client.IExamData;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ExamScoringController {
 
-    private IAddExamData model;
+    private IExamData model;
 
     @FXML
     private ResourceBundle resources;
@@ -84,7 +84,7 @@ public class ExamScoringController {
     }
 
 
-    public void setModel(IAddExamData newModel) {
+    public void setModel(IExamData newModel) {
         if (model == null)
             model = newModel;
     }
@@ -97,6 +97,16 @@ public class ExamScoringController {
 
     @FXML
     void doneButtonOnAction(ActionEvent event) {
+        String title = model.getCurrentExamTitle();
+        String tNotes = model.getCurrentExamTeacherNotes();
+        String sNotes = model.getCurrentExamStudentNotes();
+        List<String> questionsId = new ArrayList<>(model.getObservableExamQuestionsList());
+        List<Double> questionsScoringList =  new ArrayList<>();
+        int duration = Integer.parseInt(model.getCurrentExamDuration());
+        for(String val : model.getObservableQuestionsScoringList()){
+            questionsScoringList.add(Double.parseDouble(val));
+        }
+        model.saveExam(title,duration,tNotes,sNotes,questionsId,questionsScoringList,null);
 
     }
 }

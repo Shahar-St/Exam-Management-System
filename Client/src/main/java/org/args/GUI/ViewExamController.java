@@ -77,8 +77,9 @@ public class ViewExamController {
         List<LightQuestion> questionList = model.getLightQuestionListFromCurrentExam();
         List<Double> questionsScores = model.getCurrentExamQuestionsScoreList();
         String examDescription = model.getCurrentExamTitle();
-        String examTeacherPrivateNotes = model.getCurrentExamTeacherPrivateNotes();
-        String examDuration = Integer.toString(model.getCurrentExamDurationOnMinutes());
+        String examTeacherPrivateNotes = model.getCurrentExamTeacherNotes();
+        String examStudentNotes = model.getCurrentExamStudentNotes();
+        String examDuration = model.getCurrentExamDuration();
         assert pageView != null;
         pageView.setPageCount(questionList.size());
         pageView.setCurrentPageIndex(0);
@@ -91,6 +92,10 @@ public class ViewExamController {
             Label privateNotes_label = new Label("Teacher Private Notes:");
 
             TextField privateNotes = new TextField(examTeacherPrivateNotes);
+
+            Label studentNotes_label = new Label("Student Private Notes:");
+
+            TextField sNotes = new TextField(examStudentNotes);
 
             Label duration_label = new Label("Exam Duration In Minutes:");
 
