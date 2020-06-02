@@ -77,7 +77,8 @@ public class ExamScoringController {
             }
 
         });
-        doneButton.setDisable(true);
+        if(!model.checkQuestionScoringList())
+            doneButton.setDisable(true);
 
 
     }
