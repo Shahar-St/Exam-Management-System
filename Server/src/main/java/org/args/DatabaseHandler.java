@@ -1,6 +1,7 @@
 package org.args;
 
 import DatabaseAccess.Requests.*;
+import DatabaseAccess.Requests.Questions.DeleteQuestionRequest;
 import DatabaseAccess.Responses.*;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.DatabaseStrategies.LoginStrategy;
@@ -33,6 +34,11 @@ public class DatabaseHandler {
         this.put("DeleteQuestionRequest", new DeleteQuestionStrategy());
         this.put("AddQuestionRequest", new AddQuestionStrategy());
     }};
+
+    public DatabaseResponse test(DeleteQuestionRequest request) {
+        DeleteQuestionStrategy strategy = new DeleteQuestionStrategy();
+        return strategy.test(request, session);
+    }
 
     public DatabaseHandler() {
         try
@@ -102,7 +108,10 @@ public class DatabaseHandler {
 
     public DatabaseResponse produceResponse(DatabaseRequest request, ConnectionToClient client,
                                             List<String> loggedInUsers) {
-        return strategies.get(request.getClass().getSimpleName()).handle(request, client, session, loggedInUsers);
+        DatabaseResponse response = strategies.get(request.getClass().getSimpleName())
+                .handle(request, client, session, loggedInUsers);
+        session.clear();
+        return response;
     }
 
     public void close() {

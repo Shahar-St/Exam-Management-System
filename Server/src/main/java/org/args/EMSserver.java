@@ -1,6 +1,7 @@
 package org.args;
 
 import DatabaseAccess.Requests.DatabaseRequest;
+import DatabaseAccess.Requests.Questions.DeleteQuestionRequest;
 import org.args.OCSF.AbstractServer;
 import org.args.OCSF.ConnectionToClient;
 

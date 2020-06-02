@@ -35,22 +35,21 @@ public class AllQuestionsStrategy extends DatabaseStrategy {
 
 
         List<Question> questionList = new ArrayList<>();
-        if (user instanceof Teacher)
-        {
-            Teacher teacher = (Teacher) user;
-            for (Course tCourse : teacher.getCoursesList())
-            {
-                if (tCourse.getName().equals(allQuestionsRequest.getCourseID()))
-                    questionList.addAll(tCourse.getQuestionsList());
-            }
-        }
-        else if (user instanceof Dean)  // user is dean
+
+        if (user instanceof Dean)  // user is dean
             questionList = getAllOfType(session, Question.class);
-        else if (user instanceof Student)
+        else
         {
+            List<Course> courses = new ArrayList<>();
+            if (user instanceof Teacher)
+                courses = ((Teacher) user).getCoursesList();
+            else // user is a student
+                courses = ((Student) user).getCoursesList();
 
+            for (Course course : courses)
+                if (course.getId().equals(allQuestionsRequest.getCourseID()))
+                    questionList.addAll(course.getQuestionsList());
         }
-
 
         for (Question question : questionList)
             map.put(question.getId(),

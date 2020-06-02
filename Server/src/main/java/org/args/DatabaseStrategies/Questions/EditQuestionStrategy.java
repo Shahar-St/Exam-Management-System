@@ -22,7 +22,6 @@ public class EditQuestionStrategy extends DatabaseStrategy {
 
         Question question = getTypeById(Question.class, editRequest.getQuestionID(), session);
 
-
         if (question == null)
             return new EditQuestionResponse(NOT_FOUND, request);
 

@@ -31,8 +31,9 @@ public class AddQuestionStrategy extends DatabaseStrategy {
 
         Question question = new Question(request1.getNewDescription(), request1.getNewAnswers(),
                 request1.getCorrectAnswer(), course, teacher);
-        session.save(question);
 
+        session.save(question);
+        session.flush();
         return new AddQuestionResponse(SUCCESS, request1);
     }
 }
