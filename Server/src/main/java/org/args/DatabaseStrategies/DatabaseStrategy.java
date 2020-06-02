@@ -12,6 +12,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.List;
 
 public abstract class DatabaseStrategy {
 
@@ -22,7 +23,8 @@ public abstract class DatabaseStrategy {
     protected final int NO_ACCESS = 3;
     protected final int WRONG_INFO = 4;
 
-    public abstract DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session);
+    public abstract DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
+                                            List<String> loggedInUsers);
 
     protected Question getQuestion(String questionID, Session session) {
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();

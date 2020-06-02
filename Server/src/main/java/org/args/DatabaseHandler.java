@@ -1,10 +1,13 @@
 package org.args;
 
 import DatabaseAccess.Requests.*;
-import DatabaseAccess.Requests.Questions.*;
 import DatabaseAccess.Responses.*;
-import DatabaseAccess.Responses.Questions.*;
-import Util.Pair;
+import org.args.DatabaseStrategies.DatabaseStrategy;
+import org.args.DatabaseStrategies.LoginStrategy;
+import org.args.DatabaseStrategies.QuestionStrategy.AllQuestionsStrategy;
+import org.args.DatabaseStrategies.QuestionStrategy.EditQuestionStrategy;
+import org.args.DatabaseStrategies.QuestionStrategy.QuestionStrategy;
+import org.args.DatabaseStrategies.SubjectAndCoursesStrategy;
 import org.args.Entities.*;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.HibernateException;
@@ -12,14 +15,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
 import org.hibernate.service.ServiceRegistry;
 
-import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -27,16 +26,13 @@ public class DatabaseHandler {
 
     private static DatabaseHandler databaseHandler = null;
     private static Session session;
-    private final HashMap<String, DatabaseHandler> strategies = new HashMap<>() {{
-
+    private final HashMap<String, DatabaseStrategy> strategies = new HashMap<>() {{
+        this.put("LoginRequest", new LoginStrategy());
+        this.put("SubjectsAndCoursesRequest", new SubjectAndCoursesStrategy());
+        this.put("QuestionRequest", new QuestionStrategy());
+        this.put("EditQuestionRequest",new EditQuestionStrategy());
+        this.put("AllQuestionsRequest", new AllQuestionsStrategy());
     }};
-
-    // error codes
-    private final int SUCCESS = 0;
-    private final int UNAUTHORIZED = 1;
-    private final int NOT_FOUND = 2;
-    private final int NO_ACCESS = 3;
-    private final int WRONG_INFO = 4;
 
     public DatabaseHandler() {
         try
@@ -103,38 +99,10 @@ public class DatabaseHandler {
                 new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         return configuration.buildSessionFactory(serviceRegistry);
     }
-    public DatabaseResponse handle(DatabaseRequest request) {
-        return null;
-    }
 
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client,
                                    List<String> loggedInUsers) {
-        DatabaseResponse response;
-
-        if (request instanceof LoginRequest)
-            response = loginHandler((LoginRequest) request, client, loggedInUsers);
-
-        this.session.clear();
-        return response;
-    }
-
-    private LoginResponse loginHandler(LoginRequest request, ConnectionToClient client, List<String> loggedInUsers) {
-
-        User user = getUser(request.getUserName());
-
-        if (user == null || !user.getUserName().equals(request.getUserName()))
-            return new LoginResponse(NOT_FOUND, request);
-
-        if (loggedInUsers.contains(request.getUserName()))
-            return new LoginResponse(NO_ACCESS, request);
-
-        if (!user.getPassword().equals(request.getPassword()))
-            return new LoginResponse(WRONG_INFO, request);
-
-        client.setInfo("userName", user.getUserName());
-        loggedInUsers.add(user.getUserName());
-        return new LoginResponse(SUCCESS, user.getClass().getSimpleName().toLowerCase(),
-                user.getFullName(), request);
+        return strategies.get(request.getClass().getSimpleName()).handle(request, client, session, loggedInUsers);
     }
 
     public void close() {

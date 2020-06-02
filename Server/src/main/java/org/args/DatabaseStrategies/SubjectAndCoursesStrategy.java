@@ -20,7 +20,8 @@ import java.util.List;
 public class SubjectAndCoursesStrategy extends DatabaseStrategy {
 
     @Override
-    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session) {
+    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
+                                   List<String> loggedInUsers) {
 
 
         if (client.getInfo("userName") == null)

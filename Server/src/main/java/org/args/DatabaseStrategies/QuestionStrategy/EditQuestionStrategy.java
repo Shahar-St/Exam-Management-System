@@ -9,10 +9,13 @@ import org.args.Entities.Question;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
+import java.util.List;
+
 public class EditQuestionStrategy extends DatabaseStrategy {
 
     @Override
-    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session) {
+    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
+                                   List<String> loggedInUsers) {
         EditQuestionRequest editRequest = (EditQuestionRequest) request;
         if (client.getInfo("userName") == null)
             return new EditQuestionResponse(UNAUTHORIZED, request);

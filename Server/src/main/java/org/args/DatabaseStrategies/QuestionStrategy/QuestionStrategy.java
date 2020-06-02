@@ -15,7 +15,8 @@ import java.util.List;
 public class QuestionStrategy extends DatabaseStrategy {
 
     @Override
-    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session) {
+    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
+                                   List<String> loggedInUsers) {
 
         QuestionRequest questionRequest = (QuestionRequest) request;
 
