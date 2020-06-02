@@ -26,7 +26,10 @@ import java.util.logging.Level;
 public class DatabaseHandler {
 
     private static DatabaseHandler databaseHandler = null;
-    private Session session;
+    private static Session session;
+    private final HashMap<String, DatabaseHandler> strategies = new HashMap<>() {{
+
+    }};
 
     // error codes
     private final int SUCCESS = 0;
@@ -35,7 +38,7 @@ public class DatabaseHandler {
     private final int NO_ACCESS = 3;
     private final int WRONG_INFO = 4;
 
-    private DatabaseHandler() {
+    public DatabaseHandler() {
         try
         {
             SessionFactory sessionFactory = getSessionFactory();
@@ -100,6 +103,9 @@ public class DatabaseHandler {
                 new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         return configuration.buildSessionFactory(serviceRegistry);
     }
+    public DatabaseResponse handle(DatabaseRequest request) {
+        return null;
+    }
 
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client,
                                    List<String> loggedInUsers) {
@@ -109,8 +115,6 @@ public class DatabaseHandler {
             response = loginHandler((LoginRequest) request, client, loggedInUsers);
         else if (request instanceof AllQuestionsRequest)
             response = allQuestionsHandler((AllQuestionsRequest) request, client);
-        else if (request instanceof EditQuestionRequest)
-            response = editQuestionHandler((EditQuestionRequest) request, client);
         else if (request instanceof QuestionRequest)
             response = questionHandler((QuestionRequest) request, client);
         else // request is instanceof SubjectsAndCoursesRequest
@@ -132,13 +136,16 @@ public class DatabaseHandler {
         List<Course> courses;
         if (user instanceof Teacher)
             courses = ((Teacher) user).getCoursesList();
-        else    // user is dean, get all courses
+        else if (user instanceof Dean) // user is dean, get all courses
         {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Course> criteriaQuery = criteriaBuilder.createQuery(Course.class);
             criteriaQuery.from(Course.class);
             Query<Course> query = session.createQuery(criteriaQuery);
             courses = query.getResultList();
+        }
+        else {  // user is a Student -  need to implement
+            courses = new ArrayList<>();
         }
 
         for (Course course : courses)
@@ -169,30 +176,6 @@ public class DatabaseHandler {
         return new QuestionResponse(SUCCESS, request, question.getQuestionContent(),
                 answers, question.getCorrectAnswer(), question.getAuthor().getFullName(),
                 question.getLastModified());
-    }
-
-    private EditQuestionResponse editQuestionHandler(EditQuestionRequest request, ConnectionToClient client) {
-
-        if (client.getInfo("userName") == null)
-            return new EditQuestionResponse(UNAUTHORIZED, request);
-
-        Question question = getQuestion(request.getQuestionID());
-
-        if (question == null)
-            return new EditQuestionResponse(NOT_FOUND, request);
-
-
-        if (question.getAuthor() != getUser((String) client.getInfo("userName")))
-            return new EditQuestionResponse(NO_ACCESS, request);
-
-        question.setQuestionContent(request.getNewDescription());
-        question.setAnswersArray(request.getNewAnswers());
-        question.setCorrectAnswer(request.getCorrectAnswer());
-        question.setLastModified();
-        session.update(question);
-        session.flush();
-
-        return new EditQuestionResponse(SUCCESS, request);
     }
 
     private LoginResponse loginHandler(LoginRequest request, ConnectionToClient client, List<String> loggedInUsers) {
@@ -255,38 +238,6 @@ public class DatabaseHandler {
         return new AllQuestionsResponse(SUCCESS, request, map);
     }
 
-    private User getUser(String userName) throws NoResultException {
-
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
-        Root<User> root = criteriaQuery.from(User.class);
-        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("userName"), userName));
-        Query<User> query = session.createQuery(criteriaQuery);
-        try
-        {
-            return query.getSingleResult();
-        }
-        catch (NoResultException e)
-        {
-            return null;
-        }
-    }
-
-    private Question getQuestion(String questionID) {
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Question> criteriaQuery = criteriaBuilder.createQuery(Question.class);
-        Root<Question> root = criteriaQuery.from(Question.class);
-        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("id"), questionID));
-        Query<Question> query = session.createQuery(criteriaQuery);
-        try
-        {
-            return query.getSingleResult();
-        }
-        catch (NoResultException e)
-        {
-            return null;
-        }
-    }
     public void close() {
         assert session != null;
         session.close();

@@ -15,10 +15,9 @@ import java.util.Scanner;
 public class EMSserver extends AbstractServer {
 
     private static EMSserver singleInstanceServer = null;
-    //private boolean isOnline = false;
-
     private final DatabaseHandler databaseHandler;
     List<String> loggedInUsers = new ArrayList<>();
+
 
     private EMSserver(int port, DatabaseHandler databaseHandler) {
         super(port);
@@ -49,7 +48,7 @@ public class EMSserver extends AbstractServer {
         {
             try
             {
-                client.sendToClient(databaseHandler.handle((DatabaseRequest) msg, client, loggedInUsers));
+                client.sendToClient(databaseHandler.handle((DatabaseRequest)msg,client,loggedInUsers));
             }
             catch (Exception e)
             {
