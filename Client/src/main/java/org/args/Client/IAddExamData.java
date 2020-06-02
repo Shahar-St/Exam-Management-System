@@ -63,5 +63,5 @@ public interface IAddExamData {
 
     void setCurrentExamTotalScore(String currentExamTotalScore);
 
-
+    void clearDetailsScreen();
 }

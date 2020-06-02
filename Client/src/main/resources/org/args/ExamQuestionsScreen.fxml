@@ -47,8 +47,8 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ListView>
-            <Button fx:id="doneButton" layoutX="140.0" layoutY="506.0" mnemonicParsing="false" onAction="#allQuestionsAdded" prefHeight="32.0" prefWidth="90.0" styleClass="primary" text="Done" />
-            <Button fx:id="cancelButton" layoutX="14.0" layoutY="506.0" mnemonicParsing="false" onAction="#cancel" prefHeight="32.0" prefWidth="90.0" styleClass="danger" text="Cancel" />
+            <Button fx:id="doneButton" layoutX="140.0" layoutY="506.0" mnemonicParsing="false" onAction="#allQuestionsAdded" prefHeight="32.0" prefWidth="90.0" styleClass="primary" text="Next" />
+            <Button fx:id="cancelButton" layoutX="14.0" layoutY="506.0" mnemonicParsing="false" onAction="#cancel" prefHeight="32.0" prefWidth="90.0" styleClass="danger" text="Back" />
          </children>
       </Pane>
    </children>
