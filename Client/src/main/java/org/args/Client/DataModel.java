@@ -393,10 +393,13 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     public void initQuestionsScoringList(){
-        if (observableQuestionsScoringList.isEmpty()){
+        if (observableQuestionsScoringList.isEmpty() && !observableExamQuestionsList.isEmpty()){
             for(String str:observableExamQuestionsList){
                 observableQuestionsScoringList.add("0");
             }
+        }else if(observableExamQuestionsList.isEmpty()){
+            observableQuestionsScoringList.clear();
+            setCurrentExamTotalScore("0.0");
         }
     }
 
@@ -409,6 +412,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     public boolean checkQuestionScoringList(){
+        if(observableQuestionsScoringList.isEmpty())
+            return false;
         for(String str:observableQuestionsScoringList){
             if(Double.parseDouble(str)==0)
                 return false;
