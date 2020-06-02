@@ -59,7 +59,12 @@ public class AddExamDetailsController {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("Error");
-        if (titleTextField.getText().isEmpty())
+        if (titleTextField.getText() == null)
+        {
+            alert.setContentText("Title field can't be empty!");
+            alert.showAndWait();
+        }
+        else if (titleTextField.getText().isEmpty())
         {
             alert.setContentText("Title field can't be empty!");
             alert.showAndWait();
