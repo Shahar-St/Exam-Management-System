@@ -19,60 +19,78 @@ public class ExecutedExam {
     @JoinColumn(name = "student_id")
     private Student student;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @Cascade(CascadeType.SAVE_UPDATE)
-    @JoinColumn(name = "course_id")
-    private Course course;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @Cascade(CascadeType.SAVE_UPDATE)
+//    @JoinColumn(name = "course_id")
+//    private Course course;
+
+     @ManyToOne(fetch = FetchType.LAZY)
+     @Cascade(CascadeType.SAVE_UPDATE)
+     @JoinColumn(name = "exam_id")
+     private Exam exam;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Cascade(CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "teacher_id")
     private Teacher author;
 
-    @ManyToMany(mappedBy = "containedInExecutedExams")
-    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
-    private List<Question> questionsList = new ArrayList<>();
+//    @ManyToMany(mappedBy = "containedInExecutedExams")
+//    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
+//    private List<Question> questionsList = new ArrayList<>();
+
+//    @ElementCollection
+//    private List<Double> questionsScores = new ArrayList<>();
 
     @ElementCollection
-    private List<Double> questionsScores = new ArrayList<>();
+    private List<Integer> answersByStudent= new ArrayList<>();
 
-    private String examId;
+//    private String examId;
+    private String reasonsForChangeGrade;
+    private String commentsAfterCheck;
     private int grade = 0;
     private int duration; // exam duration in minutes
-    private String executedExamDescription, teacherPrivateNotes; // teacherPrivateNotes only for the teacher
+//    private String executedExamDescription, teacherPrivateNotes; // teacherPrivateNotes only for the teacher
 
     //Group c'tors
-    public ExecutedExam() {
-    }
+    public ExecutedExam() { }
 
-    public ExecutedExam(Exam exam, Student student) {
+    public ExecutedExam(Exam exam, Student student, Teacher teacher, String commentsAfterCheck,
+                        List<Integer> answersByStudent, String reasonsForChangeGrade) {
 
-        //exam.getCourse().addExecutedExam(this);
-        this.setCourse(exam.getCourse());
-        for (Question question : exam.getQuestionsList())
-           // question.addExecutedExam(this);
-            this.addQuestion(question);
-        this.questionsScores.addAll(exam.getQuestionsScores());
-        //exam.getAuthor().addExecutedExam(this);
-        this.setAuthor(exam.getAuthor());
-        this.examId = exam.getId();
-        this.duration = exam.getDurationInMinutes();
-        this.executedExamDescription = exam.getDescription();
-        this.teacherPrivateNotes = exam.getTeacherPrivateNotes();
-        //student.addExecutedExam(this);
+        this.setExam(exam);
         this.setStudent(student);
+        this.setAuthor(teacher);
+        this.commentsAfterCheck = commentsAfterCheck;
+        this.reasonsForChangeGrade = reasonsForChangeGrade;
+        this.answersByStudent = answersByStudent;
         if (student.getExtensionEligible())
             setOverTime();
+        else
+            this.duration = exam.getDurationInMinutes();
+
+//        this.setCourse(exam.getCourse());
+//        for (Question question : exam.getQuestionsList())
+//            this.addQuestion(question);
+//        this.questionsScores.addAll(exam.getQuestionsScores());
+
+//        this.setAuthor(exam.getAuthor());
+//        this.examId = exam.getId();
+//          this.duration = exam.getDurationInMinutes();
+//        this.executedExamDescription = exam.getStudentNotes();
+//        this.teacherPrivateNotes = exam.getTeacherNotes();
+
+
     }
 
     //Group adders and removers
-    public void addQuestion(Question question) {
-        if (!questionsList.contains(question))
-            questionsList.add(question);
 
-        if (!question.getContainedInExecutedExams().contains(this))
-            question.getContainedInExecutedExams().add(this);
-    }
+//    public void addQuestion(Question question) {
+//        if (!questionsList.contains(question))
+//            questionsList.add(question);
+//
+//        if (!question.getContainedInExecutedExams().contains(this))
+//            question.getContainedInExecutedExams().add(this);
+//    }
 
     //Group setters and getters
     public int getId() {
@@ -89,14 +107,14 @@ public class ExecutedExam {
             student.addExecutedExam(this);
     }
 
-    public Course getCourse() {
-        return course;
+    public Exam getExam() {
+        return this.exam;
     }
-    public void setCourse(Course course) {
+    public void setExam(Exam exam) {
 
-        this.course = course;
-        if (!course.getExecutedExamsList().contains(this))
-            course.addExecutedExam(this);
+        this.exam = exam;
+        if (!exam.getExecutedExamsList().contains(this))
+            exam.addExecutedExam(this);
     }
 
     public Teacher getAuthor() {
@@ -109,26 +127,26 @@ public class ExecutedExam {
             author.addExecutedExam(this);
     }
 
-    public List<Question> getQuestionsList() {
-        return questionsList;
-    }
-    public void setQuestionsList(List<Question> questionsList) {
-        this.questionsList = questionsList;
-    }
-
-    public List<Double> getQuestionsScores() {
-        return questionsScores;
-    }
-    public void setQuestionsScores(List<Double> questionsScores) {
-        this.questionsScores = questionsScores;
-    }
-
-    public String getExamId() {
-        return examId;
-    }
-    public void setExamId(String examId) {
-        this.examId = examId;
-    }
+//    public List<Question> getQuestionsList() {
+//        return questionsList;
+//    }
+//    public void setQuestionsList(List<Question> questionsList) {
+//        this.questionsList = questionsList;
+//    }
+//
+//    public List<Double> getQuestionsScores() {
+//        return questionsScores;
+//    }
+//    public void setQuestionsScores(List<Double> questionsScores) {
+//        this.questionsScores = questionsScores;
+//    }
+//
+//    public String getExamId() {
+//        return examId;
+//    }
+//    public void setExamId(String examId) {
+//        this.examId = examId;
+//    }
 
     public int getGrade() {
         return grade;
@@ -144,19 +162,19 @@ public class ExecutedExam {
         this.duration = duration;
     }
 
-    public String getExecutedExamDescription() {
-        return executedExamDescription;
-    }
-    public void setExecutedExamDescription(String description) {
-        this.executedExamDescription = description;
-    }
-
-    public String getTeacherPrivateNotes() {
-        return teacherPrivateNotes;
-    }
-    public void setTeacherPrivateNotes(String teacherPrivateNotes) {
-        this.teacherPrivateNotes = teacherPrivateNotes;
-    }
+//    public String getExecutedExamDescription() {
+//        return executedExamDescription;
+//    }
+//    public void setExecutedExamDescription(String description) {
+//        this.executedExamDescription = description;
+//    }
+//
+//    public String getTeacherPrivateNotes() {
+//        return teacherPrivateNotes;
+//    }
+//    public void setTeacherPrivateNotes(String teacherPrivateNotes) {
+//        this.teacherPrivateNotes = teacherPrivateNotes;
+//    }
 
     public void setOverTime() {
         this.duration += 0.25 * this.duration;
