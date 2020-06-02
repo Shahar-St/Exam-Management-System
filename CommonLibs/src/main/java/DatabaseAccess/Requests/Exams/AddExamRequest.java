@@ -56,5 +56,7 @@ public class AddExamRequest extends DatabaseRequest {
         return description;
     }
 
-
+    public String getCourseID() {
+        return courseID;
+    }
 }
