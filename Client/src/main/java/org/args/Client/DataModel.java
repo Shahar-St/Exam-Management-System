@@ -356,8 +356,13 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         setCurrentExamDuration(Integer.toString(currentExam.getDurationInMinutes()));
         observableExamQuestionsList.clear();
         for (LightQuestion question : currentExam.getLightQuestionList())
+        {
             observableExamQuestionsList.add(question.toString());
-        //add support for grades list**********
+        }
+        for (Double score : currentExam.getQuestionsScores())
+        {
+            observableQuestionsScoringList.add(Double.toString(score));
+        }
     }
 
     @Override
