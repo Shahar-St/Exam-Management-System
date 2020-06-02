@@ -2,6 +2,7 @@ package org.args.GUI;
 
 
 import DatabaseAccess.Responses.*;
+import DatabaseAccess.Responses.Exams.DeleteExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
 import DatabaseAccess.Responses.Questions.EditQuestionResponse;
@@ -231,10 +232,31 @@ public class ClientApp extends Application {
     }
 
     @Subscribe
+    public void handleDeleteExamResponse(DeleteExamResponse response) {
+        Alert alert;
+        if (response.getStatus() == 0) {
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Exam Deleted");
+            alert.setContentText("Exam Deleted Successfully!");
+        } else {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("Ooops, exam could not be deleted!");
+        }
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                alert.showAndWait();
+            }
+        });
+        setRoot("ExamManagementScreen");
+    }
+
+    @Subscribe
     public void handleViewExamResponse(ViewExamResponse response){
         if(response.getStatus()==0){
             pushLastScene(scene.getRoot());
-            FXMLLoader loader = model.getViewMode().equals("EDIT") ? fxmlLoader("AddExamDetailsScreen") : fxmlLoader("ViewExamScreen");
+            FXMLLoader loader = fxmlLoader("ViewExamScreen");
             Parent screen = null;
             try {
                 screen = loader.load();

@@ -305,22 +305,30 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Subscribe
     public void handleViewExamResponse(ViewExamResponse response) {
-        if(viewMode.equals("VIEW"))
             currentExam = response.getLightExam();
-        else if (viewMode.equals("EDIT"))
-            startExamEdit(response.getLightExam());
     }
 
-    public void startExamEdit(LightExam exam)
+    public void startExamEdit()
     {
-        setCurrentExamTitle(exam.getTitle());
-        setCurrentExamStudentNotes(exam.getStudentNotes());
-        setCurrentExamTeacherNotes(exam.getTeacherNotes());
-        setCurrentExamDuration(Integer.toString(exam.getDurationInMinutes()));
+        setViewMode("EDIT");
+        setCurrentExamTitle(currentExam.getTitle());
+        setCurrentExamStudentNotes(currentExam.getStudentNotes());
+        setCurrentExamTeacherNotes(currentExam.getTeacherNotes());
+        setCurrentExamDuration(Integer.toString(currentExam.getDurationInMinutes()));
         observableExamQuestionsList.clear();
-        for (LightQuestion question : exam.getLightQuestionList())
+        for (LightQuestion question : currentExam.getLightQuestionList())
             observableExamQuestionsList.add(question.toString());
         //add support for grades list
+    }
+
+    @Override
+    public boolean isExamDeletable() {
+        return getName().equals(currentExam.getAuthor());
+    }
+
+    @Override
+    public void deleteExam() {
+        ClientApp.sendRequest(new DeleteExamRequest(currentExam.getId()));
     }
 
     String viewMode;

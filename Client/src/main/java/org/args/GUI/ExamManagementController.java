@@ -31,16 +31,11 @@ public class ExamManagementController {
     private Button addButton;
 
     @FXML
-    private Button deleteButton;
-
-    @FXML
     private ListView<String> examListView;
 
     @FXML
     private Button executeButton;
 
-    @FXML
-    private Button editButton;
 
 
     private IExamManagementData model;
@@ -51,11 +46,9 @@ public class ExamManagementController {
 
     @FXML
     private void bindButtonVisibility() {
-        deleteButton.visibleProperty().bind(model.isCourseSelected());
         addButton.visibleProperty().bind(model.isCourseSelected());
         detailsButton.visibleProperty().bind(model.isCourseSelected());
         executeButton.visibleProperty().bind(model.isCourseSelected());
-        editButton.visibleProperty().bind(model.isCourseSelected());
     }
 
     @FXML
@@ -128,20 +121,17 @@ public class ExamManagementController {
         coursesDropdown.getItems().add(course);
     }
 
-    @FXML
-    void deleteExam(ActionEvent event) {
 
-    }
 
     @FXML
     void switchToAddExamScreen(ActionEvent event) {
         model.fillQuestionsList(model.getCurrentCourse());
-        ClientApp.setRoot("AddExamDetailsScreen");
+        model.setViewMode("ADD");
+        ClientApp.setRoot("ExamDetailsScreen");
     }
 
     @FXML
     void switchToExamScreen(ActionEvent event) {
-        model.setViewMode("VIEW");
         viewSelectedExamDetails();
     }
 
@@ -192,12 +182,6 @@ public class ExamManagementController {
         return null;
     }
 
-
-    @FXML
-    void editExam(ActionEvent event) {
-        model.setViewMode("EDIT");
-        viewSelectedExamDetails();
-    }
 
     @FXML
     void executeExam(ActionEvent event) {

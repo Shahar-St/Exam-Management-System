@@ -8,7 +8,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.args.Client.IAddExamData;
 
-public class AddExamQuestionsController {
+public class ExamQuestionsController {
 
     @FXML
     private Label questionsListTitle;

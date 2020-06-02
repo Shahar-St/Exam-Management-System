@@ -2,13 +2,14 @@ package org.args.GUI;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.args.Client.IAddExamData;
 
-public class AddExamDetailsController {
+public class ExamDetailsController {
+
+
+    @FXML
+    private Label pageTitle;
 
     @FXML
     private TextField titleTextField;
@@ -39,6 +40,8 @@ public class AddExamDetailsController {
     {
         setModel(ClientApp.getModel());
         bindTextFields();
+        if(model.getViewMode().equals("EDIT"))
+            pageTitle.setText("Edit An Existing Exam");
     }
 
 
@@ -50,8 +53,12 @@ public class AddExamDetailsController {
     }
 
     @FXML
-    void backToExamManagement(ActionEvent event) {
-        ClientApp.setRoot("ExamManagementScreen");
+    void back(ActionEvent event)
+    {
+        if (model.getViewMode().equals("ADD"))
+            ClientApp.setRoot("ExamManagementScreen");
+        else
+            ClientApp.backToLastScene();
     }
 
     @FXML
@@ -79,6 +86,7 @@ public class AddExamDetailsController {
             ClientApp.setRoot("AddExamQuestionsScreen");
         }
     }
+
 
     private boolean isNumeric(String str) {
         try {

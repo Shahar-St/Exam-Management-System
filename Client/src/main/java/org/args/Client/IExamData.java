@@ -16,4 +16,11 @@ public interface IExamData {
     int getCurrentExamDurationOnMinutes();
 
     List<Double> getCurrentExamQuestionsScoreList();
+
+    boolean isExamDeletable();
+
+    void deleteExam();
+
+    void startExamEdit();
+
 }

@@ -2,11 +2,13 @@ package org.args;
 
 
 import DatabaseAccess.Requests.Exams.AllExamsRequest;
+import DatabaseAccess.Requests.Exams.DeleteExamRequest;
 import DatabaseAccess.Requests.Exams.ViewExamRequest;
 import DatabaseAccess.Requests.Questions.AllQuestionsRequest;
 import DatabaseAccess.Requests.Questions.EditQuestionRequest;
 import DatabaseAccess.Requests.Questions.QuestionRequest;
 import DatabaseAccess.Responses.Exams.AllExamsResponse;
+import DatabaseAccess.Responses.Exams.DeleteExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
 import DatabaseAccess.Responses.Questions.EditQuestionResponse;
@@ -135,7 +137,12 @@ public class ServerApp extends AbstractServer
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        } else if(msg instanceof DeleteExamRequest)
+            try {
+                client.sendToClient(new DeleteExamResponse(0,(DeleteExamRequest)msg));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
     }
 

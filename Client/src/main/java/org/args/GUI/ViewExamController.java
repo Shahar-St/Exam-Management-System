@@ -5,11 +5,9 @@
 package org.args.GUI;
 
 import LightEntities.LightQuestion;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.Pagination;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -17,6 +15,7 @@ import org.args.Client.IExamData;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ViewExamController {
@@ -38,19 +37,45 @@ public class ViewExamController {
     @FXML // fx:id="pageView"
     private Pagination pageView; // Value injected by FXMLLoader
 
-    @FXML
-    private ImageView backButton;
 
     @FXML
-    void onBackClick(MouseEvent event) {
+    private Button cancelButton;
+
+    @FXML
+    private Button editButton;
+
+    @FXML
+    private Button deleteButton;
+
+    @FXML
+    void onBackClick(ActionEvent event) {
         ClientApp.backToLastScene();
+    }
 
+    @FXML
+    void deleteExam(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Exam");
+        alert.setHeaderText("Delete Exam " + model.getCurrentExamDescription());
+        alert.setContentText("Are you sure you want to delete this exam?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            model.deleteExam();
+        }
+    }
+
+    @FXML
+    void editExam(ActionEvent event) {
+        model.startExamEdit();
+        ClientApp.setRoot("ExamDetailsScreen");
     }
 
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         setModel(ClientApp.getModel());
+        deleteButton.setDisable(!model.isExamDeletable());
+        editButton.setDisable(!model.isExamDeletable());
         List<LightQuestion> questionList = model.getLightQuestionListFromCurrentExam();
         List<Double> questionsScores = model.getCurrentExamQuestionsScoreList();
         String examDescription = model.getCurrentExamDescription();
