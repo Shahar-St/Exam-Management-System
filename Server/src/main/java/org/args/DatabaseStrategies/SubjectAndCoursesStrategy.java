@@ -3,10 +3,7 @@ package org.args.DatabaseStrategies;
 import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
-import org.args.Entities.Course;
-import org.args.Entities.Dean;
-import org.args.Entities.Teacher;
-import org.args.Entities.User;
+import org.args.Entities.*;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -31,20 +28,13 @@ public class SubjectAndCoursesStrategy extends DatabaseStrategy {
         User user = getUser((String) client.getInfo("userName"), session);
 
         List<Course> courses;
+
         if (user instanceof Teacher)
             courses = ((Teacher) user).getCoursesList();
-        else if (user instanceof Dean)
-        {
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<Course> criteriaQuery = criteriaBuilder.createQuery(Course.class);
-            criteriaQuery.from(Course.class);
-            Query<Course> query = session.createQuery(criteriaQuery);
-            courses = query.getResultList();
-        }
-        else
-        {  // user is a Student -  need to implement
-            courses = new ArrayList<>();
-        }
+        else if (user instanceof Student)
+            courses = ((Student) user).getCoursesList();
+        else // user instanceof Dean - get all courses
+            courses = getAllOfType(session, Course.class);
 
         for (Course course : courses)
         {

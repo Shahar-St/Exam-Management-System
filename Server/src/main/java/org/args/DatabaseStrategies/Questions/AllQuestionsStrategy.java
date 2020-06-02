@@ -6,17 +6,10 @@ import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
 import Util.Pair;
 import org.args.DatabaseStrategies.DatabaseStrategy;
-import org.args.Entities.Course;
-import org.args.Entities.Question;
-import org.args.Entities.Teacher;
-import org.args.Entities.User;
+import org.args.Entities.*;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,19 +40,17 @@ public class AllQuestionsStrategy extends DatabaseStrategy {
             Teacher teacher = (Teacher) user;
             for (Course tCourse : teacher.getCoursesList())
             {
-                if (tCourse.getName().equals(allQuestionsRequest.getCourse()))
+                if (tCourse.getName().equals(allQuestionsRequest.getCourseID()))
                     questionList.addAll(tCourse.getQuestionsList());
             }
         }
-        else    // user is dean
+        else if (user instanceof Dean)  // user is dean
+            questionList = getAllOfType(session, Question.class);
+        else if (user instanceof Student)
         {
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<Question> criteriaQuery = criteriaBuilder.createQuery(Question.class);
-            Root<Question> root = criteriaQuery.from(Question.class);
-            criteriaQuery.select(root);
-            Query<Question> query = session.createQuery(criteriaQuery);
-            questionList.addAll(query.getResultList());
+
         }
+
 
         for (Question question : questionList)
             map.put(question.getId(),

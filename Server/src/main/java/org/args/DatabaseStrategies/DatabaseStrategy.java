@@ -42,6 +42,13 @@ public abstract class DatabaseStrategy {
         }
     }
 
+    protected <T> List<T> getAllOfType(Session session, Class<T> objectType) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<T> query = builder.createQuery(objectType);
+        query.from(objectType);
+        return session.createQuery(query).getResultList();
+    }
+
     protected User getUser(String userName, Session session) throws NoResultException {
 
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
