@@ -83,7 +83,7 @@ public class ExamDetailsController {
         }
         else
         {
-            ClientApp.setRoot("AddExamQuestionsScreen");
+            ClientApp.setRoot("ExamQuestionsScreen");
         }
     }
 
