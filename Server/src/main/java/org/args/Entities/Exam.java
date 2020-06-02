@@ -1,5 +1,7 @@
 package org.args.Entities;
 
+import LightEntities.LightExam;
+import org.hibernate.Session;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -124,5 +126,12 @@ public class Exam {
     }
     public void setQuestionsScores(List<Double> questionsScores) {
         this.questionsScores = questionsScores;
+    }
+
+    @Override
+    protected LightExam clone() throws CloneNotSupportedException {
+        super.clone();
+
+
     }
 }

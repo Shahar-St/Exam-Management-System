@@ -48,7 +48,7 @@ public class EMSserver extends AbstractServer {
         {
             try
             {
-                client.sendToClient(databaseHandler.handle((DatabaseRequest) msg, client, loggedInUsers));
+                client.sendToClient(databaseHandler.produceResponse((DatabaseRequest) msg, client, loggedInUsers));
             }
             catch (Exception e)
             {

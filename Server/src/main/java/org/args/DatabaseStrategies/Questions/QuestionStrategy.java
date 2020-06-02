@@ -1,4 +1,4 @@
-package org.args.DatabaseStrategies.QuestionStrategy;
+package org.args.DatabaseStrategies.Questions;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.Questions.QuestionRequest;

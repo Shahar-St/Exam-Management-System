@@ -4,9 +4,9 @@ import DatabaseAccess.Requests.*;
 import DatabaseAccess.Responses.*;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.DatabaseStrategies.LoginStrategy;
-import org.args.DatabaseStrategies.QuestionStrategy.AllQuestionsStrategy;
-import org.args.DatabaseStrategies.QuestionStrategy.EditQuestionStrategy;
-import org.args.DatabaseStrategies.QuestionStrategy.QuestionStrategy;
+import org.args.DatabaseStrategies.Questions.AllQuestionsStrategy;
+import org.args.DatabaseStrategies.Questions.EditQuestionStrategy;
+import org.args.DatabaseStrategies.Questions.QuestionStrategy;
 import org.args.DatabaseStrategies.SubjectAndCoursesStrategy;
 import org.args.Entities.*;
 import org.args.OCSF.ConnectionToClient;
@@ -30,7 +30,7 @@ public class DatabaseHandler {
         this.put("LoginRequest", new LoginStrategy());
         this.put("SubjectsAndCoursesRequest", new SubjectAndCoursesStrategy());
         this.put("QuestionRequest", new QuestionStrategy());
-        this.put("EditQuestionRequest",new EditQuestionStrategy());
+        this.put("EditQuestionRequest", new EditQuestionStrategy());
         this.put("AllQuestionsRequest", new AllQuestionsStrategy());
     }};
 
@@ -84,24 +84,24 @@ public class DatabaseHandler {
     private static SessionFactory getSessionFactory() throws HibernateException {
 
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
-        Configuration configuration = new Configuration();
-        configuration.addAnnotatedClass(User.class);
-        configuration.addAnnotatedClass(Teacher.class);
-        configuration.addAnnotatedClass(Dean.class);
-        configuration.addAnnotatedClass(Student.class);
-        configuration.addAnnotatedClass(Subject.class);
-        configuration.addAnnotatedClass(Course.class);
-        configuration.addAnnotatedClass(Question.class);
-        configuration.addAnnotatedClass(Exam.class);
-        configuration.addAnnotatedClass(ExecutedExam.class);
+        Configuration configuration = new Configuration()
+                .addAnnotatedClass(User.class)
+                .addAnnotatedClass(Teacher.class)
+                .addAnnotatedClass(Dean.class)
+                .addAnnotatedClass(Student.class)
+                .addAnnotatedClass(Subject.class)
+                .addAnnotatedClass(Course.class)
+                .addAnnotatedClass(Question.class)
+                .addAnnotatedClass(Exam.class)
+                .addAnnotatedClass(ExecutedExam.class);
 
         ServiceRegistry serviceRegistry =
                 new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         return configuration.buildSessionFactory(serviceRegistry);
     }
 
-    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client,
-                                   List<String> loggedInUsers) {
+    public DatabaseResponse produceResponse(DatabaseRequest request, ConnectionToClient client,
+                                            List<String> loggedInUsers) {
         return strategies.get(request.getClass().getSimpleName()).handle(request, client, session, loggedInUsers);
     }
 
@@ -110,7 +110,6 @@ public class DatabaseHandler {
         session.close();
         session.getSessionFactory().close();
     }
-
 
     //Group dummy DB
     private final int NUM_OF_SUBJECTS = 2;

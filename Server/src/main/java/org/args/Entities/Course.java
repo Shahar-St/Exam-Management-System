@@ -1,5 +1,6 @@
 package org.args.Entities;
 
+import com.sun.istack.Nullable;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
