@@ -26,13 +26,13 @@ public class ExecutedExam {
 
      @ManyToOne(fetch = FetchType.LAZY)
      @Cascade(CascadeType.SAVE_UPDATE)
-     @JoinColumn(name = "exam_id")
-     private Exam exam;
+     @JoinColumn(name = "ConcreteExam_id")
+     private ConcreteExam exam;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @Cascade(CascadeType.SAVE_UPDATE)
-    @JoinColumn(name = "teacher_id")
-    private Teacher author;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @Cascade(CascadeType.SAVE_UPDATE)
+//    @JoinColumn(name = "teacher_id")
+//    private Teacher author;
 
 //    @ManyToMany(mappedBy = "containedInExecutedExams")
 //    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
@@ -54,12 +54,11 @@ public class ExecutedExam {
     //Group c'tors
     public ExecutedExam() { }
 
-    public ExecutedExam(Exam exam, Student student, Teacher teacher, String commentsAfterCheck,
+    public ExecutedExam(ConcreteExam exam, Student student, String commentsAfterCheck,
                         List<Integer> answersByStudent, String reasonsForChangeGrade) {
 
         this.setExam(exam);
         this.setStudent(student);
-        this.setAuthor(teacher);
         this.commentsAfterCheck = commentsAfterCheck;
         this.reasonsForChangeGrade = reasonsForChangeGrade;
         this.answersByStudent = answersByStudent;
@@ -107,25 +106,25 @@ public class ExecutedExam {
             student.addExecutedExam(this);
     }
 
-    public Exam getExam() {
-        return this.exam;
+    public ConcreteExam getExam() {
+        return exam;
     }
-    public void setExam(Exam exam) {
+    public void setExam(ConcreteExam exam) {
 
         this.exam = exam;
         if (!exam.getExecutedExamsList().contains(this))
             exam.addExecutedExam(this);
     }
-
-    public Teacher getAuthor() {
-        return author;
-    }
-    public void setAuthor(Teacher author) {
-
-        this.author = author;
-        if (!author.getExecutedExamsList().contains(this))
-            author.addExecutedExam(this);
-    }
+//
+//    public Teacher getAuthor() {
+//        return author;
+//    }
+//    public void setAuthor(Teacher author) {
+//
+//        this.author = author;
+//        if (!author.getExecutedExamsList().contains(this))
+//            author.addExecutedExam(this);
+//    }
 
 //    public List<Question> getQuestionsList() {
 //        return questionsList;

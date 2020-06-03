@@ -29,9 +29,12 @@ public class Exam {
     @JoinColumn(name = "teacher_id")
     private Teacher author;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "exam")
-    @Cascade(CascadeType.SAVE_UPDATE)
-    private List<ExecutedExam> executedExamsList = new ArrayList<>();
+    @OneToMany
+    private List<ConcreteExam> concreteExamsList = new ArrayList<>();
+//
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "exam")
+//    @Cascade(CascadeType.SAVE_UPDATE)
+//    private List<ExecutedExam> executedExamsList = new ArrayList<>();
 
     @ManyToMany(mappedBy = "containedInExams")
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
@@ -84,12 +87,16 @@ public class Exam {
             question.getContainedInExams().add(this);
     }
 
-    public void addExecutedExam(ExecutedExam executedExam) {
-        if (!executedExamsList.contains(executedExam))
-            executedExamsList.add(executedExam);
+//    public void addExecutedExam(ExecutedExam executedExam) {
+//        if (!executedExamsList.contains(executedExam))
+//            executedExamsList.add(executedExam);
+//
+//        if (executedExam.getExam() != this)
+//            executedExam.setExam(this);
+//    }
 
-        if (executedExam.getExam() != this)
-            executedExam.setExam(this);
+    public void addConcreteExam(ConcreteExam exam) { // need to implement
+
     }
 
     //Group setters and getters
@@ -167,13 +174,13 @@ public class Exam {
         this.questionsScores = questionsScores;
     }
 
-    public List<ExecutedExam> getExecutedExamsList() {
-        return executedExamsList;
-    }
-
-    public void setExecutedExamsList(List<ExecutedExam> executedExamsList) {
-        this.executedExamsList = executedExamsList;
-    }
+//    public List<ExecutedExam> getExecutedExamsList() {
+//        return executedExamsList;
+//    }
+//
+//    public void setExecutedExamsList(List<ExecutedExam> executedExamsList) {
+//        this.executedExamsList = executedExamsList;
+//    }
 
     public LocalDateTime getLastModified() {
         return lastModified;
@@ -181,6 +188,13 @@ public class Exam {
 
     public void setLastModified() {
         this.lastModified = LocalDateTime.now();
+    }
+
+    public List<ConcreteExam> getConcreteExamsList() {
+        return concreteExamsList;
+    }
+    public void setConcreteExamsList(List<ConcreteExam> concreteExamsList) {
+        this.concreteExamsList = concreteExamsList;
     }
 
     @Override

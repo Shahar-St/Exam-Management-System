@@ -31,7 +31,7 @@ public class EditExamStrategy extends DatabaseStrategy {
         if (exam.getAuthor() != getUser((String) client.getInfo("userName"), session))
             return new EditExamResponse(NO_ACCESS, request);
 
-        if (!exam.getExecutedExamsList().isEmpty())
+        if (!exam.getConcreteExamsList().isEmpty())
         {
             Exam newExam = new Exam(exam);
             session.saveOrUpdate(newExam);

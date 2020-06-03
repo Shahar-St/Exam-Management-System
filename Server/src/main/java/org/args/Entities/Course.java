@@ -65,7 +65,6 @@ public class Course {
         this.id = decimalFormat.format(id);
         this.name = name;
         this.setSubject(subject);
-        //this.setTeacher(teacher);
 
         for (int i = 0; i < 1000; i++)  // max questions per course
             availableQuestionCodes.add(i);

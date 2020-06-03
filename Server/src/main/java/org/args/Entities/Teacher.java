@@ -31,9 +31,9 @@ public class Teacher extends User {
     @Cascade(CascadeType.SAVE_UPDATE)
     private List<Exam> examsList = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "tester")
     @Cascade(CascadeType.SAVE_UPDATE)
-    private List<ExecutedExam> executedExamsList = new ArrayList<>();
+    private List<ConcreteExam> concreteExamsList = new ArrayList<>();
 
     //Group c'tors
     public Teacher() {
@@ -76,12 +76,12 @@ public class Teacher extends User {
             question.setAuthor(this);
     }
 
-    public void addExecutedExam(ExecutedExam executedExam) {
-        if (!executedExamsList.contains(executedExam))
-            executedExamsList.add(executedExam);
+    public void addConcreteExam(ConcreteExam concreteExam) {
+        if (!concreteExamsList.contains(concreteExam))
+            concreteExamsList.add(concreteExam);
 
-        if (executedExam.getAuthor() != this)
-            executedExam.setAuthor(this);
+        if (concreteExam.getTester() != this)
+            concreteExam.setTester(this);
     }
 
     public Question createQuestion(String questionContent, List<String> answersArray, int correctAnswer, Course course){
@@ -127,10 +127,10 @@ public class Teacher extends User {
         this.examsList = examsList;
     }
 
-    public List<ExecutedExam> getExecutedExamsList() {
-        return executedExamsList;
+    public List<ConcreteExam> getConcreteExamsList() {
+        return concreteExamsList;
     }
-    public void setExecutedExamsList(List<ExecutedExam> execExamsList) {
-        this.executedExamsList = execExamsList;
+    public void setConcreteExamsList(List<ConcreteExam> concreteExamsList) {
+        this.concreteExamsList = concreteExamsList;
     }
 }
