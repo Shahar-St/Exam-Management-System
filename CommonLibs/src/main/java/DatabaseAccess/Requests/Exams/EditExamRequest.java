@@ -9,11 +9,11 @@ public class EditExamRequest extends DatabaseRequest {
     private final String examId;
     private final String examTitle;
     private final List<String> questionsIDs;
-    private final List<Integer> scoresList;
+    private final List<Double> scoresList;
     private final String teacherNotes;
     private final String studentNotes;
 
-    public EditExamRequest(String examId, String examTitle, List<String> questionsIDs, List<Integer> scoresList, String teacherNotes, String studentNotes) {
+    public EditExamRequest(String examId, String examTitle, List<String> questionsIDs, List<Double> scoresList, String teacherNotes, String studentNotes) {
         this.examId = examId;
         this.examTitle = examTitle;
         this.questionsIDs = questionsIDs;
@@ -34,7 +34,7 @@ public class EditExamRequest extends DatabaseRequest {
         return questionsIDs;
     }
 
-    public List<Integer> getScoresList() {
+    public List<Double> getScoresList() {
         return scoresList;
     }
 

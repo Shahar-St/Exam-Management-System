@@ -1,19 +1,19 @@
 package org.args.Client;
 
-import DatabaseAccess.Requests.Exams.AddExamRequest;
-import DatabaseAccess.Requests.Exams.AllExamsRequest;
-import DatabaseAccess.Requests.Exams.DeleteExamRequest;
-import DatabaseAccess.Requests.Exams.ViewExamRequest;
+import DatabaseAccess.Requests.Exams.*;
 import DatabaseAccess.Requests.LoginRequest;
 import DatabaseAccess.Requests.Questions.AllQuestionsRequest;
 import DatabaseAccess.Requests.Questions.EditQuestionRequest;
 import DatabaseAccess.Requests.Questions.QuestionRequest;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
+import DatabaseAccess.Responses.Exams.AddExamResponse;
 import DatabaseAccess.Responses.Exams.AllExamsResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
 import DatabaseAccess.Responses.LoginResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
+import DatabaseAccess.Responses.Questions.EditQuestionResponse;
 import DatabaseAccess.Responses.Questions.QuestionResponse;
+import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
 import LightEntities.LightExam;
 import LightEntities.LightQuestion;
@@ -25,6 +25,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import org.args.GUI.ClientApp;
@@ -362,6 +363,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     }
 
+
+
     public void startExamEdit() {
         setViewMode("EDIT");
     }
@@ -607,6 +610,17 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     // TODO: implement method for ITeacherViewStatsData
+    private final HashMap<String, Double> currentExamForStats = new HashMap<>();
+
+    public HashMap<String, Double> getCurrentExamForStats() {
+        return currentExamForStats;
+    }
+
+    @Subscribe
+    public void handleTeacherStatisticsResponse(TeacherStatisticsResponse response){
+        getCurrentExamForStats().putAll(response.getExamHashMap());
+    }
+
     @Override
     public List getTeacherExams() {
         return null;
@@ -661,8 +675,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     //TODO: implement IExamData Method
     @Override
     public void saveExam(String title, int duration, String teacherNotes, String studentNotes, List<String> questionList, List<Double> questionsScoreList, String examId) {
-        ClientApp.sendRequest(new AddExamRequest(title, questionList, questionsScoreList, teacherNotes, studentNotes, duration,currentCourseId));
-
+        if(getViewMode().equals("ADD")) {
+            ClientApp.sendRequest(new AddExamRequest(title, questionList, questionsScoreList, teacherNotes, studentNotes, duration, currentCourseId));
+        }else{
+            ClientApp.sendRequest(new EditExamRequest(examId,title,questionList,questionsScoreList,teacherNotes,studentNotes));
+        }
     }
 
     //TODO: implement ITeacherExamExecutionData Methods

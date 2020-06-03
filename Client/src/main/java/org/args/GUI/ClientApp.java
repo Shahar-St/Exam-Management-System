@@ -2,11 +2,13 @@ package org.args.GUI;
 
 
 import DatabaseAccess.Responses.*;
+import DatabaseAccess.Responses.Exams.AddExamResponse;
 import DatabaseAccess.Responses.Exams.DeleteExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
 import DatabaseAccess.Responses.Questions.EditQuestionResponse;
 import DatabaseAccess.Responses.Questions.QuestionResponse;
+import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -233,21 +235,18 @@ public class ClientApp extends Application {
 
     @Subscribe
     public void handleDeleteExamResponse(DeleteExamResponse response) {
-        Alert alert;
-        if (response.getStatus() == 0) {
-            alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Exam Deleted");
-            alert.setContentText("Exam Deleted Successfully!");
-        } else {
-            alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText("Ooops, exam could not be deleted!");
-        }
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                alert.showAndWait();
+        Platform.runLater(()->{
+            Alert alert;
+            if (response.getStatus() == 0) {
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Exam Deleted");
+                alert.setContentText("Exam Deleted Successfully!");
+            } else {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("Ooops, exam could not be deleted!");
             }
+            alert.showAndWait();
         });
         setRoot("ExamManagementScreen");
     }
@@ -268,6 +267,32 @@ public class ClientApp extends Application {
         else{
             popUpAlert("Failed to Fetch Exam");
         }
+    }
+
+    @Subscribe
+    public void handleAddExamResponse(AddExamResponse response){
+        if(response.getStatus() == 0){
+            popUpAlert("Add Exam Successfully");
+            setRoot("ExamManagementScreen");
+        }else{
+            popUpAlert("Add Exam Failed");
+        }
+
+    }
+
+    @Subscribe
+    public void handleEditExamResponse(EditQuestionResponse response){
+        if(response.getStatus() == 0){
+            popUpAlert("Edit Exam Successfully");
+        }else{
+            popUpAlert("Edit Exam Failed");
+        }
+
+    }
+
+    @Subscribe
+    public void handleTeacherStatisticsResponse(TeacherStatisticsResponse response){
+        setRoot("TeacherStatisticsScreen");
     }
 
     public static Parent popLastScene() {
