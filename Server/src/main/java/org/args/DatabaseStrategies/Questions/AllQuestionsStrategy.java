@@ -34,22 +34,8 @@ public class AllQuestionsStrategy extends DatabaseStrategy {
             return new AllQuestionsResponse(NOT_FOUND, request);
 
         Course course = getTypeById(Course.class, allQuestionsRequest.getCourseID(), session);
-        List<Question> questionList = new ArrayList<>();
 
-        if (user instanceof Dean)
-            questionList.addAll(course.getQuestionsList());
-        else if (user instanceof Teacher)
-        {
-            for (Question question : course.getQuestionsList())
-            {
-                if (question.getAuthor() == user)
-                    questionList.add(question);
-            }
-        }
-        else
-            return new AllQuestionsResponse(UNAUTHORIZED, request);
-
-        for (Question question : questionList)
+        for (Question question : course.getQuestionsList())
             map.put(question.getId(),
                     new Pair<>(question.getLastModified(), question.getQuestionContent()));
 
