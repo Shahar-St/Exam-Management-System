@@ -168,7 +168,7 @@ public class ViewExamController {
                     break;
             }
 
-            return new VBox(description_label, description, privateNotes_label, privateNotes, duration_label, duration,
+            return new VBox(description_label, description, privateNotes_label, privateNotes,studentNotes_label,sNotes ,duration_label, duration,
                     date_label, lastModified, author_label, author, content_label, content, ans1_label, answer1, ans2_label,
                     answer2, ans3_label, answer3, ans4_label, answer4, score_label, score);
 
