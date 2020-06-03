@@ -29,7 +29,8 @@ public class Exam {
     @JoinColumn(name = "teacher_id")
     private Teacher author;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "exam")
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     private List<ConcreteExam> concreteExamsList = new ArrayList<>();
 //
 //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "exam")
@@ -51,8 +52,7 @@ public class Exam {
 
 
     //Group c'tors
-    public Exam() {
-    }
+    public Exam() { }
 
     public Exam(Course course, Teacher author, int durationInMinutes, String title, String studentNotes,
                 String teacherNotes, List<Question> questionsList, List<Double> questionsScores) {
@@ -67,6 +67,7 @@ public class Exam {
         this.questionsScores.addAll(questionsScores);
         setLastModified();
 
+        //handle max size
         DecimalFormat decimalFormat = new DecimalFormat("00");
         this.id = course.getSubject().getId() + course.getId() +
                 decimalFormat.format(course.getAvailableExamCodes().poll());
@@ -95,8 +96,12 @@ public class Exam {
 //            executedExam.setExam(this);
 //    }
 
-    public void addConcreteExam(ConcreteExam exam) { // need to implement
+    public void addConcreteExam(ConcreteExam concreteExam) {
+        if (!concreteExamsList.contains(concreteExam))
+            concreteExamsList.add(concreteExam);
 
+        if(concreteExam.getExam() != this)
+            concreteExam.setExam(this);
     }
 
     //Group setters and getters
@@ -185,7 +190,6 @@ public class Exam {
     public LocalDateTime getLastModified() {
         return lastModified;
     }
-
     public void setLastModified() {
         this.lastModified = LocalDateTime.now();
     }
@@ -196,6 +200,8 @@ public class Exam {
     public void setConcreteExamsList(List<ConcreteExam> concreteExamsList) {
         this.concreteExamsList = concreteExamsList;
     }
+
+
 
     @Override
     public LightExam clone() throws CloneNotSupportedException {

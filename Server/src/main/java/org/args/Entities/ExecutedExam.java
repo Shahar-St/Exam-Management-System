@@ -27,7 +27,7 @@ public class ExecutedExam {
      @ManyToOne(fetch = FetchType.LAZY)
      @Cascade(CascadeType.SAVE_UPDATE)
      @JoinColumn(name = "ConcreteExam_id")
-     private ConcreteExam exam;
+     private ConcreteExam concreteExam;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @Cascade(CascadeType.SAVE_UPDATE)
@@ -54,18 +54,17 @@ public class ExecutedExam {
     //Group c'tors
     public ExecutedExam() { }
 
-    public ExecutedExam(ConcreteExam exam, Student student, String commentsAfterCheck,
+    public ExecutedExam(ConcreteExam concreteExam, Student student, String commentsAfterCheck,
                         List<Integer> answersByStudent, String reasonsForChangeGrade) {
 
-        this.setExam(exam);
+        this.setConcreteExam(concreteExam);
         this.setStudent(student);
         this.commentsAfterCheck = commentsAfterCheck;
         this.reasonsForChangeGrade = reasonsForChangeGrade;
         this.answersByStudent = answersByStudent;
+        this.duration = concreteExam.getExam().getDurationInMinutes();
         if (student.getExtensionEligible())
             setOverTime();
-        else
-            this.duration = exam.getDurationInMinutes();
 
 //        this.setCourse(exam.getCourse());
 //        for (Question question : exam.getQuestionsList())
@@ -78,10 +77,7 @@ public class ExecutedExam {
 //        this.executedExamDescription = exam.getStudentNotes();
 //        this.teacherPrivateNotes = exam.getTeacherNotes();
 
-
     }
-
-    //Group adders and removers
 
 //    public void addQuestion(Question question) {
 //        if (!questionsList.contains(question))
@@ -90,6 +86,7 @@ public class ExecutedExam {
 //        if (!question.getContainedInExecutedExams().contains(this))
 //            question.getContainedInExecutedExams().add(this);
 //    }
+
 
     //Group setters and getters
     public int getId() {
@@ -106,14 +103,14 @@ public class ExecutedExam {
             student.addExecutedExam(this);
     }
 
-    public ConcreteExam getExam() {
-        return exam;
+    public ConcreteExam getConcreteExam() {
+        return concreteExam;
     }
-    public void setExam(ConcreteExam exam) {
+    public void setConcreteExam(ConcreteExam concreteExam) {
 
-        this.exam = exam;
-        if (!exam.getExecutedExamsList().contains(this))
-            exam.addExecutedExam(this);
+        this.concreteExam = concreteExam;
+        if (!concreteExam.getExecutedExamsList().contains(this))
+            concreteExam.addExecutedExam(this);
     }
 //
 //    public Teacher getAuthor() {
@@ -178,4 +175,30 @@ public class ExecutedExam {
     public void setOverTime() {
         this.duration += 0.25 * this.duration;
     }
+
+    public List<Integer> getAnswersByStudent() {
+        return answersByStudent;
+    }
+
+    public void setAnswersByStudent(List<Integer> answersByStudent) {
+        this.answersByStudent = answersByStudent;
+    }
+
+    public String getReasonsForChangeGrade() {
+        return reasonsForChangeGrade;
+    }
+
+    public void setReasonsForChangeGrade(String reasonsForChangeGrade) {
+        this.reasonsForChangeGrade = reasonsForChangeGrade;
+    }
+
+    public String getCommentsAfterCheck() {
+        return commentsAfterCheck;
+    }
+
+    public void setCommentsAfterCheck(String commentsAfterCheck) {
+        this.commentsAfterCheck = commentsAfterCheck;
+    }
+
+
 }
