@@ -24,7 +24,7 @@ public class LightQuestion implements Serializable {
         this.author = author;
         this.course = course;
         this.lastModified = lastModified;
-        questionId = id;
+        this.questionId = id;
     }
 
     public String getQuestionContent() {

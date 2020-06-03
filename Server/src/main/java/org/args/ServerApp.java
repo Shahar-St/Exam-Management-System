@@ -66,7 +66,7 @@ public class ServerApp extends AbstractServer
         if(msg instanceof LoginRequest){
             LoginRequest request = (LoginRequest)msg;
             try {
-                client.sendToClient(new LoginResponse(0,request,"1111","malki","Teacher"));
+                client.sendToClient(new LoginResponse(0,"Teacher","malki",request));
             }catch (IOException e){
                 e.printStackTrace();
             }
@@ -89,9 +89,15 @@ public class ServerApp extends AbstractServer
 
         }else if(msg instanceof SubjectsAndCoursesRequest){
             SubjectsAndCoursesRequest request = (SubjectsAndCoursesRequest)msg;
-            HashMap<String, List<String>> response = new HashMap<>();
-            response.put("CS", Arrays.asList("DS", "OS"));
-            response.put("Math",Arrays.asList("Linear","AMIFUCKEDYOU"));
+            HashMap<String, HashMap<String,String>> response = new HashMap<>();
+            HashMap<String,String> map1 = new HashMap<>();
+            map1.put("001","DS");
+            map1.put("002","OS");
+            HashMap<String,String> map2 = new HashMap<>();
+            map2.put("001","Linear");
+            map2.put("002","AMIFUCKEDYOU");
+            response.put("CS", map1);
+            response.put("Math",map2);
             try {
                 client.sendToClient(new SubjectsAndCoursesResponse(0,request,response));
             } catch (IOException e) {
@@ -114,10 +120,10 @@ public class ServerApp extends AbstractServer
 
         }else if(msg instanceof ViewExamRequest){
             List<LightQuestion> questionList = new ArrayList<>();
-            questionList.add(new LightQuestion("1 + 0 = ? ",Arrays.asList("1","2","3","4"),0,"malki",LocalDateTime.now(),"5"));
-            questionList.add(new LightQuestion("0 + 4 = ? ",Arrays.asList("11","12","13","14"),0,"malki",LocalDateTime.now(),"6"));
-            questionList.add(new LightQuestion("cat is a/an:",Arrays.asList("shit","shitty","a","an"),0,"malki",LocalDateTime.now(),"7"));
-            questionList.add(new LightQuestion("same meaning of happy is:",Arrays.asList("shimon","shimon","shimon","shimon"),0,"malki",LocalDateTime.now(),"8"));
+            questionList.add(new LightQuestion("1 + 0 = ? ",Arrays.asList("1","2","3","4"),0,"FuckThisShit!","malki",LocalDateTime.now(),"5"));
+            questionList.add(new LightQuestion("0 + 4 = ? ",Arrays.asList("11","12","13","14"),0,"FuckThisShit!","malki",LocalDateTime.now(),"6"));
+            questionList.add(new LightQuestion("cat is a/an:",Arrays.asList("shit","shitty","a","an"),0,"FuckThisShit!","malki",LocalDateTime.now(),"7"));
+            questionList.add(new LightQuestion("same meaning of happy is:",Arrays.asList("shimon","shimon","shimon","shimon"),0,"FuckThisShit!","malki",LocalDateTime.now(),"8"));
             LightExam exam = new LightExam("1111","malki",questionList,Arrays.asList(25.0,25.0,25.0,25.0),90,"exampleTest","teacher sucks","student rocks");
             ViewExamRequest request = (ViewExamRequest)msg;
             ViewExamResponse response = new ViewExamResponse(0,request,exam);
@@ -147,13 +153,13 @@ public class ServerApp extends AbstractServer
             } else if(msg instanceof AddExamRequest){
                 AddExamRequest request = (AddExamRequest)msg;
                 List<LightQuestion> questionList = new ArrayList<>();
-                questionList.add(new LightQuestion("1 + 0 = ? ",Arrays.asList("1","2","3","4"),0,"malki",LocalDateTime.now(),"5"));
-                questionList.add(new LightQuestion("0 + 4 = ? ",Arrays.asList("11","12","13","14"),0,"malki",LocalDateTime.now(),"6"));
-                questionList.add(new LightQuestion("cat is a/an:",Arrays.asList("shit","shitty","a","an"),0,"malki",LocalDateTime.now(),"7"));
-                questionList.add(new LightQuestion("same meaning of happy is:",Arrays.asList("shimon","shimon","shimon","shimon"),0,"malki",LocalDateTime.now(),"8"));
+                questionList.add(new LightQuestion("1 + 0 = ? ",Arrays.asList("1","2","3","4"),0,"FuckThisShit!","malki",LocalDateTime.now(),"5"));
+                questionList.add(new LightQuestion("0 + 4 = ? ",Arrays.asList("11","12","13","14"),0,"FuckThisShit!","malki",LocalDateTime.now(),"6"));
+                questionList.add(new LightQuestion("cat is a/an:",Arrays.asList("shit","shitty","a","an"),0,"FuckThisShit!","malki",LocalDateTime.now(),"7"));
+                questionList.add(new LightQuestion("same meaning of happy is:",Arrays.asList("shimon","shimon","shimon","shimon"),0,"FuckThisShit!","malki",LocalDateTime.now(),"8"));
                 LightExam exam = new LightExam("1111","malki",questionList,Arrays.asList(25.0,25.0,25.0,25.0),90,"exampleTest","teacher sucks","student rocks");
                 try {
-                    client.sendToClient(new AddExamResponse(0,request,exam));
+                    client.sendToClient(new AddExamResponse(0,request));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
