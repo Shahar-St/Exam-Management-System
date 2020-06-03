@@ -8,6 +8,7 @@ import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,9 +41,11 @@ public class Exam {
     private List<Double> questionsScores = new ArrayList<>();
 
     private int durationInMinutes;
-    private  String title;
+    private String title;
     private String studentNotes;
     private String teacherNotes; // only for the teacher
+    private LocalDateTime lastModified;
+
 
     //Group c'tors
     public Exam() {
@@ -59,10 +62,16 @@ public class Exam {
         this.teacherNotes = teacherNotes;
         this.questionsList.addAll(questionsList);
         this.questionsScores.addAll(questionsScores);
+        setLastModified();
 
         DecimalFormat decimalFormat = new DecimalFormat("00");
         this.id = course.getSubject().getId() + course.getId() +
                 decimalFormat.format(course.getAvailableExamCodes().poll());
+    }
+
+    public Exam(Exam exam) {
+        this(exam.course, exam.author, exam.durationInMinutes, exam.title, exam.studentNotes, exam.teacherNotes,
+                exam.questionsList, exam.questionsScores);
     }
 
     //Group adders and removers
@@ -75,11 +84,11 @@ public class Exam {
             question.getContainedInExams().add(this);
     }
 
-        public void addExecutedExam(ExecutedExam executedExam) {
+    public void addExecutedExam(ExecutedExam executedExam) {
         if (!executedExamsList.contains(executedExam))
             executedExamsList.add(executedExam);
 
-        if(executedExam.getExam() != this)
+        if (executedExam.getExam() != this)
             executedExam.setExam(this);
     }
 
@@ -87,7 +96,8 @@ public class Exam {
     public Course getCourse() {
         return course;
     }
-    protected void setCourse(Course course) {
+
+    public void setCourse(Course course) {
 
         this.course = course;
         if (!course.getExamsList().contains(this))
@@ -97,7 +107,8 @@ public class Exam {
     public Teacher getAuthor() {
         return author;
     }
-    protected void setAuthor(Teacher author) {
+
+    public void setAuthor(Teacher author) {
 
         this.author = author;
         if (!author.getExamsList().contains(this))
@@ -107,6 +118,7 @@ public class Exam {
     public List<Question> getQuestionsList() {
         return questionsList;
     }
+
     public void setQuestionsList(List<Question> questionsList) {
         this.questionsList = questionsList;
     }
@@ -118,41 +130,68 @@ public class Exam {
     public int getDurationInMinutes() {
         return durationInMinutes;
     }
+
     public void setDurationInMinutes(int duration) {
         this.durationInMinutes = duration;
     }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getStudentNotes() {
         return studentNotes;
     }
+
     public void setStudentNotes(String studentNotes) {
         this.studentNotes = studentNotes;
     }
 
-    public String getTeacherNotes() { return teacherNotes;}
-    public void setTeacherNotes(String privateNotes) {teacherNotes = privateNotes;}
+    public String getTeacherNotes() {
+        return teacherNotes;
+    }
+
+    public void setTeacherNotes(String privateNotes) {
+        teacherNotes = privateNotes;
+    }
 
     public List<Double> getQuestionsScores() {
         return questionsScores;
     }
+
     public void setQuestionsScores(List<Double> questionsScores) {
         this.questionsScores = questionsScores;
     }
 
-    public List<ExecutedExam> getExecutedExamsList() { return executedExamsList; }
-    public void setExecutedExamsList(List<ExecutedExam> executedExamsList) {this.executedExamsList = executedExamsList;}
+    public List<ExecutedExam> getExecutedExamsList() {
+        return executedExamsList;
+    }
+
+    public void setExecutedExamsList(List<ExecutedExam> executedExamsList) {
+        this.executedExamsList = executedExamsList;
+    }
+
+    public LocalDateTime getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified() {
+        this.lastModified = LocalDateTime.now();
+    }
 
     @Override
     protected LightExam clone() throws CloneNotSupportedException {
         super.clone();
-        List<LightQuestion> lightQuestionsList = new ArrayList<>();;
+        List<LightQuestion> lightQuestionsList = new ArrayList<>();
+        ;
         for (Question question : this.getQuestionsList())
-            lightQuestionsList.add( question.clone() );
+            lightQuestionsList.add(question.clone());
 
-        return new LightExam(this.id, this.author.getUserName(),lightQuestionsList, this.questionsScores,
+        return new LightExam(this.id, this.author.getUserName(), lightQuestionsList, this.questionsScores,
                 this.durationInMinutes, this.title, this.teacherNotes, this.studentNotes);
     }
 }

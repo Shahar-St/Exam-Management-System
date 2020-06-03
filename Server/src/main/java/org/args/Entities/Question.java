@@ -61,7 +61,7 @@ public class Question {
         this.questionContent = questionContent;
         this.answersArray = answersArray;
         this.correctAnswer = correctAnswer;
-        this.author = author;
+        this.setAuthor(author);
         this.setCourse(course);
         setLastModified();
 
@@ -143,7 +143,7 @@ public class Question {
     public void setCourse(Course course) {
 
         this.course = course;
-        if (course.getQuestionsList().contains(this))
+        if (!course.getQuestionsList().contains(this))
             course.addQuestion(this);
     }
 

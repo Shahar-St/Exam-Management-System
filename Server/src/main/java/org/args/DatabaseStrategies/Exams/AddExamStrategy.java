@@ -24,19 +24,19 @@ public class AddExamStrategy extends DatabaseStrategy {
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
                                    List<String> loggedInUsers) {
 
-        AddExamRequest request1 = (AddExamRequest) request;
+        AddExamRequest addExamRequest = (AddExamRequest) request;
 
         if (client.getInfo("userName") == null)
             return new AddExamResponse(UNAUTHORIZED, request);
 
         Teacher teacher = (Teacher) getUser((String) client.getInfo("userName"), session);
-        Course course = getTypeById(Course.class, request1.getCourseID(), session);
+        Course course = getTypeById(Course.class, addExamRequest.getCourseID(), session);
         List<Question> questionsList = new ArrayList<>();
-        for (String question : request1.getQuestionsIDs())
+        for (String question : addExamRequest.getQuestionsIDs())
             questionsList.add(getTypeById(Question.class, question, session));
 
-        Exam exam = new Exam(course, teacher, request1.getDurationInMinutes(), request1.getExamTitle(),
-                request1.getStudentNotes(), request1.getTeacherNotes(), questionsList, request1.getScoresList());
+        Exam exam = new Exam(course, teacher, addExamRequest.getDurationInMinutes(), addExamRequest.getExamTitle(),
+                addExamRequest.getStudentNotes(), addExamRequest.getTeacherNotes(), questionsList, addExamRequest.getScoresList());
 
         session.save(exam);
         session.flush();
