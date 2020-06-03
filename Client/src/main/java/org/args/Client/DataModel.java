@@ -407,12 +407,12 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return currentExam.getLightQuestionList();
     }
 
-    public String getCurrentExamDescription(){
-        return currentExam.getDescription();
+    public String getCurrentExamTitle(){
+        return currentExam.getTitle();
     }
 
-    public String getCurrentExamTeacherPrivateNotes(){
-        return currentExam.getTeacherPrivateNotes();
+    public String getCurrentExamTeacherNotes(){
+        return currentExam.getTeacherNotes();
     }
 
     public int getCurrentExamDurationOnMinutes(){

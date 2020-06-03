@@ -53,8 +53,8 @@ public class ViewExamController {
         setModel(ClientApp.getModel());
         List<LightQuestion> questionList = model.getLightQuestionListFromCurrentExam();
         List<Double> questionsScores = model.getCurrentExamQuestionsScoreList();
-        String examDescription = model.getCurrentExamDescription();
-        String examTeacherPrivateNotes = model.getCurrentExamTeacherPrivateNotes();
+        String examDescription = model.getCurrentExamTitle();
+        String examTeacherPrivateNotes = model.getCurrentExamTeacherNotes();
         String examDuration = Integer.toString(model.getCurrentExamDurationOnMinutes());
         assert pageView != null;
         pageView.setPageCount(questionList.size());
