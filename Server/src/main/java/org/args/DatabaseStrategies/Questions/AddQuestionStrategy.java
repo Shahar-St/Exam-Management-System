@@ -24,7 +24,7 @@ public class AddQuestionStrategy extends DatabaseStrategy {
         AddQuestionRequest request1 = (AddQuestionRequest) request;
 
         if (client.getInfo("userName") == null)
-            return new EditQuestionResponse(UNAUTHORIZED, request);
+            return new AddQuestionResponse(UNAUTHORIZED, request);
 
         Teacher teacher = (Teacher) getUser((String) client.getInfo("userName"), session);
         Course course = getTypeById(Course.class, request1.getCourseID(), session);
@@ -34,6 +34,6 @@ public class AddQuestionStrategy extends DatabaseStrategy {
 
         session.save(question);
         session.flush();
-        return new AddQuestionResponse(SUCCESS, request1);
+        return new AddQuestionResponse(SUCCESS, request);
     }
 }
