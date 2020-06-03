@@ -38,9 +38,9 @@ public class AddExamStrategy extends DatabaseStrategy {
         Exam exam = new Exam(course, teacher, addExamRequest.getDurationInMinutes(), addExamRequest.getExamTitle(),
                 addExamRequest.getStudentNotes(), addExamRequest.getTeacherNotes(), questionsList, addExamRequest.getScoresList());
 
-        session.save(exam);
+        session.saveOrUpdate(exam);
         session.flush();
-        return new AddQuestionResponse(SUCCESS, request);
+        return new AddExamResponse(SUCCESS, request);
 
     }
 }

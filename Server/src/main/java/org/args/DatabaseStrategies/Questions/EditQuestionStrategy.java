@@ -31,7 +31,7 @@ public class EditQuestionStrategy extends DatabaseStrategy {
         if (!question.getContainedInExams().isEmpty())
         {
             Question newQuestion = new Question(question);
-            session.save(newQuestion);
+            session.saveOrUpdate(newQuestion);
         }
         else
         {

@@ -38,13 +38,4 @@ public class DeleteQuestionStrategy extends DatabaseStrategy {
         session.flush();
         return new DeleteQuestionResponse(SUCCESS, request);
     }
-
-    public DeleteQuestionResponse test(DeleteQuestionRequest request, Session session) {
-
-        Question question = getTypeById(Question.class, request.getQuestionID(), session);
-
-        session.remove(question);
-        session.flush();
-        return new DeleteQuestionResponse(SUCCESS, request);
-    }
 }

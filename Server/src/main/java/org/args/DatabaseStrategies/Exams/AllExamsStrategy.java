@@ -31,11 +31,6 @@ public class AllExamsStrategy extends DatabaseStrategy {
         if (client.getInfo("userName") == null)
             return new AllExamsResponse(UNAUTHORIZED, request);
 
-        User user = getUser((String) client.getInfo("userName"), session);
-
-        if (user == null)
-            return new AllQuestionsResponse(NOT_FOUND, request);
-
         Course course = getTypeById(Course.class, allExamsRequest.getCourseID(), session);
 
         for (Exam exam : course.getExamsList())

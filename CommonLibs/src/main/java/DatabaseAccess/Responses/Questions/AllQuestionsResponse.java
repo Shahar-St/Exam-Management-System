@@ -8,9 +8,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 
 /**
- * Request: asks for all questions from a specific course of the logged in user
- * Response: dictionary. key = question id, value = pair{date modified, description}
- *
  * status dictionary:
  *  0 - success
  *  1 - unauthorized access - user isn't logged in

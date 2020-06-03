@@ -28,11 +28,6 @@ public class AllQuestionsStrategy extends DatabaseStrategy {
         if (client.getInfo("userName") == null)
             return new AllQuestionsResponse(UNAUTHORIZED, request);
 
-        User user = getUser((String) client.getInfo("userName"), session);
-
-        if (user == null)
-            return new AllQuestionsResponse(NOT_FOUND, request);
-
         Course course = getTypeById(Course.class, allQuestionsRequest.getCourseID(), session);
 
         for (Question question : course.getQuestionsList())

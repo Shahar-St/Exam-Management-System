@@ -4,6 +4,7 @@ import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.Exams.EditExamRequest;
 import DatabaseAccess.Requests.Questions.EditQuestionRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
+import DatabaseAccess.Responses.Exams.EditExamResponse;
 import DatabaseAccess.Responses.Questions.EditQuestionResponse;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.Entities.Exam;
@@ -20,20 +21,20 @@ public class EditExamStrategy extends DatabaseStrategy {
 
         EditExamRequest editExamRequest = (EditExamRequest) request;
         if (client.getInfo("userName") == null)
-            return new EditQuestionResponse(UNAUTHORIZED, request);
+            return new EditExamResponse(UNAUTHORIZED, request);
 
         Exam exam = getTypeById(Exam.class, editExamRequest.getExamId(), session);
 
         if (exam == null)
-            return new EditQuestionResponse(NOT_FOUND, request);
+            return new EditExamResponse(NOT_FOUND, request);
 
         if (exam.getAuthor() != getUser((String) client.getInfo("userName"), session))
-            return new EditQuestionResponse(NO_ACCESS, request);
+            return new EditExamResponse(NO_ACCESS, request);
 
         if (!exam.getExecutedExamsList().isEmpty())
         {
             Exam newExam = new Exam(exam);
-            session.save(newExam);
+            session.saveOrUpdate(newExam);
         }
         else
         {
@@ -51,6 +52,6 @@ public class EditExamStrategy extends DatabaseStrategy {
             session.update(exam);
             session.flush();
         }
-        return new EditQuestionResponse(SUCCESS, request);
+        return new EditExamResponse(SUCCESS, request);
     }
 }

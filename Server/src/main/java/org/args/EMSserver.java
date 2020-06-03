@@ -56,7 +56,8 @@ public class EMSserver extends AbstractServer {
                 e.printStackTrace();
             }
         }
-        //TODO check adding question updates the related fields
+        //TODO check adding question/exam updates the related fields
+        //TODO check delete exam works
     }
 
     @Override

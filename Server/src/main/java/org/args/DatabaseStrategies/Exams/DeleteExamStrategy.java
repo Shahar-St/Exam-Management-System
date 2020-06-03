@@ -21,7 +21,7 @@ public class DeleteExamStrategy extends DatabaseStrategy {
 
         DeleteExamRequest deleteExamRequest = (DeleteExamRequest) request;
         if (client.getInfo("userName") == null)
-            return new DeleteQuestionResponse(UNAUTHORIZED, request);
+            return new DeleteExamResponse(UNAUTHORIZED, request);
 
         Exam exam = getTypeById(Exam.class, deleteExamRequest.getExamId(), session);
 
@@ -29,7 +29,7 @@ public class DeleteExamStrategy extends DatabaseStrategy {
             return new DeleteExamResponse(NOT_FOUND, request);
 
         if (exam.getAuthor() != getUser((String) client.getInfo("userName"), session))
-            return new DeleteQuestionResponse(NO_ACCESS, request);
+            return new DeleteExamResponse(NO_ACCESS, request);
 
         if (!exam.getExecutedExamsList().isEmpty())
             return new DeleteExamResponse(WRONG_INFO, request);
