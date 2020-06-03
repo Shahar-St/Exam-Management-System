@@ -56,6 +56,7 @@ public class EMSserver extends AbstractServer {
                 e.printStackTrace();
             }
         }
+        //TODO check adding question updates the related fields
     }
 
     @Override
