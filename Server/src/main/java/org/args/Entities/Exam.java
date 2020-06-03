@@ -184,7 +184,7 @@ public class Exam {
     }
 
     @Override
-    protected LightExam clone() throws CloneNotSupportedException {
+    public LightExam clone() throws CloneNotSupportedException {
         super.clone();
         List<LightQuestion> lightQuestionsList = new ArrayList<>();
         ;

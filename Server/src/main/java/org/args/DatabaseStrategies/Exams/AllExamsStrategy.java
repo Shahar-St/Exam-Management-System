@@ -36,31 +36,11 @@ public class AllExamsStrategy extends DatabaseStrategy {
         if (user == null)
             return new AllQuestionsResponse(NOT_FOUND, request);
 
-        List<Exam> examsList = new ArrayList<>();
-        
-        if (user instanceof Dean)  // user is dean
-            examsList = getAllOfType(session, Exam.class);
-        else
-        {
-            List<Course> coursesList = new ArrayList<>();
-            if (user instanceof Teacher)
-                coursesList = ((Teacher) user).getCoursesList();
-            else // user is a student
-                coursesList = ((Student) user).getCoursesList();
+        Course course = getTypeById(Course.class, allExamsRequest.getCourseID(), session);
 
-            for (Course course : coursesList)
-                if (course.getId().equals(allExamsRequest.getCourseID()))
-                    examsList.addAll(course.getExamsList());
-        }
-
-        for (Exam exam : examsList)
-            map.put(exam.getId(),
-                    new Pair<>(question.getLastModified(), question.getQuestionContent()));
-        
-
+        for (Exam exam : course.getExamsList())
+            map.put(exam.getId(), new Pair<>(exam.getLastModified(), exam.getTitle()));
 
         return new AllExamsResponse(SUCCESS, request, map);
-        
-
     }
 }

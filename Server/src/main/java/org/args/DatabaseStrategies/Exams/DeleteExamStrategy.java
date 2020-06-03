@@ -31,7 +31,7 @@ public class DeleteExamStrategy extends DatabaseStrategy {
         if (exam.getAuthor() != getUser((String) client.getInfo("userName"), session))
             return new DeleteQuestionResponse(NO_ACCESS, request);
 
-        if (!question.getContainedInExams().isEmpty())
+        if (!exam.getExecutedExamsList().isEmpty())
             return new DeleteExamResponse(WRONG_INFO, request);
 
         session.remove(exam);
