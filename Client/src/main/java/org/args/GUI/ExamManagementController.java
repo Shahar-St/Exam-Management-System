@@ -3,16 +3,14 @@ package org.args.GUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.args.Client.IExamManagementData;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class ExamManagementController {
@@ -33,16 +31,10 @@ public class ExamManagementController {
     private Button addButton;
 
     @FXML
-    private Button deleteButton;
-
-    @FXML
     private ListView<String> examListView;
 
     @FXML
     private Button executeButton;
-
-    @FXML
-    private Button editButton;
 
 
 
@@ -54,11 +46,9 @@ public class ExamManagementController {
 
     @FXML
     private void bindButtonVisibility() {
-        deleteButton.visibleProperty().bind(model.isCourseSelected());
         addButton.visibleProperty().bind(model.isCourseSelected());
         detailsButton.visibleProperty().bind(model.isCourseSelected());
         executeButton.visibleProperty().bind(model.isCourseSelected());
-        editButton.visibleProperty().bind(model.isCourseSelected());
     }
 
     @FXML
@@ -72,13 +62,11 @@ public class ExamManagementController {
                 addSubjectToSubjectDropdown(subjectName);
             }
             subjectsDropdown.setText(model.getCurrentSubject());
-            coursesDropdown.setText(model.getCurrentCourse());
+            coursesDropdown.setText(model.getCurrentCourseId());
             initializeCoursesDropdown();
             fillCoursesDropdown(model.getCurrentSubject());
-            model.fillExamList(model.getCurrentCourse());
-        }
-        else
-        {
+            model.fillExamList(model.getCurrentCourseId());
+        } else {
             fillSubjectsDropDown(model.getSubjects());
         }
 
@@ -126,22 +114,20 @@ public class ExamManagementController {
             @Override
             public void handle(ActionEvent event) {
                 coursesDropdown.setText(((MenuItem) event.getSource()).getText());
-                model.setCurrentCourse(((MenuItem) event.getSource()).getText());
+                model.setCurrentCourseId(((MenuItem) event.getSource()).getText());
                 model.fillExamList(((MenuItem) event.getSource()).getText());
             }
         });
         coursesDropdown.getItems().add(course);
     }
 
-    @FXML
-    void deleteExam(ActionEvent event) {
 
-    }
 
     @FXML
     void switchToAddExamScreen(ActionEvent event) {
-        model.fillQuestionsList(model.getCurrentCourse());
-        ClientApp.setRoot("AddExamScreen");
+        model.fillQuestionsList(model.getCurrentCourseId());
+        model.setViewMode("ADD");
+        ClientApp.setRoot("ExamDetailsScreen");
     }
 
     @FXML
@@ -164,8 +150,7 @@ public class ExamManagementController {
     }
 
     @FXML
-    void clearScreen()
-    {
+    void clearScreen() {
         subjectsDropdown.getItems().clear();
         coursesDropdown.getItems().clear();
         model.setCurrentSubject(null);
@@ -177,30 +162,40 @@ public class ExamManagementController {
 
     @FXML
     void handleMouseEvent(MouseEvent event) {
-        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2)
-        {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
             viewSelectedExamDetails();
         }
     }
 
     private void viewSelectedExamDetails() {
+        String examId = getExamIdFromSelected();
+        if (examId != null)
+            model.saveExamDetails(examId);
+    }
+
+    private String getExamIdFromSelected() {
         if (examListView.getSelectionModel().getSelectedItem() != null) {
             String currentItem = examListView.getSelectionModel().getSelectedItem();
             int indexOfColon = currentItem.indexOf(':');
-            String examId = currentItem.substring(1, indexOfColon);
-            model.saveExamDetails(examId);
+            return currentItem.substring(1, indexOfColon);
         }
+        return null;
     }
 
-
-    @FXML
-    void editExam(ActionEvent event) {
-
-    }
 
     @FXML
     void executeExam(ActionEvent event) {
+        String examId = getExamIdFromSelected();
+        if (examId != null)
+        {
+            TextInputDialog examCodeDialog = new TextInputDialog();
+            examCodeDialog.setTitle("Exam Code");
+            examCodeDialog.setHeaderText("Exam Code");
+            examCodeDialog.setContentText("Please enter exam code:");
 
+            Optional<String> result = examCodeDialog.showAndWait();
+            result.ifPresent(code -> model.deployExam(examId, code));
+        }
     }
 
 }

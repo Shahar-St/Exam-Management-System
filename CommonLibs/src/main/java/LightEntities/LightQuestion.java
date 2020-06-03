@@ -9,17 +9,22 @@ public class LightQuestion implements Serializable {
     private List<String> answers;
     private int correctAnswer;
     private String author;
+    private String course;
     private LocalDateTime lastModified;
+    private String questionId;
 
     public LightQuestion() {
     }
 
-    public LightQuestion(String questionContent, List<String> answers, int correctAnswer, String author, LocalDateTime lastModified) {
+    public LightQuestion(String questionContent, List<String> answers, int correctAnswer, String author,
+                         String course, LocalDateTime lastModified, String id) {
         this.questionContent = questionContent;
         this.answers = answers;
         this.correctAnswer = correctAnswer;
         this.author = author;
+        this.course = course;
         this.lastModified = lastModified;
+        this.questionId = id;
     }
 
     public String getQuestionContent() {
@@ -54,11 +59,28 @@ public class LightQuestion implements Serializable {
         this.author = author;
     }
 
+    public String getCourse() { return course; }
+
+    public void setCourse(String course) { this.course = course; }
+
     public LocalDateTime getLastModified() {
         return lastModified;
     }
 
     public void setLastModified(LocalDateTime lastModified) {
         this.lastModified = lastModified;
+    }
+
+    public String getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(String questionId) {
+        this.questionId = questionId;
+    }
+
+    @Override
+    public String toString() {
+        return "#"+questionId+": "+questionContent;
     }
 }

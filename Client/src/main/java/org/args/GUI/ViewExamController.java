@@ -5,18 +5,15 @@
 package org.args.GUI;
 
 import LightEntities.LightQuestion;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.Pagination;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import org.args.Client.IExamData;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ViewExamController {
@@ -38,24 +35,51 @@ public class ViewExamController {
     @FXML // fx:id="pageView"
     private Pagination pageView; // Value injected by FXMLLoader
 
-    @FXML
-    private ImageView backButton;
 
     @FXML
-    void onBackClick(MouseEvent event) {
+    private Button cancelButton;
+
+    @FXML
+    private Button editButton;
+
+    @FXML
+    private Button deleteButton;
+
+    @FXML
+    void onBackClick(ActionEvent event) {
         ClientApp.backToLastScene();
+    }
 
+    @FXML
+    void deleteExam(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Exam");
+        alert.setHeaderText("Delete Exam " + model.getCurrentExamTitle());
+        alert.setContentText("Are you sure you want to delete this exam?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            model.deleteExam();
+        }
+    }
+
+    @FXML
+    void editExam(ActionEvent event) {
+        model.startExamEdit();
+        ClientApp.setRoot("ExamDetailsScreen");
     }
 
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         setModel(ClientApp.getModel());
+        deleteButton.setDisable(!model.isExamDeletable());
+        editButton.setDisable(!model.isExamDeletable());
         List<LightQuestion> questionList = model.getLightQuestionListFromCurrentExam();
         List<Double> questionsScores = model.getCurrentExamQuestionsScoreList();
-        String examDescription = model.getCurrentExamDescription();
-        String examTeacherPrivateNotes = model.getCurrentExamTeacherPrivateNotes();
-        String examDuration = Integer.toString(model.getCurrentExamDurationOnMinutes());
+        String examDescription = model.getCurrentExamTitle();
+        String examTeacherPrivateNotes = model.getCurrentExamTeacherNotes();
+        String examStudentNotes = model.getCurrentExamStudentNotes();
+        String examDuration = model.getCurrentExamDuration();
         assert pageView != null;
         pageView.setPageCount(questionList.size());
         pageView.setCurrentPageIndex(0);
@@ -68,6 +92,10 @@ public class ViewExamController {
             Label privateNotes_label = new Label("Teacher Private Notes:");
 
             TextField privateNotes = new TextField(examTeacherPrivateNotes);
+
+            Label studentNotes_label = new Label("Student Private Notes:");
+
+            TextField sNotes = new TextField(examStudentNotes);
 
             Label duration_label = new Label("Exam Duration In Minutes:");
 
@@ -140,7 +168,7 @@ public class ViewExamController {
                     break;
             }
 
-            return new VBox(description_label, description, privateNotes_label, privateNotes, duration_label, duration,
+            return new VBox(description_label, description, privateNotes_label, privateNotes,studentNotes_label,sNotes ,duration_label, duration,
                     date_label, lastModified, author_label, author, content_label, content, ans1_label, answer1, ans2_label,
                     answer2, ans3_label, answer3, ans4_label, answer4, score_label, score);
 

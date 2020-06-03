@@ -4,6 +4,7 @@
 
 package org.args.GUI;
 
+import DatabaseAccess.Requests.Statistics.TeacherStatisticsRequest;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -134,7 +135,7 @@ public class MainScreenController {
     @FXML
     void switchToStatsScreen (ActionEvent event)
     {
-        ClientApp.setRoot("StatsAnalysisScreen");
+        ClientApp.sendRequest(new TeacherStatisticsRequest("111"));
     }
     @FXML
     void switchToStudentExamExecutionScreen (ActionEvent event)
