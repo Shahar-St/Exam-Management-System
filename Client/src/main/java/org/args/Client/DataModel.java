@@ -90,15 +90,15 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
             setSubjectsAndCourses(response.getSubjectsAndCourses());
     }
 
-    private HashMap<String, List<String>> subjectsAndCourses;
+    private HashMap<String, HashMap<String,String>> subjectsAndCourses;
 
     private String currentSubject;
 
-    private String currentCourse;
+    private String currentCourseId;
     /* bound to buttons that shouldn't be visible/enabled while a course isn't selected */
     private final BooleanProperty courseSelected = new SimpleBooleanProperty(false);
 
-    public void setSubjectsAndCourses(HashMap<String, List<String>> mapFromResponse) {
+    public void setSubjectsAndCourses(HashMap<String, HashMap<String,String>> mapFromResponse) {
         subjectsAndCourses = mapFromResponse;
     }
 
@@ -115,7 +115,15 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     public List<String> getCoursesOfSubject(String subject) {
-        return subjectsAndCourses.get(subject);
+        HashMap<String,String> coursesEntries = subjectsAndCourses.get(subject);
+        List<String> listOfCourses = new Vector<>();
+        for (Map.Entry<String,String> course : coursesEntries.entrySet())
+        {
+            String id = course.getKey();
+            String name = course.getValue();
+            listOfCourses.add(id +" - " + name);
+        }
+        return listOfCourses;
     }
 
     public String getCurrentSubject() {
@@ -126,12 +134,12 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         this.currentSubject = currentSubject;
     }
 
-    public String getCurrentCourse() {
-        return currentCourse;
+    public String getCurrentCourseId() {
+        return currentCourseId;
     }
 
-    public void setCurrentCourse(String currentCourse) {
-        this.currentCourse = currentCourse;
+    public void setCurrentCourseId(String currentCourseId) {
+        this.currentCourseId = currentCourseId;
         courseSelected.setValue(true);
     }
     /*used to verify if data is present before init of question management screen*/
@@ -530,12 +538,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void handleAllExamsResponse(AllExamsResponse response) {
         if (response.getStatus() == 0) {
             if (observableExamList.size() > 0) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        observableExamList.clear();
-                    }
-                });
+                Platform.runLater(observableExamList::clear);
 
             }
             generateExamDescriptors(response.getExamList());
@@ -658,7 +661,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     //TODO: implement IExamData Method
     @Override
     public void saveExam(String title, int duration, String teacherNotes, String studentNotes, List<String> questionList, List<Double> questionsScoreList, String examId) {
-        ClientApp.sendRequest(new AddExamRequest(title, questionList, questionsScoreList, teacherNotes, studentNotes, duration));
+        ClientApp.sendRequest(new AddExamRequest(title, questionList, questionsScoreList, teacherNotes, studentNotes, duration,currentCourseId));
 
     }
 

@@ -37,7 +37,7 @@ public interface IExamData {
 
     void loadQuestionDetails(String questionId);
 
-    String getCurrentCourse();
+    String getCurrentCourseId();
 
     StringProperty currentExamTitleProperty();
 

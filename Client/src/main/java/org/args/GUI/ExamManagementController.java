@@ -62,10 +62,10 @@ public class ExamManagementController {
                 addSubjectToSubjectDropdown(subjectName);
             }
             subjectsDropdown.setText(model.getCurrentSubject());
-            coursesDropdown.setText(model.getCurrentCourse());
+            coursesDropdown.setText(model.getCurrentCourseId());
             initializeCoursesDropdown();
             fillCoursesDropdown(model.getCurrentSubject());
-            model.fillExamList(model.getCurrentCourse());
+            model.fillExamList(model.getCurrentCourseId());
         } else {
             fillSubjectsDropDown(model.getSubjects());
         }
@@ -114,7 +114,7 @@ public class ExamManagementController {
             @Override
             public void handle(ActionEvent event) {
                 coursesDropdown.setText(((MenuItem) event.getSource()).getText());
-                model.setCurrentCourse(((MenuItem) event.getSource()).getText());
+                model.setCurrentCourseId(((MenuItem) event.getSource()).getText());
                 model.fillExamList(((MenuItem) event.getSource()).getText());
             }
         });
@@ -125,7 +125,7 @@ public class ExamManagementController {
 
     @FXML
     void switchToAddExamScreen(ActionEvent event) {
-        model.fillQuestionsList(model.getCurrentCourse());
+        model.fillQuestionsList(model.getCurrentCourseId());
         model.setViewMode("ADD");
         ClientApp.setRoot("ExamDetailsScreen");
     }

@@ -61,10 +61,10 @@ public class QuestionManagementController {
                 addSubjectToSubjectDropdown(subjectName);
             }
             subjectsDropdown.setText(model.getCurrentSubject());
-            coursesDropdown.setText(model.getCurrentCourse());
+            coursesDropdown.setText(model.getCurrentCourseId());
             initializeCoursesDropdown();
             fillCoursesDropdown(model.getCurrentSubject());
-            model.fillQuestionsList(model.getCurrentCourse());
+            model.fillQuestionsList(model.getCurrentCourseId());
         } else {
             fillSubjectsDropDown(model.getSubjects());
         }
@@ -83,7 +83,7 @@ public class QuestionManagementController {
             @Override
             public void handle(ActionEvent event) {
                 coursesDropdown.setText(((MenuItem) event.getSource()).getText());
-                model.setCurrentCourse(((MenuItem) event.getSource()).getText());
+                model.setCurrentCourseId(((MenuItem) event.getSource()).getText().substring(0,2));
                 model.fillQuestionsList(((MenuItem) event.getSource()).getText());
             }
         });

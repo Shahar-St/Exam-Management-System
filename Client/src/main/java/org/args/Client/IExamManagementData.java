@@ -16,8 +16,8 @@ public interface IExamManagementData {
     boolean dataWasAlreadyInitialized();
     String getCurrentSubject();
     void setCurrentSubject(String subjectName);
-    String getCurrentCourse();
-    void setCurrentCourse(String courseName);
+    String getCurrentCourseId();
+    void setCurrentCourseId(String courseName);
     void fillExamList(String courseName);
     BooleanProperty isCourseSelected();
     void setCourseSelected(boolean courseSelected);
