@@ -23,9 +23,7 @@ public class ViewExamResponse extends DatabaseResponse {
         this(status, request, null);
     }
 
-
     public LightExam getLightExam() {
         return lightExam;
     }
-
 }

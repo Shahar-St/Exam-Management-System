@@ -2,6 +2,7 @@ package org.args.Entities;
 
 import LightEntities.LightExam;
 import LightEntities.LightQuestion;
+import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -70,10 +71,10 @@ public class Question {
         this.id = course.getId() + decimalFormat.format(course.getAvailableQuestionCodes().poll());
     }
 
-    public Question(Question question) {
-        this(question.questionContent,question.answersArray,question.correctAnswer,question.course,
-                question.getAuthor());
-    }
+//    public Question(Question question) {
+//        this(question.questionContent,question.answersArray,question.correctAnswer,question.course,
+//                question.getAuthor());
+//    }
 
     //Group adders and removers
     public void addExam(Exam exam) {
@@ -166,10 +167,17 @@ public class Question {
         this.lastModified = LocalDateTime.now();
     }
 
+    protected LightQuestion createLightQuestion() {
+
+        return new LightQuestion(this.questionContent, new ArrayList<>(this.answersArray), this.correctAnswer, this.author.getUserName(),
+                this.course.getName(), this.lastModified, this.id);
+    }
+
+
     @Override
     protected LightQuestion clone() throws CloneNotSupportedException {
         super.clone();
         return new LightQuestion(this.questionContent, this.answersArray, this.correctAnswer, this.author.getUserName(),
-                               this.course.getName(), this.lastModified, this.id);
+                this.course.getName(), this.lastModified, this.id);
     }
 }

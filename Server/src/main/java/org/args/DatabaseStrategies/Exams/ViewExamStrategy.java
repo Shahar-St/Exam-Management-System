@@ -13,6 +13,7 @@ import org.hibernate.Session;
 import java.util.List;
 
 public class ViewExamStrategy extends DatabaseStrategy {
+
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session, List<String> loggedInUsers) {
 
@@ -26,17 +27,17 @@ public class ViewExamStrategy extends DatabaseStrategy {
         if (exam == null)
             return new ViewExamResponse(NOT_FOUND, viewExamRequest);
 
-        LightExam lightExam = null;
-        int res = SUCCESS;
-        try
-        {
-            lightExam = exam.clone();
-        } catch (CloneNotSupportedException e)
-        {
-            res = NO_ACCESS;
-            e.printStackTrace();
-        }
+        //LightExam lightExam = null;
+//        int res = SUCCESS;
+//        try
+//        {
+        LightExam lightExam = exam.createLightExam();
+//        } catch (CloneNotSupportedException e)
+//        {
+//            res = NO_ACCESS;
+//            e.printStackTrace();
+//        }
 
-        return new ViewExamResponse(res, request, lightExam);
+        return new ViewExamResponse(SUCCESS, request, lightExam);
     }
 }

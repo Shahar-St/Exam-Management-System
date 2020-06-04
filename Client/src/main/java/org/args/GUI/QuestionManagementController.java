@@ -82,9 +82,10 @@ public class QuestionManagementController {
         course.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                coursesDropdown.setText(((MenuItem) event.getSource()).getText());
-                model.setCurrentCourseId(((MenuItem) event.getSource()).getText().substring(0,2));
-                model.fillQuestionsList(((MenuItem) event.getSource()).getText());
+                String text = ((MenuItem) event.getSource()).getText();
+                coursesDropdown.setText(text);
+                model.setCurrentCourseId(text.substring(0,2));
+                model.fillQuestionsList(text.substring(0,2));
             }
         });
         coursesDropdown.getItems().add(course);

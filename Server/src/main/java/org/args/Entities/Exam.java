@@ -52,7 +52,8 @@ public class Exam {
 
 
     //Group c'tors
-    public Exam() { }
+    public Exam() {
+    }
 
     public Exam(Course course, Teacher author, int durationInMinutes, String title, String studentNotes,
                 String teacherNotes, List<Question> questionsList, List<Double> questionsScores) {
@@ -65,7 +66,7 @@ public class Exam {
         this.teacherNotes = teacherNotes;
         //this.questionsList.addAll(questionsList);
         for (Question question : questionsList)
-             this.addQuestion(question);
+            this.addQuestion(question);
         this.questionsScores.addAll(questionsScores);
         setLastModified();
 
@@ -102,7 +103,7 @@ public class Exam {
         if (!concreteExamsList.contains(concreteExam))
             concreteExamsList.add(concreteExam);
 
-        if(concreteExam.getExam() != this)
+        if (concreteExam.getExam() != this)
             concreteExam.setExam(this);
     }
 
@@ -203,17 +204,26 @@ public class Exam {
         this.concreteExamsList = concreteExamsList;
     }
 
-
-
-    @Override
-    public LightExam clone() throws CloneNotSupportedException {
-        super.clone();
+    public LightExam createLightExam() {
         List<LightQuestion> lightQuestionsList = new ArrayList<>();
-        ;
-        for (Question question : this.getQuestionsList())
-            lightQuestionsList.add(question.clone());
 
-        return new LightExam(this.id, this.author.getUserName(), lightQuestionsList, this.questionsScores,
+        for (Question question : this.getQuestionsList())
+            lightQuestionsList.add(question.createLightQuestion());
+
+        return new LightExam(this.id, this.author.getUserName(), lightQuestionsList, new ArrayList<>(this.questionsScores),
                 this.durationInMinutes, this.title, this.teacherNotes, this.studentNotes);
     }
+
+//
+//    @Override
+//    public LightExam clone() throws CloneNotSupportedException {
+//        super.clone();
+//        List<LightQuestion> lightQuestionsList = new ArrayList<>();
+//
+//        for (Question question : this.getQuestionsList())
+//            lightQuestionsList.add(question.clone());
+//
+//        return new LightExam(this.id, this.author.getUserName(), lightQuestionsList, this.questionsScores,
+//                this.durationInMinutes, this.title, this.teacherNotes, this.studentNotes);
+//    }
 }
