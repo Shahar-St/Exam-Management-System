@@ -328,10 +328,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return currentExam.getQuestionsScores();
     }
 
-    public void viewExam() {
-        ClientApp.sendRequest(new ViewExamRequest("1111"));
-    }
-
     /*properties bound to the various exam screens*/
     private final ObservableList<String> observableExamQuestionsList = FXCollections.observableArrayList();
     private final ObservableList<String> observableQuestionsScoringList = FXCollections.observableArrayList();
