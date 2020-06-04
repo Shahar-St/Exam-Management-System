@@ -651,7 +651,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         if (getViewMode().equals("ADD")) {
             ClientApp.sendRequest(new AddExamRequest(title, questionList, questionsScoreList, teacherNotes, studentNotes, duration, currentCourseId));
         } else {
-            ClientApp.sendRequest(new EditExamRequest(examId, title, questionList, questionsScoreList, teacherNotes, studentNotes));
+            ClientApp.sendRequest(new EditExamRequest(examId, title, questionList, questionsScoreList, teacherNotes, studentNotes, duration));
         }
     }
 
