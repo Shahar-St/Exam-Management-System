@@ -116,7 +116,7 @@ public class ExamManagementController {
                 String text = ((MenuItem) event.getSource()).getText();
                 coursesDropdown.setText(text);
                 model.setCurrentCourseId(text.substring(0,2));
-                model.fillExamList(text);
+                model.fillExamList(text.substring(0,2));
             }
         });
         coursesDropdown.getItems().add(course);
