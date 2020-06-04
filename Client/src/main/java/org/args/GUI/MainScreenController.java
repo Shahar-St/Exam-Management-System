@@ -65,7 +65,7 @@ public class MainScreenController {
 
     private void initTeacher() throws IOException
     {
-        button1.setText("Question Management Screen");
+        button1.setText("Question Management");
         button1.setOnAction(event -> {
             try {
                 switchToQuestionManagement(event);

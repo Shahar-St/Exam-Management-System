@@ -172,8 +172,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     /*sends the request needed to fill the questions list, which is then filled by the response handler*/
-    public void fillQuestionsList(String courseName) {
-        ClientApp.sendRequest(new AllQuestionsRequest(courseName));
+    public void fillQuestionsList(String courseId) {
+        ClientApp.sendRequest(new AllQuestionsRequest(courseId));
     }
 
     /*sends the request needed to view the details of the selected question*/
@@ -497,6 +497,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void viewExam(String examId) {
+        fillQuestionsList(currentCourseId);
         ClientApp.sendRequest(new ViewExamRequest(examId));
     }
 
@@ -507,10 +508,14 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void clearDetailsScreen() {
-        currentExamDuration.setValue("");
-        currentExamTitle.setValue("");
-        currentExamStudentNotes.setValue("");
-        currentExamTeacherNotes.setValue("");
+        if (getViewMode().equals("ADD"))
+        {
+            currentExamDuration.setValue("");
+            currentExamTitle.setValue("");
+            currentExamStudentNotes.setValue("");
+            currentExamTeacherNotes.setValue("");
+            cancelExamAddition();
+        }
     }
 
     @Override

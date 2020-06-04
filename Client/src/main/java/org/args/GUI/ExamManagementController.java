@@ -138,7 +138,7 @@ public class ExamManagementController {
     @FXML
     void switchToMainScreen(MouseEvent event) {
         clearScreen();
-        ClientApp.backToLastScene();
+        ClientApp.setRoot("MainScreen");
 
     }
 
@@ -156,7 +156,6 @@ public class ExamManagementController {
         model.setCurrentSubject(null);
         model.setCourseSelected(false);
         model.clearExamList();
-
     }
 
 
