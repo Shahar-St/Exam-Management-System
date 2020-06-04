@@ -11,7 +11,7 @@ import java.util.Set;
 
 public interface IQuestionManagementData {
 
-    void setSubjectsAndCourses(HashMap<String, List<String>> mapFromResponse);
+    void setSubjectsAndCourses(HashMap<String, HashMap<String,String>> mapFromResponse);
 
     Set<String> getSubjects();
 
@@ -21,9 +21,9 @@ public interface IQuestionManagementData {
 
     void setCurrentSubject(String currentSubject);
 
-    String getCurrentCourse();
+    String getCurrentCourseId();
 
-    void setCurrentCourse(String currentCourse);
+    void setCurrentCourseId(String currentCourseId);
 
     boolean dataWasAlreadyInitialized();
 
@@ -44,12 +44,9 @@ public interface IQuestionManagementData {
     ObservableList<String> getObservableQuestionsList();
 
 
-    void setSelectedIndex(int selectedIndex);
-
-
     void clearQuestionsList();
 
     void fillQuestionsList(String text);
 
-    void saveQuestionDetails(String questionId);
+    void loadQuestionDetails(String questionId);
 }

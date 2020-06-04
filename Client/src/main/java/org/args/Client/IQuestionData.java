@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IQuestionData {
 
-    String getCurrentCourse();
+    String getCurrentCourseId();
 
     String getQuestionId();
 

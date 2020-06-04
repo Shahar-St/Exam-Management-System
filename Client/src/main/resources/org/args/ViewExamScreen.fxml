@@ -1,34 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.ViewExamController">
+<ScrollPane fitToHeight="true" fitToWidth="true" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.ViewExamController">
    <content>
-      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20.0">
          <children>
             <Pagination fx:id="pageView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <VBox.margin>
                   <Insets />
                </VBox.margin></Pagination>
-            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+            <HBox alignment="BOTTOM_RIGHT">
                <children>
-                  <ImageView fx:id="backButton" fitHeight="46.0" fitWidth="54.0" onMouseClicked="#onBackClick" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../Assets/left-arrow.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </ImageView>
-                  <Label prefHeight="44.0" prefWidth="35.0" text="Back" />
+                  <ButtonBar prefHeight="40.0" prefWidth="258.0">
+                    <buttons>
+                      <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onBackClick" text="Cancel" />
+                        <Button fx:id="editButton" mnemonicParsing="false" onAction="#editExam" styleClass="info" text="Edit" />
+                        <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteExam" styleClass="danger" text="Delete" />
+                    </buttons>
+                  </ButtonBar>
                </children>
             </HBox>
          </children>

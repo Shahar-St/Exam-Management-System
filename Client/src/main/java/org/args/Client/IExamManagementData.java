@@ -8,22 +8,23 @@ import java.util.Set;
 
 public interface IExamManagementData {
     List getExams(String courseName);
-    void deleteExam(String examId);
     Set<String> getSubjects();
     List getCourses(String subjectName);
-    void viewExam(String examId);
-    public ObservableList<String> getObservableExamList();
+
+    ObservableList<String> getObservableExamList();
     boolean dataWasAlreadyInitialized();
     String getCurrentSubject();
     void setCurrentSubject(String subjectName);
-    String getCurrentCourse();
-    void setCurrentCourse(String courseName);
+    String getCurrentCourseId();
+    void setCurrentCourseId(String courseName);
     void fillExamList(String courseName);
     BooleanProperty isCourseSelected();
     void setCourseSelected(boolean courseSelected);
     List<String> getCoursesOfSubject(String subjectName);
-    void saveExamDetails(String examId);
+    void viewExam(String examId);
     void clearExamList();
     void fillQuestionsList(String courseName);
     void deployExam(String examId,String examCode);
+    String getViewMode();
+    void setViewMode(String viewMode);
 }

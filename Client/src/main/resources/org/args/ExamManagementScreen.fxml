@@ -45,20 +45,11 @@
                                 <MenuButton fx:id="coursesDropdown" disable="true" mnemonicParsing="false" styleClass="primary" text="Courses" />
                             </children>
                         </HBox>
-                        <HBox alignment="TOP_CENTER" prefHeight="49.0" prefWidth="1258.0" spacing="30.0">
-                            <children>
-                                <Button fx:id="detailsButton" mnemonicParsing="false" onAction="#switchToExamScreen" prefHeight="77.0" prefWidth="192.0" styleClass="info" text="Show Details" />
-                        <Button fx:id="editButton" mnemonicParsing="false" onAction="#editExam" prefHeight="77.0" prefWidth="192.0" styleClass="info" text="Edit" />
-                                <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteExam" prefHeight="77.0" prefWidth="192.0" styleClass="info" text="Delete" />
-                            </children>
-                            <VBox.margin>
-                                <Insets top="20.0" />
-                            </VBox.margin>
-                        </HBox>
-                  <HBox alignment="TOP_CENTER" prefHeight="42.0" prefWidth="1258.0" spacing="30.0">
+                  <HBox alignment="TOP_CENTER" prefHeight="42.0" prefWidth="1258.0" spacing="20.0">
                      <children>
                                 <Button fx:id="addButton" mnemonicParsing="false" onAction="#switchToAddExamScreen" prefHeight="77.0" prefWidth="192.0" styleClass="info" text="New Exam" />
                         <Button fx:id="executeButton" mnemonicParsing="false" onAction="#executeExam" prefHeight="77.0" prefWidth="192.0" styleClass="info" text="Execute" />
+                                <Button fx:id="detailsButton" mnemonicParsing="false" onAction="#switchToExamScreen" prefHeight="77.0" prefWidth="192.0" styleClass="info" text="Show Details" />
                      </children>
                   </HBox>
                     </children>
