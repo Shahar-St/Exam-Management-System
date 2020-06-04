@@ -37,11 +37,6 @@ public class MainScreenController {
         ClientApp.setRoot("QuestionManagementScreen");
     }
 
-    @FXML
-    void onAction(ActionEvent event) {
-        model.viewExam();
-    }
-
     private IMainScreenData model;
 
     public void setModel(IMainScreenData dataModel)
@@ -70,7 +65,7 @@ public class MainScreenController {
 
     private void initTeacher() throws IOException
     {
-        button1.setText("Question Management Screen");
+        button1.setText("Question Management");
         button1.setOnAction(event -> {
             try {
                 switchToQuestionManagement(event);
@@ -135,7 +130,7 @@ public class MainScreenController {
     @FXML
     void switchToStatsScreen (ActionEvent event)
     {
-        ClientApp.sendRequest(new TeacherStatisticsRequest("111"));
+
     }
     @FXML
     void switchToStudentExamExecutionScreen (ActionEvent event)

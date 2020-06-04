@@ -27,9 +27,9 @@ public interface IExamData {
 
     void showQuestionInfo(String questionId);
 
-    void done();
-
     void cancelExamAddition();
+
+    void viewExam(String examId);
 
     ObservableList<String> getObservableQuestionsList();
 

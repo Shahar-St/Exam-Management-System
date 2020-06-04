@@ -3,13 +3,13 @@ package DatabaseAccess.Requests.Statistics;
 import DatabaseAccess.Requests.DatabaseRequest;
 
 public class TeacherStatisticsRequest extends DatabaseRequest {
-    private final String executedExamGradeList;
+    private final String executedExamID;
 
-    public TeacherStatisticsRequest(String executedExamGradeList) {
-        this.executedExamGradeList = executedExamGradeList;
+    public TeacherStatisticsRequest(String executedExamID) {
+        this.executedExamID = executedExamID;
     }
 
-    public String getExecutedExamGradeList() {
-        return executedExamGradeList;
+    public String getExecutedExamID() {
+        return executedExamID;
     }
 }

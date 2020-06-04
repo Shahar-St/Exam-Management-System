@@ -12,5 +12,4 @@ public interface IMainScreenData {
 
     String getPermission();
 
-    void viewExam();// added for testing it may not be required
 }
