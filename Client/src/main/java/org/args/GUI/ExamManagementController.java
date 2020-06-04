@@ -113,9 +113,10 @@ public class ExamManagementController {
         course.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                coursesDropdown.setText(((MenuItem) event.getSource()).getText());
-                model.setCurrentCourseId(((MenuItem) event.getSource()).getText());
-                model.fillExamList(((MenuItem) event.getSource()).getText());
+                String text = ((MenuItem) event.getSource()).getText();
+                coursesDropdown.setText(text);
+                model.setCurrentCourseId(text.substring(0,2));
+                model.fillExamList(text);
             }
         });
         coursesDropdown.getItems().add(course);

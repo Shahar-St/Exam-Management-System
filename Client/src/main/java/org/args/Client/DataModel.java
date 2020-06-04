@@ -573,8 +573,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     @Override
-    public void fillExamList(String courseName) {
-        ClientApp.sendRequest(new AllExamsRequest(courseName));
+    public void fillExamList(String courseId) {
+        ClientApp.sendRequest(new AllExamsRequest(courseId));
     }
 
     @Override
