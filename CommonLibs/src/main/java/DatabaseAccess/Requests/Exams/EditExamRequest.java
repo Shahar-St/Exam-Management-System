@@ -9,17 +9,20 @@ public class EditExamRequest extends DatabaseRequest {
     private final String examId;
     private final String examTitle;
     private final List<String> questionsIDs;
-    private final List<Integer> scoresList;
+    private final List<Double> scoresList;
     private final String teacherNotes;
     private final String studentNotes;
+    private final int durationInMinutes;
 
-    public EditExamRequest(String examId, String examTitle, List<String> questionsIDs, List<Integer> scoresList, String teacherNotes, String studentNotes) {
+    public EditExamRequest(String examId, String examTitle, List<String> questionsIDs, List<Double> scoresList,
+                           String teacherNotes, String studentNotes, int durationInMinutes) {
         this.examId = examId;
         this.examTitle = examTitle;
         this.questionsIDs = questionsIDs;
         this.scoresList = scoresList;
         this.teacherNotes = teacherNotes;
         this.studentNotes = studentNotes;
+        this.durationInMinutes = durationInMinutes;
     }
 
     public String getExamId() {
@@ -34,7 +37,7 @@ public class EditExamRequest extends DatabaseRequest {
         return questionsIDs;
     }
 
-    public List<Integer> getScoresList() {
+    public List<Double> getScoresList() {
         return scoresList;
     }
 
@@ -45,4 +48,6 @@ public class EditExamRequest extends DatabaseRequest {
     public String getStudentNotes() {
         return studentNotes;
     }
+
+    public int getDurationInMinutes() { return durationInMinutes; }
 }

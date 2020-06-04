@@ -1,6 +1,7 @@
 package org.args;
 
 import DatabaseAccess.Requests.DatabaseRequest;
+import DatabaseAccess.Requests.Questions.DeleteQuestionRequest;
 import org.args.OCSF.AbstractServer;
 import org.args.OCSF.ConnectionToClient;
 
@@ -15,10 +16,9 @@ import java.util.Scanner;
 public class EMSserver extends AbstractServer {
 
     private static EMSserver singleInstanceServer = null;
-    //private boolean isOnline = false;
-
     private final DatabaseHandler databaseHandler;
     List<String> loggedInUsers = new ArrayList<>();
+
 
     private EMSserver(int port, DatabaseHandler databaseHandler) {
         super(port);
@@ -49,13 +49,15 @@ public class EMSserver extends AbstractServer {
         {
             try
             {
-                client.sendToClient(databaseHandler.handle((DatabaseRequest) msg, client, loggedInUsers));
+                client.sendToClient(databaseHandler.produceResponse((DatabaseRequest) msg, client, loggedInUsers));
             }
             catch (Exception e)
             {
                 e.printStackTrace();
             }
         }
+        //TODO check adding question/exam updates the related fields
+        //TODO check delete exam works
     }
 
     @Override
@@ -93,7 +95,6 @@ public class EMSserver extends AbstractServer {
             String input = scanner.nextLine();
             if (input.equals("exit"))
             {
-                databaseHandler.close();
                 try
                 {
                     this.close();
@@ -102,6 +103,7 @@ public class EMSserver extends AbstractServer {
                 {
                     e.printStackTrace();
                 }
+                databaseHandler.close();
                 return;
             }
         }

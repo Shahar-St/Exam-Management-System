@@ -16,7 +16,8 @@ public class LightExam implements Serializable {
     public LightExam() {
     }
 
-    public LightExam(String id, String author, List<LightQuestion> lightQuestionList, List<Double> questionsScores, int durationInMinutes, String title, String teacherPrivateNotes, String studentNotes) {
+    public LightExam(String id, String author, List<LightQuestion> lightQuestionList, List<Double> questionsScores,
+                     int durationInMinutes, String title, String teacherPrivateNotes, String studentNotes) {
         this.id = id;
         this.author = author;
         this.lightQuestionList = lightQuestionList;
@@ -47,9 +48,7 @@ public class LightExam implements Serializable {
         return lightQuestionList;
     }
 
-    public void setLightQuestionList(List<LightQuestion> lightQuestionList) {
-        this.lightQuestionList = lightQuestionList;
-    }
+    public void setLightQuestionList(List<LightQuestion> lightQuestionList) {this.lightQuestionList = lightQuestionList;}
 
     public List<Double> getQuestionsScores() {
         return questionsScores;
@@ -79,9 +78,7 @@ public class LightExam implements Serializable {
         return teacherNotes;
     }
 
-    public void setTeacherNotes(String teacherNotes) {
-        this.teacherNotes = teacherNotes;
-    }
+    public void setTeacherNotes(String teacherNotes) {this.teacherNotes = teacherNotes; }
 
     public String getStudentNotes() {
         return studentNotes;

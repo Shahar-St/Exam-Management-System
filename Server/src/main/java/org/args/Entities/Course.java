@@ -1,5 +1,6 @@
 package org.args.Entities;
 
+import com.sun.istack.Nullable;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -51,9 +52,9 @@ public class Course {
     )
     private List<Student> studentsList = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
-    @Cascade(CascadeType.SAVE_UPDATE)
-    private List<ExecutedExam> executedExamsList = new ArrayList<>();
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+//    @Cascade(CascadeType.SAVE_UPDATE)
+//    private List<ExecutedExam> executedExamsList = new ArrayList<>();
 
     //Group c'tors
     public Course() { }
@@ -64,7 +65,6 @@ public class Course {
         this.id = decimalFormat.format(id);
         this.name = name;
         this.setSubject(subject);
-        //this.setTeacher(teacher);
 
         for (int i = 0; i < 1000; i++)  // max questions per course
             availableQuestionCodes.add(i);
@@ -98,13 +98,13 @@ public class Course {
             student.getCoursesList().add(this);
     }
 
-    public void addExecutedExam(ExecutedExam executedExam) {
-        if (!executedExamsList.contains(executedExam))
-            executedExamsList.add(executedExam);
-
-        if(executedExam.getCourse() != this)
-            executedExam.setCourse(this);
-    }
+//    public void addExecutedExam(ExecutedExam executedExam) {
+//        if (!executedExamsList.contains(executedExam))
+//            executedExamsList.add(executedExam);
+//
+//        if(executedExam.getCourse() != this)
+//            executedExam.setCourse(this);
+//    }
 
     //Group setters and getters
     public Queue<Integer> getAvailableQuestionCodes() { return availableQuestionCodes; }
@@ -140,6 +140,6 @@ public class Course {
     public List<Student> getStudentsList() { return studentsList; }
     public void setStudentsList(List<Student> studentsList) { this.studentsList = studentsList; }
 
-    public List<ExecutedExam> getExecutedExamsList() { return executedExamsList; }
-    public void setExecutedExamsList(List<ExecutedExam> execExamsList) { this.executedExamsList = execExamsList; }
+//    public List<ExecutedExam> getExecutedExamsList() { return executedExamsList; }
+//    public void setExecutedExamsList(List<ExecutedExam> execExamsList) { this.executedExamsList = execExamsList; }
 }

@@ -10,7 +10,7 @@ import DatabaseAccess.Responses.DatabaseResponse;
  *  0 - success
  *  1 - unauthorized access - user isn't logged in
  *  2 - Question wasn't found
- *  3 - trying to edit a question that wasn't written by the user
+ *  3 - trying to delete a question that wasn't written by the user
  */
 public class EditQuestionResponse extends DatabaseResponse {
 

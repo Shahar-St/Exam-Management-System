@@ -8,13 +8,13 @@ import DatabaseAccess.Requests.DatabaseRequest;
  */
 public class AllExamsRequest extends DatabaseRequest {
 
-    private final String course;
+    private final String courseID;
 
-    public AllExamsRequest(String course) {
-        this.course = course;
+    public AllExamsRequest(String courseID) {
+        this.courseID = courseID;
     }
 
-    public String getCourse() {
-        return course;
+    public String getCourseID() {
+        return courseID;
     }
 }

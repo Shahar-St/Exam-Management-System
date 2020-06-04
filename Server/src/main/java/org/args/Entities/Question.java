@@ -1,5 +1,7 @@
 package org.args.Entities;
 
+import LightEntities.LightExam;
+import LightEntities.LightQuestion;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -32,14 +34,14 @@ public class Question {
     )
     private List<Exam> containedInExams = new ArrayList<>();
 
-    @ManyToMany
-    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
-    @JoinTable(
-            name = "questions_executedExams",
-            joinColumns = @JoinColumn(name = "question_id"),
-            inverseJoinColumns = @JoinColumn(name = "executedExam_id")
-    )
-    private List<ExecutedExam> containedInExecutedExams = new ArrayList<>();
+//    @ManyToMany
+//    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
+//    @JoinTable(
+//            name = "questions_executedExams",
+//            joinColumns = @JoinColumn(name = "question_id"),
+//            inverseJoinColumns = @JoinColumn(name = "executedExam_id")
+//    )
+//    private List<ExecutedExam> containedInExecutedExams = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Cascade(CascadeType.SAVE_UPDATE)
@@ -59,13 +61,18 @@ public class Question {
         this.questionContent = questionContent;
         this.answersArray = answersArray;
         this.correctAnswer = correctAnswer;
-        this.author = author;
+        this.setAuthor(author);
         this.setCourse(course);
         setLastModified();
 
         // handle empty queue
         DecimalFormat decimalFormat = new DecimalFormat("000");
         this.id = course.getId() + decimalFormat.format(course.getAvailableQuestionCodes().poll());
+    }
+
+    public Question(Question question) {
+        this(question.questionContent,question.answersArray,question.correctAnswer,question.course,
+                question.getAuthor());
     }
 
     //Group adders and removers
@@ -77,13 +84,13 @@ public class Question {
             exam.getQuestionsList().add(this);
     }
 
-    public void addExecutedExam(ExecutedExam executedExam) {
-        if (!containedInExecutedExams.contains(executedExam))
-            containedInExecutedExams.add(executedExam);
-
-        if (!executedExam.getQuestionsList().contains(this))
-            executedExam.getQuestionsList().add(this);
-    }
+//    public void addExecutedExam(ExecutedExam executedExam) {
+//        if (!containedInExecutedExams.contains(executedExam))
+//            containedInExecutedExams.add(executedExam);
+//
+//        if (!executedExam.getQuestionsList().contains(this))
+//            executedExam.getQuestionsList().add(this);
+//    }
 
     //Group setters and getters
     public String getId() {
@@ -122,13 +129,12 @@ public class Question {
         this.containedInExams = containedInExams;
     }
 
-    public List<ExecutedExam> getContainedInExecutedExams() {
-        return containedInExecutedExams;
-    }
-
-    public void setContainedInExecutedExams(List<ExecutedExam> containedInExecutedExams) {
-        this.containedInExecutedExams = containedInExecutedExams;
-    }
+//    public List<ExecutedExam> getContainedInExecutedExams() {
+//        return containedInExecutedExams;
+//    }
+//    public void setContainedInExecutedExams(List<ExecutedExam> containedInExecutedExams) {
+//        this.containedInExecutedExams = containedInExecutedExams;
+//    }
 
     public Course getCourse() {
         return course;
@@ -137,7 +143,7 @@ public class Question {
     public void setCourse(Course course) {
 
         this.course = course;
-        if (course.getQuestionsList().contains(this))
+        if (!course.getQuestionsList().contains(this))
             course.addQuestion(this);
     }
 
@@ -158,5 +164,12 @@ public class Question {
 
     public void setLastModified() {
         this.lastModified = LocalDateTime.now();
+    }
+
+    @Override
+    protected LightQuestion clone() throws CloneNotSupportedException {
+        super.clone();
+        return new LightQuestion(this.questionContent, this.answersArray, this.correctAnswer, this.author.getUserName(),
+                               this.course.getName(), this.lastModified, this.id);
     }
 }
