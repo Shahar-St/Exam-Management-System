@@ -63,7 +63,9 @@ public class Exam {
         this.title = title;
         this.studentNotes = studentNotes;
         this.teacherNotes = teacherNotes;
-        this.questionsList.addAll(questionsList);
+        //this.questionsList.addAll(questionsList);
+        for (Question question : questionsList)
+             this.addQuestion(question);
         this.questionsScores.addAll(questionsScores);
         setLastModified();
 

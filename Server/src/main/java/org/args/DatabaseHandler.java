@@ -41,10 +41,10 @@ public class DatabaseHandler {
         this.put("ViewExamRequest", new ViewExamStrategy());
     }};
 
-    public DatabaseResponse test(DeleteQuestionRequest request) {
-        DeleteQuestionStrategy strategy = new DeleteQuestionStrategy();
-        return strategy.test(request, session);
-    }
+////    public DatabaseResponse test(DeleteQuestionRequest request) {
+////        DeleteQuestionStrategy strategy = new DeleteQuestionStrategy();
+////        return strategy.test(request, session);
+//    }
 
     public DatabaseHandler() {
         try
@@ -105,7 +105,8 @@ public class DatabaseHandler {
                 .addAnnotatedClass(Course.class)
                 .addAnnotatedClass(Question.class)
                 .addAnnotatedClass(Exam.class)
-                .addAnnotatedClass(ExecutedExam.class);
+                .addAnnotatedClass(ExecutedExam.class)
+                .addAnnotatedClass(ConcreteExam.class);
 
         ServiceRegistry serviceRegistry =
                 new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
@@ -133,6 +134,7 @@ public class DatabaseHandler {
     private final int NUM_OF_COURSES = 4;
     private final int NUM_OF_OPTIONAL_ANSWERS = 4;
     private final int NUM_OF_QUESTIONS = 8;
+    private final int NUM_OF_EXAMS = 4;
 
     private void createDummyEntities() {
 
@@ -228,6 +230,21 @@ public class DatabaseHandler {
         }
         session.flush();
 
+        //creating exams by teachers
+
+        String[] titlesArr = {"functions", "spelling", "circles", "vocabulary"};
+        List<Double> questionsScores = Arrays.asList(50.0, 50.0);
+
+        for (int i = 0; i < NUM_OF_EXAMS; i++)
+        {
+            Teacher teacher = teachers.get(i % NUM_OF_TEACHERS);
+            Course course = teacher.getCoursesList().get(i % teacher.getCoursesList().size());
+            Exam exam = teacher.createExam(course, 90, titlesArr[i], "good luck!", "my private notes",
+                    course.getQuestionsList(), questionsScores);
+            session.save(exam);
+            session.update(teacher);
+        }
+        session.flush();
     }
 
     private static <T> List<T> getAllOfType(Session session, Class<T> objectType) {

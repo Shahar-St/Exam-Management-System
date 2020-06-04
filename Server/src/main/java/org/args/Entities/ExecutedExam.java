@@ -26,7 +26,7 @@ public class ExecutedExam {
 
      @ManyToOne(fetch = FetchType.LAZY)
      @Cascade(CascadeType.SAVE_UPDATE)
-     @JoinColumn(name = "ConcreteExam_id")
+     @JoinColumn(name = "concrete_id")
      private ConcreteExam concreteExam;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
