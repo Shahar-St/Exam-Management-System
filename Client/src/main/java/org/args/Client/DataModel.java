@@ -6,12 +6,10 @@ import DatabaseAccess.Requests.Questions.AllQuestionsRequest;
 import DatabaseAccess.Requests.Questions.EditQuestionRequest;
 import DatabaseAccess.Requests.Questions.QuestionRequest;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
-import DatabaseAccess.Responses.Exams.AddExamResponse;
 import DatabaseAccess.Responses.Exams.AllExamsResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
 import DatabaseAccess.Responses.LoginResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
-import DatabaseAccess.Responses.Questions.EditQuestionResponse;
 import DatabaseAccess.Responses.Questions.QuestionResponse;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
@@ -25,9 +23,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import org.args.GUI.ClientApp;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -505,7 +500,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     @Override
-    public void saveExamDetails(String examId) {
+    public void viewExam(String examId) {
         ClientApp.sendRequest(new ViewExamRequest(examId));
     }
 
@@ -524,11 +519,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void showQuestionInfo(String questionId) {
-
-    }
-
-    @Override
-    public void done() {
 
     }
 
@@ -576,23 +566,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
 
     @Override
-    public void deleteExam(String examId) {
-        Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmDelete.setContentText("Are you sure you want to delete exam number " + examId + "?");
-        Optional<ButtonType> result = confirmDelete.showAndWait();
-        if (result.get() == ButtonType.OK)
-            ClientApp.sendRequest(new DeleteExamRequest(examId));
-    }
-
-    @Override
     public void clearExamList() {
         observableExamList.clear();
-    }
-
-    // TODO: decide if the function return void or list, conflict between istudentexam and iexammanagement
-    @Override
-    public void viewExam(String examId) {
-        ClientApp.sendRequest(new ViewExamRequest(examId));
     }
 
     public ObservableList<String> getObservableExamList() {

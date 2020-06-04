@@ -170,7 +170,7 @@ public class ExamManagementController {
     private void viewSelectedExamDetails() {
         String examId = getExamIdFromSelected();
         if (examId != null)
-            model.saveExamDetails(examId);
+            model.viewExam(examId);
     }
 
     private String getExamIdFromSelected() {
