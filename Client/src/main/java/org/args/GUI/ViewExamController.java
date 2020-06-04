@@ -47,6 +47,7 @@ public class ViewExamController {
 
     @FXML
     void onBackClick(ActionEvent event) {
+        model.clearDetailsScreen();
         ClientApp.backToLastScene();
     }
 

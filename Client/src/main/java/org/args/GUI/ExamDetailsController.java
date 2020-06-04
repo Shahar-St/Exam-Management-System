@@ -55,9 +55,11 @@ public class ExamDetailsController {
     @FXML
     void back(ActionEvent event)
     {
-        model.clearDetailsScreen();
         if (model.getViewMode().equals("ADD"))
+        {
             ClientApp.setRoot("ExamManagementScreen");
+            model.clearDetailsScreen();
+        }
         else
             ClientApp.backToLastScene();
     }

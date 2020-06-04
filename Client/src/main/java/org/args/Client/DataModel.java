@@ -86,7 +86,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
             setSubjectsAndCourses(response.getSubjectsAndCourses());
     }
 
-    private HashMap<String, HashMap<String,String>> subjectsAndCourses;
+    private HashMap<String, HashMap<String, String>> subjectsAndCourses;
 
     private String currentSubject;
 
@@ -94,7 +94,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     /* bound to buttons that shouldn't be visible/enabled while a course isn't selected */
     private final BooleanProperty courseSelected = new SimpleBooleanProperty(false);
 
-    public void setSubjectsAndCourses(HashMap<String, HashMap<String,String>> mapFromResponse) {
+    public void setSubjectsAndCourses(HashMap<String, HashMap<String, String>> mapFromResponse) {
         subjectsAndCourses = mapFromResponse;
     }
 
@@ -111,13 +111,12 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     public List<String> getCoursesOfSubject(String subject) {
-        HashMap<String,String> coursesEntries = subjectsAndCourses.get(subject);
+        HashMap<String, String> coursesEntries = subjectsAndCourses.get(subject);
         List<String> listOfCourses = new Vector<>();
-        for (Map.Entry<String,String> course : coursesEntries.entrySet())
-        {
+        for (Map.Entry<String, String> course : coursesEntries.entrySet()) {
             String id = course.getKey();
             String name = course.getValue();
-            listOfCourses.add(id +" - " + name);
+            listOfCourses.add(id + " - " + name);
         }
         return listOfCourses;
     }
@@ -138,6 +137,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         this.currentCourseId = currentCourseId;
         courseSelected.setValue(true);
     }
+
     /*used to verify if data is present before init of question management screen*/
     public boolean dataWasAlreadyInitialized() {
         return currentSubject != null && !subjectsAndCourses.isEmpty();
@@ -355,7 +355,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
 
-
     public void startExamEdit() {
         setViewMode("EDIT");
     }
@@ -508,14 +507,12 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void clearDetailsScreen() {
-        if (getViewMode().equals("ADD"))
-        {
-            currentExamDuration.setValue("");
-            currentExamTitle.setValue("");
-            currentExamStudentNotes.setValue("");
-            currentExamTeacherNotes.setValue("");
-            cancelExamAddition();
-        }
+        currentExamDuration.setValue("");
+        currentExamTitle.setValue("");
+        currentExamStudentNotes.setValue("");
+        currentExamTeacherNotes.setValue("");
+        cancelExamAddition();
+
     }
 
     @Override
@@ -593,7 +590,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     @Subscribe
-    public void handleTeacherStatisticsResponse(TeacherStatisticsResponse response){
+    public void handleTeacherStatisticsResponse(TeacherStatisticsResponse response) {
         getCurrentExamForStats().putAll(response.getExamHashMap());
     }
 
@@ -651,10 +648,10 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     //TODO: implement IExamData Method
     @Override
     public void saveExam(String title, int duration, String teacherNotes, String studentNotes, List<String> questionList, List<Double> questionsScoreList, String examId) {
-        if(getViewMode().equals("ADD")) {
+        if (getViewMode().equals("ADD")) {
             ClientApp.sendRequest(new AddExamRequest(title, questionList, questionsScoreList, teacherNotes, studentNotes, duration, currentCourseId));
-        }else{
-            ClientApp.sendRequest(new EditExamRequest(examId,title,questionList,questionsScoreList,teacherNotes,studentNotes));
+        } else {
+            ClientApp.sendRequest(new EditExamRequest(examId, title, questionList, questionsScoreList, teacherNotes, studentNotes));
         }
     }
 
