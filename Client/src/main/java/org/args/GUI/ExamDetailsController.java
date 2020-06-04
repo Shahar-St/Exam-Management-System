@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.args.Client.IExamData;
 
+import java.util.List;
+
 public class ExamDetailsController {
 
 
@@ -29,6 +31,12 @@ public class ExamDetailsController {
     @FXML
     private Button nextButton;
 
+    String tempTitle;
+    String tempStudentNote;
+    String tempTeacherNote;
+    String tempDuration;
+    List<String> tempQuestions;
+
     private IExamData model;
 
     public void setModel(IExamData model) {
@@ -41,7 +49,27 @@ public class ExamDetailsController {
         setModel(ClientApp.getModel());
         bindTextFields();
         if(model.getViewMode().equals("EDIT"))
+        {
             pageTitle.setText("Edit An Existing Exam");
+            saveOriginalExamData();
+        }
+    }
+
+    private void saveOriginalExamData() {
+        tempTitle = model.getCurrentExamTitle();
+        tempStudentNote = model.getCurrentExamStudentNotes();
+        tempTeacherNote = model.getCurrentExamTeacherNotes();
+        tempDuration = model.getCurrentExamDuration();
+        tempQuestions = model.getObservableExamQuestionsList();
+    }
+
+    private void restoreOriginalExamData ()
+    {
+        model.setCurrentExamTitle(tempTitle);
+        model.setCurrentExamStudentNotes(tempStudentNote);
+        model.setCurrentExamTeacherNotes(tempTeacherNote);
+        model.setCurrentExamDuration(tempDuration);
+        model.getObservableExamQuestionsList().setAll(tempQuestions);
     }
 
 
@@ -61,7 +89,10 @@ public class ExamDetailsController {
             model.clearDetailsScreen();
         }
         else
+        {
+            restoreOriginalExamData();
             ClientApp.backToLastScene();
+        }
     }
 
     @FXML
