@@ -21,17 +21,17 @@ public class QuestionResponse extends DatabaseResponse {
     private final String questionContent;
     private final List<String> answers;
     private final int correctAnswer;
-    private final String authorName;
+    private final String authorUserName;
     private final LocalDateTime lastModified;
 
     // successful request
     public QuestionResponse(int status, DatabaseRequest request, String questionContent, List<String> answers,
-                            int correctAnswer, String authorName, LocalDateTime lastModified) {
+                            int correctAnswer, String authorUserName, LocalDateTime lastModified) {
         super(status, request);
         this.questionContent = questionContent;
         this.answers = answers;
         this.correctAnswer = correctAnswer;
-        this.authorName = authorName;
+        this.authorUserName = authorUserName;
         this.lastModified = lastModified;
     }
 
@@ -41,7 +41,7 @@ public class QuestionResponse extends DatabaseResponse {
         questionContent = null;
         answers = null;
         correctAnswer = -1;
-        authorName = null;
+        authorUserName = null;
         lastModified = null;
     }
 
@@ -57,8 +57,8 @@ public class QuestionResponse extends DatabaseResponse {
         return correctAnswer;
     }
 
-    public String getAuthorName() {
-        return authorName;
+    public String getAuthorUserName() {
+        return authorUserName;
     }
 
     public LocalDateTime getLastModified() {

@@ -43,7 +43,10 @@ public class EditQuestionStrategy extends DatabaseStrategy {
 
             Question newQuestion = new Question(editRequest.getNewDescription(), editRequest.getNewAnswers(),
                     editRequest.getCorrectAnswer(), question.getCourse(), question.getAuthor());
-            session.saveOrUpdate(newQuestion);
+        //    session.saveOrUpdate(newQuestion);
+            session.save(newQuestion);
+            session.update(newQuestion);
+            session.flush();
         }
         else
         {
@@ -52,8 +55,9 @@ public class EditQuestionStrategy extends DatabaseStrategy {
             question.setCorrectAnswer(editRequest.getCorrectAnswer());
             question.setLastModified();
             session.update(question);
+            session.flush();
         }
-        session.flush();
+
         return new EditQuestionResponse(SUCCESS, request);
     }
 }

@@ -34,6 +34,7 @@ public class DeleteExamStrategy extends DatabaseStrategy {
             return new DeleteExamResponse(ERROR4, request);
 
         exam.getCourse().getAvailableExamCodes().add(Integer.parseInt(exam.getId().substring(4)));
+        //TODO FIX
         session.remove(exam);
         session.flush();
         return new DeleteExamResponse(SUCCESS, request);
