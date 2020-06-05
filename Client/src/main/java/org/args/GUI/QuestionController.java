@@ -103,7 +103,7 @@ public class QuestionController {
                     break;
             }
             // if the current logged user is not the author of the question disable edit and delete buttons
-            if(!model.getName().equals(model.getAuthor())){
+            if(!model.getUserName().equals(model.getAuthor())){
                 EditButton.setDisable(true);
                 DeleteButton.setDisable(true);
             }
@@ -173,6 +173,7 @@ public class QuestionController {
 
     @FXML
     void deleteButtonClicked(ActionEvent event) {
+        model.deleteQuestion(model.getQuestionId());
 
     }
 

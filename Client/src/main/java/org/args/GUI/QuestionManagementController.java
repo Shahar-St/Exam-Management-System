@@ -54,6 +54,8 @@ public class QuestionManagementController {
     public void initialize() {
         setModel(ClientApp.getModel());
         questionsList.setItems(model.getObservableQuestionsList());
+        if (model.getObservableQuestionsList().size() > 0 && !model.isCourseSelected().get())
+            model.clearQuestionsList();
         bindButtonVisibility();
         if (model.dataWasAlreadyInitialized()) {
             for (String subjectName : model.getSubjects()) //iterate through every subject in the hashmap
@@ -176,6 +178,7 @@ public class QuestionManagementController {
         if (questionsList.getSelectionModel().getSelectedItem() != null) {
             int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
             String questionId = questionsList.getSelectionModel().getSelectedItem().substring(1, indexOfColon);
+            model.setCurrentQuestionId(questionId);
             model.loadQuestionDetails(questionId);
         }
     }

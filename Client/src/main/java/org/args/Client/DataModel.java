@@ -1,10 +1,9 @@
 package org.args.Client;
 
+import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.Exams.*;
 import DatabaseAccess.Requests.LoginRequest;
-import DatabaseAccess.Requests.Questions.AllQuestionsRequest;
-import DatabaseAccess.Requests.Questions.EditQuestionRequest;
-import DatabaseAccess.Requests.Questions.QuestionRequest;
+import DatabaseAccess.Requests.Questions.*;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
 import DatabaseAccess.Responses.Exams.AllExamsResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
@@ -94,6 +93,17 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void handleSubjectsAndCoursesResponse(SubjectsAndCoursesResponse response) {
         if (response.getStatus() == 0)
             setSubjectsAndCourses(response.getSubjectsAndCourses());
+    }
+
+    String currentQuestionId;
+
+    public String getCurrentQuestionId() {
+        return currentQuestionId;
+    }
+
+    @Override
+    public void setCurrentQuestionId(String currentQuestionId) {
+        this.currentQuestionId = currentQuestionId;
     }
 
     private HashMap<String, HashMap<String, String>> subjectsAndCourses;
@@ -222,6 +232,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     private ObservableList<String> choiceItems;
 
     @Override
+    public void deleteQuestion(String questionId) {
+        ClientApp.sendRequest(new DeleteQuestionRequest(questionId));
+    }
+
+    @Override
     public boolean isCreating() {
         return isCreating;
     }
@@ -293,8 +308,13 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     public void saveQuestion(String questionId, String answer_1, String answer_2, String answer_3, String answer_4, String newContent) {
+        DatabaseRequest request = null;
+        if(isCreating){
+             request = new AddQuestionRequest(newContent, Arrays.asList(answer_1, answer_2, answer_3, answer_4), correctAnswer,currentCourseId);
 
-        EditQuestionRequest request = new EditQuestionRequest(questionId, newContent, Arrays.asList(answer_1, answer_2, answer_3, answer_4), correctAnswer);
+        }else {
+             request = new EditQuestionRequest(questionId, newContent, Arrays.asList(answer_1, answer_2, answer_3, answer_4), correctAnswer);
+        }
         ClientApp.sendRequest(request);
     }
 
@@ -324,6 +344,10 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     public void setViewMode(String viewMode) {
         this.viewMode = viewMode;
+        if(viewMode.equals("ADD")){
+            if(!observableQuestionsScoringList.isEmpty())
+                observableQuestionsScoringList.clear();
+        }
     }
 
 
@@ -355,6 +379,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         setCurrentExamTeacherNotes(currentExam.getTeacherNotes());
         setCurrentExamDuration(Integer.toString(currentExam.getDurationInMinutes()));
         observableExamQuestionsList.clear();
+        observableQuestionsScoringList.clear();
         for (LightQuestion question : currentExam.getLightQuestionList()) {
             observableExamQuestionsList.add(question.toString());
         }
@@ -371,7 +396,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public boolean isExamDeletable() {
-        return getName().equals(currentExam.getAuthor());
+        return getUserName().equals(currentExam.getAuthor());
     }
 
     @Override
@@ -403,8 +428,14 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
             }
         } else if (observableExamQuestionsList.isEmpty()) {
             observableQuestionsScoringList.clear();
-            setCurrentExamTotalScore("0.0");
+
+        }else if( observableQuestionsScoringList.size() != observableExamQuestionsList.size()){
+            for(int i=observableQuestionsScoringList.size();i<observableExamQuestionsList.size();i++){
+                observableQuestionsScoringList.add("0");
+            }
         }
+        setCurrentExamTotalScore(String.valueOf(calcQuestionsScoringListValue()));
+
     }
 
     public double calcQuestionsScoringListValue() {
@@ -484,6 +515,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
             @Override
             public void run() {
                 observableExamQuestionsList.add(question);
+                observableQuestionsScoringList.add("0");
             }
         });
 
@@ -494,6 +526,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                observableQuestionsScoringList.remove(observableExamQuestionsList.indexOf(question));
                 observableExamQuestionsList.remove(question);
             }
         });

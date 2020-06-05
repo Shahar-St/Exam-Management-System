@@ -81,26 +81,26 @@ public class ViewExamController {
         String examTeacherPrivateNotes = model.getCurrentExamTeacherNotes();
         String examStudentNotes = model.getCurrentExamStudentNotes();
         String examDuration = model.getCurrentExamDuration();
+        Label description_label = new Label("Exam Description:");
+
+        TextField description = new TextField(examDescription);
+
+        Label privateNotes_label = new Label("Teacher Private Notes:");
+
+        TextField privateNotes = new TextField(examTeacherPrivateNotes);
+
+        Label studentNotes_label = new Label("Student Private Notes:");
+
+        TextField sNotes = new TextField(examStudentNotes);
+
+        Label duration_label = new Label("Exam Duration In Minutes:");
+
+        TextField duration = new TextField(examDuration);
         assert pageView != null;
         pageView.setPageCount(questionList.size());
         pageView.setCurrentPageIndex(0);
         pageView.setMaxPageIndicatorCount(5);
         pageView.setPageFactory((pageIndex) -> {
-            Label description_label = new Label("Exam Description:");
-
-            TextField description = new TextField(examDescription);
-
-            Label privateNotes_label = new Label("Teacher Private Notes:");
-
-            TextField privateNotes = new TextField(examTeacherPrivateNotes);
-
-            Label studentNotes_label = new Label("Student Private Notes:");
-
-            TextField sNotes = new TextField(examStudentNotes);
-
-            Label duration_label = new Label("Exam Duration In Minutes:");
-
-            TextField duration = new TextField(examDuration);
 
             Label date_label = new Label("Last Modified:");
 
@@ -169,9 +169,15 @@ public class ViewExamController {
                     break;
             }
 
-            return new VBox(description_label, description, privateNotes_label, privateNotes,studentNotes_label,sNotes ,duration_label, duration,
-                    date_label, lastModified, author_label, author, content_label, content, ans1_label, answer1, ans2_label,
+            if(pageIndex==0){
+                return new VBox(description_label, description, privateNotes_label, privateNotes,studentNotes_label,sNotes ,duration_label, duration,
+                        date_label, lastModified, author_label, author, content_label, content, ans1_label, answer1, ans2_label,
+                        answer2, ans3_label, answer3, ans4_label, answer4, score_label, score);
+            }
+            return new VBox(date_label, lastModified, author_label, author, content_label, content, ans1_label, answer1, ans2_label,
                     answer2, ans3_label, answer3, ans4_label, answer4, score_label, score);
+
+
 
         });
 
