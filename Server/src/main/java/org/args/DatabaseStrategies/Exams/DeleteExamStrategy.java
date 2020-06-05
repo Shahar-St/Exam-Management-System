@@ -9,9 +9,11 @@ import org.args.Entities.Exam;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public class DeleteExamStrategy extends DatabaseStrategy {
+
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
                                    List<String> loggedInUsers) {
@@ -31,6 +33,7 @@ public class DeleteExamStrategy extends DatabaseStrategy {
         if (!exam.getConcreteExamsList().isEmpty())
             return new DeleteExamResponse(ERROR4, request);
 
+        exam.getCourse().getAvailableExamCodes().add(Integer.parseInt(exam.getId().substring(4)));
         session.remove(exam);
         session.flush();
         return new DeleteExamResponse(SUCCESS, request);

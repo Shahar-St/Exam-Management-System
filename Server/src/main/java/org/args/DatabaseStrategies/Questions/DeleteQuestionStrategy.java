@@ -41,6 +41,7 @@ public class DeleteQuestionStrategy extends DatabaseStrategy {
         if (!question.getContainedInExams().isEmpty())
             return new DeleteQuestionResponse(ERROR4, request);
 
+        question.getCourse().getAvailableQuestionCodes().add(Integer.parseInt(question.getId().substring(2)));
         session.remove(question);
         session.flush();
         return new DeleteQuestionResponse(SUCCESS, request);

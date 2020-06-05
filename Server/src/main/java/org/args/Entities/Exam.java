@@ -76,11 +76,11 @@ public class Exam {
         this.id = course.getSubject().getId() + course.getId() +
                 decimalFormat.format(course.getAvailableExamCodes().remove(0));
     }
-
-    public Exam(Exam exam) {
-        this(exam.course, exam.author, exam.durationInMinutes, exam.title, exam.studentNotes, exam.teacherNotes,
-                exam.questionsList, exam.questionsScores);
-    }
+//
+//    public Exam(Exam exam) {
+//        this(exam.course, exam.author, exam.durationInMinutes, exam.title, exam.studentNotes, exam.teacherNotes,
+//                exam.questionsList, exam.questionsScores);
+//    }
 
     //Group adders and removers
     public void addQuestion(Question question) {

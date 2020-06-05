@@ -18,6 +18,13 @@ import org.hibernate.Session;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * status dictionary:
+ * 0 - success
+ * 1 - unauthorized access - user isn't logged in
+ * 2 - there are already 100 exams for this course
+ */
+
 public class AddExamStrategy extends DatabaseStrategy {
 
     @Override
@@ -31,8 +38,11 @@ public class AddExamStrategy extends DatabaseStrategy {
 
         Teacher teacher = (Teacher) getUser((String) client.getInfo("userName"), session);
         Course course = getTypeById(Course.class, addExamRequest.getCourseID(), session);
+
+        if (course.getAvailableExamCodes().isEmpty())
+            return new AddExamResponse(ERROR2, request);
+
         List<Question> questionsList = new ArrayList<>();
-        // why?
         for (String question : addExamRequest.getQuestionsIDs())
             questionsList.add(getTypeById(Question.class, question, session));
 
