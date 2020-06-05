@@ -47,6 +47,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private String permission;
 
+    private String userName;
+
     @Subscribe
     public void handleLoginResponse(LoginResponse response) {
         if (response.getStatus() == 0) {
@@ -76,6 +78,14 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     public String getPermission() {
         return permission;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     //question management - subjects and courses dropdowns and screen init
@@ -649,10 +659,21 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Override
     public void saveExam(String title, int duration, String teacherNotes, String studentNotes, List<String> questionList, List<Double> questionsScoreList, String examId) {
         if (getViewMode().equals("ADD")) {
-            ClientApp.sendRequest(new AddExamRequest(title, questionList, questionsScoreList, teacherNotes, studentNotes, duration, currentCourseId));
+            ClientApp.sendRequest(new AddExamRequest(title, generateListOfIds(questionList), questionsScoreList, teacherNotes, studentNotes, duration, currentCourseId));
         } else {
-            ClientApp.sendRequest(new EditExamRequest(examId, title, questionList, questionsScoreList, teacherNotes, studentNotes, duration));
+            ClientApp.sendRequest(new EditExamRequest(examId, title, generateListOfIds(questionList), questionsScoreList, teacherNotes, studentNotes, duration));
         }
+    }
+
+    private List<String> generateListOfIds(List<String> questions)
+    {
+        List<String> questionIds = new Vector<>();
+        for (String question : questions)
+        {
+            questionIds.add(question.substring(1,6));
+        }
+        return questionIds;
+
     }
 
     //TODO: implement ITeacherExamExecutionData Methods
