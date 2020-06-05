@@ -96,6 +96,17 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
             setSubjectsAndCourses(response.getSubjectsAndCourses());
     }
 
+    String currentQuestionId;
+
+    public String getCurrentQuestionId() {
+        return currentQuestionId;
+    }
+
+    @Override
+    public void setCurrentQuestionId(String currentQuestionId) {
+        this.currentQuestionId = currentQuestionId;
+    }
+
     private HashMap<String, HashMap<String, String>> subjectsAndCourses;
 
     private String currentSubject;
@@ -293,7 +304,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     public void saveQuestion(String questionId, String answer_1, String answer_2, String answer_3, String answer_4, String newContent) {
-
         EditQuestionRequest request = new EditQuestionRequest(questionId, newContent, Arrays.asList(answer_1, answer_2, answer_3, answer_4), correctAnswer);
         ClientApp.sendRequest(request);
     }

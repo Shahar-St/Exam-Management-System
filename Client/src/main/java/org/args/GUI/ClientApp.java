@@ -289,7 +289,6 @@ public class ClientApp extends Application {
         }else{
             popUpAlert("Exam editing failed");
         }
-
     }
 
     @Subscribe

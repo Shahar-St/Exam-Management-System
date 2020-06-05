@@ -49,4 +49,6 @@ public interface IQuestionManagementData {
     void fillQuestionsList(String text);
 
     void loadQuestionDetails(String questionId);
+
+    void setCurrentQuestionId(String questionId);
 }
