@@ -18,6 +18,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * status dictionary:
+ * 0 - success
+ * 1 - unauthorized access - user isn't logged in
+ */
+
 public class AllExamsStrategy extends DatabaseStrategy {
 
     @Override

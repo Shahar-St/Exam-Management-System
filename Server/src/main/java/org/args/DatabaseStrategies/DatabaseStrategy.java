@@ -19,9 +19,9 @@ public abstract class DatabaseStrategy {
     // error codes
     protected final int SUCCESS = 0;
     protected final int UNAUTHORIZED = 1;
-    protected final int NOT_FOUND = 2;
-    protected final int NO_ACCESS = 3;
-    protected final int WRONG_INFO = 4;
+    protected final int ERROR2 = 2;
+    protected final int ERROR3 = 3;
+    protected final int ERROR4 = 4;
 
     public abstract DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
                                             List<String> loggedInUsers);

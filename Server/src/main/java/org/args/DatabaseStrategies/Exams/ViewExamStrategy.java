@@ -12,6 +12,12 @@ import org.hibernate.Session;
 
 import java.util.List;
 
+/**
+ * status dictionary:
+ * 0 - success
+ * 1 - unauthorized access - user isn't logged in
+ * 2 - exam wasn't found
+ */
 public class ViewExamStrategy extends DatabaseStrategy {
 
     @Override
@@ -25,19 +31,8 @@ public class ViewExamStrategy extends DatabaseStrategy {
         Exam exam = getTypeById(Exam.class, viewExamRequest.getExamId(), session);
 
         if (exam == null)
-            return new ViewExamResponse(NOT_FOUND, viewExamRequest);
+            return new ViewExamResponse(ERROR2, viewExamRequest);
 
-        //LightExam lightExam = null;
-//        int res = SUCCESS;
-//        try
-//        {
-        LightExam lightExam = exam.createLightExam();
-//        } catch (CloneNotSupportedException e)
-//        {
-//            res = NO_ACCESS;
-//            e.printStackTrace();
-//        }
-
-        return new ViewExamResponse(SUCCESS, request, lightExam);
+        return new ViewExamResponse(SUCCESS, request, exam.createLightExam());
     }
 }

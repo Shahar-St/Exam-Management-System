@@ -21,13 +21,13 @@ public class LoginStrategy extends DatabaseStrategy {
         User user = getUser(loginRequest.getUserName(), session);
 
         if (user == null || !user.getUserName().equals(loginRequest.getUserName()))
-            return new LoginResponse(NOT_FOUND, request);
+            return new LoginResponse(ERROR2, request);
 
         if (loggedInUsers.contains(loginRequest.getUserName()))
-            return new LoginResponse(NO_ACCESS, request);
+            return new LoginResponse(ERROR3, request);
 
         if (!user.getPassword().equals(loginRequest.getPassword()))
-            return new LoginResponse(WRONG_INFO, request);
+            return new LoginResponse(ERROR4, request);
 
         client.setInfo("userName", user.getUserName());
         loggedInUsers.add(user.getUserName());
