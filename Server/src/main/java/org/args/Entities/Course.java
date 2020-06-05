@@ -3,13 +3,12 @@ package org.args.Entities;
 import com.sun.istack.Nullable;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 @Entity
 public class Course {
@@ -20,10 +19,10 @@ public class Course {
 
     private String name;
 
-    @Transient
-    private final Queue<Integer> availableQuestionCodes = new LinkedList<>();
-    @Transient
-    private final Queue<Integer> availableExamCodes = new LinkedList<>();
+    @ElementCollection
+    private final List<Integer> availableQuestionCodes = new LinkedList<>();
+    @ElementCollection
+    private final List<Integer> availableExamCodes = new LinkedList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Cascade(CascadeType.SAVE_UPDATE)
@@ -57,7 +56,8 @@ public class Course {
 //    private List<ExecutedExam> executedExamsList = new ArrayList<>();
 
     //Group c'tors
-    public Course() { }
+    public Course() {
+    }
 
     public Course(int id, String name, Subject subject) {
 
@@ -86,7 +86,7 @@ public class Course {
         if (!questionsList.contains(question))
             questionsList.add(question);
 
-        if(question.getCourse() != this)
+        if (question.getCourse() != this)
             question.setCourse(this);
     }
 
@@ -107,38 +107,64 @@ public class Course {
 //    }
 
     //Group setters and getters
-    public Queue<Integer> getAvailableQuestionCodes() { return availableQuestionCodes; }
-    public Queue<Integer> getAvailableExamCodes() { return availableExamCodes; }
+    public List<Integer> getAvailableQuestionCodes() {
+        return availableQuestionCodes;
+    }
+    public List<Integer> getAvailableExamCodes() {
+        return availableExamCodes;
+    }
 
-    public String getId() { return id; }
+    public String getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public Subject getSubject() { return subject; }
+    public Subject getSubject() {
+        return subject;
+    }
     public void setSubject(Subject subject) {
 
         this.subject = subject;
-        if(!subject.getCoursesList().contains(this))
+        if (!subject.getCoursesList().contains(this))
             subject.addCourse(this);
     }
 
-    public Teacher getTeacher() { return teacher; }
+    public Teacher getTeacher() {
+        return teacher;
+    }
     public void setTeacher(Teacher teacher) {
 
         this.teacher = teacher;
-        if(!teacher.getCoursesList().contains(this))
+        if (!teacher.getCoursesList().contains(this))
             teacher.addCourse(this);
     }
 
-    public List<Exam> getExamsList() { return examsList; }
-    public void setExamsList(List<Exam> examsList) { this.examsList = examsList; }
+    public List<Exam> getExamsList() {
+        return examsList;
+    }
+    public void setExamsList(List<Exam> examsList) {
+        this.examsList = examsList;
+    }
 
-    public List<Question> getQuestionsList() { return questionsList; }
-    public void setQuestionsList(List<Question> questionsList) { this.questionsList = questionsList; }
+    public List<Question> getQuestionsList() {
+        return questionsList;
+    }
+    public void setQuestionsList(List<Question> questionsList) {
+        this.questionsList = questionsList;
+    }
 
-    public List<Student> getStudentsList() { return studentsList; }
-    public void setStudentsList(List<Student> studentsList) { this.studentsList = studentsList; }
+    public List<Student> getStudentsList() {
+        return studentsList;
+    }
+    public void setStudentsList(List<Student> studentsList) {
+        this.studentsList = studentsList;
+    }
 
 //    public List<ExecutedExam> getExecutedExamsList() { return executedExamsList; }
 //    public void setExecutedExamsList(List<ExecutedExam> execExamsList) { this.executedExamsList = execExamsList; }

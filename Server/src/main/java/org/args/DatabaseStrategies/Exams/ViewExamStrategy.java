@@ -25,7 +25,7 @@ public class ViewExamStrategy extends DatabaseStrategy {
         Exam exam = getTypeById(Exam.class, viewExamRequest.getExamId(), session);
 
         if (exam == null)
-            return new ViewExamResponse(NOT_FOUND, viewExamRequest);
+            return new ViewExamResponse(ERROR2, viewExamRequest);
 
         //LightExam lightExam = null;
 //        int res = SUCCESS;

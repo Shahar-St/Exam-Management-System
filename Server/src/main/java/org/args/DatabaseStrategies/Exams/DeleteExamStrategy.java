@@ -2,13 +2,10 @@ package org.args.DatabaseStrategies.Exams;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.Exams.DeleteExamRequest;
-import DatabaseAccess.Requests.Questions.DeleteQuestionRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.Exams.DeleteExamResponse;
-import DatabaseAccess.Responses.Questions.DeleteQuestionResponse;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.Entities.Exam;
-import org.args.Entities.Question;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
@@ -26,13 +23,13 @@ public class DeleteExamStrategy extends DatabaseStrategy {
         Exam exam = getTypeById(Exam.class, deleteExamRequest.getExamId(), session);
 
         if (exam == null)
-            return new DeleteExamResponse(NOT_FOUND, request);
+            return new DeleteExamResponse(ERROR2, request);
 
         if (exam.getAuthor() != getUser((String) client.getInfo("userName"), session))
-            return new DeleteExamResponse(NO_ACCESS, request);
+            return new DeleteExamResponse(ERROR3, request);
 
         if (!exam.getConcreteExamsList().isEmpty())
-            return new DeleteExamResponse(WRONG_INFO, request);
+            return new DeleteExamResponse(ERROR4, request);
 
         session.remove(exam);
         session.flush();

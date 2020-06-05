@@ -23,13 +23,16 @@ public class EditQuestionStrategy extends DatabaseStrategy {
         Question question = getTypeById(Question.class, editRequest.getQuestionID(), session);
 
         if (question == null)
-            return new EditQuestionResponse(NOT_FOUND, request);
+            return new EditQuestionResponse(ERROR2, request);
 
         if (question.getAuthor() != getUser((String) client.getInfo("userName"), session))
-            return new EditQuestionResponse(NO_ACCESS, request);
+            return new EditQuestionResponse(ERROR3, request);
 
         if (!question.getContainedInExams().isEmpty())
         {
+            if (question.getCourse().getAvailableQuestionCodes().isEmpty())
+                return new EditQuestionResponse(ERROR4, request);
+
             Question newQuestion = new Question(editRequest.getNewDescription(), editRequest.getNewAnswers(),
                     editRequest.getCorrectAnswer(), question.getCourse(), question.getAuthor());
             session.saveOrUpdate(newQuestion);
@@ -41,8 +44,8 @@ public class EditQuestionStrategy extends DatabaseStrategy {
             question.setCorrectAnswer(editRequest.getCorrectAnswer());
             question.setLastModified();
             session.update(question);
-            session.flush();
         }
+        session.flush();
         return new EditQuestionResponse(SUCCESS, request);
     }
 }

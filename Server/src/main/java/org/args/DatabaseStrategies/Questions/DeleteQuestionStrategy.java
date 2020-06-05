@@ -4,8 +4,6 @@ import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.Questions.DeleteQuestionRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.Questions.DeleteQuestionResponse;
-import DatabaseAccess.Responses.Questions.EditQuestionResponse;
-import net.bytebuddy.asm.Advice;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.Entities.Question;
 import org.args.OCSF.ConnectionToClient;
@@ -26,13 +24,13 @@ public class DeleteQuestionStrategy extends DatabaseStrategy {
         Question question = getTypeById(Question.class, request1.getQuestionID(), session);
 
         if (question == null)
-            return new DeleteQuestionResponse(NOT_FOUND, request);
+            return new DeleteQuestionResponse(ERROR2, request);
 
         if (question.getAuthor() != getUser((String) client.getInfo("userName"), session))
-            return new DeleteQuestionResponse(NO_ACCESS, request);
+            return new DeleteQuestionResponse(ERROR3, request);
 
         if (!question.getContainedInExams().isEmpty())
-            return new DeleteQuestionResponse(WRONG_INFO, request);
+            return new DeleteQuestionResponse(ERROR4, request);
 
         session.remove(question);
         session.flush();

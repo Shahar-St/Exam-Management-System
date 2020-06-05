@@ -2,10 +2,8 @@ package org.args.DatabaseStrategies.Exams;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.Exams.EditExamRequest;
-import DatabaseAccess.Requests.Questions.EditQuestionRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.Exams.EditExamResponse;
-import DatabaseAccess.Responses.Questions.EditQuestionResponse;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.Entities.Exam;
 import org.args.Entities.Question;
@@ -26,10 +24,10 @@ public class EditExamStrategy extends DatabaseStrategy {
         Exam exam = getTypeById(Exam.class, editExamRequest.getExamId(), session);
 
         if (exam == null)
-            return new EditExamResponse(NOT_FOUND, request);
+            return new EditExamResponse(ERROR2, request);
 
         if (exam.getAuthor() != getUser((String) client.getInfo("userName"), session))
-            return new EditExamResponse(NO_ACCESS, request);
+            return new EditExamResponse(ERROR3, request);
 
         if (!exam.getConcreteExamsList().isEmpty())
         {

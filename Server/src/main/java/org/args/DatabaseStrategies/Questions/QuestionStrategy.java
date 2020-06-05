@@ -26,11 +26,11 @@ public class QuestionStrategy extends DatabaseStrategy {
         Question question = getTypeById(Question.class, questionRequest.getQuestionID(), session);
 
         if (question == null)
-            return new QuestionResponse(NOT_FOUND, questionRequest);
+            return new QuestionResponse(ERROR2, questionRequest);
 
         List<String> answers = new ArrayList<>(question.getAnswersArray());
         return new QuestionResponse(SUCCESS, request, question.getQuestionContent(),
-                answers, question.getCorrectAnswer(), question.getAuthor().getUserName(),
+                answers, question.getCorrectAnswer(), question.getAuthor().getFullName(),
                 question.getLastModified());
     }
 }

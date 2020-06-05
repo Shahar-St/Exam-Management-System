@@ -32,6 +32,7 @@ public class AddExamStrategy extends DatabaseStrategy {
         Teacher teacher = (Teacher) getUser((String) client.getInfo("userName"), session);
         Course course = getTypeById(Course.class, addExamRequest.getCourseID(), session);
         List<Question> questionsList = new ArrayList<>();
+        // why?
         for (String question : addExamRequest.getQuestionsIDs())
             questionsList.add(getTypeById(Question.class, question, session));
 
