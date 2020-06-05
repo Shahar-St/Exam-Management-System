@@ -5,6 +5,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.args.Client.IExamData;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ExamDetailsController {
 
 
@@ -29,6 +32,13 @@ public class ExamDetailsController {
     @FXML
     private Button nextButton;
 
+    String origTitle;
+    String origStudentNote;
+    String origTeacherNote;
+    String origDuration;
+    List<String> origQuestions = new ArrayList<>();
+    List<String> origScores = new ArrayList<>();
+
     private IExamData model;
 
     public void setModel(IExamData model) {
@@ -41,7 +51,32 @@ public class ExamDetailsController {
         setModel(ClientApp.getModel());
         bindTextFields();
         if(model.getViewMode().equals("EDIT"))
+        {
             pageTitle.setText("Edit An Existing Exam");
+            saveOriginalExamData();
+        }
+    }
+
+    private void saveOriginalExamData() {
+        origTitle = model.getCurrentExamTitle();
+        origStudentNote = model.getCurrentExamStudentNotes();
+        origTeacherNote = model.getCurrentExamTeacherNotes();
+        origDuration = model.getCurrentExamDuration();
+        origQuestions.addAll(model.getObservableExamQuestionsList());
+        origScores.addAll(model.getObservableQuestionsScoringList());
+    }
+
+    private void restoreOriginalExamData ()
+    {
+        model.setCurrentExamTitle(origTitle);
+        model.setCurrentExamStudentNotes(origStudentNote);
+        model.setCurrentExamTeacherNotes(origTeacherNote);
+        model.setCurrentExamDuration(origDuration);
+        model.getObservableExamQuestionsList().clear();
+        model.getObservableQuestionsScoringList().clear();
+        for(String question : origQuestions)
+            model.addToExamQuestionsList(question);
+        model.getObservableQuestionsScoringList().addAll(origScores);
     }
 
 
@@ -61,7 +96,10 @@ public class ExamDetailsController {
             model.clearDetailsScreen();
         }
         else
+        {
+            restoreOriginalExamData();
             ClientApp.backToLastScene();
+        }
     }
 
     @FXML
