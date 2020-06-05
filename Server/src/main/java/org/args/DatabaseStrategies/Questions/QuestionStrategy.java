@@ -36,7 +36,7 @@ public class QuestionStrategy extends DatabaseStrategy {
 
         List<String> answers = new ArrayList<>(question.getAnswersArray());
         return new QuestionResponse(SUCCESS, request, question.getQuestionContent(),
-                answers, question.getCorrectAnswer(), question.getAuthor().getFullName(),
+                answers, question.getCorrectAnswer(), question.getAuthor().getUserName(),
                 question.getLastModified());
     }
 }
