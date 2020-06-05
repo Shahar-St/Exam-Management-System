@@ -137,6 +137,7 @@ public class QuestionManagementController {
     @FXML
     void switchToAddQuestionScreen(ActionEvent event) {
         model.prepareAddQuestion();
+        questionDetailsButton.setDisable(true);
         ClientApp.setRoot("QuestionScreen");
     }
 
@@ -169,12 +170,14 @@ public class QuestionManagementController {
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
             viewSelectedQuestionDetails();
         }
-
+        if (questionDetailsButton.isDisabled())
+            questionDetailsButton.setDisable(false);
 
     }
 
     private void viewSelectedQuestionDetails() {
         if (questionsList.getSelectionModel().getSelectedItem() != null) {
+            questionDetailsButton.setDisable(true);
             int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
             String questionId = questionsList.getSelectionModel().getSelectedItem().substring(1, indexOfColon);
             model.setCurrentQuestionId(questionId);

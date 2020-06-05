@@ -568,6 +568,16 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private final ObservableList<String> observableExamList = FXCollections.observableArrayList();
 
+    String currentExamId;
+
+    public String getCurrentExamId() {
+        return currentExamId;
+    }
+
+    public void setCurrentExamId(String currentExamId) {
+        this.currentExamId = currentExamId;
+    }
+
     @Subscribe
     public void handleAllExamsResponse(AllExamsResponse response) {
         if (response.getStatus() == 0) {

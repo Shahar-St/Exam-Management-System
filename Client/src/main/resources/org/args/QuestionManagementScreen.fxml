@@ -47,7 +47,7 @@
                   </HBox>
                   <HBox alignment="TOP_CENTER" prefHeight="86.0" prefWidth="1258.0" spacing="50.0">
                      <children>
-                            <Button fx:id="questionDetailsButton" mnemonicParsing="false" onAction="#switchToQuestionEditScreen" prefHeight="77.0" prefWidth="192.0" styleClass="info" text="Show Details" />
+                            <Button fx:id="questionDetailsButton" disable="true" mnemonicParsing="false" onAction="#switchToQuestionEditScreen" prefHeight="77.0" prefWidth="192.0" styleClass="info" text="Show Details" />
                         <Button fx:id="addButton" mnemonicParsing="false" onAction="#switchToAddQuestionScreen" prefHeight="77.0" prefWidth="192.0" styleClass="info" text="New Question" />
                      </children>
                      <padding>
