@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import org.args.Client.IExamData;
 
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -19,6 +20,8 @@ import java.util.ResourceBundle;
 public class ViewExamController {
 
     private IExamData model;
+
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     void setModel(IExamData dataModel) {
         if (model == null) {
@@ -96,6 +99,7 @@ public class ViewExamController {
         Label duration_label = new Label("Exam Duration In Minutes:");
 
         TextField duration = new TextField(examDuration);
+
         assert pageView != null;
         pageView.setPageCount(questionList.size());
         pageView.setCurrentPageIndex(0);
@@ -104,7 +108,7 @@ public class ViewExamController {
 
             Label date_label = new Label("Last Modified:");
 
-            TextField lastModified = new TextField(questionList.get(pageIndex).getLastModified().toString());
+            TextField lastModified = new TextField(questionList.get(pageIndex).getLastModified().format(formatter));
 
             Label author_label = new Label("Author:");
 

@@ -6,10 +6,7 @@ import DatabaseAccess.Responses.Exams.AddExamResponse;
 import DatabaseAccess.Responses.Exams.DeleteExamResponse;
 import DatabaseAccess.Responses.Exams.EditExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
-import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
-import DatabaseAccess.Responses.Questions.DeleteQuestionResponse;
-import DatabaseAccess.Responses.Questions.EditQuestionResponse;
-import DatabaseAccess.Responses.Questions.QuestionResponse;
+import DatabaseAccess.Responses.Questions.*;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -232,6 +229,24 @@ public class ClientApp extends Application {
             popUpAlert("Failed To Fetch The Question, Please Try Again." + getErrorMessage(response.getStatus()));
         }
 
+    }
+
+    @Subscribe
+    public void handleAddQuestionResponse(AddQuestionResponse response){
+        Platform.runLater(()->{
+            Alert alert;
+            if (response.getStatus() == 0) {
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Question Added");
+                alert.setContentText("Question Added Successfully!");
+                setRoot("QuestionManagementScreen");
+            } else {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("Ooops, Question could not be added!");
+            }
+            alert.showAndWait();
+        });
     }
 
     @Subscribe

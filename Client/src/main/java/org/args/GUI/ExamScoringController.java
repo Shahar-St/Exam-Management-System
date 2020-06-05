@@ -106,7 +106,7 @@ public class ExamScoringController {
         for(String val : model.getObservableQuestionsScoringList()){
             questionsScoringList.add(Double.parseDouble(val));
         }
-        model.saveExam(title,duration,tNotes,sNotes,questionsId,questionsScoringList,null);
+        model.saveExam(title,duration,tNotes,sNotes,questionsId,questionsScoringList,model.getCurrentExamId());
 
     }
 }
