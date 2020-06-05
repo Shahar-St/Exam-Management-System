@@ -42,7 +42,6 @@ public class QuestionManagementController {
     @FXML
     private Button addButton;
 
-
     private IQuestionManagementData model;
 
     public void setModel(IQuestionManagementData dataModel) {
