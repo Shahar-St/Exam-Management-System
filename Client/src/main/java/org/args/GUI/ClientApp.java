@@ -4,6 +4,7 @@ package org.args.GUI;
 import DatabaseAccess.Responses.*;
 import DatabaseAccess.Responses.Exams.AddExamResponse;
 import DatabaseAccess.Responses.Exams.DeleteExamResponse;
+import DatabaseAccess.Responses.Exams.EditExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
 import DatabaseAccess.Responses.Questions.EditQuestionResponse;
@@ -281,11 +282,12 @@ public class ClientApp extends Application {
     }
 
     @Subscribe
-    public void handleEditExamResponse(EditQuestionResponse response){
+    public void handleEditExamResponse(EditExamResponse response){
         if(response.getStatus() == 0){
-            popUpAlert("Edit Exam Successfully");
+            popUpAlert("Exam was successfully edited!");
+            setRoot("ViewExamScreen");
         }else{
-            popUpAlert("Edit Exam Failed");
+            popUpAlert("Exam editing failed");
         }
 
     }
