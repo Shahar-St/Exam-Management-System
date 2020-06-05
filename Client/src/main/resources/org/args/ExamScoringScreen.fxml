@@ -5,16 +5,14 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.ExamScoringController">
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.ExamScoringController">
    <content>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
          <children>
-            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+            <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <children>
                   <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <children>
@@ -32,14 +30,10 @@
             </HBox>
             <ButtonBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
               <buttons>
-                  <ImageView fx:id="backArrow" fitHeight="41.0" fitWidth="41.0" onMouseClicked="#backButtonClicked" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../Assets/left-arrow.png" />
-                     </image>
-                  </ImageView>
                   <Label text="Total Score:" />
                   <Label fx:id="scoreLabel" layoutX="230.0" layoutY="22.0" text="Score" />
-                <Button fx:id="doneButton" mnemonicParsing="false" onAction="#doneButtonOnAction" text="Done" />
+                  <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonClicked" styleClass="danger" text="Back" />
+                <Button fx:id="doneButton" mnemonicParsing="false" onAction="#doneButtonOnAction" styleClass="primary" text="Done" />
               </buttons>
             </ButtonBar>
          </children>

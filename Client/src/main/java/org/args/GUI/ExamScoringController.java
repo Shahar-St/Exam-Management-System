@@ -90,7 +90,7 @@ public class ExamScoringController {
     }
 
     @FXML
-    void backButtonClicked(MouseEvent event) {
+    void backButtonClicked(ActionEvent event) {
         ClientApp.backToLastScene();
 
     }
