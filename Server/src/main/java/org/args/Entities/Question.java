@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -68,7 +69,8 @@ public class Question {
 
         // handle empty queue
         DecimalFormat decimalFormat = new DecimalFormat("000");
-        this.id = course.getId() + decimalFormat.format(course.getAvailableQuestionCodes().poll());
+        this.id = course.getId() +
+                decimalFormat.format(course.getAvailableQuestionCodes().remove(0));
     }
 
 //    public Question(Question question) {

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class LightExam implements Serializable {
     private String id;
-    private String author;
+    private String authorUserName;
     private List<LightQuestion> lightQuestionList;
     private List<Double> questionsScores;
     private int durationInMinutes;
@@ -16,10 +16,10 @@ public class LightExam implements Serializable {
     public LightExam() {
     }
 
-    public LightExam(String id, String author, List<LightQuestion> lightQuestionList, List<Double> questionsScores,
+    public LightExam(String id, String authorUserName, List<LightQuestion> lightQuestionList, List<Double> questionsScores,
                      int durationInMinutes, String title, String teacherPrivateNotes, String studentNotes) {
         this.id = id;
-        this.author = author;
+        this.authorUserName = authorUserName;
         this.lightQuestionList = lightQuestionList;
         this.questionsScores = questionsScores;
         this.durationInMinutes = durationInMinutes;
@@ -36,12 +36,12 @@ public class LightExam implements Serializable {
         this.id = id;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getAuthorUserName() {
+        return authorUserName;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setAuthorUserName(String authorUserName) {
+        this.authorUserName = authorUserName;
     }
 
     public List<LightQuestion> getLightQuestionList() {

@@ -12,6 +12,12 @@ import org.hibernate.Session;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * status dictionary:
+ * 0 - success
+ * 1 - unauthorized access - user isn't logged in
+ * 2 - Question wasn't found
+ */
 public class QuestionStrategy extends DatabaseStrategy {
 
     @Override
@@ -26,11 +32,11 @@ public class QuestionStrategy extends DatabaseStrategy {
         Question question = getTypeById(Question.class, questionRequest.getQuestionID(), session);
 
         if (question == null)
-            return new QuestionResponse(NOT_FOUND, questionRequest);
+            return new QuestionResponse(ERROR2, questionRequest);
 
         List<String> answers = new ArrayList<>(question.getAnswersArray());
         return new QuestionResponse(SUCCESS, request, question.getQuestionContent(),
-                answers, question.getCorrectAnswer(), question.getAuthor().getFullName(),
+                answers, question.getCorrectAnswer(), question.getAuthor().getUserName(),
                 question.getLastModified());
     }
 }

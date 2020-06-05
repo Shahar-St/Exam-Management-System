@@ -15,7 +15,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * status dictionary:
+ *  0 - success
+ *  1 - unauthorized access - user isn't logged in
+ */
+
 public class AllQuestionsStrategy extends DatabaseStrategy {
+
+
 
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,

@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -73,13 +74,13 @@ public class Exam {
         //handle max size
         DecimalFormat decimalFormat = new DecimalFormat("00");
         this.id = course.getSubject().getId() + course.getId() +
-                decimalFormat.format(course.getAvailableExamCodes().poll());
+                decimalFormat.format(course.getAvailableExamCodes().remove(0));
     }
-
-    public Exam(Exam exam) {
-        this(exam.course, exam.author, exam.durationInMinutes, exam.title, exam.studentNotes, exam.teacherNotes,
-                exam.questionsList, exam.questionsScores);
-    }
+//
+//    public Exam(Exam exam) {
+//        this(exam.course, exam.author, exam.durationInMinutes, exam.title, exam.studentNotes, exam.teacherNotes,
+//                exam.questionsList, exam.questionsScores);
+//    }
 
     //Group adders and removers
     public void addQuestion(Question question) {

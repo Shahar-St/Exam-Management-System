@@ -26,7 +26,8 @@ public class EMSClient extends AbstractClient {
     public void sendToServer(Object msg) throws IOException {
         // check if the client is not connected to the server then connect
         // good for initial connection and for disconnections
-        if (!super.isConnected()) {
+        if (!super.isConnected())
+        {
             super.openConnection();
         }
         super.sendToServer(msg);
@@ -54,7 +55,9 @@ public class EMSClient extends AbstractClient {
     }
 
     @Override
-    protected void handleMessageFromServer(Object msg) { EventBus.getDefault().post(msg); }
+    protected void handleMessageFromServer(Object msg) {
+        EventBus.getDefault().post(msg);
+    }
 
 
 }

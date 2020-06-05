@@ -325,7 +325,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         if (response.getStatus() == 0) {
             setQuestionId(((QuestionRequest) response.getRequest()).getQuestionID());
             setLastModified(response.getLastModified().toString());
-            setAuthor(response.getAuthor());
+            setAuthor(response.getAuthorUserName());
             setContent(response.getQuestionContent());
             setAnswers(response.getAnswers());
             setCorrectAnswer(response.getCorrectAnswer());
@@ -396,7 +396,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public boolean isExamDeletable() {
-        return getUserName().equals(currentExam.getAuthor());
+        return getUserName().equals(currentExam.getAuthorUserName());
     }
 
     @Override
