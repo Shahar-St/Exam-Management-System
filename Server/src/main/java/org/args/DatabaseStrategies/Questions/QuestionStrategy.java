@@ -12,6 +12,12 @@ import org.hibernate.Session;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * status dictionary:
+ * 0 - success
+ * 1 - unauthorized access - user isn't logged in
+ * 2 - Question wasn't found
+ */
 public class QuestionStrategy extends DatabaseStrategy {
 
     @Override
