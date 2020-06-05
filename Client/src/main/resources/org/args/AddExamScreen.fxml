@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox alignment="CENTER" prefHeight="600.0" prefWidth="961.0" spacing="100.0" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.AddExamController">
+   <children>
+      <Pane prefHeight="600.0" prefWidth="408.0">
+         <children>
+            <ListView fx:id="courseQuestionsListView" layoutX="13.0" layoutY="110.0" onMouseClicked="#handleMouseEventCourseQuestionsList" prefHeight="380.0" prefWidth="270.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></ListView>
+            <Label fx:id="questionsListTitle" layoutX="13.0" layoutY="26.0" prefHeight="77.0" prefWidth="270.0" text="Questions in Course X">
+               <font>
+                  <Font name="SansSerif Regular" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane>
+         <children>
+            <VBox alignment="CENTER" layoutX="-56.0" layoutY="-14.0" prefHeight="600.0" prefWidth="254.0" spacing="30.0">
+               <children>
+                  <Button fx:id="detailsButton" mnemonicParsing="false" onAction="#showQuestionDetails" prefHeight="32.0" prefWidth="83.0" styleClass="info" text="Details" />
+                  <Button fx:id="addButton" mnemonicParsing="false" onAction="#addToExamQuestionList" prefHeight="32.0" prefWidth="78.0" styleClass="info" text="Add" />
+                  <Button fx:id="removeButton" mnemonicParsing="false" onAction="#removeFromExamQuestionList" prefHeight="32.0" prefWidth="78.0" styleClass="info" text="Remove" />
+               </children>
+            </VBox>
+         </children>
+      </Pane>
+      <Pane prefHeight="600.0" prefWidth="408.0">
+         <children>
+            <Label layoutX="33.0" layoutY="41.0" prefHeight="53.0" prefWidth="141.0" text="Questions added">
+               <font>
+                  <Font name="SansSerif Regular" size="18.0" />
+               </font>
+            </Label>
+            <ListView fx:id="examQuestionsListView" layoutX="-25.0" layoutY="110.0" onMouseClicked="#handleMouseEventExamQuestionsList" prefHeight="380.0" prefWidth="270.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></ListView>
+            <Button fx:id="doneButton" layoutX="140.0" layoutY="506.0" mnemonicParsing="false" onAction="#allQuestionsAdded" prefHeight="32.0" prefWidth="90.0" styleClass="primary" text="Done" />
+            <Button fx:id="cancelButton" layoutX="14.0" layoutY="506.0" mnemonicParsing="false" onAction="#cancel" prefHeight="32.0" prefWidth="90.0" styleClass="danger" text="Cancel" />
+         </children>
+      </Pane>
+   </children>
+   <padding>
+      <Insets right="30.0" />
+   </padding>
+</HBox>

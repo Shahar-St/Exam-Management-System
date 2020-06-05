@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 /**
  * Request: asks for all exams from a specific course of the logDed in user
- * Response: dictionary. key = exam id, value = pair{date modified, description}
+ * Response: dictionary. key = exam id, value = pair{date modified, title}
  *
  * status dictionary:
  *  0 - success
