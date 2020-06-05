@@ -7,6 +7,7 @@ import DatabaseAccess.Responses.Exams.DeleteExamResponse;
 import DatabaseAccess.Responses.Exams.EditExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
+import DatabaseAccess.Responses.Questions.DeleteQuestionResponse;
 import DatabaseAccess.Responses.Questions.EditQuestionResponse;
 import DatabaseAccess.Responses.Questions.QuestionResponse;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
@@ -177,7 +178,6 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleLoginResponse(LoginResponse response) {
         if (response.getStatus() == 0) {
-            pushLastScene(scene.getRoot());
             FXMLLoader loader = fxmlLoader("MainScreen");
 
             Parent screen = null;
@@ -233,6 +233,26 @@ public class ClientApp extends Application {
         }
 
     }
+
+    @Subscribe
+    public void handleDeleteQuestionResponse(DeleteQuestionResponse response){
+        Platform.runLater(()->{
+            Alert alert;
+            if (response.getStatus() == 0) {
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Question Deleted");
+                alert.setContentText("Question Deleted Successfully!");
+                setRoot("QuestionManagementScreen");
+            } else {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("Ooops, Question could not be deleted!");
+            }
+            alert.showAndWait();
+        });
+
+    }
+
 
     @Subscribe
     public void handleDeleteExamResponse(DeleteExamResponse response) {

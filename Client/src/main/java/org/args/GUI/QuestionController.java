@@ -173,6 +173,7 @@ public class QuestionController {
 
     @FXML
     void deleteButtonClicked(ActionEvent event) {
+        model.deleteQuestion(model.getQuestionId());
 
     }
 
