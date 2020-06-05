@@ -371,7 +371,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public boolean isExamDeletable() {
-        return getName().equals(currentExam.getAuthor());
+        return getUserName().equals(currentExam.getAuthor());
     }
 
     @Override

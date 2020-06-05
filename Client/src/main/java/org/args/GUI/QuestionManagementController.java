@@ -55,7 +55,7 @@ public class QuestionManagementController {
         setModel(ClientApp.getModel());
         questionsList.setItems(model.getObservableQuestionsList());
         if (model.getObservableQuestionsList().size() > 0 && !model.isCourseSelected().get())
-            model.getObservableQuestionsList().clear();
+            model.clearQuestionsList();
         bindButtonVisibility();
         if (model.dataWasAlreadyInitialized()) {
             for (String subjectName : model.getSubjects()) //iterate through every subject in the hashmap

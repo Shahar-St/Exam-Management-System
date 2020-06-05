@@ -44,5 +44,7 @@ public interface IQuestionData {
 
     String getName();
 
+    String getUserName();
+
     void saveQuestion(String questionId, String answer_1, String answer_2, String answer_3, String answer_4, String newContent);
 }
