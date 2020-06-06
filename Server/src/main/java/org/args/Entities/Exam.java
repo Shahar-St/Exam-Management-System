@@ -31,7 +31,7 @@ public class Exam {
     private Teacher author;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "exam")
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @Cascade(CascadeType.SAVE_UPDATE)
     private List<ConcreteExam> concreteExamsList = new ArrayList<>();
 //
 //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "exam")
@@ -81,6 +81,12 @@ public class Exam {
 //        this(exam.course, exam.author, exam.durationInMinutes, exam.title, exam.studentNotes, exam.teacherNotes,
 //                exam.questionsList, exam.questionsScores);
 //    }
+
+    @PreRemove
+    private void preRemove() {
+        for (Question question : questionsList)
+            question.getContainedInExams().remove(this);
+    }
 
     //Group adders and removers
     public void addQuestion(Question question) {
