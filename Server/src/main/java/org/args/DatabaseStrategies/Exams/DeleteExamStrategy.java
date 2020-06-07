@@ -9,7 +9,6 @@ import org.args.Entities.Exam;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public class DeleteExamStrategy extends DatabaseStrategy {
@@ -34,10 +33,10 @@ public class DeleteExamStrategy extends DatabaseStrategy {
             return new DeleteExamResponse(ERROR4, request);
 
         exam.getCourse().getAvailableExamCodes().add(Integer.parseInt(exam.getId().substring(4)));
-        //TODO FIX
+
         session.remove(exam);
         session.flush();
-        return new DeleteExamResponse(SUCCESS, request);
 
+        return new DeleteExamResponse(SUCCESS, request);
     }
 }
