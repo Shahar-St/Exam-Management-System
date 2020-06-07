@@ -59,8 +59,9 @@ public class ExamQuestionsController {
 
     @FXML
     void allQuestionsAdded(ActionEvent event) {
-        if (model.getObservableExamQuestionsList().size() >0)
+        if (model.getObservableExamQuestionsList().size() >0) {
             ClientApp.setRoot("ExamScoringScreen");
+        }
         else
         {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -72,7 +73,7 @@ public class ExamQuestionsController {
 
     @FXML
     void cancel(ActionEvent event) {
-        ClientApp.backToLastScene();
+        ClientApp.setRoot("ExamDetailsScreen");
     }
 
     @FXML

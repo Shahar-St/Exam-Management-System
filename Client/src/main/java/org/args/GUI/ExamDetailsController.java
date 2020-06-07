@@ -92,14 +92,13 @@ public class ExamDetailsController {
     {
         if (model.getViewMode().equals("ADD"))
         {
-            ClientApp.setRoot("ExamManagementScreen");
             model.clearDetailsScreen();
         }
         else
         {
             restoreOriginalExamData();
-            ClientApp.backToLastScene();
         }
+        ClientApp.backToLastScene();
     }
 
     @FXML

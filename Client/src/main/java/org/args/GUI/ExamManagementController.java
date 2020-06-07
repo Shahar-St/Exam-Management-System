@@ -130,6 +130,7 @@ public class ExamManagementController {
     void switchToAddExamScreen(ActionEvent event) {
         model.fillQuestionsList(model.getCurrentCourseId());
         model.setViewMode("ADD");
+        ClientApp.pushLastScene("ExamManagementScreen");
         ClientApp.setRoot("ExamDetailsScreen");
     }
 
@@ -175,8 +176,10 @@ public class ExamManagementController {
         disableDetailsAndExecuteButtons();
         String examId = getExamIdFromSelected();
         model.setCurrentExamId(examId);
-        if (examId != null)
+        if (examId != null) {
+            ClientApp.pushLastScene("ExamManagementScreen");
             model.viewExam(examId);
+        }
     }
 
     private String getExamIdFromSelected() {

@@ -22,6 +22,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Stack;
 
 
@@ -40,7 +41,7 @@ public class ClientApp extends Application {
 
     private final String[] errors = {"SUCCESS", "UNAUTHORIZED", "NOT_FOUND", "NO_ACCESS", "WRONG_INFO"};
 
-    private static Stack<Parent> lastScenes;
+    private static Stack<String> lastScenes;
 
     protected String getErrorMessage(int error_code) {
         return errors[error_code];
@@ -48,8 +49,10 @@ public class ClientApp extends Application {
 
     public static void setRoot(String fxml) {
         try {
-            pushLastScene(scene.getRoot());
             scene.setRoot(loadFXML(fxml));
+            System.out.println("Stack State:");
+            System.out.println("Stack Size:"+lastScenes.size());
+            System.out.println(Arrays.toString(lastScenes.toArray()));
         } catch (IOException e) {
             System.out.println("Failed to change the root of the scene: " + e.toString());
 
@@ -57,7 +60,14 @@ public class ClientApp extends Application {
     }
 
     public static void backToLastScene(){
-        scene.setRoot(popLastScene());
+        try {
+            scene.setRoot(loadFXML(popLastScene()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Stack State:");
+        System.out.println("Stack Size:"+lastScenes.size());
+        System.out.println(Arrays.toString(lastScenes.toArray()));
     }
 
 
@@ -92,7 +102,6 @@ public class ClientApp extends Application {
             scene = new Scene(loader.load());
             scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
             stage.setScene(scene);
-            pushLastScene(scene.getRoot());
             stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
             stage.setResizable(false);
             stage.setTitle("HSTS");
@@ -215,7 +224,6 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleQuestionResponse(QuestionResponse response) {
         if (response.getStatus() == 0) {
-            pushLastScene(scene.getRoot());
             FXMLLoader loader = fxmlLoader("QuestionScreen");
             Parent screen = null;
             try {
@@ -290,7 +298,6 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleViewExamResponse(ViewExamResponse response){
         if(response.getStatus()==0){
-            pushLastScene(scene.getRoot());
             FXMLLoader loader = fxmlLoader("ViewExamScreen");
             Parent screen = null;
             try {
@@ -309,6 +316,7 @@ public class ClientApp extends Application {
     public void handleAddExamResponse(AddExamResponse response){
         if(response.getStatus() == 0){
             popUpAlert("Add Exam Successfully");
+            popNScenes(4);
             setRoot("ExamManagementScreen");
         }else{
             popUpAlert("Add Exam Failed");
@@ -320,7 +328,7 @@ public class ClientApp extends Application {
     public void handleEditExamResponse(EditExamResponse response){
         if(response.getStatus() == 0){
             popUpAlert("Exam was successfully edited!");
-            setRoot("ViewExamScreen");
+            setRoot("ExamManagementScreen");
         }else{
             popUpAlert("Exam editing failed");
         }
@@ -331,13 +339,21 @@ public class ClientApp extends Application {
         setRoot("TeacherStatisticsScreen");
     }
 
-    public static Parent popLastScene() {
+    public static String popLastScene() {
         if(!lastScenes.empty())
             return lastScenes.pop();
         return null;
     }
 
-    public static void pushLastScene(Parent lastScene) {
-        lastScenes.push(lastScene);
+    public static void pushLastScene(String fxml) {
+        lastScenes.push(fxml);
+    }
+
+    public static void popNScenes(int n){
+        int i=0;
+        while (!lastScenes.empty()&& i<n){
+            lastScenes.pop();
+            i++;
+        }
     }
 }

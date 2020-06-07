@@ -92,7 +92,7 @@ public class ExamScoringController {
 
     @FXML
     void backButtonClicked(ActionEvent event) {
-        ClientApp.backToLastScene();
+        ClientApp.setRoot("ExamQuestionsScreen");
 
     }
 

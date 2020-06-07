@@ -129,7 +129,8 @@ public class QuestionManagementController {
 
 
     @FXML
-    void switchToQuestionEditScreen(ActionEvent event) throws IOException {
+    void switchToQuestionEditScreen(ActionEvent event) {
+        ClientApp.pushLastScene("QuestionManagementScreen");
         viewSelectedQuestionDetails();
     }
 
@@ -138,12 +139,13 @@ public class QuestionManagementController {
     void switchToAddQuestionScreen(ActionEvent event) {
         model.prepareAddQuestion();
         questionDetailsButton.setDisable(true);
+        ClientApp.pushLastScene("QuestionManagementScreen");
         ClientApp.setRoot("QuestionScreen");
     }
 
 
     @FXML
-    void switchToMainScreen(MouseEvent event) throws IOException {
+    void switchToMainScreen(MouseEvent event) {
         clearScreen();
         ClientApp.setRoot("MainScreen");
     }
