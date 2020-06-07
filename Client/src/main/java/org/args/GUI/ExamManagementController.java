@@ -71,7 +71,6 @@ public class ExamManagementController {
         {
             fillSubjectsDropDown(model.getSubjects());
         }
-
     }
 
     @FXML

@@ -55,6 +55,10 @@ public class ExamDetailsController {
             pageTitle.setText("Edit An Existing Exam");
             saveOriginalExamData();
         }
+        else
+        {
+            model.clearDetailsScreen();
+        }
     }
 
     private void saveOriginalExamData() {
