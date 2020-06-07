@@ -268,6 +268,7 @@ public class ClientApp extends Application {
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Question Deleted");
                 alert.setContentText("Question Deleted Successfully!");
+                popLastScene();
                 setRoot("QuestionManagementScreen");
             } else {
                 alert = new Alert(Alert.AlertType.ERROR);

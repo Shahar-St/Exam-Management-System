@@ -129,8 +129,7 @@ public class QuestionManagementController {
 
 
     @FXML
-    void switchToQuestionEditScreen(ActionEvent event) {
-        ClientApp.pushLastScene("QuestionManagementScreen");
+    void switchToQuestionViewScreen(ActionEvent event) {
         viewSelectedQuestionDetails();
     }
 
@@ -184,6 +183,7 @@ public class QuestionManagementController {
             String questionId = questionsList.getSelectionModel().getSelectedItem().substring(1, indexOfColon);
             model.setCurrentQuestionId(questionId);
             model.loadQuestionDetails(questionId);
+            ClientApp.pushLastScene("QuestionManagementScreen");
         }
     }
 
