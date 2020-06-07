@@ -122,13 +122,13 @@ public class DatabaseHandler {
     }
 
     //Group dummy DB
-    private final int NUM_OF_SUBJECTS = 2;
-    private final int NUM_OF_TEACHERS = 4;
-    private final int NUM_OF_STUDENTS = 8;
-    private final int NUM_OF_COURSES = 4;
+    private final int NUM_OF_SUBJECTS = 4;
+    private final int NUM_OF_TEACHERS = 2;
+    private final int NUM_OF_STUDENTS = 16;
+    private final int NUM_OF_COURSES = 8;
     private final int NUM_OF_OPTIONAL_ANSWERS = 4;
-    private final int NUM_OF_QUESTIONS = 8;
-    private final int NUM_OF_EXAMS = 4;
+    private final int NUM_OF_QUESTIONS = 16;
+    private final int NUM_OF_EXAMS = 8;
 
     private void createDummyEntities() {
 
@@ -138,7 +138,7 @@ public class DatabaseHandler {
         session.flush();
 
         //creating subjects
-        String[] subjectsNamesArr = {"Math", "English"};
+        String[] subjectsNamesArr = {"Math", "English", "History", "Hebrew"};
         for (int i = 0; i < NUM_OF_SUBJECTS; i++)
         {
             Subject subject = new Subject(i, subjectsNamesArr[i % subjectsNamesArr.length]);
@@ -148,7 +148,8 @@ public class DatabaseHandler {
         List<Subject> subjects = getAllOfType(session, Subject.class);
 
         //creating courses and connecting with subjects
-        String[] coursesNamesArr = {"Level 1", "Beginners", "Level 2", "Advanced"};
+        String[] coursesNamesArr = {"4 points", "Beginners", "Israel", "level 1", "5 points", "Advanced", "Holocaust",
+                                    "level 2"};
         for (int i = 0; i < NUM_OF_COURSES; i++)
         {
             Course course = new Course(i, coursesNamesArr[i % coursesNamesArr.length], subjects.get(i % NUM_OF_SUBJECTS));
@@ -158,8 +159,8 @@ public class DatabaseHandler {
         List<Course> courses = getAllOfType(session, Course.class);
 
         //creating teachers and connecting with courses and subjects
-        String[] teacherFirstNamesArr = {"Ronit", "Miri", "Shir", "Neta"};
-        String[] teacherLastNamesArr = {"Cohen", "Haim", "Levi", "Zur"};
+        String[] teacherFirstNamesArr = {"1", "Miri", "Shir", "Neta", "Ronit", "Shiri", "Yuval", "shahar"};
+        String[] teacherLastNamesArr = {"1", "Haim", "Levi", "Zur", "Cohen", "Levi", "Lev", "Oren"};
         for (int i = 0; i < NUM_OF_TEACHERS; i++)
         {
             Teacher teacher = new Teacher(i, teacherFirstNamesArr[i % teacherFirstNamesArr.length],
@@ -167,18 +168,24 @@ public class DatabaseHandler {
                     teacherFirstNamesArr[i % teacherFirstNamesArr.length],
                     teacherFirstNamesArr[i] + "_" + teacherLastNamesArr[i]);
             session.save(teacher);
+        }
+        session.flush();
+        List<Teacher> teachers = getAllOfType(session, Teacher.class);
 
+        for (int i = 0; i < NUM_OF_COURSES; i++)
+        {
+            Teacher teacher = teachers.get(i % NUM_OF_TEACHERS);
             courses.get(i % NUM_OF_COURSES).setTeacher(teacher);
             session.update(teacher);
             courses.get(i % NUM_OF_COURSES).getSubject().addTeacher(teacher);
             session.update(teacher);
         }
-        session.flush();
-        List<Teacher> teachers = getAllOfType(session, Teacher.class);
+
 
         //creating students and connecting with courses
-        String[] studentFirstNamesArr = {"Yoni", "Guy", "Niv", "Maayan", "Or", "Ariel", "Shoval", "Tal"};
-        String[] studentLastNamesArr = {"Cohen", "Haim", "Bar-Dayan", "Shitrit"};
+        String[] studentFirstNamesArr = {"Yoni", "Guy", "Niv", "Maayan", "Or", "Ariel", "Shoval", "Tal",
+                                         "Tal", "Shoval", "Ariel", "Or", "Maayan", "Niv", "Guy","Yoni"};
+        String[] studentLastNamesArr = {"Cohen", "Haim", "Bar-Dayan", "Shitrit", "Lev", "Yaron", "Raz", "Ezer"};
         for (int i = 0; i < NUM_OF_STUDENTS; i++)
         {
             Student student;
@@ -201,42 +208,63 @@ public class DatabaseHandler {
 
         //creating questions by teachers
 
-        String[] questionsArr = {"1 + 0 = ?", "cat is a/an:", "1 + 4 = ?", "same meaning of happy is:", "0 + 4 = ?",
-                "beautiful is a/an:", "1 + 1 = ?", "how to spell many people?"};
+        String[] questionsArr = {"1 + 0 = ?", "capital city of Israel:", "1 + 4 = ?", "how many jewish people died?:",
+                                "0 + 4 = ?", "the biggest city in Israel is:", "1 + 1 = ?", "the leader was:",
+                                "cat is a/an:", "after 'a':", "same meaning of happy is:", "after 'c':",
+                                "beautiful is a/an:", "capital of 'b':", "how to spell many people?", "capital of 'd':"};
         List<String> ansArr1 = Arrays.asList("1", "2", "3", "4");
-        List<String> ansArr2 = Arrays.asList("food", "animal", "product", "emotions");
+        List<String> ansArr2 = Arrays.asList("Haifa", "Jerusalem", "Tel Aviv", "Dimona");
         List<String> ansArr3 = Arrays.asList("0", "3", "5", "-3");
-        List<String> ansArr4 = Arrays.asList("sad", "hungry", "afraid", "glad");
+        List<String> ansArr4 = Arrays.asList("3M", "4M", "5M", "6M");
         List<String> ansArr5 = Arrays.asList("4", "2", "1", "0");
-        List<String> ansArr6 = Arrays.asList("verb", "adjective", "noun", "none of above");
+        List<String> ansArr6 = Arrays.asList("Haifa", "Jerusalem", "Tel Aviv", "Dimona");
         List<String> ansArr7 = Arrays.asList("1", "3", "2", "4");
-        List<String> ansArr8 = Arrays.asList("mans", "man", "mens", "men");
+        List<String> ansArr8 = Arrays.asList("Gal", "Shahar", "Adar", "Hitler");
+        List<String> ansArr9 = Arrays.asList("animal", "food", "product", "emotions");
+        List<String> ansArr10 = Arrays.asList("a", "b", "c", "d");
+        List<String> ansArr11 = Arrays.asList("sad", "hungry", "glad", "afraid");
+        List<String> ansArr12 = Arrays.asList("a", "b", "c", "d");
+        List<String> ansArr13 = Arrays.asList("adjective", "verb", "noun", "none of above");
+        List<String> ansArr14 = Arrays.asList("A", "B", "C", "D");
+        List<String> ansArr15 = Arrays.asList("mans", "man", "men", "mens");
+        List<String> ansArr16 = Arrays.asList("A", "B", "C", "D");
         List<List<String>> answers = new ArrayList<>();
-        Collections.addAll(answers, ansArr1, ansArr2, ansArr3, ansArr4, ansArr5, ansArr6, ansArr7, ansArr8);
+        Collections.addAll(answers, ansArr1, ansArr2, ansArr3, ansArr4, ansArr5, ansArr6, ansArr7, ansArr8,
+                           ansArr9, ansArr10, ansArr11, ansArr12, ansArr13, ansArr14, ansArr15, ansArr16);
 
-        for (int i = 0; i < NUM_OF_QUESTIONS; i++)
+        int k = 0;
+        for (int j = 0; j < NUM_OF_TEACHERS; j++)
         {
-            Teacher teacher = teachers.get(i % NUM_OF_TEACHERS);
-            Question question = teacher.createQuestion(questionsArr[i], answers.get(i), i % NUM_OF_OPTIONAL_ANSWERS,
-                    teacher.getCoursesList().get(i % teacher.getCoursesList().size()));
-            session.save(question);
-            session.update(teacher);
+            Teacher teacher = teachers.get(j % NUM_OF_TEACHERS);
+            List<Course> c = teacher.getCoursesList();
+            for (int i = 0; i < NUM_OF_QUESTIONS/NUM_OF_TEACHERS ; i++)
+            {
+                Question question = teacher.createQuestion(questionsArr[k], answers.get(k), i % NUM_OF_OPTIONAL_ANSWERS,
+                        teacher.getCoursesList().get(i % teacher.getCoursesList().size()));
+                session.save(question);
+                session.update(teacher);
+                k++;
+            }
         }
         session.flush();
 
         //creating exams by teachers
-
-        String[] titlesArr = {"functions", "spelling", "circles", "vocabulary"};
+        String[] titlesArr = {"functions", "Jerusalem", "circles", "Germany", "letters", "nikud", "spelling", "vocabulary"};
         List<Double> questionsScores = Arrays.asList(50.0, 50.0);
 
-        for (int i = 0; i < NUM_OF_EXAMS; i++)
+        k=0;
+        for (int j = 0; j < NUM_OF_TEACHERS; j++)
         {
-            Teacher teacher = teachers.get(i % NUM_OF_TEACHERS);
-            Course course = teacher.getCoursesList().get(i % teacher.getCoursesList().size());
-            Exam exam = teacher.createExam(course, 90, titlesArr[i], "good luck!", "my private notes",
-                    course.getQuestionsList(), questionsScores);
-            session.save(exam);
-            session.update(teacher);
+            Teacher teacher = teachers.get(j % NUM_OF_TEACHERS);
+            for (int i = 0; i < NUM_OF_EXAMS/NUM_OF_TEACHERS; i++)
+            {
+                Course course = teacher.getCoursesList().get(i % teacher.getCoursesList().size());
+                Exam exam = teacher.createExam(course, 90, titlesArr[k], "good luck!", "my private notes",
+                        course.getQuestionsList(), questionsScores);
+                session.save(exam);
+                session.update(teacher);
+                k++;
+            }
         }
         session.flush();
     }
