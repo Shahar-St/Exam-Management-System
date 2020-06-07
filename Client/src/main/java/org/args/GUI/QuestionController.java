@@ -165,6 +165,8 @@ public class QuestionController {
                     System.out.println("Undefined correct answer");
                     break;
             }
+            model.setCorrectAnswer(t1.intValue());
+
         });
     }
 
