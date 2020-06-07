@@ -66,8 +66,9 @@ public class Exam {
         this.studentNotes = studentNotes;
         this.teacherNotes = teacherNotes;
         //this.questionsList.addAll(questionsList);
-        for (Question question : questionsList)
-            this.addQuestion(question);
+//        for (Question question : questionsList)
+//            this.addQuestion(question);
+        this.setQuestionsList(questionsList);
         this.questionsScores.addAll(questionsScores);
         setLastModified();
 
@@ -142,7 +143,8 @@ public class Exam {
     }
 
     public void setQuestionsList(List<Question> questionsList) {
-        this.questionsList = questionsList;
+        for (Question question : questionsList)
+            this.addQuestion(question);
     }
 
     public String getId() {
@@ -188,14 +190,6 @@ public class Exam {
     public void setQuestionsScores(List<Double> questionsScores) {
         this.questionsScores = questionsScores;
     }
-
-//    public List<ExecutedExam> getExecutedExamsList() {
-//        return executedExamsList;
-//    }
-//
-//    public void setExecutedExamsList(List<ExecutedExam> executedExamsList) {
-//        this.executedExamsList = executedExamsList;
-//    }
 
     public LocalDateTime getLastModified() {
         return lastModified;
