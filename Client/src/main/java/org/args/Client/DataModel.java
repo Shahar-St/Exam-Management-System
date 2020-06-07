@@ -318,6 +318,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         }else {
              request = new EditQuestionRequest(questionId, newContent, Arrays.asList(answer_1, answer_2, answer_3, answer_4), correctAnswer);
         }
+        ClientApp.popLastScene();
         ClientApp.sendRequest(request);
     }
 
@@ -711,6 +712,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         } else {
             ClientApp.sendRequest(new EditExamRequest(examId, title, generateListOfIds(questionList), questionsScoreList, teacherNotes, studentNotes, duration));
         }
+        ClientApp.popLastScene();
     }
 
     private List<String> generateListOfIds(List<String> questions)
