@@ -42,7 +42,6 @@ public class QuestionManagementController {
     @FXML
     private Button addButton;
 
-
     private IQuestionManagementData model;
 
     public void setModel(IQuestionManagementData dataModel) {
@@ -130,7 +129,8 @@ public class QuestionManagementController {
 
 
     @FXML
-    void switchToQuestionEditScreen(ActionEvent event) throws IOException {
+    void switchToQuestionEditScreen(ActionEvent event) {
+        ClientApp.pushLastScene("QuestionManagementScreen");
         viewSelectedQuestionDetails();
     }
 
@@ -138,12 +138,14 @@ public class QuestionManagementController {
     @FXML
     void switchToAddQuestionScreen(ActionEvent event) {
         model.prepareAddQuestion();
+        questionDetailsButton.setDisable(true);
+        ClientApp.pushLastScene("QuestionManagementScreen");
         ClientApp.setRoot("QuestionScreen");
     }
 
 
     @FXML
-    void switchToMainScreen(MouseEvent event) throws IOException {
+    void switchToMainScreen(MouseEvent event) {
         clearScreen();
         ClientApp.setRoot("MainScreen");
     }
@@ -170,12 +172,14 @@ public class QuestionManagementController {
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
             viewSelectedQuestionDetails();
         }
-
+        if (questionDetailsButton.isDisabled())
+            questionDetailsButton.setDisable(false);
 
     }
 
     private void viewSelectedQuestionDetails() {
         if (questionsList.getSelectionModel().getSelectedItem() != null) {
+            questionDetailsButton.setDisable(true);
             int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
             String questionId = questionsList.getSelectionModel().getSelectedItem().substring(1, indexOfColon);
             model.setCurrentQuestionId(questionId);

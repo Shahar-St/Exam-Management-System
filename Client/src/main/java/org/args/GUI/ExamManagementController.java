@@ -71,7 +71,6 @@ public class ExamManagementController {
         {
             fillSubjectsDropDown(model.getSubjects());
         }
-
     }
 
     @FXML
@@ -130,6 +129,7 @@ public class ExamManagementController {
     void switchToAddExamScreen(ActionEvent event) {
         model.fillQuestionsList(model.getCurrentCourseId());
         model.setViewMode("ADD");
+        ClientApp.pushLastScene("ExamManagementScreen");
         ClientApp.setRoot("ExamDetailsScreen");
     }
 
@@ -164,6 +164,7 @@ public class ExamManagementController {
 
     @FXML
     void handleMouseEvent(MouseEvent event) {
+        enableDetailsAndExecuteButtons();
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2)
         {
             viewSelectedExamDetails();
@@ -171,9 +172,13 @@ public class ExamManagementController {
     }
 
     private void viewSelectedExamDetails() {
+        disableDetailsAndExecuteButtons();
         String examId = getExamIdFromSelected();
-        if (examId != null)
+        model.setCurrentExamId(examId);
+        if (examId != null) {
+            ClientApp.pushLastScene("ExamManagementScreen");
             model.viewExam(examId);
+        }
     }
 
     private String getExamIdFromSelected() {
@@ -189,6 +194,7 @@ public class ExamManagementController {
 
     @FXML
     void executeExam(ActionEvent event) {
+        disableDetailsAndExecuteButtons();
         String examId = getExamIdFromSelected();
         if (examId != null)
         {
@@ -200,6 +206,18 @@ public class ExamManagementController {
             Optional<String> result = examCodeDialog.showAndWait();
             result.ifPresent(code -> model.deployExam(examId, code));
         }
+    }
+
+    private void disableDetailsAndExecuteButtons()
+    {
+        detailsButton.setDisable(true);
+        executeButton.setDisable(true);
+    }
+
+    private void enableDetailsAndExecuteButtons()
+    {
+        detailsButton.setDisable(false);
+        executeButton.setDisable(false);
     }
 
 }

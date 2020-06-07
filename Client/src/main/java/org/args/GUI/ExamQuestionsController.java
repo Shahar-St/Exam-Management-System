@@ -59,13 +59,21 @@ public class ExamQuestionsController {
 
     @FXML
     void allQuestionsAdded(ActionEvent event) {
-        ClientApp.setRoot("ExamScoringScreen");
-
+        if (model.getObservableExamQuestionsList().size() >0) {
+            ClientApp.setRoot("ExamScoringScreen");
+        }
+        else
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("No questions added!");
+            alert.showAndWait();
+        }
     }
 
     @FXML
     void cancel(ActionEvent event) {
-        ClientApp.backToLastScene();
+        ClientApp.setRoot("ExamDetailsScreen");
     }
 
     @FXML

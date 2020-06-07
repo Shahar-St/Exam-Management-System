@@ -27,6 +27,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class DataModel implements IMainScreenData, IQuestionManagementData, IQuestionData, IStudentExamExecutionData,
@@ -34,6 +35,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ITeacherViewStatsData, IExamManagementData, IExamReviewData {
 
     private ClientApp app;
+
+    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public DataModel(ClientApp clientApp) {
         app = clientApp;
@@ -324,7 +327,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
         if (response.getStatus() == 0) {
             setQuestionId(((QuestionRequest) response.getRequest()).getQuestionID());
-            setLastModified(response.getLastModified().toString());
+            setLastModified(response.getLastModified().format(dateTimeFormatter));
             setAuthor(response.getAuthorUserName());
             setContent(response.getQuestionContent());
             setAnswers(response.getAnswers());
@@ -422,18 +425,18 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     public void initQuestionsScoringList() {
-        if (observableQuestionsScoringList.isEmpty() && !observableExamQuestionsList.isEmpty()) {
-            for (String str : observableExamQuestionsList) {
-                observableQuestionsScoringList.add("0");
-            }
-        } else if (observableExamQuestionsList.isEmpty()) {
-            observableQuestionsScoringList.clear();
-
-        }else if( observableQuestionsScoringList.size() != observableExamQuestionsList.size()){
-            for(int i=observableQuestionsScoringList.size();i<observableExamQuestionsList.size();i++){
-                observableQuestionsScoringList.add("0");
-            }
-        }
+//        if (observableQuestionsScoringList.isEmpty() && !observableExamQuestionsList.isEmpty()) {
+//            for (String str : observableExamQuestionsList) {
+//                observableQuestionsScoringList.add("0");
+//            }
+//        } else if (observableExamQuestionsList.isEmpty()) {
+//            observableQuestionsScoringList.clear();
+//
+//        }else if( observableQuestionsScoringList.size() != observableExamQuestionsList.size()){
+//            for(int i=observableQuestionsScoringList.size();i<observableExamQuestionsList.size();i++){
+//                observableQuestionsScoringList.add("0");
+//            }
+//        }
         setCurrentExamTotalScore(String.valueOf(calcQuestionsScoringListValue()));
 
     }
@@ -515,7 +518,9 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
             @Override
             public void run() {
                 observableExamQuestionsList.add(question);
-                observableQuestionsScoringList.add("0");
+                // check if new score need to be added
+                if(observableExamQuestionsList.size()>observableQuestionsScoringList.size())
+                    observableQuestionsScoringList.add("0");
             }
         });
 
@@ -567,6 +572,16 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     //exam management data
 
     private final ObservableList<String> observableExamList = FXCollections.observableArrayList();
+
+    String currentExamId;
+
+    public String getCurrentExamId() {
+        return currentExamId;
+    }
+
+    public void setCurrentExamId(String currentExamId) {
+        this.currentExamId = currentExamId;
+    }
 
     @Subscribe
     public void handleAllExamsResponse(AllExamsResponse response) {
@@ -696,6 +711,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         } else {
             ClientApp.sendRequest(new EditExamRequest(examId, title, generateListOfIds(questionList), questionsScoreList, teacherNotes, studentNotes, duration));
         }
+        ClientApp.popLastScene();
     }
 
     private List<String> generateListOfIds(List<String> questions)
