@@ -318,7 +318,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         }else {
              request = new EditQuestionRequest(questionId, newContent, Arrays.asList(answer_1, answer_2, answer_3, answer_4), correctAnswer);
         }
-        ClientApp.popLastScene();
         ClientApp.sendRequest(request);
     }
 

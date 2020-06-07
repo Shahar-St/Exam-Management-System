@@ -215,6 +215,8 @@ public class ClientApp extends Application {
     public void handleEditQuestionResponse(EditQuestionResponse response) {
         if (response.getStatus() == 0) {
             popUpAlert("Edit Question Success");
+            popLastScene();
+            setRoot("QuestionManagementScreen");
         } else {
             popUpAlert("Edit Question Failed, Please Try Again." + getErrorMessage(response.getStatus()));
         }
@@ -247,6 +249,7 @@ public class ClientApp extends Application {
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Question Added");
                 alert.setContentText("Question Added Successfully!");
+                popLastScene();
                 setRoot("QuestionManagementScreen");
             } else {
                 alert = new Alert(Alert.AlertType.ERROR);
