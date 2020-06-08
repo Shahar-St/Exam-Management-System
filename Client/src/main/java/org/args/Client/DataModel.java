@@ -7,6 +7,7 @@ import DatabaseAccess.Requests.Questions.*;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
 import DatabaseAccess.Responses.Exams.AllExamsResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
+import DatabaseAccess.Responses.ExecuteExam.TakeExamResponse;
 import DatabaseAccess.Responses.LoginResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
 import DatabaseAccess.Responses.Questions.QuestionResponse;
@@ -683,6 +684,23 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
 
     //TODO: implement IStudentExamExecutionData methods
+
+    private LightExam examForStudentExecution;
+
+    public LightExam getExamForStudentExecution() {
+        return examForStudentExecution;
+    }
+
+    public void setExamForStudentExecution(LightExam examForStudentExecution) {
+        this.examForStudentExecution = examForStudentExecution;
+    }
+
+    @Subscribe
+    public void handleTakeExamResponse(TakeExamResponse response){
+        if(response.getStatus()==0){
+            setExamForStudentExecution(response.getLightExam());
+        }
+    }
     @Override
     public void storeAnswer(int questionNumber, int answerNumber) {
 

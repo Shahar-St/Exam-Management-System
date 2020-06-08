@@ -80,13 +80,13 @@ public class ViewExamController {
         editButton.setDisable(!model.isExamDeletable());
         List<LightQuestion> questionList = model.getLightQuestionListFromCurrentExam();
         List<Double> questionsScores = model.getCurrentExamQuestionsScoreList();
-        String examDescription = model.getCurrentExamTitle();
+        String examTitle = model.getCurrentExamTitle();
         String examTeacherPrivateNotes = model.getCurrentExamTeacherNotes();
         String examStudentNotes = model.getCurrentExamStudentNotes();
         String examDuration = model.getCurrentExamDuration();
-        Label description_label = new Label("Exam Description:");
+        Label title_label = new Label("Exam Title:");
 
-        TextField description = new TextField(examDescription);
+        TextField title = new TextField(examTitle);
 
         Label privateNotes_label = new Label("Teacher Private Notes:");
 
@@ -107,7 +107,7 @@ public class ViewExamController {
         pageView.setPageFactory((pageIndex) -> {
 
             if(pageIndex==0){
-                return new VBox(description_label, description, privateNotes_label, privateNotes,studentNotes_label,sNotes ,duration_label, duration);
+                return new VBox(title_label, title, privateNotes_label, privateNotes,studentNotes_label,sNotes ,duration_label, duration);
             }
             Label date_label = new Label("Last Modified:");
 
@@ -141,7 +141,7 @@ public class ViewExamController {
 
             TextField score = new TextField(questionsScores.get(pageIndex-1).toString());
 
-            description.setEditable(false);
+            title.setEditable(false);
             privateNotes.setEditable(false);
             duration.setEditable(false);
             lastModified.setEditable(false);

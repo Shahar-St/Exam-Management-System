@@ -6,6 +6,7 @@ import DatabaseAccess.Responses.Exams.AddExamResponse;
 import DatabaseAccess.Responses.Exams.DeleteExamResponse;
 import DatabaseAccess.Responses.Exams.EditExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
+import DatabaseAccess.Responses.ExecuteExam.TakeExamResponse;
 import DatabaseAccess.Responses.Questions.*;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import javafx.application.Application;
@@ -68,6 +69,16 @@ public class ClientApp extends Application {
         System.out.println("Stack State:");
         System.out.println("Stack Size:"+lastScenes.size());
         System.out.println(Arrays.toString(lastScenes.toArray()));
+    }
+
+    public static String popLastScene() {
+        if(!lastScenes.empty())
+            return lastScenes.pop();
+        return null;
+    }
+
+    public static void pushLastScene(String fxml) {
+        lastScenes.push(fxml);
     }
 
 
@@ -181,6 +192,8 @@ public class ClientApp extends Application {
         return port;
     }
 
+
+
     @Subscribe
     public void handleLoginResponse(LoginResponse response) {
         if (response.getStatus() == 0) {
@@ -226,15 +239,7 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleQuestionResponse(QuestionResponse response) {
         if (response.getStatus() == 0) {
-            FXMLLoader loader = fxmlLoader("QuestionScreen");
-            Parent screen = null;
-            try {
-                screen = loader.load();
-                scene.setRoot(screen);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+            setRoot("QuestionScreen");
         } else {
             popUpAlert("Failed To Fetch The Question, Please Try Again." + getErrorMessage(response.getStatus()));
         }
@@ -302,14 +307,7 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleViewExamResponse(ViewExamResponse response){
         if(response.getStatus()==0){
-            FXMLLoader loader = fxmlLoader("ViewExamScreen");
-            Parent screen = null;
-            try {
-                screen = loader.load();
-                scene.setRoot(screen);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            setRoot("ViewExamScreen");
         }
         else{
             popUpAlert("Failed to Fetch Exam");
@@ -320,7 +318,6 @@ public class ClientApp extends Application {
     public void handleAddExamResponse(AddExamResponse response){
         if(response.getStatus() == 0){
             popUpAlert("Add Exam Successfully");
-            popNScenes(4);
             setRoot("ExamManagementScreen");
         }else{
             popUpAlert("Add Exam Failed");
@@ -343,21 +340,13 @@ public class ClientApp extends Application {
         setRoot("TeacherStatisticsScreen");
     }
 
-    public static String popLastScene() {
-        if(!lastScenes.empty())
-            return lastScenes.pop();
-        return null;
-    }
+    @Subscribe
+    public void handleStudentTakeExamResponse(TakeExamResponse response){
+        if(response.getStatus() == 0){
 
-    public static void pushLastScene(String fxml) {
-        lastScenes.push(fxml);
-    }
-
-    public static void popNScenes(int n){
-        int i=0;
-        while (!lastScenes.empty()&& i<n){
-            lastScenes.pop();
-            i++;
+        }else{
+            popUpAlert("Something went wrong while trying to take exam."+getErrorMessage(response.getStatus()));
         }
     }
+
 }
