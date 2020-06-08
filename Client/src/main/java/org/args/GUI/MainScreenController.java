@@ -102,13 +102,13 @@ public class MainScreenController {
 
     private void initAccordingToPermission() throws IOException {
         switch (model.getPermission()){
-            case "Teacher":
+            case "teacher":
                 initTeacher();
                 break;
-            case "Student":
+            case "student":
                 initStudent();
                 break;
-            case "Dean":
+            case "dean":
                 initDean();
                 break;
         }

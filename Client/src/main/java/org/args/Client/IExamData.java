@@ -79,4 +79,6 @@ public interface IExamData {
 
     void clearDetailsScreen();
 
+    String getCurrentExamId();
+
 }

@@ -48,15 +48,15 @@
                   <HBox alignment="TOP_CENTER" prefHeight="42.0" prefWidth="1258.0" spacing="20.0">
                      <children>
                                 <Button fx:id="addButton" mnemonicParsing="false" onAction="#switchToAddExamScreen" prefHeight="77.0" prefWidth="192.0" styleClass="info" text="New Exam" />
-                        <Button fx:id="executeButton" mnemonicParsing="false" onAction="#executeExam" prefHeight="77.0" prefWidth="192.0" styleClass="info" text="Execute" />
-                                <Button fx:id="detailsButton" mnemonicParsing="false" onAction="#switchToExamScreen" prefHeight="77.0" prefWidth="192.0" styleClass="info" text="Show Details" />
+                        <Button fx:id="executeButton" disable="true" mnemonicParsing="false" onAction="#executeExam" prefHeight="77.0" prefWidth="192.0" styleClass="info" text="Execute" />
+                                <Button fx:id="detailsButton" disable="true" mnemonicParsing="false" onAction="#switchToExamScreen" prefHeight="77.0" prefWidth="192.0" styleClass="info" text="Show Details" />
                      </children>
                   </HBox>
                     </children>
                 </VBox>
                 <TilePane alignment="CENTER" prefHeight="524.0" prefWidth="811.0">
                     <children>
-                        <ListView fx:id="examListView" editable="true" prefHeight="474.0" prefWidth="740.0" stylesheets="@bootstrap3.css">
+                        <ListView fx:id="examListView" editable="true" onMouseClicked="#handleMouseEvent" prefHeight="474.0" prefWidth="740.0" stylesheets="@bootstrap3.css">
                             <TilePane.margin>
                                 <Insets bottom="30.0" />
                             </TilePane.margin>

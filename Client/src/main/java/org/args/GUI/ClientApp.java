@@ -4,10 +4,10 @@ package org.args.GUI;
 import DatabaseAccess.Responses.*;
 import DatabaseAccess.Responses.Exams.AddExamResponse;
 import DatabaseAccess.Responses.Exams.DeleteExamResponse;
+import DatabaseAccess.Responses.Exams.EditExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
-import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
-import DatabaseAccess.Responses.Questions.EditQuestionResponse;
-import DatabaseAccess.Responses.Questions.QuestionResponse;
+import DatabaseAccess.Responses.ExecuteExam.TakeExamResponse;
+import DatabaseAccess.Responses.Questions.*;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -23,6 +23,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Stack;
 
 
@@ -41,7 +42,7 @@ public class ClientApp extends Application {
 
     private final String[] errors = {"SUCCESS", "UNAUTHORIZED", "NOT_FOUND", "NO_ACCESS", "WRONG_INFO"};
 
-    private static Stack<Parent> lastScenes;
+    private static Stack<String> lastScenes;
 
     protected String getErrorMessage(int error_code) {
         return errors[error_code];
@@ -49,8 +50,10 @@ public class ClientApp extends Application {
 
     public static void setRoot(String fxml) {
         try {
-            pushLastScene(scene.getRoot());
             scene.setRoot(loadFXML(fxml));
+            System.out.println("Stack State:");
+            System.out.println("Stack Size:"+lastScenes.size());
+            System.out.println(Arrays.toString(lastScenes.toArray()));
         } catch (IOException e) {
             System.out.println("Failed to change the root of the scene: " + e.toString());
 
@@ -58,7 +61,24 @@ public class ClientApp extends Application {
     }
 
     public static void backToLastScene(){
-        scene.setRoot(popLastScene());
+        try {
+            scene.setRoot(loadFXML(popLastScene()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Stack State:");
+        System.out.println("Stack Size:"+lastScenes.size());
+        System.out.println(Arrays.toString(lastScenes.toArray()));
+    }
+
+    public static String popLastScene() {
+        if(!lastScenes.empty())
+            return lastScenes.pop();
+        return null;
+    }
+
+    public static void pushLastScene(String fxml) {
+        lastScenes.push(fxml);
     }
 
 
@@ -93,7 +113,6 @@ public class ClientApp extends Application {
             scene = new Scene(loader.load());
             scene.getStylesheets().add(getClass().getResource("/org/args/bootstrap3.css").toExternalForm());
             stage.setScene(scene);
-            pushLastScene(scene.getRoot());
             stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
             stage.setResizable(false);
             stage.setTitle("HSTS");
@@ -173,10 +192,11 @@ public class ClientApp extends Application {
         return port;
     }
 
+
+
     @Subscribe
     public void handleLoginResponse(LoginResponse response) {
         if (response.getStatus() == 0) {
-            pushLastScene(scene.getRoot());
             FXMLLoader loader = fxmlLoader("MainScreen");
 
             Parent screen = null;
@@ -208,6 +228,8 @@ public class ClientApp extends Application {
     public void handleEditQuestionResponse(EditQuestionResponse response) {
         if (response.getStatus() == 0) {
             popUpAlert("Edit Question Success");
+            popLastScene();
+            setRoot("QuestionManagementScreen");
         } else {
             popUpAlert("Edit Question Failed, Please Try Again." + getErrorMessage(response.getStatus()));
         }
@@ -217,21 +239,52 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleQuestionResponse(QuestionResponse response) {
         if (response.getStatus() == 0) {
-            pushLastScene(scene.getRoot());
-            FXMLLoader loader = fxmlLoader("QuestionScreen");
-            Parent screen = null;
-            try {
-                screen = loader.load();
-                scene.setRoot(screen);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+            setRoot("QuestionScreen");
         } else {
             popUpAlert("Failed To Fetch The Question, Please Try Again." + getErrorMessage(response.getStatus()));
         }
 
     }
+
+    @Subscribe
+    public void handleAddQuestionResponse(AddQuestionResponse response){
+        Platform.runLater(()->{
+            Alert alert;
+            if (response.getStatus() == 0) {
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Question Added");
+                alert.setContentText("Question Added Successfully!");
+                popLastScene();
+                setRoot("QuestionManagementScreen");
+            } else {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("Ooops, Question could not be added!");
+            }
+            alert.showAndWait();
+        });
+    }
+
+    @Subscribe
+    public void handleDeleteQuestionResponse(DeleteQuestionResponse response){
+        Platform.runLater(()->{
+            Alert alert;
+            if (response.getStatus() == 0) {
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Question Deleted");
+                alert.setContentText("Question Deleted Successfully!");
+                popLastScene();
+                setRoot("QuestionManagementScreen");
+            } else {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("Ooops, Question could not be deleted!");
+            }
+            alert.showAndWait();
+        });
+
+    }
+
 
     @Subscribe
     public void handleDeleteExamResponse(DeleteExamResponse response) {
@@ -254,15 +307,7 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleViewExamResponse(ViewExamResponse response){
         if(response.getStatus()==0){
-            pushLastScene(scene.getRoot());
-            FXMLLoader loader = fxmlLoader("ViewExamScreen");
-            Parent screen = null;
-            try {
-                screen = loader.load();
-                scene.setRoot(screen);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            setRoot("ViewExamScreen");
         }
         else{
             popUpAlert("Failed to Fetch Exam");
@@ -281,13 +326,13 @@ public class ClientApp extends Application {
     }
 
     @Subscribe
-    public void handleEditExamResponse(EditQuestionResponse response){
+    public void handleEditExamResponse(EditExamResponse response){
         if(response.getStatus() == 0){
-            popUpAlert("Edit Exam Successfully");
+            popUpAlert("Exam was successfully edited!");
+            setRoot("ExamManagementScreen");
         }else{
-            popUpAlert("Edit Exam Failed");
+            popUpAlert("Exam editing failed");
         }
-
     }
 
     @Subscribe
@@ -295,13 +340,13 @@ public class ClientApp extends Application {
         setRoot("TeacherStatisticsScreen");
     }
 
-    public static Parent popLastScene() {
-        if(!lastScenes.empty())
-            return lastScenes.pop();
-        return null;
+    @Subscribe
+    public void handleStudentTakeExamResponse(TakeExamResponse response){
+        if(response.getStatus() == 0){
+
+        }else{
+            popUpAlert("Something went wrong while trying to take exam."+getErrorMessage(response.getStatus()));
+        }
     }
 
-    public static void pushLastScene(Parent lastScene) {
-        lastScenes.push(lastScene);
-    }
 }

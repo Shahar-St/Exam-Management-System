@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.args.Client.IExamData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExamDetailsController {
@@ -31,11 +32,12 @@ public class ExamDetailsController {
     @FXML
     private Button nextButton;
 
-    String tempTitle;
-    String tempStudentNote;
-    String tempTeacherNote;
-    String tempDuration;
-    List<String> tempQuestions;
+    String origTitle;
+    String origStudentNote;
+    String origTeacherNote;
+    String origDuration;
+    List<String> origQuestions = new ArrayList<>();
+    List<String> origScores = new ArrayList<>();
 
     private IExamData model;
 
@@ -53,23 +55,32 @@ public class ExamDetailsController {
             pageTitle.setText("Edit An Existing Exam");
             saveOriginalExamData();
         }
+        else
+        {
+            model.clearDetailsScreen();
+        }
     }
 
     private void saveOriginalExamData() {
-        tempTitle = model.getCurrentExamTitle();
-        tempStudentNote = model.getCurrentExamStudentNotes();
-        tempTeacherNote = model.getCurrentExamTeacherNotes();
-        tempDuration = model.getCurrentExamDuration();
-        tempQuestions = model.getObservableExamQuestionsList();
+        origTitle = model.getCurrentExamTitle();
+        origStudentNote = model.getCurrentExamStudentNotes();
+        origTeacherNote = model.getCurrentExamTeacherNotes();
+        origDuration = model.getCurrentExamDuration();
+        origQuestions.addAll(model.getObservableExamQuestionsList());
+        origScores.addAll(model.getObservableQuestionsScoringList());
     }
 
     private void restoreOriginalExamData ()
     {
-        model.setCurrentExamTitle(tempTitle);
-        model.setCurrentExamStudentNotes(tempStudentNote);
-        model.setCurrentExamTeacherNotes(tempTeacherNote);
-        model.setCurrentExamDuration(tempDuration);
-        model.getObservableExamQuestionsList().setAll(tempQuestions);
+        model.setCurrentExamTitle(origTitle);
+        model.setCurrentExamStudentNotes(origStudentNote);
+        model.setCurrentExamTeacherNotes(origTeacherNote);
+        model.setCurrentExamDuration(origDuration);
+        model.getObservableExamQuestionsList().clear();
+        model.getObservableQuestionsScoringList().clear();
+        for(String question : origQuestions)
+            model.addToExamQuestionsList(question);
+        model.getObservableQuestionsScoringList().addAll(origScores);
     }
 
 
@@ -85,14 +96,13 @@ public class ExamDetailsController {
     {
         if (model.getViewMode().equals("ADD"))
         {
-            ClientApp.setRoot("ExamManagementScreen");
             model.clearDetailsScreen();
         }
         else
         {
             restoreOriginalExamData();
-            ClientApp.backToLastScene();
         }
+        ClientApp.backToLastScene();
     }
 
     @FXML

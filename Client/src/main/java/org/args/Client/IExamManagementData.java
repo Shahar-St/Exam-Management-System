@@ -27,4 +27,5 @@ public interface IExamManagementData {
     void deployExam(String examId,String examCode);
     String getViewMode();
     void setViewMode(String viewMode);
+    void setCurrentExamId(String examId);
 }

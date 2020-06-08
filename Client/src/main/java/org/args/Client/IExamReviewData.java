@@ -11,4 +11,5 @@ public interface IExamReviewData {
     void changeGrade(double newGrade,String reason,String examId);
     void viewExam(String examId);
     void addNote(String note);
+    String getCurrentExamId();
 }

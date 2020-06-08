@@ -12,4 +12,6 @@ public interface IMainScreenData {
 
     String getPermission();
 
+    void setUserName(String userName);
+
 }

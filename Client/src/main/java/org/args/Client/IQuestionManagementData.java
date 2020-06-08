@@ -46,7 +46,9 @@ public interface IQuestionManagementData {
 
     void clearQuestionsList();
 
-    void fillQuestionsList(String text);
+    void fillQuestionsList(String courseId);
 
     void loadQuestionDetails(String questionId);
+
+    void setCurrentQuestionId(String questionId);
 }

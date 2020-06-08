@@ -37,7 +37,6 @@ public class ExamManagementController {
     private Button executeButton;
 
 
-
     private IExamManagementData model;
 
     public void setModel(IExamManagementData model) {
@@ -56,7 +55,8 @@ public class ExamManagementController {
         setModel(ClientApp.getModel());
         examListView.setItems(model.getObservableExamList());
         bindButtonVisibility();
-        if (model.dataWasAlreadyInitialized()) {
+        if (model.dataWasAlreadyInitialized())
+        {
             for (String subjectName : model.getSubjects()) //iterate through every subject in the hashmap
             {
                 addSubjectToSubjectDropdown(subjectName);
@@ -66,10 +66,11 @@ public class ExamManagementController {
             initializeCoursesDropdown();
             fillCoursesDropdown(model.getCurrentSubject());
             model.fillExamList(model.getCurrentCourseId());
-        } else {
+        }
+        else
+        {
             fillSubjectsDropDown(model.getSubjects());
         }
-
     }
 
     @FXML
@@ -102,7 +103,8 @@ public class ExamManagementController {
     @FXML
     void fillCoursesDropdown(String subject) {
         List<String> coursesToAdd = model.getCoursesOfSubject(subject);
-        for (String course : coursesToAdd) {
+        for (String course : coursesToAdd)
+        {
             addCourseToDropdown(course);
         }
     }
@@ -115,19 +117,19 @@ public class ExamManagementController {
             public void handle(ActionEvent event) {
                 String text = ((MenuItem) event.getSource()).getText();
                 coursesDropdown.setText(text);
-                model.setCurrentCourseId(text.substring(0,2));
-                model.fillExamList(text.substring(0,2));
+                model.setCurrentCourseId(text.substring(0, 2));
+                model.fillExamList(text.substring(0, 2));
             }
         });
         coursesDropdown.getItems().add(course);
     }
 
 
-
     @FXML
     void switchToAddExamScreen(ActionEvent event) {
         model.fillQuestionsList(model.getCurrentCourseId());
         model.setViewMode("ADD");
+        ClientApp.pushLastScene("ExamManagementScreen");
         ClientApp.setRoot("ExamDetailsScreen");
     }
 
@@ -162,19 +164,26 @@ public class ExamManagementController {
 
     @FXML
     void handleMouseEvent(MouseEvent event) {
-        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+        enableDetailsAndExecuteButtons();
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2)
+        {
             viewSelectedExamDetails();
         }
     }
 
     private void viewSelectedExamDetails() {
+        disableDetailsAndExecuteButtons();
         String examId = getExamIdFromSelected();
-        if (examId != null)
+        model.setCurrentExamId(examId);
+        if (examId != null) {
+            ClientApp.pushLastScene("ExamManagementScreen");
             model.viewExam(examId);
+        }
     }
 
     private String getExamIdFromSelected() {
-        if (examListView.getSelectionModel().getSelectedItem() != null) {
+        if (examListView.getSelectionModel().getSelectedItem() != null)
+        {
             String currentItem = examListView.getSelectionModel().getSelectedItem();
             int indexOfColon = currentItem.indexOf(':');
             return currentItem.substring(1, indexOfColon);
@@ -185,6 +194,7 @@ public class ExamManagementController {
 
     @FXML
     void executeExam(ActionEvent event) {
+        disableDetailsAndExecuteButtons();
         String examId = getExamIdFromSelected();
         if (examId != null)
         {
@@ -196,6 +206,18 @@ public class ExamManagementController {
             Optional<String> result = examCodeDialog.showAndWait();
             result.ifPresent(code -> model.deployExam(examId, code));
         }
+    }
+
+    private void disableDetailsAndExecuteButtons()
+    {
+        detailsButton.setDisable(true);
+        executeButton.setDisable(true);
+    }
+
+    private void enableDetailsAndExecuteButtons()
+    {
+        detailsButton.setDisable(false);
+        executeButton.setDisable(false);
     }
 
 }

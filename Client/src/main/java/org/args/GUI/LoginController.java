@@ -59,6 +59,7 @@ public class LoginController {
     private void loginAttempt() {
         String userName = usernameField.getText();
         String password = passwordField.getText();
+        model.setUserName(userName);
         model.login(userName,password);
     }
 

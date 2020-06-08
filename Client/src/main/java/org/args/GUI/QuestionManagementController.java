@@ -42,7 +42,6 @@ public class QuestionManagementController {
     @FXML
     private Button addButton;
 
-
     private IQuestionManagementData model;
 
     public void setModel(IQuestionManagementData dataModel) {
@@ -54,6 +53,8 @@ public class QuestionManagementController {
     public void initialize() {
         setModel(ClientApp.getModel());
         questionsList.setItems(model.getObservableQuestionsList());
+        if (model.getObservableQuestionsList().size() > 0 && !model.isCourseSelected().get())
+            model.clearQuestionsList();
         bindButtonVisibility();
         if (model.dataWasAlreadyInitialized()) {
             for (String subjectName : model.getSubjects()) //iterate through every subject in the hashmap
@@ -128,7 +129,7 @@ public class QuestionManagementController {
 
 
     @FXML
-    void switchToQuestionEditScreen(ActionEvent event) throws IOException {
+    void switchToQuestionViewScreen(ActionEvent event) {
         viewSelectedQuestionDetails();
     }
 
@@ -136,12 +137,14 @@ public class QuestionManagementController {
     @FXML
     void switchToAddQuestionScreen(ActionEvent event) {
         model.prepareAddQuestion();
+        questionDetailsButton.setDisable(true);
+        ClientApp.pushLastScene("QuestionManagementScreen");
         ClientApp.setRoot("QuestionScreen");
     }
 
 
     @FXML
-    void switchToMainScreen(MouseEvent event) throws IOException {
+    void switchToMainScreen(MouseEvent event) {
         clearScreen();
         ClientApp.setRoot("MainScreen");
     }
@@ -168,15 +171,19 @@ public class QuestionManagementController {
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
             viewSelectedQuestionDetails();
         }
-
+        if (questionDetailsButton.isDisabled())
+            questionDetailsButton.setDisable(false);
 
     }
 
     private void viewSelectedQuestionDetails() {
         if (questionsList.getSelectionModel().getSelectedItem() != null) {
+            questionDetailsButton.setDisable(true);
             int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
             String questionId = questionsList.getSelectionModel().getSelectedItem().substring(1, indexOfColon);
+            model.setCurrentQuestionId(questionId);
             model.loadQuestionDetails(questionId);
+            ClientApp.pushLastScene("QuestionManagementScreen");
         }
     }
 
