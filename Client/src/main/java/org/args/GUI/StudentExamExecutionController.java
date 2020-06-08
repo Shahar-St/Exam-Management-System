@@ -8,7 +8,7 @@ import org.args.Client.IStudentExamExecutionData;
 
 import java.time.format.DateTimeFormatter;
 
-public class StudentExecuteExamController {
+public class StudentExamExecutionController {
 
     private IStudentExamExecutionData model;
 
@@ -38,7 +38,7 @@ public class StudentExecuteExamController {
 
                 Label duration = new Label(String.valueOf(model.getExamForStudentExecution().getDurationInMinutes()));
 
-                return new VBox(title_label,title,studentNotes_label,sNotes,duration_label,duration);
+                return new ScrollPane(new VBox(title_label,title,studentNotes_label,sNotes,duration_label,duration));
             }
 
             LightQuestion currentQuestion = model.getExamForStudentExecution().getLightQuestionList().get(pageIndex-1);
@@ -73,10 +73,10 @@ public class StudentExecuteExamController {
                 done.setOnMouseClicked(e->{
 
                 });
-                return new VBox(date_label,lastModified,content_label,questionContent,answer1_label,answer1,answer2_label,answer2,answer3_label,answer3,answer4_label,answer4,done);
+                return new ScrollPane(new VBox(date_label,lastModified,content_label,questionContent,answer1_label,answer1,answer2_label,answer2,answer3_label,answer3,answer4_label,answer4,done));
             }
 
-            return new VBox(date_label,lastModified,content_label,questionContent,answer1_label,answer1,answer2_label,answer2,answer3_label,answer3,answer4_label,answer4);
+            return new ScrollPane(new VBox(date_label,lastModified,content_label,questionContent,answer1_label,answer1,answer2_label,answer2,answer3_label,answer3,answer4_label,answer4));
 
 
 

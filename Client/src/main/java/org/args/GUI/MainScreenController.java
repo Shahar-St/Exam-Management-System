@@ -4,6 +4,7 @@
 
 package org.args.GUI;
 
+import DatabaseAccess.Requests.ExecuteExam.TakeExamRequest;
 import DatabaseAccess.Requests.Statistics.TeacherStatisticsRequest;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
 import javafx.event.ActionEvent;
@@ -135,7 +136,8 @@ public class MainScreenController {
     @FXML
     void switchToStudentExamExecutionScreen (ActionEvent event)
     {
-        ClientApp.setRoot("StudentExamExecutionScreen");
+        // need to remove only for testing
+        ClientApp.sendRequest(new TakeExamRequest(111,"111"));
     }
     @FXML
     void switchToReportsScreen (ActionEvent event)

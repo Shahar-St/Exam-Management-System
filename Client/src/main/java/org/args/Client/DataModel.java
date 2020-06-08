@@ -703,6 +703,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
             setExamForStudentExecution(response.getLightExam());
         }
     }
+
     @Override
     public void storeAnswer(int questionNumber, int answerNumber) {
 
