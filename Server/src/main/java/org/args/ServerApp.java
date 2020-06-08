@@ -74,7 +74,7 @@ public class ServerApp extends AbstractServer {
         if (msg instanceof LoginRequest) {
             LoginRequest request = (LoginRequest) msg;
             try {
-                client.sendToClient(new LoginResponse(0, "teacher", "malki", request));
+                client.sendToClient(new LoginResponse(0, "student", "malki", request));
             } catch (IOException e) {
                 e.printStackTrace();
             }

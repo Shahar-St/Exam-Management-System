@@ -31,6 +31,7 @@ import org.args.GUI.ClientApp;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -732,6 +733,12 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void submitExam() {
+        // test of word generator
+        try {
+            wordGenerator.createWord(getExamForStudentExecution());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         ClientApp.sendRequest(new SubmitExamRequest(examForStudentExecution.getId(),correctAnswersList));
 
     }

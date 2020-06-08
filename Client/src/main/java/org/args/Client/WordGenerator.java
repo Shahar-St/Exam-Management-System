@@ -13,18 +13,14 @@ import java.util.List;
 public class WordGenerator {
 
     public void createWord(LightExam exam) throws IOException {
-        //Blank Document
         XWPFDocument document = new XWPFDocument();
-        //Write the Document in file system
-        FileOutputStream out = new FileOutputStream(
-                new File(exam.getId() + "_" + "exam" + ".docx"));
-        //create Paragraph
+        FileOutputStream out = new FileOutputStream(new File(exam.getId() + "_" + "exam" + ".docx"));
         XWPFParagraph paragraph = document.createParagraph();
         XWPFRun run = paragraph.createRun();
-        run.setText("Title: "+exam.getTitle()+"\n"+"");
-        //Close document
-        out.close();
-        System.out.println("createdWord" + "_"  + ".docx" + " written successfully");
+        run.setText("Title: "+exam.getTitle()+"\n"+"Student Notes: "+exam.getStudentNotes()+"\n"+"Exam Duration: "+exam.getDurationInMinutes()+"\n");
         document.write(out);
+        out.close();
+        document.close();
+
     }
 }
