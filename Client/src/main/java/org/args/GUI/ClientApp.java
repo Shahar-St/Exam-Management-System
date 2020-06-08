@@ -6,6 +6,7 @@ import DatabaseAccess.Responses.Exams.AddExamResponse;
 import DatabaseAccess.Responses.Exams.DeleteExamResponse;
 import DatabaseAccess.Responses.Exams.EditExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
+import DatabaseAccess.Responses.ExecuteExam.ExecuteExamResponse;
 import DatabaseAccess.Responses.ExecuteExam.TakeExamResponse;
 import DatabaseAccess.Responses.Questions.*;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
@@ -183,6 +184,15 @@ public class ClientApp extends Application {
         client.setPort(port);
     }
 
+    public static boolean isNumeric(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
+    }
+
 
     public static String getHost() {
         return host;
@@ -338,6 +348,16 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleTeacherStatisticsResponse(TeacherStatisticsResponse response){
         setRoot("TeacherStatisticsScreen");
+    }
+    @Subscribe
+    public void handleExecuteExamResponse(ExecuteExamResponse response)
+    {
+        if (response.getStatus() != 0)
+            popUpAlert("Exam execution failed!");
+        else {
+            popUpAlert("Exam is being initiated...");
+            setRoot("TeacherExamExecutionScreen");
+        }
     }
 
     @Subscribe
