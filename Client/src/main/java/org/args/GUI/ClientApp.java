@@ -7,7 +7,9 @@ import DatabaseAccess.Responses.Exams.DeleteExamResponse;
 import DatabaseAccess.Responses.Exams.EditExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
 import DatabaseAccess.Responses.ExecuteExam.ExecuteExamResponse;
+import DatabaseAccess.Responses.ExecuteExam.RaiseHandResponse;
 import DatabaseAccess.Responses.ExecuteExam.TakeExamResponse;
+import DatabaseAccess.Responses.ExecuteExam.TimeExtensionResponse;
 import DatabaseAccess.Responses.Questions.*;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import javafx.application.Application;
@@ -39,11 +41,17 @@ public class ClientApp extends Application {
     // specify the server defaults
     private static String host = "127.0.0.1";
 
+    private static boolean isRunning;
+
     private static int port = 3000;
 
     private final String[] errors = {"SUCCESS", "UNAUTHORIZED", "NOT_FOUND", "NO_ACCESS", "WRONG_INFO"};
 
     private static Stack<String> lastScenes;
+
+    public static boolean isRunning() {
+        return isRunning;
+    }
 
     protected String getErrorMessage(int error_code) {
         return errors[error_code];
@@ -109,6 +117,7 @@ public class ClientApp extends Application {
     @Override
     public void start(Stage stage) {
         try {
+            isRunning = true;
             EventBus.getDefault().register(this);
             FXMLLoader loader = fxmlLoader("LoginScreen");
             scene = new Scene(loader.load());
@@ -117,7 +126,6 @@ public class ClientApp extends Application {
             stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
             stage.setResizable(false);
             stage.setTitle("HSTS");
-
             stage.show();
         } catch (Exception e) {
             System.out.println("Failed to start the app.. exiting: " + e.toString());
@@ -129,12 +137,15 @@ public class ClientApp extends Application {
 
     @Override
     public void stop() throws Exception {
+        isRunning=false;
         EventBus.getDefault().unregister(this);
         super.stop();
     }
 
     private void closeWindowEvent(WindowEvent event) {
         System.out.println("Window close request ...");
+        // set false
+        isRunning=false;
         try {
             client.closeConnection();
         } catch (IOException e) {
@@ -207,15 +218,7 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleLoginResponse(LoginResponse response) {
         if (response.getStatus() == 0) {
-            FXMLLoader loader = fxmlLoader("MainScreen");
-
-            Parent screen = null;
-            try {
-                screen = loader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            scene.setRoot(screen);
+            setRoot("MainScreen");
             Platform.runLater(() -> {
                 ((Stage) scene.getWindow()).setResizable(true);
                 scene.getWindow().setWidth(800);
@@ -363,10 +366,30 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleStudentTakeExamResponse(TakeExamResponse response){
         if(response.getStatus() == 0){
-
+            setRoot("StudentExamExecutionScreen");
         }else{
             popUpAlert("Something went wrong while trying to take exam."+getErrorMessage(response.getStatus()));
         }
+    }
+
+    @Subscribe
+    public void handleTimeExtensionResponse(TimeExtensionResponse response)
+    {
+        if(response.getStatus() != 0)
+            popUpAlert("Network Error: Failed to fetch Dean's response!");
+        else
+        {
+            if(!response.isAccepted())
+                popUpAlert("Time extension request was denied by the dean. \nReason: " + response.getDeanResponse());
+            else
+                popUpAlert("Time extension request was accepted by the dean. \nApproved added time: " + response.getAuthorizedTimeExtension());
+        }
+    }
+
+    @Subscribe
+    public void handleRaisedHandResponse(RaiseHandResponse response)
+    {
+        popUpAlert(response.getStudentName());
     }
 
 }

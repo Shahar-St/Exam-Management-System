@@ -28,4 +28,6 @@ public interface IExamManagementData {
     String getViewMode();
     void setViewMode(String viewMode);
     void setCurrentExamId(String examId);
+    public void setCurrentExecutedExamLaunchTime(String currentExecutedExamLaunchTime);
+    public void setCurrentExecutedExamTitle(String currentExecutedExamTitle);
 }

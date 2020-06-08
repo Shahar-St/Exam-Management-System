@@ -9,6 +9,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.args.Client.IExamManagementData;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -43,6 +45,8 @@ public class ExamManagementController {
     public void setModel(IExamManagementData model) {
         this.model = model;
     }
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     @FXML
     private void bindButtonVisibility() {
@@ -230,6 +234,9 @@ public class ExamManagementController {
                     advance.set(true);
             }
         }
+        model.setCurrentExecutedExamLaunchTime(LocalDateTime.now().format(formatter));
+        String currentTitle = examListView.getSelectionModel().getSelectedItem().substring(9);
+        model.setCurrentExecutedExamTitle(currentTitle);
     }
 
     private void disableDetailsAndExecuteButtons()
