@@ -4,6 +4,7 @@ import DatabaseAccess.Requests.ExecuteExam.RaiseHandRequest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import org.args.Client.ITeacherExecuteExamData;
 
 public class TeacherExamExecutionController {
@@ -76,11 +77,14 @@ public class TeacherExamExecutionController {
     void solveSelected(ActionEvent event) {
         String currentStudentName = raisedHandsListView.getSelectionModel().getSelectedItem();
         model.solveRaisedHand(currentStudentName);
+        if(model.getCurrentHandsRaised().isEmpty())
+            solveButton.setDisable(true);
     }
 
     @FXML
-    void sendDummyRequest(ActionEvent event) {
-        ClientApp.sendRequest(new RaiseHandRequest());
-    }
+    void handleMouseEvent(MouseEvent event) {
+        if (model.getCurrentHandsRaised().size() > 0)
+            solveButton.setDisable(false);
 
+    }
 }
