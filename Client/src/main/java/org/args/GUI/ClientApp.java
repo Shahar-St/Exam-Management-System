@@ -197,15 +197,7 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleLoginResponse(LoginResponse response) {
         if (response.getStatus() == 0) {
-            FXMLLoader loader = fxmlLoader("MainScreen");
-
-            Parent screen = null;
-            try {
-                screen = loader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            scene.setRoot(screen);
+            setRoot("MainScreen");
             Platform.runLater(() -> {
                 ((Stage) scene.getWindow()).setResizable(true);
                 scene.getWindow().setWidth(800);
@@ -343,7 +335,7 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleStudentTakeExamResponse(TakeExamResponse response){
         if(response.getStatus() == 0){
-
+            setRoot("StudentExamExecutionScreen");
         }else{
             popUpAlert("Something went wrong while trying to take exam."+getErrorMessage(response.getStatus()));
         }
