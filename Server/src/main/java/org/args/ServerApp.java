@@ -6,7 +6,9 @@ import DatabaseAccess.Requests.Exams.AllExamsRequest;
 import DatabaseAccess.Requests.Exams.DeleteExamRequest;
 import DatabaseAccess.Requests.Exams.ViewExamRequest;
 import DatabaseAccess.Requests.ExecuteExam.ExecuteExamRequest;
+import DatabaseAccess.Requests.ExecuteExam.RaiseHandRequest;
 import DatabaseAccess.Requests.ExecuteExam.TakeExamRequest;
+import DatabaseAccess.Requests.ExecuteExam.TimeExtensionRequest;
 import DatabaseAccess.Requests.LoginRequest;
 import DatabaseAccess.Requests.Questions.AllQuestionsRequest;
 import DatabaseAccess.Requests.Questions.EditQuestionRequest;
@@ -18,7 +20,9 @@ import DatabaseAccess.Responses.Exams.AllExamsResponse;
 import DatabaseAccess.Responses.Exams.DeleteExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
 import DatabaseAccess.Responses.ExecuteExam.ExecuteExamResponse;
+import DatabaseAccess.Responses.ExecuteExam.RaiseHandResponse;
 import DatabaseAccess.Responses.ExecuteExam.TakeExamResponse;
+import DatabaseAccess.Responses.ExecuteExam.TimeExtensionResponse;
 import DatabaseAccess.Responses.LoginResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
 import DatabaseAccess.Responses.Questions.EditQuestionResponse;
@@ -70,7 +74,7 @@ public class ServerApp extends AbstractServer {
         if (msg instanceof LoginRequest) {
             LoginRequest request = (LoginRequest) msg;
             try {
-                client.sendToClient(new LoginResponse(0, "student", "malki", request));
+                client.sendToClient(new LoginResponse(0, "teacher", "malki", request));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -139,10 +143,10 @@ public class ServerApp extends AbstractServer {
         } else if (msg instanceof AllExamsRequest) {
             AllExamsRequest request = (AllExamsRequest) msg;
             HashMap<String, Pair<LocalDateTime, String>> examList = new HashMap<>();
-            examList.put("exam1", new Pair<>(LocalDateTime.now(), "Content1"));
-            examList.put("exam2", new Pair<>(LocalDateTime.now(), "Content2"));
-            examList.put("exam3", new Pair<>(LocalDateTime.now(), "Content3"));
-            examList.put("exam4", new Pair<>(LocalDateTime.now(), "Content4"));
+            examList.put("000001", new Pair<>(LocalDateTime.now(), "Algebra"));
+            examList.put("000002", new Pair<>(LocalDateTime.now(), "English"));
+            examList.put("000003", new Pair<>(LocalDateTime.now(), "Sex Education"));
+            examList.put("000004", new Pair<>(LocalDateTime.now(), "Pooping Lesson"));
             AllExamsResponse response = new AllExamsResponse(0, request, examList);
             try {
                 client.sendToClient(response);
@@ -201,6 +205,23 @@ public class ServerApp extends AbstractServer {
                 e.printStackTrace();
             }
 
+        }else if(msg instanceof TimeExtensionRequest){
+            TimeExtensionRequest request = (TimeExtensionRequest)msg;
+            TimeExtensionResponse response = new TimeExtensionResponse(0,request,false,"Fuck off",0);
+            try {
+                client.sendToClient(response);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else if(msg instanceof RaiseHandRequest)
+        {
+            RaiseHandRequest request = (RaiseHandRequest)msg;
+            RaiseHandResponse response = new RaiseHandResponse(0,request,"SHIMON");
+            try {
+                client.sendToClient(response);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }

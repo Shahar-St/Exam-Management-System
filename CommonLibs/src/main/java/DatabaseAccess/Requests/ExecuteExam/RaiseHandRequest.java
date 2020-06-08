@@ -1,5 +1,7 @@
 package DatabaseAccess.Requests.ExecuteExam;
 
-public class RaiseHandRequest {
+import DatabaseAccess.Requests.DatabaseRequest;
+
+public class RaiseHandRequest extends DatabaseRequest {
 
 }

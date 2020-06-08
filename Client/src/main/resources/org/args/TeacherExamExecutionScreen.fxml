@@ -36,26 +36,22 @@
             </Pane>
             <Pane prefHeight="424.0" prefWidth="363.0">
                <children>
-                  <Label layoutX="85.0" layoutY="14.0" prefHeight="39.0" prefWidth="163.0" text="Current Exam:">
+                  <Label fx:id="examNameLabel" layoutX="31.0" layoutY="56.0" prefHeight="59.0" prefWidth="301.0" text="Exam Name Placeholder">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="examNameLabel" layoutX="14.0" layoutY="94.0" prefHeight="59.0" prefWidth="301.0" text="Exam Name Placeholder">
+                  <Label layoutX="9.0" layoutY="170.0" prefHeight="35.0" prefWidth="152.0" text="Launched at:">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <Label layoutX="9.0" layoutY="205.0" prefHeight="35.0" prefWidth="152.0" text="Launched at:">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="launchTimeLabel" layoutX="165.0" layoutY="205.0" prefHeight="35.0" prefWidth="192.0" text="Launch Time Placeholder">
+                  <Label fx:id="launchTimeLabel" layoutX="167.0" layoutY="170.0" prefHeight="35.0" prefWidth="192.0" text="Launch Time Placeholder">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
+                  <Button layoutX="135.0" layoutY="274.0" mnemonicParsing="false" onAction="#sendDummyRequest" prefHeight="32.0" prefWidth="100.0" text="REQUEST" />
                </children>
             </Pane>
             <Pane prefHeight="424.0" prefWidth="245.0">

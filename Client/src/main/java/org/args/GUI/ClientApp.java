@@ -7,7 +7,9 @@ import DatabaseAccess.Responses.Exams.DeleteExamResponse;
 import DatabaseAccess.Responses.Exams.EditExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
 import DatabaseAccess.Responses.ExecuteExam.ExecuteExamResponse;
+import DatabaseAccess.Responses.ExecuteExam.RaiseHandResponse;
 import DatabaseAccess.Responses.ExecuteExam.TakeExamResponse;
+import DatabaseAccess.Responses.ExecuteExam.TimeExtensionResponse;
 import DatabaseAccess.Responses.Questions.*;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import javafx.application.Application;
@@ -359,6 +361,26 @@ public class ClientApp extends Application {
         }else{
             popUpAlert("Something went wrong while trying to take exam."+getErrorMessage(response.getStatus()));
         }
+    }
+
+    @Subscribe
+    public void handleTimeExtensionResponse(TimeExtensionResponse response)
+    {
+        if(response.getStatus() != 0)
+            popUpAlert("Network Error: Failed to fetch Dean's response!");
+        else
+        {
+            if(!response.isAccepted())
+                popUpAlert("Time extension request was denied by the dean. \nReason: " + response.getDeanResponse());
+            else
+                popUpAlert("Time extension request was accepted by the dean. \nApproved added time: " + response.getAuthorizedTimeExtension());
+        }
+    }
+
+    @Subscribe
+    public void handleRaisedHandResponse(RaiseHandResponse response)
+    {
+        popUpAlert(response.getStudentName());
     }
 
 }

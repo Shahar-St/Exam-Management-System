@@ -4,12 +4,13 @@ import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.Exams.*;
 import DatabaseAccess.Requests.ExecuteExam.SubmitExamRequest;
 import DatabaseAccess.Requests.ExecuteExam.ExecuteExamRequest;
+import DatabaseAccess.Requests.ExecuteExam.TimeExtensionRequest;
 import DatabaseAccess.Requests.LoginRequest;
 import DatabaseAccess.Requests.Questions.*;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
 import DatabaseAccess.Responses.Exams.AllExamsResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
-import DatabaseAccess.Responses.ExecuteExam.ExecuteExamResponse;
+import DatabaseAccess.Responses.ExecuteExam.RaiseHandResponse;
 import DatabaseAccess.Responses.ExecuteExam.TakeExamResponse;
 import DatabaseAccess.Responses.LoginResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
@@ -35,8 +36,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class DataModel implements IMainScreenData, IQuestionManagementData, IQuestionData, IStudentExamExecutionData,
-        IDeanViewStatsData, IStudentViewStatsData, IExamData, ITeacherExamExecutionData, IDeanExamExecutionData,
-        ITeacherViewStatsData, IExamManagementData, IExamReviewData {
+        IDeanViewStatsData, IStudentViewStatsData, IExamData, IDeanExamExecutionData,
+        ITeacherViewStatsData, IExamManagementData, IExamReviewData , ITeacherExecuteExamData{
 
     private ClientApp app;
 
@@ -598,13 +599,10 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         }
     }
 
-    @Override
-    public void executeExam(String examId, String examCode) {
-        ClientApp.sendRequest(new ExecuteExamRequest(examId,examCode));
-    }
+
 
     /*used to represent the exams as strings in the list view in the format: -#id: content-
-    (same as questions in question management*/
+        (same as questions in question management*/
     public void generateExamDescriptors(HashMap<String, Pair<LocalDateTime, String>> examList) {
         for (Map.Entry<String, Pair<LocalDateTime, String>> exam : examList.entrySet()) {
             String examId = exam.getKey();
@@ -764,14 +762,60 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     //TODO: implement ITeacherExamExecutionData Methods
     //Teacher Execute Exam Data
 
-    @Override
-    public void timeExtensionRequest(int minutes) {
+    String currentExecutedExamLaunchTime;
+    String currentExecutedExamTitle;
+    ObservableList<String> currentHandsRaised = FXCollections.observableArrayList();
 
+    public ObservableList<String> getCurrentHandsRaised() {
+        return currentHandsRaised;
+    }
+
+    public String getCurrentExecutedExamLaunchTime() {
+        return currentExecutedExamLaunchTime;
+    }
+
+    public void setCurrentExecutedExamLaunchTime(String currentExecutedExamLaunchTime) {
+        this.currentExecutedExamLaunchTime = currentExecutedExamLaunchTime;
+    }
+
+    public String getCurrentExecutedExamTitle() {
+        return currentExecutedExamTitle;
+    }
+
+    public void setCurrentExecutedExamTitle(String currentExecutedExamTitle) {
+        this.currentExecutedExamTitle = currentExecutedExamTitle;
     }
 
     @Override
-    public void handleRaisedHand(String studentId) {
+    public void executeExam(String examId, String examCode) {
+        setCurrentExamId(examId);
+        ClientApp.sendRequest(new ExecuteExamRequest(examId,examCode));
+    }
 
+    @Override
+    public void sendTimeExtensionRequest(int timeExtension, String reason) {
+        ClientApp.sendRequest(new TimeExtensionRequest(currentExamId,timeExtension,reason));
+    }
+
+    @Subscribe
+    public void handleRaisedHandResponse(RaiseHandResponse response)
+    {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                currentHandsRaised.add(response.getStudentName());
+            }
+        });
+    }
+
+    @Override
+    public void solveRaisedHand(String currentStudentName) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                currentHandsRaised.remove(currentStudentName);
+            }
+        });
     }
 
     //TODO: implement IDeanExamExecutionData method NOTE: the request should be other type then String!!
