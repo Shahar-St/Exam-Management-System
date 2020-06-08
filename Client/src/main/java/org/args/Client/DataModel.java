@@ -2,6 +2,7 @@ package org.args.Client;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.Exams.*;
+import DatabaseAccess.Requests.ExecuteExam.SubmitExamRequest;
 import DatabaseAccess.Requests.LoginRequest;
 import DatabaseAccess.Requests.Questions.*;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
@@ -687,12 +688,22 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private LightExam examForStudentExecution;
 
+    private List<Integer> correctAnswersList;
+
     public LightExam getExamForStudentExecution() {
         return examForStudentExecution;
     }
 
     public void setExamForStudentExecution(LightExam examForStudentExecution) {
         this.examForStudentExecution = examForStudentExecution;
+    }
+
+    public List<Integer> getCorrectAnswersList() {
+        return correctAnswersList;
+    }
+
+    public void setCorrectAnswersList(List<Integer> correctAnswersList) {
+        this.correctAnswersList = correctAnswersList;
     }
 
     @Subscribe
@@ -704,7 +715,9 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void storeAnswer(int questionNumber, int answerNumber) {
-
+        if(correctAnswersList == null)
+            correctAnswersList = new ArrayList<>();
+        correctAnswersList.add(questionNumber,answerNumber);
     }
 
     @Override
@@ -714,6 +727,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void submitExam() {
+        ClientApp.sendRequest(new SubmitExamRequest(examForStudentExecution.getId(),correctAnswersList));
+        correctAnswersList.clear();
 
     }
 
