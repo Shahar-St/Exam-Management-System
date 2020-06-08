@@ -2,11 +2,13 @@ package org.args.Client;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.Exams.*;
+import DatabaseAccess.Requests.ExecuteExam.ExecuteExamRequest;
 import DatabaseAccess.Requests.LoginRequest;
 import DatabaseAccess.Requests.Questions.*;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
 import DatabaseAccess.Responses.Exams.AllExamsResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
+import DatabaseAccess.Responses.ExecuteExam.ExecuteExamResponse;
 import DatabaseAccess.Responses.ExecuteExam.TakeExamResponse;
 import DatabaseAccess.Responses.LoginResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
@@ -596,8 +598,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     @Override
-    public void deployExam(String examId, String examCode) {
-
+    public void executeExam(String examId, String examCode) {
+        ClientApp.sendRequest(new ExecuteExamRequest(examId,examCode));
     }
 
     /*used to represent the exams as strings in the list view in the format: -#id: content-
@@ -744,6 +746,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     //TODO: implement ITeacherExamExecutionData Methods
+    //Teacher Execute Exam Data
+
     @Override
     public void timeExtensionRequest(int minutes) {
 

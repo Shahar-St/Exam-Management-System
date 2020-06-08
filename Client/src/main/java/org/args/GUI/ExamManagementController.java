@@ -12,6 +12,7 @@ import org.args.Client.IExamManagementData;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ExamManagementController {
 
@@ -198,13 +199,36 @@ public class ExamManagementController {
         String examId = getExamIdFromSelected();
         if (examId != null)
         {
+            AtomicBoolean advance = new AtomicBoolean(false);
             TextInputDialog examCodeDialog = new TextInputDialog();
             examCodeDialog.setTitle("Exam Code");
-            examCodeDialog.setHeaderText("Exam Code");
             examCodeDialog.setContentText("Please enter exam code:");
 
-            Optional<String> result = examCodeDialog.showAndWait();
-            result.ifPresent(code -> model.deployExam(examId, code));
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            while (!advance.get())
+            {
+                Optional<String> result = examCodeDialog.showAndWait();
+                result.ifPresent(code ->
+                        {
+                            if (code.length() != 4) {
+                                alert.setHeaderText("Wrong number of digits");
+                                alert.setContentText("Please enter a 4-digit code!");
+                                alert.showAndWait();
+                            } else if (!ClientApp.isNumeric(code)) {
+                                alert.setHeaderText("Invalid exam code");
+                                alert.setContentText("Code must only contain 4 digits!");
+                                alert.showAndWait();
+                            }else
+                            {
+                                model.executeExam(examId, code);
+                                advance.set(true);
+                            }
+                        }
+                );
+                if (!result.isPresent())
+                    advance.set(true);
+            }
         }
     }
 
