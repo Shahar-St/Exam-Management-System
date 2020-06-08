@@ -41,11 +41,17 @@ public class ClientApp extends Application {
     // specify the server defaults
     private static String host = "127.0.0.1";
 
+    private static boolean isRunning;
+
     private static int port = 3000;
 
     private final String[] errors = {"SUCCESS", "UNAUTHORIZED", "NOT_FOUND", "NO_ACCESS", "WRONG_INFO"};
 
     private static Stack<String> lastScenes;
+
+    public static boolean isRunning() {
+        return isRunning;
+    }
 
     protected String getErrorMessage(int error_code) {
         return errors[error_code];
@@ -111,6 +117,7 @@ public class ClientApp extends Application {
     @Override
     public void start(Stage stage) {
         try {
+            isRunning = true;
             EventBus.getDefault().register(this);
             FXMLLoader loader = fxmlLoader("LoginScreen");
             scene = new Scene(loader.load());
@@ -119,7 +126,6 @@ public class ClientApp extends Application {
             stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
             stage.setResizable(false);
             stage.setTitle("HSTS");
-
             stage.show();
         } catch (Exception e) {
             System.out.println("Failed to start the app.. exiting: " + e.toString());
@@ -131,12 +137,15 @@ public class ClientApp extends Application {
 
     @Override
     public void stop() throws Exception {
+        isRunning=false;
         EventBus.getDefault().unregister(this);
         super.stop();
     }
 
     private void closeWindowEvent(WindowEvent event) {
         System.out.println("Window close request ...");
+        // set false
+        isRunning=false;
         try {
             client.closeConnection();
         } catch (IOException e) {

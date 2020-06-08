@@ -101,7 +101,7 @@ public class ViewExamController {
         TextField duration = new TextField(examDuration);
 
         assert pageView != null;
-        pageView.setPageCount(questionList.size());
+        pageView.setPageCount(questionList.size()+1);
         pageView.setCurrentPageIndex(0);
         pageView.setMaxPageIndicatorCount(5);
         pageView.setPageFactory((pageIndex) -> {

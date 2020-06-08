@@ -710,13 +710,15 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void handleTakeExamResponse(TakeExamResponse response){
         if(response.getStatus()==0){
             setExamForStudentExecution(response.getLightExam());
+            if(correctAnswersList == null)
+                correctAnswersList = new ArrayList<>();
+            else
+                correctAnswersList.clear();
         }
     }
 
     @Override
     public void storeAnswer(int questionNumber, int answerNumber) {
-        if(correctAnswersList == null)
-            correctAnswersList = new ArrayList<>();
         correctAnswersList.add(questionNumber,answerNumber);
     }
 
@@ -728,7 +730,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Override
     public void submitExam() {
         ClientApp.sendRequest(new SubmitExamRequest(examForStudentExecution.getId(),correctAnswersList));
-        correctAnswersList.clear();
 
     }
 
