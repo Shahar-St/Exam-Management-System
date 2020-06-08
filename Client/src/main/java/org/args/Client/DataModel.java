@@ -41,10 +41,13 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private ClientApp app;
 
+    private WordGenerator wordGenerator;
+
     private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public DataModel(ClientApp clientApp) {
         app = clientApp;
+        wordGenerator = new WordGenerator();
         EventBus.getDefault().register(this);
     }
 
@@ -735,6 +738,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void raiseHand() {
+
+    }
+
+    @Override
+    public void createManualTest(){
 
     }
 

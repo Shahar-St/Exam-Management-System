@@ -11,4 +11,5 @@ public interface IStudentExamExecutionData {
     void raiseHand();
     LightExam getExamForStudentExecution();
     List<Integer> getCorrectAnswersList();
+    void createManualTest();
 }
