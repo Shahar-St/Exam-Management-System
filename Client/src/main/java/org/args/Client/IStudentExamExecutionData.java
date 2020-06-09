@@ -13,4 +13,5 @@ public interface IStudentExamExecutionData {
     LightExam getExamForStudentExecution();
     HashMap<Integer,Integer> getCorrectAnswersMap();
     void createManualTest(File path);
+    void setManualExamFile(File manualExamFile);
 }

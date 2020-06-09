@@ -204,6 +204,15 @@ public class ClientApp extends Application {
         }
     }
 
+    public static boolean isDouble(String str){
+        try {
+            Double.parseDouble(str);
+            return true;
+        }catch (NumberFormatException e){
+            return false;
+        }
+    }
+
 
     public static String getHost() {
         return host;
@@ -403,6 +412,15 @@ public class ClientApp extends Application {
             setRoot("MainScreen");
         }else{
             popUpAlert("Submission Failed, Please Try Again.");
+        }
+    }
+
+    @Subscribe
+    public void handleEvaluateManualExamResponse(EvaluateManualExamResponse response){
+        if(response.getStatus()==0){
+            setRoot("MainScreen");
+        }else{
+            popUpAlert("Evaluation Failed, Please Try Again.");
         }
     }
 

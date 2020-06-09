@@ -3,6 +3,7 @@ package org.args.Client;
 import javafx.collections.ObservableList;
 import org.args.GUI.StudentExamType;
 
+import java.io.File;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +19,10 @@ public interface IExamReviewData {
     ObservableList<String> getPendingExamsObservableList();
     void showPendingExamGrades(String examId);
     void loadPendingExams();
+    File getManualExamForReview();
+    String getManualExamForReviewStudentId();
+    void saveWordFile(File filePath);
+    void submitExamReview(double grade,String notes,File manualExamFile);
     ObservableList<StudentExamType> getStudentsGradesToReview();
 
     void reviewComputerizedExam(String id);
