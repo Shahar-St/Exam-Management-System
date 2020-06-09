@@ -34,7 +34,6 @@ import LightEntities.LightQuestion;
 import Util.Pair;
 import org.args.server.AbstractServer;
 import org.args.server.ConnectionToClient;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -42,7 +41,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-/**
+/*
  * Hello world!
  */
 public class ServerApp extends AbstractServer {
@@ -74,7 +73,7 @@ public class ServerApp extends AbstractServer {
         if (msg instanceof LoginRequest) {
             LoginRequest request = (LoginRequest) msg;
             try {
-                client.sendToClient(new LoginResponse(0, "student", "malki", request));
+                client.sendToClient(new LoginResponse(0, "dean", "malki", request));
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -398,7 +398,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         for (Double score : currentExam.getQuestionsScores()) {
             observableQuestionsScoringList.add(Double.toString(score));
         }
-
     }
 
 
@@ -467,7 +466,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         }
         return true;
     }
-
 
     public StringProperty currentExamTitleProperty() {
         return currentExamTitle;
