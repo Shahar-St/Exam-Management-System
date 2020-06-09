@@ -2,8 +2,10 @@ package org.args.Client;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.Exams.*;
+import DatabaseAccess.Requests.ExecuteExam.RaiseHandRequest;
 import DatabaseAccess.Requests.ExecuteExam.SubmitExamRequest;
 import DatabaseAccess.Requests.ExecuteExam.ExecuteExamRequest;
+import DatabaseAccess.Requests.ExecuteExam.TakeExamRequest;
 import DatabaseAccess.Requests.ExecuteExam.TimeExtensionRequest;
 import DatabaseAccess.Requests.LoginRequest;
 import DatabaseAccess.Requests.Questions.*;
@@ -27,10 +29,12 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import org.args.GUI.ClientApp;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -96,6 +100,16 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    @Override
+    public void studentTakeComputerizedExam(String examCode, String id) {
+        ClientApp.sendRequest(new TakeExamRequest(Integer.parseInt(id),examCode));
+    }
+
+    @Override
+    public void studentTakeManualExam(String code) {
+        ClientApp.sendRequest(new TakeExamRequest(0, code));
     }
 
     //question management - subjects and courses dropdowns and screen init
@@ -689,9 +703,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     //TODO: implement IStudentExamExecutionData methods
 
+    private boolean raisedHand = false;
+
     private LightExam examForStudentExecution;
 
-    private List<Integer> correctAnswersList;
+    private HashMap<Integer,Integer> correctAnswersMap;
 
     public LightExam getExamForStudentExecution() {
         return examForStudentExecution;
@@ -701,28 +717,28 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         this.examForStudentExecution = examForStudentExecution;
     }
 
-    public List<Integer> getCorrectAnswersList() {
-        return correctAnswersList;
+    public HashMap<Integer,Integer> getCorrectAnswersMap() {
+        return correctAnswersMap;
     }
 
-    public void setCorrectAnswersList(List<Integer> correctAnswersList) {
-        this.correctAnswersList = correctAnswersList;
+    public void setCorrectAnswersMap(HashMap<Integer,Integer> correctAnswersMap) {
+        this.correctAnswersMap = correctAnswersMap;
     }
 
     @Subscribe
     public void handleTakeExamResponse(TakeExamResponse response){
         if(response.getStatus()==0){
             setExamForStudentExecution(response.getLightExam());
-            if(correctAnswersList == null)
-                correctAnswersList = new ArrayList<>();
+            if(correctAnswersMap == null)
+                correctAnswersMap = new HashMap<>();
             else
-                correctAnswersList.clear();
+                correctAnswersMap.clear();
         }
     }
 
     @Override
     public void storeAnswer(int questionNumber, int answerNumber) {
-        correctAnswersList.add(questionNumber,answerNumber);
+        correctAnswersMap.put(questionNumber,answerNumber);
     }
 
     @Override
@@ -732,18 +748,52 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void submitExam() {
-        ClientApp.sendRequest(new SubmitExamRequest(examForStudentExecution.getId(),correctAnswersList));
+        List<Integer> correctAnswersList = new ArrayList<>();
+        for (Map.Entry<Integer,Integer> entry: getCorrectAnswersMap().entrySet())
+            correctAnswersList.add(entry.getKey(),entry.getValue());
+        ClientApp.sendRequest(new SubmitExamRequest(examForStudentExecution.getId(), correctAnswersList));
 
     }
 
     @Override
     public void raiseHand() {
+        if(!raisedHand){
+            ClientApp.sendRequest(new RaiseHandRequest());
+            raisedHand = true;
+            Platform.runLater(()->{
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("INFO");
+                alert.setHeaderText(null);
+                alert.setContentText("A Massage Has Been Sent To You're Teacher");
+                alert.show();
+            });
+        }else{
+            Platform.runLater(()->{
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("INFO");
+                alert.setHeaderText(null);
+                alert.setContentText("A Massage Has Been Sent Already, Please Wait To You're Teacher Response");
+                alert.show();
+            });
+        }
 
     }
 
     @Override
     public void createManualTest(){
+        // test of word generator
+        try {
+            wordGenerator.createWordFile(getExamForStudentExecution());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    @Subscribe
+    public void handleRaiseHandResponse(RaiseHandResponse response){
+        if(response.getStatus()==0){
+            raisedHand  = false;
+        }
     }
 
     //TODO: implement IExamData Method

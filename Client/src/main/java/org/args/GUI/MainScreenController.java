@@ -7,16 +7,20 @@ package org.args.GUI;
 import DatabaseAccess.Requests.ExecuteExam.TakeExamRequest;
 import DatabaseAccess.Requests.Statistics.TeacherStatisticsRequest;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
+import Util.Pair;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import org.args.Client.IMainScreenData;
 
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainScreenController {
 
@@ -136,9 +140,129 @@ public class MainScreenController {
     @FXML
     void switchToStudentExamExecutionScreen (ActionEvent event)
     {
-        // need to remove only for testing
-        ClientApp.sendRequest(new TakeExamRequest(111,"111"));
+        List<String> choices = new ArrayList<>();
+        choices.add("Computerized Exam");
+        choices.add("Manual Exam");
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("Computerized Exam", choices);
+        dialog.setTitle("Perform Exam");
+        dialog.setContentText("Select exam method:");
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(choice -> {
+            if(choice.equals("Computerized Exam"))
+            {
+                prepCompExam();
+            }
+            else
+                {
+                prepManualExam();
+            }
+
+        });
     }
+
+    private void prepManualExam() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Exam Code");
+        dialog.setContentText("Please enter exam code:");
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        AtomicBoolean advance = new AtomicBoolean(false);
+        while (!advance.get())
+        {
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(code -> {
+                if (result.toString().length() != 4) {
+                    alert.setHeaderText("Wrong number of digits");
+                    alert.setContentText("Please enter a 4-digit code!");
+                    alert.showAndWait();
+                } else if (!ClientApp.isNumeric(result.toString())) {
+                    alert.setHeaderText("Invalid exam code");
+                    alert.setContentText("Code must only contain digits!");
+                    alert.showAndWait();
+                }else {
+                    model.studentTakeManualExam(code);
+                    advance.set(true);
+                }
+            });
+            if (!result.isPresent())
+                advance.set(true);
+        }
+    }
+
+
+    void prepCompExam() {
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle("Personal Details");
+        dialog.setHeaderText("Please enter your personal details:");
+
+        ButtonType loginButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField code = new TextField();
+        code.setPromptText("Code");
+        TextField id = new TextField();
+        id.setPromptText("ID");
+
+        grid.add(new Label("Exam Code:"), 0, 0);
+        grid.add(code, 1, 0);
+        grid.add(new Label("ID:"), 0, 1);
+        grid.add(id, 1, 1);
+
+// Enable/Disable login button depending on whether a username was entered.
+        Node OkButton = dialog.getDialogPane().lookupButton(loginButtonType);
+        OkButton.setDisable(true);
+        code.textProperty().addListener((observable, oldValue, newValue) -> {
+            OkButton.setDisable(newValue.trim().isEmpty());
+        });
+        id.textProperty().addListener((observable, oldValue, newValue) -> {
+            OkButton.setDisable(newValue.trim().isEmpty());
+        });
+
+        dialog.getDialogPane().setContent(grid);
+        Platform.runLater(code::requestFocus);
+
+// Convert the result to a username-password-pair when the login button is clicked.
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == loginButtonType) {
+                return new Pair<>(code.getText(), id.getText());
+            }
+            return null;
+        });
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        AtomicBoolean advance = new AtomicBoolean(false);
+        while (!advance.get())
+        {
+            Optional<Pair<String, String>> result = dialog.showAndWait();
+            result.ifPresent(codeId -> {
+                if (codeId.getFirst().length() != 4) {
+                    alert.setHeaderText("Wrong number of digits");
+                    alert.setContentText("Please enter a 4-digit code!");
+                    alert.showAndWait();
+                } else if (!ClientApp.isNumeric(codeId.getFirst())) {
+                    alert.setHeaderText("Invalid exam code");
+                    alert.setContentText("Code must only contain digits!");
+                    alert.showAndWait();
+                } else if (!ClientApp.isNumeric(codeId.getSecond())) {
+                    alert.setHeaderText("Invalid ID");
+                    alert.setContentText("ID must only contain digits!");
+                    alert.showAndWait();
+                }
+                else {
+                    model.studentTakeComputerizedExam(codeId.getFirst(),codeId.getSecond());
+                    advance.set(true);
+                }
+            });
+            if (!result.isPresent())
+                advance.set(true);
+        }
+    }
+
     @FXML
     void switchToReportsScreen (ActionEvent event)
     {

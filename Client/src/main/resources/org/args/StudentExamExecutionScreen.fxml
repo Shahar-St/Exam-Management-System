@@ -1,10 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
 <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.StudentExamExecutionController">
    <content>
-      <Pagination fx:id="questionsPagination" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+      <VBox spacing="10.0">
+         <children>
+            <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="72.0" prefWidth="72.0">
+               <children>
+                  <VBox layoutX="213.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <ImageView fx:id="raiseHandImage" fitHeight="75.0" fitWidth="75.0" onMouseClicked="#onRaiseHandClicked" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../Assets/raiseHand.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                        <Label text="Raise Hand" underline="true" wrapText="true" />
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+            <Pagination fx:id="questionsPagination" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
    </content>
 </ScrollPane>
