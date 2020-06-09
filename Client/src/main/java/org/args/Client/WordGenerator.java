@@ -13,9 +13,9 @@ public class WordGenerator {
     /**
      * the method gets lightexam for execution and generates a word file contains the exam data.
      * **/
-    public void createWordFile(LightExam exam) throws IOException {
+    public void createWordFile(LightExam exam,File filePath) throws IOException {
         XWPFDocument document = new XWPFDocument();
-        FileOutputStream out = new FileOutputStream(new File(exam.getId() + "_" + "exam" + ".docx"));
+        FileOutputStream out = new FileOutputStream(filePath);
         XWPFParagraph title = document.createParagraph();
         title.setAlignment(ParagraphAlignment.CENTER);
         XWPFRun titleRun = title.createRun();

@@ -2,6 +2,7 @@ package org.args.Client;
 
 import LightEntities.LightExam;
 
+import java.io.File;
 import java.util.HashMap;
 
 public interface IStudentExamExecutionData {
@@ -11,5 +12,5 @@ public interface IStudentExamExecutionData {
     void raiseHand();
     LightExam getExamForStudentExecution();
     HashMap<Integer,Integer> getCorrectAnswersMap();
-    void createManualTest();
+    void createManualTest(File path);
 }

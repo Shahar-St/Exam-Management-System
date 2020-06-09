@@ -31,6 +31,7 @@ import org.args.GUI.ClientApp;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -107,6 +108,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Override
     public void studentTakeManualExam(String code) {
         ClientApp.sendRequest(new TakeExamRequest(0, code));
+        setManualExam(true);
     }
 
     //question management - subjects and courses dropdowns and screen init
@@ -679,9 +681,13 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private boolean raisedHand = false;
 
+    private boolean isManualExam = false;
+
     private LightExam examForStudentExecution;
 
     private HashMap<Integer,Integer> correctAnswersMap;
+
+    private File manualExamFile;
 
     public LightExam getExamForStudentExecution() {
         return examForStudentExecution;
@@ -695,8 +701,24 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return correctAnswersMap;
     }
 
+    public boolean isManualExam() {
+        return isManualExam;
+    }
+
+    public void setManualExam(boolean manualExam) {
+        isManualExam = manualExam;
+    }
+
     public void setCorrectAnswersMap(HashMap<Integer,Integer> correctAnswersMap) {
         this.correctAnswersMap = correctAnswersMap;
+    }
+
+    public File getManualExamFile() {
+        return manualExamFile;
+    }
+
+    public void setManualExamFile(File manualExamFile) {
+        this.manualExamFile = manualExamFile;
     }
 
     @Subscribe
@@ -722,10 +744,16 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void submitExam() {
-        List<Integer> correctAnswersList = new ArrayList<>();
-        for (Map.Entry<Integer,Integer> entry: getCorrectAnswersMap().entrySet())
-            correctAnswersList.add(entry.getKey(),entry.getValue());
-        ClientApp.sendRequest(new SubmitExamRequest(examForStudentExecution.getId(), correctAnswersList));
+        if(isManualExam()){
+            ClientApp.sendRequest(new SubmitManualExamRequest(getExamForStudentExecution().getId(),getManualExamFile()));
+            setManualExam(false);
+        }else {
+            List<Integer> correctAnswersList = new ArrayList<>();
+            for (Map.Entry<Integer, Integer> entry : getCorrectAnswersMap().entrySet())
+                correctAnswersList.add(entry.getKey(), entry.getValue());
+            ClientApp.sendRequest(new SubmitExamRequest(examForStudentExecution.getId(), correctAnswersList));
+        }
+
     }
 
     @Override
@@ -753,10 +781,10 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     @Override
-    public void createManualTest(){
+    public void createManualTest(File path){
         // test of word generator
         try {
-            wordGenerator.createWordFile(getExamForStudentExecution());
+            wordGenerator.createWordFile(getExamForStudentExecution(),path);
         } catch (IOException e) {
             e.printStackTrace();
         }

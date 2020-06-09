@@ -170,11 +170,11 @@ public class MainScreenController {
         {
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(code -> {
-                if (result.toString().length() != 4) {
+                if (result.get().length() != 4) {
                     alert.setHeaderText("Wrong number of digits");
                     alert.setContentText("Please enter a 4-digit code!");
                     alert.showAndWait();
-                } else if (!ClientApp.isNumeric(result.toString())) {
+                } else if (!ClientApp.isNumeric(result.get())) {
                     alert.setHeaderText("Invalid exam code");
                     alert.setContentText("Code must only contain digits!");
                     alert.showAndWait();
