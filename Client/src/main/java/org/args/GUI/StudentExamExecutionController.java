@@ -45,17 +45,17 @@ public class StudentExamExecutionController {
         questionsPagination.setPageFactory((pageIndex) -> {
             VBox details;
             if (pageIndex == 0) {
-                Label title_label = new Label("Exam Title:");
+                Label title_label = new Label("Title:");
 
                 Label title = new Label(model.getExamForStudentExecution().getTitle());
 
-                Label studentNotes_label = new Label("Student Notes:");
+                Label studentNotes_label = new Label("Notes:");
 
                 Label sNotes = new Label(model.getExamForStudentExecution().getStudentNotes());
 
-                Label duration_label = new Label("Exam Duration:");
+                Label duration_label = new Label("Duration:");
 
-                Label duration = new Label(String.valueOf(model.getExamForStudentExecution().getDurationInMinutes()));
+                Label duration = new Label(model.getExamForStudentExecution().getDurationInMinutes() +" Min");
 
                 title_label.setFont(Font.font(fontStyle, fontSize));
 
@@ -106,10 +106,6 @@ public class StudentExamExecutionController {
 
             answer2.setFont(Font.font(fontStyle, fontSize));
 
-            HBox ans12_hbox = new HBox(answer1, answer2);
-
-            ans12_hbox.setSpacing(mediumSpacing);
-
             RadioButton answer3 = new RadioButton(currentQuestion.getAnswers().get(2));
 
             answer3.setFont(Font.font(fontStyle, fontSize));
@@ -118,11 +114,11 @@ public class StudentExamExecutionController {
 
             answer4.setFont(Font.font(fontStyle, fontSize));
 
-            HBox ans34_hbox = new HBox(answer3, answer4);
+            Label questionScore = new Label("Question Score: "+model.getExamForStudentExecution().getQuestionsScores().get(pageIndex-1));
 
-            ans34_hbox.setSpacing(mediumSpacing);
+            questionScore.setFont(Font.font(fontStyle, fontSize));
 
-            details = new VBox(timeElapsed,content_label, questionContent, ans12_hbox, ans34_hbox);
+            details = new VBox(timeElapsed,content_label, questionContent,answer1,answer2,answer3,answer4,questionScore);
 
             details.setSpacing(largeSpacing);
 
@@ -152,8 +148,8 @@ public class StudentExamExecutionController {
                 model.storeAnswer(pageIndex - 1, 3);
             });
 
-            if (model.getCorrectAnswersList() != null && model.getCorrectAnswersList().size() >= pageIndex) {
-                switch (model.getCorrectAnswersList().get(pageIndex - 1)) {
+            if (model.getCorrectAnswersMap() != null && model.getCorrectAnswersMap().get(pageIndex-1)!=null) {
+                switch (model.getCorrectAnswersMap().get(pageIndex - 1)) {
                     case 0:
                         answer1.setSelected(true);
                         break;
@@ -173,7 +169,7 @@ public class StudentExamExecutionController {
                 done.setText("Done");
                 done.setFont(Font.font(fontStyle, fontSize));
                 done.setOnMouseClicked(e ->{
-                    if(model.getExamForStudentExecution().getLightQuestionList().size()>model.getCorrectAnswersList().size()){
+                    if(model.getExamForStudentExecution().getLightQuestionList().size()>model.getCorrectAnswersMap().size()){
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Attention!");
                         alert.setHeaderText("Attention! , Please Confirm the following:");
@@ -189,7 +185,7 @@ public class StudentExamExecutionController {
 
 
                 });
-                details = new VBox(timeElapsed, content_label, questionContent, ans12_hbox, ans34_hbox, done);
+                details = new VBox(timeElapsed, content_label, questionContent, answer1,answer2,answer3,answer4,questionScore,done);
                 details.setSpacing(largeSpacing);
             }
 
@@ -223,7 +219,14 @@ public class StudentExamExecutionController {
                     timer.purge();
                     // submit and quit
                     model.submitExam();
-                    ClientApp.setRoot("MainScreen"); // redirect client to main screen because of exam timeout.
+                    Platform.runLater(()->{
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Attention!");
+                        alert.setContentText("Attention!, Exam Time Has Ended, You're Exam Has Been Submitted And You're Now Being Redirected To Main Screen");
+                        alert.showAndWait();
+                        ClientApp.setRoot("MainScreen"); // redirect client to main screen because of exam timeout.
+                    });
+
                     return;
                 }
                 Platform.runLater(() -> timeElapsed.setText("Remaining Time: " + (examDuration / 60) + ":" + (examDuration % 60)));

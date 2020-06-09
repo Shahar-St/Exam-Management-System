@@ -692,7 +692,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private LightExam examForStudentExecution;
 
-    private List<Integer> correctAnswersList;
+    private HashMap<Integer,Integer> correctAnswersMap;
 
     public LightExam getExamForStudentExecution() {
         return examForStudentExecution;
@@ -702,28 +702,28 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         this.examForStudentExecution = examForStudentExecution;
     }
 
-    public List<Integer> getCorrectAnswersList() {
-        return correctAnswersList;
+    public HashMap<Integer,Integer> getCorrectAnswersMap() {
+        return correctAnswersMap;
     }
 
-    public void setCorrectAnswersList(List<Integer> correctAnswersList) {
-        this.correctAnswersList = correctAnswersList;
+    public void setCorrectAnswersMap(HashMap<Integer,Integer> correctAnswersMap) {
+        this.correctAnswersMap = correctAnswersMap;
     }
 
     @Subscribe
     public void handleTakeExamResponse(TakeExamResponse response){
         if(response.getStatus()==0){
             setExamForStudentExecution(response.getLightExam());
-            if(correctAnswersList == null)
-                correctAnswersList = new ArrayList<>();
+            if(correctAnswersMap == null)
+                correctAnswersMap = new HashMap<>();
             else
-                correctAnswersList.clear();
+                correctAnswersMap.clear();
         }
     }
 
     @Override
     public void storeAnswer(int questionNumber, int answerNumber) {
-        correctAnswersList.add(questionNumber,answerNumber);
+        correctAnswersMap.put(questionNumber,answerNumber);
     }
 
     @Override
@@ -739,7 +739,10 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ClientApp.sendRequest(new SubmitExamRequest(examForStudentExecution.getId(),correctAnswersList));
+        List<Integer> correctAnswersList = new ArrayList<>();
+        for (Map.Entry<Integer,Integer> entry: getCorrectAnswersMap().entrySet())
+            correctAnswersList.add(entry.getKey(),entry.getValue());
+        ClientApp.sendRequest(new SubmitExamRequest(examForStudentExecution.getId(), correctAnswersList));
 
     }
 

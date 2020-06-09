@@ -2,6 +2,7 @@ package org.args.Client;
 
 import LightEntities.LightExam;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface IStudentExamExecutionData {
@@ -10,6 +11,6 @@ public interface IStudentExamExecutionData {
     void submitExam();
     void raiseHand();
     LightExam getExamForStudentExecution();
-    List<Integer> getCorrectAnswersList();
+    HashMap<Integer,Integer> getCorrectAnswersMap();
     void createManualTest();
 }
