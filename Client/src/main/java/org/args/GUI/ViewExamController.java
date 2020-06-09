@@ -1,5 +1,5 @@
-/**
- * Sample Skeleton for 'ViewExamScreen.fxml' Controller Class
+/*
+  Sample Skeleton for 'ViewExamScreen.fxml' Controller Class
  */
 
 package org.args.GUI;
@@ -21,7 +21,7 @@ public class ViewExamController {
 
     private IExamData model;
 
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     void setModel(IExamData dataModel) {
         if (model == null) {
@@ -179,9 +179,6 @@ public class ViewExamController {
 
             return new VBox(date_label, lastModified, author_label, author, content_label, content, ans1_label, answer1, ans2_label,
                     answer2, ans3_label, answer3, ans4_label, answer4, score_label, score);
-
-
-
         });
 
     }

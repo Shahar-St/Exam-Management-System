@@ -38,8 +38,8 @@ public class ExamDetailsController {
     String origStudentNote;
     String origTeacherNote;
     String origDuration;
-    List<String> origQuestions = new ArrayList<>();
-    List<String> origScores = new ArrayList<>();
+    final List<String> origQuestions = new ArrayList<>();
+    final List<String> origScores = new ArrayList<>();
 
     private IExamData model;
 

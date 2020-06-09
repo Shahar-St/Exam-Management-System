@@ -6,10 +6,7 @@ import DatabaseAccess.Responses.Exams.AddExamResponse;
 import DatabaseAccess.Responses.Exams.DeleteExamResponse;
 import DatabaseAccess.Responses.Exams.EditExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
-import DatabaseAccess.Responses.ExecuteExam.ExecuteExamResponse;
-import DatabaseAccess.Responses.ExecuteExam.RaiseHandResponse;
-import DatabaseAccess.Responses.ExecuteExam.TakeExamResponse;
-import DatabaseAccess.Responses.ExecuteExam.TimeExtensionResponse;
+import DatabaseAccess.Responses.ExecuteExam.*;
 import DatabaseAccess.Responses.Questions.*;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import javafx.application.Application;
@@ -48,6 +45,8 @@ public class ClientApp extends Application {
     private final String[] errors = {"SUCCESS", "UNAUTHORIZED", "NOT_FOUND", "NO_ACCESS", "WRONG_INFO"};
 
     private static Stack<String> lastScenes;
+
+    public static Stage primaryStage;
 
     public static boolean isRunning() {
         return isRunning;
@@ -117,6 +116,7 @@ public class ClientApp extends Application {
     @Override
     public void start(Stage stage) {
         try {
+            primaryStage=stage;
             isRunning = true;
             EventBus.getDefault().register(this);
             FXMLLoader loader = fxmlLoader("LoginScreen");
@@ -200,6 +200,15 @@ public class ClientApp extends Application {
             Integer.parseInt(str);
             return true;
         } catch(NumberFormatException e){
+            return false;
+        }
+    }
+
+    public static boolean isDouble(String str){
+        try {
+            Double.parseDouble(str);
+            return true;
+        }catch (NumberFormatException e){
             return false;
         }
     }
@@ -366,7 +375,12 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleStudentTakeExamResponse(TakeExamResponse response){
         if(response.getStatus() == 0){
-            setRoot("StudentExamExecutionScreen");
+            if(model.isManualExam()){
+                setRoot("StudentManualExamScreen");
+            }else{
+                setRoot("StudentExamExecutionScreen");
+            }
+
         }else{
             popUpAlert("Something went wrong while trying to take exam."+getErrorMessage(response.getStatus()));
         }
@@ -390,6 +404,24 @@ public class ClientApp extends Application {
     public void handleRaisedHandResponse(RaiseHandResponse response)
     {
 
+    }
+
+    @Subscribe
+    public void handleSubmitManualExamResponse(SubmitManualExamResponse response){
+        if(response.getStatus()==0){
+            setRoot("MainScreen");
+        }else{
+            popUpAlert("Submission Failed, Please Try Again.");
+        }
+    }
+
+    @Subscribe
+    public void handleEvaluateManualExamResponse(EvaluateManualExamResponse response){
+        if(response.getStatus()==0){
+            setRoot("MainScreen");
+        }else{
+            popUpAlert("Evaluation Failed, Please Try Again.");
+        }
     }
 
 }

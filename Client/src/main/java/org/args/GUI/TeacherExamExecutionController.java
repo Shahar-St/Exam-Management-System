@@ -1,6 +1,5 @@
 package org.args.GUI;
 
-import DatabaseAccess.Requests.ExecuteExam.RaiseHandRequest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

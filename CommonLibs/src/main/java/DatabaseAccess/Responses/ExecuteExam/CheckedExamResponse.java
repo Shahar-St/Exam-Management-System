@@ -8,15 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 
 public class CheckedExamResponse extends DatabaseResponse {
-    //HashMap<studentID,Pair(answersList,Grade)>
-    private final HashMap<String, Pair<List<Integer>,Double>> checkedExamsList;
+    //HashMap<studentID,isComputerized>
+    private final HashMap<String, Boolean> checkedExamsList;
 
-    public CheckedExamResponse(int status, DatabaseRequest request, HashMap<String, Pair<List<Integer>, Double>> checkedExamsList) {
+    public CheckedExamResponse(int status, DatabaseRequest request, HashMap<String, Boolean> checkedExamsList) {
         super(status, request);
         this.checkedExamsList = checkedExamsList;
     }
-
-    public HashMap<String, Pair<List<Integer>, Double>> getCheckedExamsList() {
+    public HashMap<String, Boolean> getCheckedExamsList() {
         return checkedExamsList;
     }
+
 }

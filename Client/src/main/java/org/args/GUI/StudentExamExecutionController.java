@@ -20,7 +20,7 @@ public class StudentExamExecutionController {
 
     private IStudentExamExecutionData model;
 
-    private Label timeElapsed = new Label();
+    private final Label timeElapsed = new Label();
 
     private int examDuration;
 

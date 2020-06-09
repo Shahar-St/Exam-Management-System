@@ -1,24 +1,20 @@
-/**
- * Sample Skeleton for 'MainScreen.fxml' Controller Class
+/*
+  Sample Skeleton for 'MainScreen.fxml' Controller Class
  */
 
 package org.args.GUI;
 
-import DatabaseAccess.Requests.ExecuteExam.TakeExamRequest;
-import DatabaseAccess.Requests.Statistics.TeacherStatisticsRequest;
-import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
 import Util.Pair;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import org.args.Client.IMainScreenData;
-
 import java.io.IOException;
+
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -34,10 +30,14 @@ public class MainScreenController {
     private Button button3;
 
     @FXML
+    private Button button4;
+
+
+    @FXML
     private Label welcomeLabel;
 
     @FXML
-    void switchToQuestionManagement(ActionEvent event) throws IOException {
+    void switchToQuestionManagement(ActionEvent event) {
         model.loadSubjects();
         ClientApp.setRoot("QuestionManagementScreen");
     }
@@ -54,7 +54,7 @@ public class MainScreenController {
     {
         Date dt = new Date();
         int hours = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        String greeting = null;
+        String greeting;
         if (hours >= 5 && hours <= 12) {
             greeting = "Good Morning";
         } else if (hours >= 12 && hours < 16) {
@@ -68,20 +68,18 @@ public class MainScreenController {
         welcomeLabel.setText(fullGreeting);
     }
 
-    private void initTeacher() throws IOException
-    {
+    private void initTeacher() {
         button1.setText("Question Management");
-        button1.setOnAction(event -> {
-            try {
-                switchToQuestionManagement(event);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        button1.setOnAction(this::switchToQuestionManagement);
         button2.setText("Statistical Analysis");
         button2.setOnAction(this::switchToStatsScreen);
         button3.setText("Exam Management");
         button3.setOnAction(this::switchToExamManagementScreen);
+        button4.setOnAction(this::switchToPendingScreen);
+    }
+
+    private void switchToPendingScreen(ActionEvent event) {
+        ClientApp.setRoot("TeacherPendingExamsScreen");
     }
 
     private void initStudent()
@@ -91,21 +89,22 @@ public class MainScreenController {
         button2.setText("Past Exams");
         button2.setOnAction(this::switchToStatsScreen);
         button3.setVisible(false);
+        button4.setVisible(false);
     }
 
     private void initDean()
     {
         button1.setText("Statistical Analysis");
         button1.setOnAction(this::switchToStatsScreen);
-        button2.setText("View Reports");
-        button2.setOnAction(this::switchToReportsScreen);
-        button3.setText("Pending Requests");
-        button3.setOnAction(this::switchToExtensionRequestsScreen);
+        button2.setText("Time Extensions");
+        button2.setOnAction(this::switchToExtensionRequestsScreen);
+        button3.setVisible(false);
+        button4.setVisible(false);
     }
 
 
 
-    private void initAccordingToPermission() throws IOException {
+    private void initAccordingToPermission() {
         switch (model.getPermission()){
             case "teacher":
                 initTeacher();
@@ -120,7 +119,7 @@ public class MainScreenController {
     }
 
     @FXML
-    public void initialize() throws IOException {
+    public void initialize() {
         setModel(ClientApp.getModel());
         generateGreeting();
         initAccordingToPermission();
@@ -171,11 +170,11 @@ public class MainScreenController {
         {
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(code -> {
-                if (result.toString().length() != 4) {
+                if (result.get().length() != 4) {
                     alert.setHeaderText("Wrong number of digits");
                     alert.setContentText("Please enter a 4-digit code!");
                     alert.showAndWait();
-                } else if (!ClientApp.isNumeric(result.toString())) {
+                } else if (!ClientApp.isNumeric(result.get())) {
                     alert.setHeaderText("Invalid exam code");
                     alert.setContentText("Code must only contain digits!");
                     alert.showAndWait();
@@ -184,7 +183,7 @@ public class MainScreenController {
                     advance.set(true);
                 }
             });
-            if (!result.isPresent())
+            if (result.isEmpty())
                 advance.set(true);
         }
     }
@@ -216,12 +215,8 @@ public class MainScreenController {
 // Enable/Disable login button depending on whether a username was entered.
         Node OkButton = dialog.getDialogPane().lookupButton(loginButtonType);
         OkButton.setDisable(true);
-        code.textProperty().addListener((observable, oldValue, newValue) -> {
-            OkButton.setDisable(newValue.trim().isEmpty());
-        });
-        id.textProperty().addListener((observable, oldValue, newValue) -> {
-            OkButton.setDisable(newValue.trim().isEmpty());
-        });
+        code.textProperty().addListener((observable, oldValue, newValue) -> OkButton.setDisable(newValue.trim().isEmpty()));
+        id.textProperty().addListener((observable, oldValue, newValue) -> OkButton.setDisable(newValue.trim().isEmpty()));
 
         dialog.getDialogPane().setContent(grid);
         Platform.runLater(code::requestFocus);
@@ -258,7 +253,7 @@ public class MainScreenController {
                     advance.set(true);
                 }
             });
-            if (!result.isPresent())
+            if (result.isEmpty())
                 advance.set(true);
         }
     }
@@ -271,7 +266,7 @@ public class MainScreenController {
     @FXML
     void switchToExtensionRequestsScreen (ActionEvent event)
     {
-        ClientApp.setRoot("ExtensionRequestsScreen");
+        ClientApp.setRoot("ViewDeanTimeExtensionScreen");
     }
 
 }
