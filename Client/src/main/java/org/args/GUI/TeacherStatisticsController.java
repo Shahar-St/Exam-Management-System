@@ -49,10 +49,6 @@ public class TeacherStatisticsController {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         gradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
         gradesTableView.setItems(studentsGrades);
-
-
-
-
     }
 
     private void setModel(ITeacherViewStatsData newModel){

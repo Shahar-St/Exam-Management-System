@@ -179,9 +179,6 @@ public class ViewExamController {
 
             return new VBox(date_label, lastModified, author_label, author, content_label, content, ans1_label, answer1, ans2_label,
                     answer2, ans3_label, answer3, ans4_label, answer4, score_label, score);
-
-
-
         });
 
     }

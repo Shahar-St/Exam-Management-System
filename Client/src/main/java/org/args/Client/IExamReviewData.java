@@ -1,6 +1,7 @@
 package org.args.Client;
 
 import javafx.collections.ObservableList;
+import org.args.GUI.StudentExamType;
 
 import java.util.List;
 import java.util.Set;
@@ -17,4 +18,9 @@ public interface IExamReviewData {
     ObservableList<String> getPendingExamsObservableList();
     void showPendingExamGrades(String examId);
     void loadPendingExams();
+    ObservableList<StudentExamType> getStudentsGradesToReview();
+
+    void reviewComputerizedExam(String id);
+
+    void reviewManualExam(String id);
 }
