@@ -8,10 +8,7 @@ import DatabaseAccess.Requests.Questions.*;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
 import DatabaseAccess.Responses.Exams.AllExamsResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
-import DatabaseAccess.Responses.ExecuteExam.CheckedExamResponse;
-import DatabaseAccess.Responses.ExecuteExam.PendingExamResponse;
-import DatabaseAccess.Responses.ExecuteExam.RaiseHandResponse;
-import DatabaseAccess.Responses.ExecuteExam.TakeExamResponse;
+import DatabaseAccess.Responses.ExecuteExam.*;
 import DatabaseAccess.Responses.LoginResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
 import DatabaseAccess.Responses.Questions.QuestionResponse;
@@ -903,15 +900,12 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void handlePendingExamResponse(PendingExamResponse response) {
         if (response.getStatus() == 0) {
             for (Map.Entry<String, Pair<String, LocalDateTime>> entry : response.getCheckedExamsList().entrySet()) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        String examId = entry.getKey();
-                        String examTitle = entry.getValue().getFirst();
-                        String examDate = entry.getValue().getSecond().toString();
-                        String fullExamDescription = "#" + examId + ":" + examTitle + " from " + examDate;
-                        pendingExamsObservableList.add(fullExamDescription);
-                    }
+                Platform.runLater(() -> {
+                    String examId = entry.getKey();
+                    String examTitle = entry.getValue().getFirst();
+                    String examDate = entry.getValue().getSecond().toString();
+                    String fullExamDescription = "#" + examId + ":" + examTitle + " from " + examDate;
+                    pendingExamsObservableList.add(fullExamDescription);
                 });
             }
         }
@@ -961,6 +955,14 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void submitExamReview(double grade,String notes,File manualExamFile){
         ClientApp.sendRequest(new EvaluateManualExamRequest(grade,notes,manualExamFile));
 
+    }
+
+    @Subscribe
+    public void handleEvaluateManualExamResponse(EvaluateManualExamResponse response){
+        if(response.getStatus()==0){
+            // clean all the relevant attributes
+
+        }
     }
 
     ObservableList<StudentExamType> studentsGradesToReview = FXCollections.observableArrayList();

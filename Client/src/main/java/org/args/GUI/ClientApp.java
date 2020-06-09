@@ -415,4 +415,13 @@ public class ClientApp extends Application {
         }
     }
 
+    @Subscribe
+    public void handleEvaluateManualExamResponse(EvaluateManualExamResponse response){
+        if(response.getStatus()==0){
+            setRoot("MainScreen");
+        }else{
+            popUpAlert("Evaluation Failed, Please Try Again.");
+        }
+    }
+
 }
