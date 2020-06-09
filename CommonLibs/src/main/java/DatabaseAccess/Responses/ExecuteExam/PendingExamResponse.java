@@ -18,6 +18,7 @@ public class PendingExamResponse extends DatabaseResponse {
     }
 
     public HashMap<String, Pair<String, LocalDateTime>> getCheckedExamsList() {
+
         return checkedExamsList;
     }
 }

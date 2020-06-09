@@ -2,16 +2,13 @@ package org.args.Client;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.Exams.*;
-import DatabaseAccess.Requests.ExecuteExam.RaiseHandRequest;
-import DatabaseAccess.Requests.ExecuteExam.SubmitExamRequest;
-import DatabaseAccess.Requests.ExecuteExam.ExecuteExamRequest;
-import DatabaseAccess.Requests.ExecuteExam.TakeExamRequest;
-import DatabaseAccess.Requests.ExecuteExam.TimeExtensionRequest;
+import DatabaseAccess.Requests.ExecuteExam.*;
 import DatabaseAccess.Requests.LoginRequest;
 import DatabaseAccess.Requests.Questions.*;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
 import DatabaseAccess.Responses.Exams.AllExamsResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
+import DatabaseAccess.Responses.ExecuteExam.PendingExamResponse;
 import DatabaseAccess.Responses.ExecuteExam.RaiseHandResponse;
 import DatabaseAccess.Responses.ExecuteExam.TakeExamResponse;
 import DatabaseAccess.Responses.LoginResponse;
@@ -731,7 +728,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         for (Map.Entry<Integer,Integer> entry: getCorrectAnswersMap().entrySet())
             correctAnswersList.add(entry.getKey(),entry.getValue());
         ClientApp.sendRequest(new SubmitExamRequest(examForStudentExecution.getId(), correctAnswersList));
-
     }
 
     @Override
@@ -868,5 +864,44 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Override
     public void changeGrade(double newGrade, String reason, String examId) {
 
+    }
+
+    //Teacher pending exams data
+
+    ObservableList<String> pendingExamsObservableList = FXCollections.observableArrayList();
+
+    public ObservableList<String> getPendingExamsObservableList() {
+        return pendingExamsObservableList;
+    }
+
+    @Subscribe
+    public void handlePendingExamResponse(PendingExamResponse response)
+    {
+        if (response.getStatus() == 0)
+        {
+            for(Map.Entry<String, Pair<String, LocalDateTime>> entry : response.getCheckedExamsList().entrySet())
+            {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        String examId = entry.getKey();
+                        String examTitle = entry.getValue().getFirst();
+                        String examDate = entry.getValue().getSecond().toString();
+                        String fullExamDescription = "#"+examId+":"+examTitle+" from "+examDate;
+                        pendingExamsObservableList.add(fullExamDescription);
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
+    public void showPendingExamGrades(String examId) {
+        ClientApp.sendRequest(new CheckedExamRequest(examId));
+    }
+
+    @Override
+    public void loadPendingExams() {
+        ClientApp.sendRequest(new PendingExamRequest());
     }
 }

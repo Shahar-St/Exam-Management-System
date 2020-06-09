@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import org.args.Client.IMainScreenData;
+import java.io.IOException;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -27,6 +28,10 @@ public class MainScreenController {
 
     @FXML
     private Button button3;
+
+    @FXML
+    private Button button4;
+
 
     @FXML
     private Label welcomeLabel;
@@ -70,6 +75,11 @@ public class MainScreenController {
         button2.setOnAction(this::switchToStatsScreen);
         button3.setText("Exam Management");
         button3.setOnAction(this::switchToExamManagementScreen);
+        button4.setOnAction(this::switchToPendingScreen);
+    }
+
+    private void switchToPendingScreen(ActionEvent event) {
+        ClientApp.setRoot("TeacherPendingExamsScreen");
     }
 
     private void initStudent()
@@ -79,16 +89,17 @@ public class MainScreenController {
         button2.setText("Past Exams");
         button2.setOnAction(this::switchToStatsScreen);
         button3.setVisible(false);
+        button4.setVisible(false);
     }
 
     private void initDean()
     {
         button1.setText("Statistical Analysis");
         button1.setOnAction(this::switchToStatsScreen);
-        button2.setText("View Reports");
-        button2.setOnAction(this::switchToReportsScreen);
-        button3.setText("Pending Requests");
-        button3.setOnAction(this::switchToExtensionRequestsScreen);
+        button2.setText("Time Extensions");
+        button2.setOnAction(this::switchToExtensionRequestsScreen);
+        button3.setVisible(false);
+        button4.setVisible(false);
     }
 
 
@@ -255,7 +266,7 @@ public class MainScreenController {
     @FXML
     void switchToExtensionRequestsScreen (ActionEvent event)
     {
-        ClientApp.setRoot("ExtensionRequestsScreen");
+        ClientApp.setRoot("ViewDeanTimeExtensionScreen");
     }
 
 }
