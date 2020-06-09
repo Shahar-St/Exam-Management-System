@@ -43,11 +43,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         IDeanViewStatsData, IStudentViewStatsData, IExamData, IDeanExamExecutionData,
         ITeacherViewStatsData, IExamManagementData, IExamReviewData , ITeacherExecuteExamData{
 
-    private ClientApp app;
+    private final ClientApp app;
 
-    private WordGenerator wordGenerator;
+    private final WordGenerator wordGenerator;
 
-    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public DataModel(ClientApp clientApp) {
         app = clientApp;
@@ -193,24 +193,14 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     private final ObservableList<String> observableQuestionsList = FXCollections.observableArrayList();
 
     private void addToObservableQuestionsList(String text) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                observableQuestionsList.add(text);
-            }
-        });
+        Platform.runLater(() -> observableQuestionsList.add(text));
     }
 
     @Subscribe
     public void handleAllQuestionsResponse(AllQuestionsResponse response) {
         if (response.getStatus() == 0) {
             if (observableQuestionsList.size() > 0) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        observableQuestionsList.clear();
-                    }
-                });
+                Platform.runLater(observableQuestionsList::clear);
             }
             generateQuestionDescriptors(response.getQuestionList());
         }
@@ -333,7 +323,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     public void saveQuestion(String questionId, String answer_1, String answer_2, String answer_3, String answer_4, String newContent) {
-        DatabaseRequest request = null;
+        DatabaseRequest request;
         if(isCreating){
              request = new AddQuestionRequest(newContent, Arrays.asList(answer_1, answer_2, answer_3, answer_4), correctAnswer,currentCourseId);
 
@@ -536,26 +526,20 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void addToExamQuestionsList(String question) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                observableExamQuestionsList.add(question);
-                // check if new score need to be added
-                if(observableExamQuestionsList.size()>observableQuestionsScoringList.size())
-                    observableQuestionsScoringList.add("0");
-            }
+        Platform.runLater(() -> {
+            observableExamQuestionsList.add(question);
+            // check if new score need to be added
+            if(observableExamQuestionsList.size()>observableQuestionsScoringList.size())
+                observableQuestionsScoringList.add("0");
         });
 
     }
 
     @Override
     public void removeFromExamQuestionsList(String question) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                observableQuestionsScoringList.remove(observableExamQuestionsList.indexOf(question));
-                observableExamQuestionsList.remove(question);
-            }
+        Platform.runLater(() -> {
+            observableQuestionsScoringList.remove(observableExamQuestionsList.indexOf(question));
+            observableExamQuestionsList.remove(question);
         });
 
     }
@@ -631,12 +615,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     private void addToObservableExamList(String text) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                observableExamList.add(text);
-            }
-        });
+        Platform.runLater(() -> observableExamList.add(text));
     }
 
 
@@ -823,7 +802,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     String currentExecutedExamLaunchTime;
     String currentExecutedExamTitle;
-    ObservableList<String> currentHandsRaised = FXCollections.observableArrayList();
+    final ObservableList<String> currentHandsRaised = FXCollections.observableArrayList();
 
     public ObservableList<String> getCurrentHandsRaised() {
         return currentHandsRaised;
@@ -859,22 +838,12 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Subscribe
     public void handleRaisedHandResponse(RaiseHandResponse response)
     {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                currentHandsRaised.add(response.getStudentName());
-            }
-        });
+        Platform.runLater(() -> currentHandsRaised.add(response.getStudentName()));
     }
 
     @Override
     public void solveRaisedHand(String currentStudentName) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                currentHandsRaised.remove(currentStudentName);
-            }
-        });
+        Platform.runLater(() -> currentHandsRaised.remove(currentStudentName));
     }
 
     //TODO: implement IDeanExamExecutionData method NOTE: the request should be other type then String!!

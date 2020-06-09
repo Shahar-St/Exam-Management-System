@@ -3,7 +3,6 @@ package org.args.Client;
 import LightEntities.LightExam;
 
 import java.util.HashMap;
-import java.util.List;
 
 public interface IStudentExamExecutionData {
     void storeAnswer(int questionNumber,int answerNumber);

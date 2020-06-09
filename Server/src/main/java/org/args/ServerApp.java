@@ -114,7 +114,7 @@ public class ServerApp extends AbstractServer {
 
         } else if (msg instanceof AllQuestionsRequest) {
             AllQuestionsRequest request = (AllQuestionsRequest) msg;
-            HashMap<String, Pair<LocalDateTime, String>> response = new HashMap<String, Pair<LocalDateTime, String>>();
+            HashMap<String, Pair<LocalDateTime, String>> response = new HashMap<>();
             response.put("1", new Pair<>(LocalDateTime.now(), "Shela " + counter++));
             response.put("2", new Pair<>(LocalDateTime.now(), "Shela " + counter++));
             response.put("3", new Pair<>(LocalDateTime.now(), "Shela " + counter++));

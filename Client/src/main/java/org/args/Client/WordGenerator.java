@@ -7,11 +7,9 @@ import org.apache.poi.xwpf.usermodel.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
 
 public class WordGenerator {
 
-    private final int fontSize = 14;
     /**
      * the method gets lightexam for execution and generates a word file contains the exam data.
      * **/
@@ -23,6 +21,7 @@ public class WordGenerator {
         XWPFRun titleRun = title.createRun();
         titleRun.setText(exam.getTitle());
         titleRun.addCarriageReturn();
+        int fontSize = 14;
         titleRun.setFontSize(fontSize);
         titleRun.setBold(true);
         titleRun.setUnderline(UnderlinePatterns.SINGLE);

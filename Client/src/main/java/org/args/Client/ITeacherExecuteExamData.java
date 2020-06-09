@@ -4,10 +4,10 @@ import javafx.collections.ObservableList;
 
 public interface ITeacherExecuteExamData {
     
-    public String getCurrentExecutedExamTitle();
-    public String getCurrentExecutedExamLaunchTime();
+    String getCurrentExecutedExamTitle();
+    String getCurrentExecutedExamLaunchTime();
     void sendTimeExtensionRequest(int parseInt, String text);
-    public ObservableList<String> getCurrentHandsRaised();
+    ObservableList<String> getCurrentHandsRaised();
 
     void solveRaisedHand(String currentStudentName);
 }

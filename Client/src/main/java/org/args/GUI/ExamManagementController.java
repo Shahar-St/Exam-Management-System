@@ -46,7 +46,7 @@ public class ExamManagementController {
         this.model = model;
     }
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     @FXML
     private void bindButtonVisibility() {
@@ -86,7 +86,7 @@ public class ExamManagementController {
     }
 
     @FXML
-    public EventHandler<ActionEvent> displayCoursesFromSubject = new EventHandler<ActionEvent>() {
+    public final EventHandler<ActionEvent> displayCoursesFromSubject = new EventHandler<>() {
         @Override
         public void handle(ActionEvent event) {
             initializeCoursesDropdown();
@@ -117,14 +117,11 @@ public class ExamManagementController {
     @FXML
     public void addCourseToDropdown(String courseName) {
         MenuItem course = new MenuItem(courseName);
-        course.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                String text = ((MenuItem) event.getSource()).getText();
-                coursesDropdown.setText(text);
-                model.setCurrentCourseId(text.substring(0, 2));
-                model.fillExamList(text.substring(0, 2));
-            }
+        course.setOnAction(event -> {
+            String text = ((MenuItem) event.getSource()).getText();
+            coursesDropdown.setText(text);
+            model.setCurrentCourseId(text.substring(0, 2));
+            model.fillExamList(text.substring(0, 2));
         });
         coursesDropdown.getItems().add(course);
     }
@@ -230,7 +227,7 @@ public class ExamManagementController {
                             }
                         }
                 );
-                if (!result.isPresent())
+                if (result.isEmpty())
                     advance.set(true);
             }
         }
