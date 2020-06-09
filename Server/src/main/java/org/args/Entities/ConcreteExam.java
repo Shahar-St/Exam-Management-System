@@ -27,13 +27,16 @@ public class ConcreteExam {
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     private List<ExecutedExam> executedExamsList = new ArrayList<>();
 
+    private String examCode;
+
     //Group c'tors
 
     public ConcreteExam() { }
 
-    public ConcreteExam(Exam exam, Teacher tester) {
+    public ConcreteExam(Exam exam, Teacher tester, String examCode) {
         this.setExam(exam);
         this.setTester(tester);
+        this.examCode = examCode;
     }
 
     public void addExecutedExam(ExecutedExam executedExam) {
@@ -73,4 +76,7 @@ public class ConcreteExam {
         this.executedExamsList = executedExamsList;
     }
 
+    public String getExamCode() {
+        return examCode;
+    }
 }

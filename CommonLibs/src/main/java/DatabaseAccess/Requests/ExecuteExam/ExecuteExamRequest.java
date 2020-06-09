@@ -1,11 +1,13 @@
 package DatabaseAccess.Requests.ExecuteExam;
 
 import DatabaseAccess.Requests.DatabaseRequest;
-import LightEntities.LightExam;
 
-// start exam
 
+/**
+ * being initiated by the teacher
+ */
 public class ExecuteExamRequest extends DatabaseRequest {
+
     private final String examID;
     private final String examCode;
 
