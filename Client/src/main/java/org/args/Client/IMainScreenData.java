@@ -14,4 +14,7 @@ public interface IMainScreenData {
 
     void setUserName(String userName);
 
+    void studentTakeComputerizedExam(String examCode, String id);
+
+    void studentTakeManualExam(String code);
 }

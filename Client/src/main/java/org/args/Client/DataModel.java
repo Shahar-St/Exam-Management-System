@@ -4,6 +4,7 @@ import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.Exams.*;
 import DatabaseAccess.Requests.ExecuteExam.SubmitExamRequest;
 import DatabaseAccess.Requests.ExecuteExam.ExecuteExamRequest;
+import DatabaseAccess.Requests.ExecuteExam.TakeExamRequest;
 import DatabaseAccess.Requests.ExecuteExam.TimeExtensionRequest;
 import DatabaseAccess.Requests.LoginRequest;
 import DatabaseAccess.Requests.Questions.*;
@@ -97,6 +98,16 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    @Override
+    public void studentTakeComputerizedExam(String examCode, String id) {
+        ClientApp.sendRequest(new TakeExamRequest(Integer.parseInt(id),examCode));
+    }
+
+    @Override
+    public void studentTakeManualExam(String code) {
+        ClientApp.sendRequest(new TakeExamRequest(0, code));
     }
 
     //question management - subjects and courses dropdowns and screen init

@@ -221,7 +221,7 @@ public class ExamManagementController {
                                 alert.showAndWait();
                             } else if (!ClientApp.isNumeric(code)) {
                                 alert.setHeaderText("Invalid exam code");
-                                alert.setContentText("Code must only contain 4 digits!");
+                                alert.setContentText("Code must only contain digits!");
                                 alert.showAndWait();
                             }else
                             {
