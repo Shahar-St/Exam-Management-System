@@ -387,7 +387,7 @@ public class ClientApp extends Application {
     }
 
     @Subscribe
-    public void handleTimeExtensionResponse(TimeExtensionResponse response)
+    public void handleTimeExtensionResponse(ConfirmTimeExtensionResponse response)
     {
         if(response.getStatus() != 0)
             popUpAlert("Network Error: Failed to fetch Dean's response!");

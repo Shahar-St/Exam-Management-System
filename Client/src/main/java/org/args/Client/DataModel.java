@@ -27,7 +27,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import org.args.GUI.ClientApp;
 import org.args.GUI.StudentExamType;
-import org.args.GUI.StudentGrade;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -39,7 +38,7 @@ import java.util.*;
 
 public class DataModel implements IMainScreenData, IQuestionManagementData, IQuestionData, IStudentExamExecutionData,
         IDeanViewStatsData, IStudentViewStatsData, IExamData, IDeanExamExecutionData,
-        ITeacherViewStatsData, IExamManagementData, IExamReviewData, ITeacherExecuteExamData {
+        ITeacherViewStatsData, IExamManagementData, IExamReviewData, ITeacherExecuteExamData, IViewDeanTimeExtensionData {
 
     private final ClientApp app;
 

@@ -1,16 +1,18 @@
-package DatabaseAccess.Requests.ExecuteExam;
+package DatabaseAccess.Responses.ExecuteExam;
 
 import DatabaseAccess.Requests.DatabaseRequest;
-import LightEntities.LightExam;
+import DatabaseAccess.Responses.DatabaseResponse;
 
-//this is what the teacher sends to the server when the teacher requests time extension.
+//this is sent to the Dean once a teacher sends a time extension request.
 
-public class TimeExtensionRequest extends DatabaseRequest {
+
+public class ConfirmTimeExtensionResponse extends DatabaseResponse {
     private final String examId;
     private final int durationInMinutes;
     private final String reasonForExtension;
 
-    public TimeExtensionRequest(String examId, int durationInMinutes, String reasonForExtension) {
+    public ConfirmTimeExtensionResponse(int status, DatabaseRequest request, String examId, int durationInMinutes, String reasonForExtension) {
+        super(status,request);
         this.examId = examId;
         this.durationInMinutes = durationInMinutes;
         this.reasonForExtension = reasonForExtension;

@@ -22,7 +22,7 @@ import DatabaseAccess.Responses.Exams.ViewExamResponse;
 import DatabaseAccess.Responses.ExecuteExam.ExecuteExamResponse;
 import DatabaseAccess.Responses.ExecuteExam.RaiseHandResponse;
 import DatabaseAccess.Responses.ExecuteExam.TakeExamResponse;
-import DatabaseAccess.Responses.ExecuteExam.TimeExtensionResponse;
+import DatabaseAccess.Responses.ExecuteExam.ConfirmTimeExtensionResponse;
 import DatabaseAccess.Responses.LoginResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
 import DatabaseAccess.Responses.Questions.EditQuestionResponse;
@@ -206,7 +206,7 @@ public class ServerApp extends AbstractServer {
 
         }else if(msg instanceof TimeExtensionRequest){
             TimeExtensionRequest request = (TimeExtensionRequest)msg;
-            TimeExtensionResponse response = new TimeExtensionResponse(0,request,false,"Fuck off",0);
+            ConfirmTimeExtensionResponse response = new ConfirmTimeExtensionResponse(0,request,false,"Fuck off",0);
             try {
                 client.sendToClient(response);
             } catch (IOException e) {
