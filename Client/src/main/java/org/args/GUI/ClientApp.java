@@ -204,6 +204,15 @@ public class ClientApp extends Application {
         }
     }
 
+    public static boolean isDouble(String str){
+        try {
+            Double.parseDouble(str);
+            return true;
+        }catch (NumberFormatException e){
+            return false;
+        }
+    }
+
 
     public static String getHost() {
         return host;

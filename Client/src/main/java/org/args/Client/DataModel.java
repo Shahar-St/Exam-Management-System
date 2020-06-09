@@ -326,11 +326,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     public void saveQuestion(String questionId, String answer_1, String answer_2, String answer_3, String answer_4, String newContent) {
         DatabaseRequest request;
-        if (isCreating) {
-            request = new AddQuestionRequest(newContent, Arrays.asList(answer_1, answer_2, answer_3, answer_4), correctAnswer, currentCourseId);
+        if(isCreating){
+             request = new AddQuestionRequest(newContent, Arrays.asList(answer_1, answer_2, answer_3, answer_4), correctAnswer,currentCourseId);
 
-        } else {
-            request = new EditQuestionRequest(questionId, newContent, Arrays.asList(answer_1, answer_2, answer_3, answer_4), correctAnswer);
+        }else {
+             request = new EditQuestionRequest(questionId, newContent, Arrays.asList(answer_1, answer_2, answer_3, answer_4), correctAnswer);
         }
         ClientApp.sendRequest(request);
     }
@@ -361,8 +361,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     public void setViewMode(String viewMode) {
         this.viewMode = viewMode;
-        if (viewMode.equals("ADD")) {
-            if (!observableQuestionsScoringList.isEmpty())
+        if(viewMode.equals("ADD")){
+            if(!observableQuestionsScoringList.isEmpty())
                 observableQuestionsScoringList.clear();
         }
     }
@@ -529,7 +529,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         Platform.runLater(() -> {
             observableExamQuestionsList.add(question);
             // check if new score need to be added
-            if (observableExamQuestionsList.size() > observableQuestionsScoringList.size())
+            if(observableExamQuestionsList.size()>observableQuestionsScoringList.size())
                 observableQuestionsScoringList.add("0");
         });
 
@@ -925,6 +925,42 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Override
     public void loadPendingExams() {
         ClientApp.sendRequest(new PendingExamRequest());
+    }
+
+    //TODO: implements the manual exam review
+
+    private File manualExamForReview;
+
+    private String manualExamForReviewStudentId;
+
+    public File getManualExamForReview() {
+        return manualExamForReview;
+    }
+
+    public void setManualExamForReview(File manualExamForReview) {
+        this.manualExamForReview = manualExamForReview;
+    }
+
+    @Override
+    public String getManualExamForReviewStudentId() {
+        return manualExamForReviewStudentId;
+    }
+
+    public void setManualExamForReviewStudentId(String manualExamForReviewStudentId) {
+        this.manualExamForReviewStudentId = manualExamForReviewStudentId;
+    }
+
+    public void saveWordFile(File filePath){
+        try {
+            wordGenerator.saveWordFile(getManualExamForReview(),filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void submitExamReview(double grade,String notes,File manualExamFile){
+        ClientApp.sendRequest(new EvaluateManualExamRequest(grade,notes,manualExamFile));
+
     }
 
     ObservableList<StudentExamType> studentsGradesToReview = FXCollections.observableArrayList();

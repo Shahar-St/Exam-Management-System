@@ -30,12 +30,14 @@ public class StudentManualExamController {
             fileChooser.setInitialDirectory(defaultDirectory);
             fileChooser.setInitialFileName(model.getExamForStudentExecution().getId()+"_exam.docx");
             File selectedFile = fileChooser.showSaveDialog(ClientApp.primaryStage);
-            if(!selectedFile.getName().contains(".")){
-                selectedFile = new File(selectedFile.getAbsoluteFile()+".docx");
-            }else if(!selectedFile.getName().contains(".docx")){
-                selectedFile = new File(selectedFile.getAbsoluteFile().toString().substring(0,selectedFile.getAbsoluteFile().toString().indexOf("."))+".docx");
+            if(selectedFile!=null) {
+                if (!selectedFile.getName().contains(".")) {
+                    selectedFile = new File(selectedFile.getAbsoluteFile() + ".docx");
+                } else if (!selectedFile.getName().contains(".docx")) {
+                    selectedFile = new File(selectedFile.getAbsoluteFile().toString().substring(0, selectedFile.getAbsoluteFile().toString().indexOf(".")) + ".docx");
+                }
+                model.createManualTest(selectedFile);
             }
-            model.createManualTest(selectedFile);
         });
 
         submitButton.setOnAction(event -> {
@@ -43,6 +45,7 @@ public class StudentManualExamController {
             File defaultDirectory = new File("C:\\");
             fileChooser.setInitialDirectory(defaultDirectory);
             File selectedFile = fileChooser.showOpenDialog(ClientApp.primaryStage);
+            model.setManualExamFile(selectedFile);
             model.submitExam();
         });
     }

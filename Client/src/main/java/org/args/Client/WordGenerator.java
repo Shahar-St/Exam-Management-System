@@ -5,6 +5,7 @@ import LightEntities.LightQuestion;
 import org.apache.poi.xwpf.usermodel.*;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -12,8 +13,8 @@ public class WordGenerator {
 
     /**
      * the method gets lightexam for execution and generates a word file contains the exam data.
-     * **/
-    public void createWordFile(LightExam exam,File filePath) throws IOException {
+     **/
+    public void createWordFile(LightExam exam, File filePath) throws IOException {
         XWPFDocument document = new XWPFDocument();
         FileOutputStream out = new FileOutputStream(filePath);
         XWPFParagraph title = document.createParagraph();
@@ -26,11 +27,11 @@ public class WordGenerator {
         titleRun.setBold(true);
         titleRun.setUnderline(UnderlinePatterns.SINGLE);
         XWPFParagraph info = document.createParagraph();
-        XWPFRun infoRun =info.createRun();
-        infoRun.setText("Notes: "+exam.getStudentNotes());
+        XWPFRun infoRun = info.createRun();
+        infoRun.setText("Notes: " + exam.getStudentNotes());
         infoRun.addCarriageReturn();
         infoRun.addCarriageReturn();
-        infoRun.setText("Duration: "+exam.getDurationInMinutes());
+        infoRun.setText("Duration: " + exam.getDurationInMinutes());
         infoRun.setFontSize(fontSize);
         infoRun.setBold(true);
         infoRun.setUnderline(UnderlinePatterns.SINGLE);
@@ -39,21 +40,21 @@ public class WordGenerator {
         XWPFParagraph paragraph = document.createParagraph();
         XWPFRun paragraphRun = paragraph.createRun();
         paragraphRun.setFontSize(fontSize);
-        for(LightQuestion lightQuestion:exam.getLightQuestionList()){
+        for (LightQuestion lightQuestion : exam.getLightQuestionList()) {
             int index = exam.getLightQuestionList().indexOf(lightQuestion);
-            paragraphRun.setText("("+(index+1)+") "+lightQuestion.getQuestionContent());
+            paragraphRun.setText("(" + (index + 1) + ") " + lightQuestion.getQuestionContent());
             paragraphRun.addCarriageReturn();
             paragraphRun.addCarriageReturn();
-            paragraphRun.setText("(a) "+lightQuestion.getAnswers().get(0));
+            paragraphRun.setText("(a) " + lightQuestion.getAnswers().get(0));
             paragraphRun.addCarriageReturn();
-            paragraphRun.setText("(b) "+lightQuestion.getAnswers().get(1));
+            paragraphRun.setText("(b) " + lightQuestion.getAnswers().get(1));
             paragraphRun.addCarriageReturn();
-            paragraphRun.setText("(c) "+lightQuestion.getAnswers().get(2));
+            paragraphRun.setText("(c) " + lightQuestion.getAnswers().get(2));
             paragraphRun.addCarriageReturn();
-            paragraphRun.setText("(d) "+lightQuestion.getAnswers().get(3));
+            paragraphRun.setText("(d) " + lightQuestion.getAnswers().get(3));
             paragraphRun.addCarriageReturn();
             paragraphRun.addCarriageReturn();
-            paragraphRun.setText("Question Score: "+exam.getQuestionsScores().get(index));
+            paragraphRun.setText("Question Score: " + exam.getQuestionsScores().get(index));
             paragraphRun.addCarriageReturn();
             paragraphRun.addCarriageReturn();
             paragraphRun.addCarriageReturn();
@@ -61,6 +62,17 @@ public class WordGenerator {
         document.write(out);
         out.close();
         document.close();
+    }
+
+    public void saveWordFile(File origin, File filePath) throws IOException {
+
+        FileInputStream inputStream = new FileInputStream(origin);
+        XWPFDocument document = new XWPFDocument(inputStream);
+        FileOutputStream outputStream = new FileOutputStream(filePath);
+        document.write(outputStream);
+        outputStream.close();
+        document.close();
+
 
     }
 }
