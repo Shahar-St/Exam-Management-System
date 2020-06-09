@@ -389,7 +389,7 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleRaisedHandResponse(RaiseHandResponse response)
     {
-        popUpAlert(response.getStudentName());
+
     }
 
 }

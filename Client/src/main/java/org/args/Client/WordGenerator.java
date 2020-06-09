@@ -12,8 +12,10 @@ import java.util.List;
 public class WordGenerator {
 
     private final int fontSize = 14;
-
-    public void createWord(LightExam exam) throws IOException {
+    /**
+     * the method gets lightexam for execution and generates a word file contains the exam data.
+     * **/
+    public void createWordFile(LightExam exam) throws IOException {
         XWPFDocument document = new XWPFDocument();
         FileOutputStream out = new FileOutputStream(new File(exam.getId() + "_" + "exam" + ".docx"));
         XWPFParagraph title = document.createParagraph();

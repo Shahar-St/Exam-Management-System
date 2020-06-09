@@ -3,7 +3,10 @@ package org.args.GUI;
 import LightEntities.LightQuestion;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -29,6 +32,8 @@ public class StudentExamExecutionController {
     private final int mediumSpacing = 10;
     private final int largeSpacing = 20;
 
+    @FXML
+    private ImageView raiseHandImage;
 
     @FXML
     private Pagination questionsPagination;
@@ -85,6 +90,8 @@ public class StudentExamExecutionController {
 
                 details.setSpacing(largeSpacing);
 
+                details.setPadding(new Insets(20,20,20,20));
+
                 return new ScrollPane(details);
             }
 
@@ -121,6 +128,8 @@ public class StudentExamExecutionController {
             details = new VBox(timeElapsed,content_label, questionContent,answer1,answer2,answer3,answer4,questionScore);
 
             details.setSpacing(largeSpacing);
+
+            details.setPadding(new Insets(20,20,20,20));
 
             answer1.setOnAction(e -> {
                 answer2.setSelected(false);
@@ -187,6 +196,7 @@ public class StudentExamExecutionController {
                 });
                 details = new VBox(timeElapsed, content_label, questionContent, answer1,answer2,answer3,answer4,questionScore,done);
                 details.setSpacing(largeSpacing);
+                details.setPadding(new Insets(20,20,20,20));
             }
 
             return new ScrollPane(new VBox(details));
@@ -196,6 +206,11 @@ public class StudentExamExecutionController {
         // start countdown to submission.
         setTimer();
 
+    }
+
+    @FXML
+    void onRaiseHandClicked(MouseEvent event) {
+        model.raiseHand();
     }
 
     private void setModel(IStudentExamExecutionData newModel) {
@@ -222,6 +237,7 @@ public class StudentExamExecutionController {
                     Platform.runLater(()->{
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Attention!");
+                        alert.setHeaderText(null);
                         alert.setContentText("Attention!, Exam Time Has Ended, You're Exam Has Been Submitted And You're Now Being Redirected To Main Screen");
                         alert.showAndWait();
                         ClientApp.setRoot("MainScreen"); // redirect client to main screen because of exam timeout.
