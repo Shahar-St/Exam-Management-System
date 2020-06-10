@@ -37,7 +37,7 @@
                   </VBox>
                </children>
             </HBox>
-            <Button mnemonicParsing="false" text="Back" />
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" text="Back" />
          </children>
       </VBox>
    </children>
