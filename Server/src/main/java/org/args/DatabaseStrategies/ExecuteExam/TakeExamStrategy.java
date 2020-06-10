@@ -23,6 +23,8 @@ public class TakeExamStrategy extends DatabaseStrategy {
                                    List<String> loggedInUsers) {
 
         TakeExamRequest takeExamRequest = (TakeExamRequest) request;
+        if (client.getInfo("userName") == null)
+            return new TakeExamResponse(UNAUTHORIZED, takeExamRequest, null);
 
         Student student = (Student) getUser((String) client.getInfo("userName"), session);
         ExecutedExam executedExam = getTypeById(ExecutedExam.class, String.valueOf(student.getIdExecutedExamCurrent())
@@ -31,11 +33,14 @@ public class TakeExamStrategy extends DatabaseStrategy {
         if(takeExamRequest.getSocialId() != 0)
             executedExam.setComputerized(true);
 
+        if(executedExam==null)
+            return new TakeExamResponse(ERROR2, takeExamRequest, null);
+
         Exam exam = executedExam.getConcreteExam().getExam();
+
         LightExam lightExam = exam.createLightExam();
 
-        if (client.getInfo("userName") == null)
-            return new TakeExamResponse(UNAUTHORIZED, takeExamRequest, lightExam);
+
 
 
         return new TakeExamResponse(SUCCESS, takeExamRequest, lightExam);

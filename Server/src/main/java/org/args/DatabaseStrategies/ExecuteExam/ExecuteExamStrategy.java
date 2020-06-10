@@ -34,9 +34,6 @@ public class ExecuteExamStrategy extends DatabaseStrategy {
         Course course = exam.getCourse();
         List<Student> students = course.getStudentsList();
 
-        if (exam == null)
-            return new ExecuteExamResponse(ERROR2, request);
-
         Teacher teacher = (Teacher) getUser((String) client.getInfo("userName"), session);
         ConcreteExam concreteExam = new ConcreteExam(exam, teacher, request1.getExamCode());
         session.save(concreteExam);
@@ -46,7 +43,7 @@ public class ExecuteExamStrategy extends DatabaseStrategy {
             ExecutedExam executedExam = new ExecutedExam(concreteExam, students.get(i),"", null, "");
             students.get(i).setIdExecutedExamCurrent(executedExam.getId());
 
-            session.save(concreteExam);
+            session.save(executedExam);
         }
 
         session.flush();
