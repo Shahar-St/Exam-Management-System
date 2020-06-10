@@ -13,6 +13,8 @@ import DatabaseAccess.Requests.LoginRequest;
 import DatabaseAccess.Requests.Questions.AllQuestionsRequest;
 import DatabaseAccess.Requests.Questions.EditQuestionRequest;
 import DatabaseAccess.Requests.Questions.QuestionRequest;
+import DatabaseAccess.Requests.ReviewExam.CheckedExamRequest;
+import DatabaseAccess.Requests.ReviewExam.PendingExamRequest;
 import DatabaseAccess.Requests.Statistics.TeacherStatisticsRequest;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
 import DatabaseAccess.Responses.Exams.AddExamResponse;
@@ -24,6 +26,8 @@ import DatabaseAccess.Responses.LoginResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
 import DatabaseAccess.Responses.Questions.EditQuestionResponse;
 import DatabaseAccess.Responses.Questions.QuestionResponse;
+import DatabaseAccess.Responses.ReviewExam.CheckedExamResponse;
+import DatabaseAccess.Responses.ReviewExam.PendingExamResponse;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
 import LightEntities.LightExam;
@@ -70,7 +74,7 @@ public class ServerApp extends AbstractServer {
         if (msg instanceof LoginRequest) {
             LoginRequest request = (LoginRequest) msg;
             try {
-                client.sendToClient(new LoginResponse(0, "student", "malki", request));
+                client.sendToClient(new LoginResponse(0, "teacher", "malki", request));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -215,6 +219,27 @@ public class ServerApp extends AbstractServer {
             RaiseHandResponse response = new RaiseHandResponse(0,request,"SHIMON");
             try {
                 client.sendToClient(response);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else if(msg instanceof PendingExamRequest){
+            PendingExamRequest request = (PendingExamRequest)msg;
+            HashMap<String,Pair<String,LocalDateTime>> map = new HashMap<>();
+            map.put("1111",new Pair<>("OS",LocalDateTime.now()));
+            map.put("2222",new Pair<>("DS",LocalDateTime.now()));
+            map.put("3333",new Pair<>("SE",LocalDateTime.now()));
+            try {
+                client.sendToClient(new PendingExamResponse(0,request,map));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else if(msg instanceof CheckedExamRequest){
+            CheckedExamRequest request = (CheckedExamRequest)msg;
+            HashMap<String,Boolean> map = new HashMap<>();
+            map.put("12346789",true);
+            map.put("987654321",false);
+            try {
+                client.sendToClient(new CheckedExamResponse(0,request,map));
             } catch (IOException e) {
                 e.printStackTrace();
             }

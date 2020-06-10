@@ -34,6 +34,7 @@ public class TeacherExamGradesReviewController {
         this.model = model;
     }
 
+    @FXML
     void initialize()
     {
         setModel(ClientApp.getModel());

@@ -26,6 +26,7 @@ public class TeacherPendingExamsController {
         this.model = model;
     }
 
+    @FXML
     void initialize()
     {
         setModel(ClientApp.getModel());
