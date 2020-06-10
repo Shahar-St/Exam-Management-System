@@ -37,6 +37,7 @@ public class TakeExamStrategy extends DatabaseStrategy {
         if (client.getInfo("userName") == null)
             return new TakeExamResponse(UNAUTHORIZED, takeExamRequest, lightExam);
 
+
         return new TakeExamResponse(SUCCESS, takeExamRequest, lightExam);
 
     }
