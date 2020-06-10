@@ -1,23 +1,20 @@
 package org.args;
 
 import DatabaseAccess.Requests.DatabaseRequest;
-import DatabaseAccess.Requests.Questions.DeleteQuestionRequest;
 import org.args.OCSF.AbstractServer;
 import org.args.OCSF.ConnectionToClient;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 // server is a singleton
 public class EMSserver extends AbstractServer {
 
     private static EMSserver singleInstanceServer = null;
     private final DatabaseHandler databaseHandler;
-    List<String> loggedInUsers = new ArrayList<>();
+    private final Map<String, ConnectionToClient> loggedInUsers = new HashMap<>();
 
 
     private EMSserver(int port, DatabaseHandler databaseHandler) {

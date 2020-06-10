@@ -114,7 +114,7 @@ public class DatabaseHandler {
     }
 
     public DatabaseResponse produceResponse(DatabaseRequest request, ConnectionToClient client,
-                                            List<String> loggedInUsers) {
+                                            Map<String, ConnectionToClient> loggedInUsers) {
         DatabaseResponse response = strategies.get(request.getClass().getSimpleName())
                 .handle(request, client, session, loggedInUsers);
         session.clear();
@@ -155,7 +155,7 @@ public class DatabaseHandler {
 
         //creating courses and connecting with subjects
         String[] coursesNamesArr = {"4 points", "Beginners", "Israel", "level 1", "5 points", "Advanced", "Holocaust",
-                                    "level 2"};
+                "level 2"};
         for (int i = 0; i < NUM_OF_COURSES; i++)
         {
             Course course = new Course(i, coursesNamesArr[i % coursesNamesArr.length], subjects.get(i % NUM_OF_SUBJECTS));
@@ -190,7 +190,7 @@ public class DatabaseHandler {
 
         //creating students and connecting with courses
         String[] studentFirstNamesArr = {"Yoni", "Guy", "Niv", "Maayan", "Or", "Ariel", "Shoval", "Tal",
-                                         "Tal", "Shoval", "Ariel", "Or", "Maayan", "Niv", "Guy","Yoni"};
+                "Tal", "Shoval", "Ariel", "Or", "Maayan", "Niv", "Guy", "Yoni"};
         String[] studentLastNamesArr = {"Cohen", "Haim", "Bar-Dayan", "Shitrit", "Lev", "Yaron", "Raz", "Ezer"};
         for (int i = 0; i < NUM_OF_STUDENTS; i++)
         {
@@ -215,9 +215,9 @@ public class DatabaseHandler {
         //creating questions by teachers
 
         String[] questionsArr = {"1 + 0 = ?", "capital city of Israel:", "1 + 4 = ?", "how many jewish people died?:",
-                                "0 + 4 = ?", "the biggest city in Israel is:", "1 + 1 = ?", "the leader was:",
-                                "cat is a/an:", "after 'a':", "same meaning of happy is:", "after 'c':",
-                                "beautiful is a/an:", "capital of 'b':", "how to spell many people?", "capital of 'd':"};
+                "0 + 4 = ?", "the biggest city in Israel is:", "1 + 1 = ?", "the leader was:",
+                "cat is a/an:", "after 'a':", "same meaning of happy is:", "after 'c':",
+                "beautiful is a/an:", "capital of 'b':", "how to spell many people?", "capital of 'd':"};
         List<String> ansArr1 = Arrays.asList("1", "2", "3", "4");
         List<String> ansArr2 = Arrays.asList("Haifa", "Jerusalem", "Tel Aviv", "Dimona");
         List<String> ansArr3 = Arrays.asList("0", "3", "5", "-3");
@@ -236,14 +236,14 @@ public class DatabaseHandler {
         List<String> ansArr16 = Arrays.asList("A", "B", "C", "D");
         List<List<String>> answers = new ArrayList<>();
         Collections.addAll(answers, ansArr1, ansArr2, ansArr3, ansArr4, ansArr5, ansArr6, ansArr7, ansArr8,
-                           ansArr9, ansArr10, ansArr11, ansArr12, ansArr13, ansArr14, ansArr15, ansArr16);
+                ansArr9, ansArr10, ansArr11, ansArr12, ansArr13, ansArr14, ansArr15, ansArr16);
 
         int k = 0;
         for (int j = 0; j < NUM_OF_TEACHERS; j++)
         {
             Teacher teacher = teachers.get(j % NUM_OF_TEACHERS);
             List<Course> c = teacher.getCoursesList();
-            for (int i = 0; i < NUM_OF_QUESTIONS/NUM_OF_TEACHERS ; i++)
+            for (int i = 0; i < NUM_OF_QUESTIONS / NUM_OF_TEACHERS; i++)
             {
                 Question question = teacher.createQuestion(questionsArr[k], answers.get(k), i % NUM_OF_OPTIONAL_ANSWERS,
                         teacher.getCoursesList().get(i % teacher.getCoursesList().size()));
@@ -258,11 +258,11 @@ public class DatabaseHandler {
         String[] titlesArr = {"functions", "Jerusalem", "circles", "Germany", "letters", "nikud", "spelling", "vocabulary"};
         List<Double> questionsScores = Arrays.asList(50.0, 50.0);
 
-        k=0;
+        k = 0;
         for (int j = 0; j < NUM_OF_TEACHERS; j++)
         {
             Teacher teacher = teachers.get(j % NUM_OF_TEACHERS);
-            for (int i = 0; i < NUM_OF_EXAMS/NUM_OF_TEACHERS; i++)
+            for (int i = 0; i < NUM_OF_EXAMS / NUM_OF_TEACHERS; i++)
             {
                 Course course = teacher.getCoursesList().get(i % teacher.getCoursesList().size());
                 Exam exam = teacher.createExam(course, 90, titlesArr[k], "good luck!", "my private notes",

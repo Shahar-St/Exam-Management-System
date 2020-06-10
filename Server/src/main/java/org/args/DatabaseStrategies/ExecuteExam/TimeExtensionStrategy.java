@@ -16,11 +16,13 @@ import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
 import java.util.List;
+import java.util.Map;
+
 //TODO
 public class TimeExtensionStrategy extends DatabaseStrategy {
 
     @Override
-    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session, List<String> loggedInUsers) {
+    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session, Map<String, ConnectionToClient> loggedInUsers) {
         //get a ConfirmTime request from dean, send TimeExtension response to teacher.
         ConfirmTimeExtensionRequest cteRequest = (ConfirmTimeExtensionRequest) request;
         if (client.getInfo("userName") == null)

@@ -11,6 +11,7 @@ import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * status dictionary:
@@ -23,7 +24,7 @@ public class ExecuteExamStrategy extends DatabaseStrategy {
 
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client,
-                                   Session session, List<String> loggedInUsers) {
+                                   Session session, Map<String, ConnectionToClient> loggedInUsers) {
 
         ExecuteExamRequest request1 = (ExecuteExamRequest) request;
 

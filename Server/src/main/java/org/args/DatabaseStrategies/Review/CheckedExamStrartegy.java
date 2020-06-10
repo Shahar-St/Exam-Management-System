@@ -14,10 +14,12 @@ import org.hibernate.Session;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 //TODO
 public class CheckedExamStrartegy extends DatabaseStrategy {
     @Override
-    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session, List<String> loggedInUsers) {
+    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session, Map<String, ConnectionToClient> loggedInUsers) {
         CheckedExamRequest checkedRequest = (CheckedExamRequest) request;
         if (client.getInfo("userName") == null)
             return new CheckedExamResponse(UNAUTHORIZED,request,null);

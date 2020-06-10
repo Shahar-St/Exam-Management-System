@@ -9,6 +9,7 @@ import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * status dictionary:
@@ -23,7 +24,7 @@ public class LoginStrategy extends DatabaseStrategy {
 
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
-                                   List<String> loggedInUsers) {
+                                   Map<String, ConnectionToClient> loggedInUsers) {
 
         LoginRequest loginRequest = (LoginRequest) request;
 
@@ -32,14 +33,14 @@ public class LoginStrategy extends DatabaseStrategy {
         if (user == null || !user.getUserName().equals(loginRequest.getUserName()))
             return new LoginResponse(ERROR2, request);
 
-        if (loggedInUsers.contains(loginRequest.getUserName()))
+        if (loggedInUsers.containsKey(loginRequest.getUserName()))
             return new LoginResponse(ERROR3, request);
 
         if (!user.getPassword().equals(loginRequest.getPassword()))
             return new LoginResponse(ERROR4, request);
 
         client.setInfo("userName", user.getUserName());
-        loggedInUsers.add(user.getUserName());
+        loggedInUsers.put(user.getUserName(), client);
         return new LoginResponse(SUCCESS, user.getClass().getSimpleName().toLowerCase(),
                 user.getFullName(), request);
 
