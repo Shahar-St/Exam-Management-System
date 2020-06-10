@@ -85,9 +85,7 @@ public class Teacher extends User {
     }
 
     public Question createQuestion(String questionContent, List<String> answersArray, int correctAnswer, Course course){
-        Question question = new Question(questionContent, answersArray, correctAnswer, course, this);
-        //this.questionsList.add(question);
-        return question;
+        return new Question(questionContent, answersArray, correctAnswer, course, this);
     }
 
     public Exam createExam(Course course, int durationInMinutes, String title, String studentNotes,

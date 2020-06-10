@@ -32,6 +32,7 @@ public class ExecutedExam {
     private double grade = 0;
     private int duration; // exam duration in minutes
     private boolean isComputerized = false;
+    private boolean checked = false;
 
     //Group c'tors
     public ExecutedExam() {
@@ -127,5 +128,12 @@ public class ExecutedExam {
 
     public void setCommentsAfterCheck(String commentsAfterCheck) {
         this.commentsAfterCheck = commentsAfterCheck;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }
