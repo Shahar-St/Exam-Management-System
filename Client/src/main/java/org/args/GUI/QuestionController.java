@@ -132,39 +132,41 @@ public class QuestionController {
     @FXML
     void choiceBoxClicked(MouseEvent event) {
         correctAnswerChoice.getSelectionModel().selectedIndexProperty().addListener((observableValue, number, t1) -> {
-            switch (t1.intValue())
-            {
-                case 0 -> {
+            switch (t1.intValue()) {
+                case 0:
                     Answer1.setStyle("-fx-background-color: #00ff00 ;");
                     Answer2.setStyle("-fx-background-color: #ffffff ;");
                     Answer3.setStyle("-fx-background-color: #ffffff ;");
                     Answer4.setStyle("-fx-background-color: #ffffff ;");
                     correctAnswer = 0;
-                }
-                case 1 -> {
+                    break;
+                case 1:
                     Answer1.setStyle("-fx-background-color: #ffffff ;");
                     Answer2.setStyle("-fx-background-color: #00ff00 ;");
                     Answer3.setStyle("-fx-background-color: #ffffff ;");
                     Answer4.setStyle("-fx-background-color: #ffffff ;");
                     correctAnswer = 1;
-                }
-                case 2 -> {
+                    break;
+                case 2:
                     Answer1.setStyle("-fx-background-color: #ffffff ;");
                     Answer2.setStyle("-fx-background-color: #ffffff ;");
                     Answer3.setStyle("-fx-background-color: #00ff00 ;");
                     Answer4.setStyle("-fx-background-color: #ffffff ;");
                     correctAnswer = 2;
-                }
-                case 3 -> {
+                    break;
+                case 3:
                     Answer1.setStyle("-fx-background-color: #ffffff ;");
                     Answer2.setStyle("-fx-background-color: #ffffff ;");
                     Answer3.setStyle("-fx-background-color: #ffffff ;");
                     Answer4.setStyle("-fx-background-color: #00ff00 ;");
                     correctAnswer = 3;
-                }
-                default -> System.out.println("Undefined correct answer");
+                    break;
+                default:
+                    System.out.println("Undefined correct answer");
+                    break;
             }
             model.setCorrectAnswer(t1.intValue());
+
         });
     }
 

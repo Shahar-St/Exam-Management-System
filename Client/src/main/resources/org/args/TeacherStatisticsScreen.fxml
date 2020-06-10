@@ -7,22 +7,20 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.TeacherStatisticsController">
-   <content>
-      <VBox>
-         <children>
-            <TableView fx:id="gradesTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-              <columns>
-                <TableColumn fx:id="idColumn" maxWidth="1.7976931348623157E308" prefWidth="100.0" text="ID" />
-                <TableColumn fx:id="gradeColumn" maxWidth="1.7976931348623157E308" prefWidth="100.0" text="Grade" />
-              </columns>
-            </TableView>
-            <ButtonBar prefHeight="40.0" prefWidth="200.0">
-              <buttons>
-                <Button fx:id="okButton" mnemonicParsing="false" onAction="#okButtonOnAction" text="OK" />
-              </buttons>
-            </ButtonBar>
-         </children>
-      </VBox>
-   </content>
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+            xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.args.GUI.TeacherStatisticsController">
+    <VBox>
+        <TableView fx:id="gradesTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+            <columns>
+                <TableColumn fx:id="idColumn" maxWidth="1.7976931348623157E308" prefWidth="100.0" text="ID"/>
+                <TableColumn fx:id="gradeColumn" maxWidth="1.7976931348623157E308" prefWidth="100.0" text="Grade"/>
+            </columns>
+        </TableView>
+        <ButtonBar prefHeight="40.0" prefWidth="200.0">
+            <buttons>
+                <Button fx:id="okButton" mnemonicParsing="false" onAction="#okButtonOnAction" text="OK"/>
+            </buttons>
+        </ButtonBar>
+    </VBox>
 </ScrollPane>

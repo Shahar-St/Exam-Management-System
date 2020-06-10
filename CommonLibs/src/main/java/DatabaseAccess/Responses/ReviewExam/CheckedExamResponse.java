@@ -1,4 +1,4 @@
-package DatabaseAccess.Responses.ExecuteExam;
+package DatabaseAccess.Responses.ReviewExam;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Responses.DatabaseResponse;

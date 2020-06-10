@@ -2,8 +2,6 @@ package org.args.GUI;
 
 
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,7 +12,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.args.Client.ITeacherViewStatsData;
 
-import java.util.Collection;
 import java.util.Map;
 
 public class TeacherStatisticsController {
@@ -52,10 +49,6 @@ public class TeacherStatisticsController {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         gradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
         gradesTableView.setItems(studentsGrades);
-
-
-
-
     }
 
     private void setModel(ITeacherViewStatsData newModel){
