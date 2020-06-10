@@ -203,15 +203,15 @@ public class ServerApp extends AbstractServer {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-        }else if(msg instanceof TimeExtensionRequest){
-            TimeExtensionRequest request = (TimeExtensionRequest)msg;
-            ConfirmTimeExtensionResponse response = new ConfirmTimeExtensionResponse(0,request,false,"Fuck off",0);
-            try {
-                client.sendToClient(response);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            //comment out until we figure out the entire process of time extension
+//        }else if(msg instanceof TimeExtensionRequest){
+//            TimeExtensionRequest request = (TimeExtensionRequest)msg;
+//            ConfirmTimeExtensionResponse response = new ConfirmTimeExtensionResponse(0,request,false,"Fuck off",0);
+//            try {
+//                client.sendToClient(response);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }else if(msg instanceof RaiseHandRequest)
         {
             RaiseHandRequest request = (RaiseHandRequest)msg;

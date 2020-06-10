@@ -37,8 +37,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class DataModel implements IMainScreenData, IQuestionManagementData, IQuestionData, IStudentExamExecutionData,
-        IDeanViewStatsData, IStudentViewStatsData, IExamData, IDeanExamExecutionData,
-        ITeacherViewStatsData, IExamManagementData, IExamReviewData, ITeacherExecuteExamData, IViewDeanTimeExtensionData {
+        IDeanViewStatsData, IStudentViewStatsData, IExamData, ITeacherViewStatsData, IExamManagementData, IExamReviewData, ITeacherExecuteExamData, IViewDeanTimeExtensionData {
 
     private final ClientApp app;
 
@@ -863,12 +862,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         Platform.runLater(() -> currentHandsRaised.remove(currentStudentName));
     }
 
-    //TODO: implement IDeanExamExecutionData method NOTE: the request should be other type then String!!
-    @Override
-    public void handleTimeExtensionRequest(String request) {
-
-    }
-
 
     //TODO: implement IStudentViewStatsData methods
 
@@ -993,6 +986,47 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void reviewManualExam(String id) {
+
+    }
+
+    // dean time extension
+
+    ObservableList<String> ObservableTimeExtensionRequestsList = FXCollections.observableArrayList();
+
+    public ObservableList<String> getObservableTimeExtensionRequestsList() {
+        return ObservableTimeExtensionRequestsList;
+    }
+
+    @Subscribe
+    public void handleConfirmTimeExtensionResponse (ConfirmTimeExtensionResponse response)
+    {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                String requestDescription = response.getExamId() + ": " + response.getDurationInMinutes() + "minutes request - " + response.getReasonForExtension();
+                ObservableTimeExtensionRequestsList.add(requestDescription);
+            }
+        });
+    }
+
+    @Override
+    public void removeRequest(String selectedItem) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                getObservableTimeExtensionRequestsList().remove(selectedItem);
+            }
+        });
+    }
+
+    @Override
+    public void rejectExtension(String reason, String examId) {
+        ClientApp.sendRequest(new ConfirmTimeExtensionRequest(false,reason,0,examId));
+    }
+
+    @Override
+    public void acceptExtension(String extension, String examId) {
+        ClientApp.sendRequest(new ConfirmTimeExtensionRequest(true,"",Integer.parseInt(extension),examId));
 
     }
 }
