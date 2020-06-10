@@ -1,4 +1,4 @@
-package DatabaseAccess.Responses.ExecuteExam;
+package DatabaseAccess.Responses.ReviewExam;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
@@ -18,6 +18,7 @@ public class PendingExamResponse extends DatabaseResponse {
     }
 
     public HashMap<String, Pair<String, LocalDateTime>> getCheckedExamsList() {
+
         return checkedExamsList;
     }
 }

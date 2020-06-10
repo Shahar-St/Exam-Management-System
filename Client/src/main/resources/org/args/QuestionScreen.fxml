@@ -10,40 +10,39 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.QuestionController">
-   <content>
-      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-         <children>
-            <Label text="LastModified" />
-            <TextField fx:id="LastModified" editable="false" />
-            <Label text="Author" />
-            <TextField fx:id="Author" editable="false" />
-            <Label text="Content" />
-            <TextArea fx:id="Content" editable="false" prefHeight="119.0" prefWidth="429.0" />
-            <Label text="Answer 1" />
-            <TextField fx:id="Answer1" editable="false" />
-            <Label text="Answer 2" />
-            <TextField fx:id="Answer2" editable="false" />
-            <Label text="Answer 3" />
-            <TextField fx:id="Answer3" editable="false" />
-            <Label text="Answer 4" />
-            <TextField fx:id="Answer4" editable="false" />
-            <ButtonBar prefHeight="40.0" prefWidth="200.0">
-               <buttons>
-                  <Label text="Choose correct answer:" />
-                  <ChoiceBox fx:id="correctAnswerChoice" disable="true" onMouseClicked="#choiceBoxClicked" prefWidth="150.0" />
-                  <Button fx:id="CancelButton" mnemonicParsing="false" onAction="#CancelButtonClicked" text="Cancel" />
-                  <Button fx:id="DeleteButton" layoutX="240.0" layoutY="17.0" mnemonicParsing="false" onAction="#deleteButtonClicked" text="Delete" />
-                  <Button fx:id="EditButton" mnemonicParsing="false" onAction="#EditButtonClicked" text="Edit" />
-               </buttons>
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-            </ButtonBar>
-         </children>
-         <padding>
-            <Insets bottom="20.0" left="60.0" right="60.0" top="20.0" />
-         </padding>
-      </VBox>
-   </content>
+<ScrollPane fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.QuestionController">
+    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+        <padding>
+            <Insets bottom="20.0" left="60.0" right="60.0" top="20.0"/>
+        </padding>
+        <Label text="LastModified"/>
+        <TextField fx:id="LastModified" editable="false"/>
+        <Label text="Author"/>
+        <TextField fx:id="Author" editable="false"/>
+        <Label text="Content"/>
+        <TextArea fx:id="Content" editable="false" prefHeight="119.0" prefWidth="429.0"/>
+        <Label text="Answer 1"/>
+        <TextField fx:id="Answer1" editable="false"/>
+        <Label text="Answer 2"/>
+        <TextField fx:id="Answer2" editable="false"/>
+        <Label text="Answer 3"/>
+        <TextField fx:id="Answer3" editable="false"/>
+        <Label text="Answer 4"/>
+        <TextField fx:id="Answer4" editable="false"/>
+        <ButtonBar prefHeight="40.0" prefWidth="200.0">
+            <buttons>
+                <Label text="Choose correct answer:"/>
+                <ChoiceBox fx:id="correctAnswerChoice" disable="true" onMouseClicked="#choiceBoxClicked"
+                           prefWidth="150.0"/>
+                <Button fx:id="CancelButton" mnemonicParsing="false" onAction="#CancelButtonClicked" text="Cancel"/>
+                <Button fx:id="DeleteButton" layoutX="240.0" layoutY="17.0" mnemonicParsing="false"
+                        onAction="#deleteButtonClicked" text="Delete"/>
+                <Button fx:id="EditButton" mnemonicParsing="false" onAction="#EditButtonClicked" text="Edit"/>
+            </buttons>
+            <VBox.margin>
+                <Insets top="20.0"/>
+            </VBox.margin>
+        </ButtonBar>
+    </VBox>
 </ScrollPane>

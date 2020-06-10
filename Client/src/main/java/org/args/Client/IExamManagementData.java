@@ -24,7 +24,10 @@ public interface IExamManagementData {
     void viewExam(String examId);
     void clearExamList();
     void fillQuestionsList(String courseName);
-    void deployExam(String examId,String examCode);
+    void executeExam(String examId, String examCode);
     String getViewMode();
     void setViewMode(String viewMode);
+    void setCurrentExamId(String examId);
+    void setCurrentExecutedExamLaunchTime(String currentExecutedExamLaunchTime);
+    void setCurrentExecutedExamTitle(String currentExecutedExamTitle);
 }

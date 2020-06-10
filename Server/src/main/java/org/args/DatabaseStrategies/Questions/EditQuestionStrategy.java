@@ -13,11 +13,11 @@ import java.util.List;
 
 /**
  * status dictionary:
- *  0 - success
- *  1 - unauthorized access - user isn't logged in
- *  2 - Question wasn't found
- *  3 - trying to delete a question that wasn't written by the user
- *  4 - there are already 1000 question for this course (in case we need to add a new question)
+ * 0 - success
+ * 1 - unauthorized access - user isn't logged in
+ * 2 - Question wasn't found
+ * 3 - trying to delete a question that wasn't written by the user
+ * 4 - there are already 1000 question for this course (in case we need to add a new question)
  */
 public class EditQuestionStrategy extends DatabaseStrategy {
 
@@ -43,10 +43,7 @@ public class EditQuestionStrategy extends DatabaseStrategy {
 
             Question newQuestion = new Question(editRequest.getNewDescription(), editRequest.getNewAnswers(),
                     editRequest.getCorrectAnswer(), question.getCourse(), question.getAuthor());
-        //    session.saveOrUpdate(newQuestion);
-            session.save(newQuestion);
-            session.update(newQuestion);
-            session.flush();
+            session.saveOrUpdate(newQuestion);
         }
         else
         {
@@ -55,8 +52,8 @@ public class EditQuestionStrategy extends DatabaseStrategy {
             question.setCorrectAnswer(editRequest.getCorrectAnswer());
             question.setLastModified();
             session.update(question);
-            session.flush();
         }
+        session.flush();
 
         return new EditQuestionResponse(SUCCESS, request);
     }

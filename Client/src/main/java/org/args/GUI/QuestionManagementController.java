@@ -1,5 +1,5 @@
-/**
- * Sample Skeleton for 'QuestionManagementScreen.fxml' Controller Class
+/*
+  Sample Skeleton for 'QuestionManagementScreen.fxml' Controller Class
  */
 
 package org.args.GUI;
@@ -16,7 +16,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.args.Client.IQuestionManagementData;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -41,7 +40,6 @@ public class QuestionManagementController {
 
     @FXML
     private Button addButton;
-
 
     private IQuestionManagementData model;
 
@@ -81,14 +79,11 @@ public class QuestionManagementController {
     @FXML
     public void addCourseToDropdown(String courseName) {
         MenuItem course = new MenuItem(courseName);
-        course.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                String text = ((MenuItem) event.getSource()).getText();
-                coursesDropdown.setText(text);
-                model.setCurrentCourseId(text.substring(0,2));
-                model.fillQuestionsList(text.substring(0,2));
-            }
+        course.setOnAction(event -> {
+            String text = ((MenuItem) event.getSource()).getText();
+            coursesDropdown.setText(text);
+            model.setCurrentCourseId(text.substring(0,2));
+            model.fillQuestionsList(text.substring(0,2));
         });
         coursesDropdown.getItems().add(course);
     }
@@ -118,7 +113,7 @@ public class QuestionManagementController {
     }
 
     @FXML
-    public EventHandler<ActionEvent> displayCoursesFromSubject = new EventHandler<ActionEvent>() {
+    public final EventHandler<ActionEvent> displayCoursesFromSubject = new EventHandler<>() {
         @Override
         public void handle(ActionEvent event) {
             initializeCoursesDropdown();
@@ -130,7 +125,7 @@ public class QuestionManagementController {
 
 
     @FXML
-    void switchToQuestionEditScreen(ActionEvent event) throws IOException {
+    void switchToQuestionViewScreen(ActionEvent event) {
         viewSelectedQuestionDetails();
     }
 
@@ -138,12 +133,14 @@ public class QuestionManagementController {
     @FXML
     void switchToAddQuestionScreen(ActionEvent event) {
         model.prepareAddQuestion();
+        questionDetailsButton.setDisable(true);
+        ClientApp.pushLastScene("QuestionManagementScreen");
         ClientApp.setRoot("QuestionScreen");
     }
 
 
     @FXML
-    void switchToMainScreen(MouseEvent event) throws IOException {
+    void switchToMainScreen(MouseEvent event) {
         clearScreen();
         ClientApp.setRoot("MainScreen");
     }
@@ -170,16 +167,19 @@ public class QuestionManagementController {
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
             viewSelectedQuestionDetails();
         }
-
+        if (questionDetailsButton.isDisabled())
+            questionDetailsButton.setDisable(false);
 
     }
 
     private void viewSelectedQuestionDetails() {
         if (questionsList.getSelectionModel().getSelectedItem() != null) {
+            questionDetailsButton.setDisable(true);
             int indexOfColon = questionsList.getSelectionModel().getSelectedItem().indexOf(':');
             String questionId = questionsList.getSelectionModel().getSelectedItem().substring(1, indexOfColon);
             model.setCurrentQuestionId(questionId);
             model.loadQuestionDetails(questionId);
+            ClientApp.pushLastScene("QuestionManagementScreen");
         }
     }
 

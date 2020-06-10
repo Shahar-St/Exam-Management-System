@@ -11,7 +11,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.args.Client.IQuestionData;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class QuestionController {
@@ -111,13 +113,16 @@ public class QuestionController {
         }else{
             // when creating new question set the edit button to save from the beginning
             Author.setText(model.getName());
-            LastModified.setText(LocalDateTime.now().toString());
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            LastModified.setText(LocalDateTime.now().format(formatter));
             Content.setEditable(true);
             Answer1.setEditable(true);
             Answer2.setEditable(true);
             Answer3.setEditable(true);
             Answer4.setEditable(true);
             EditButton.setText("Save");
+            DeleteButton.setDisable(true);
             correctAnswerChoice.setDisable(false);
         }
 
@@ -160,6 +165,8 @@ public class QuestionController {
                     System.out.println("Undefined correct answer");
                     break;
             }
+            model.setCorrectAnswer(t1.intValue());
+
         });
     }
 

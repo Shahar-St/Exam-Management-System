@@ -1,7 +1,6 @@
 package org.args;
 
 import DatabaseAccess.Requests.*;
-import DatabaseAccess.Requests.Questions.DeleteQuestionRequest;
 import DatabaseAccess.Responses.*;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.DatabaseStrategies.Exams.*;
@@ -41,12 +40,7 @@ public class DatabaseHandler {
         this.put("ViewExamRequest", new ViewExamStrategy());
     }};
 
-////    public DatabaseResponse test(DeleteQuestionRequest request) {
-////        DeleteQuestionStrategy strategy = new DeleteQuestionStrategy();
-////        return strategy.test(request, session);
-//    }
-
-    public DatabaseHandler() {
+    private DatabaseHandler() {
         try
         {
             SessionFactory sessionFactory = getSessionFactory();

@@ -3,6 +3,8 @@ package DatabaseAccess.Requests.ExecuteExam;
 import DatabaseAccess.Requests.DatabaseRequest;
 import LightEntities.LightExam;
 
+// start exam
+
 public class ExecuteExamRequest extends DatabaseRequest {
     private final String examID;
     private final String examCode;

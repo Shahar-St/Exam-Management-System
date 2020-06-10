@@ -1,17 +1,16 @@
 package org.args.GUI;
 
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import org.args.Client.IExamData;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ExamScoringController {
@@ -91,7 +90,7 @@ public class ExamScoringController {
 
     @FXML
     void backButtonClicked(ActionEvent event) {
-        ClientApp.backToLastScene();
+        ClientApp.setRoot("ExamQuestionsScreen");
 
     }
 
@@ -106,7 +105,20 @@ public class ExamScoringController {
         for(String val : model.getObservableQuestionsScoringList()){
             questionsScoringList.add(Double.parseDouble(val));
         }
-        model.saveExam(title,duration,tNotes,sNotes,questionsId,questionsScoringList,null);
+        if(model.calcQuestionsScoringListValue()>100 || model.calcQuestionsScoringListValue()<100){
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Attention!");
+            alert.setHeaderText("Attention! , Please Confirm the following:");
+            alert.setContentText("Exams Grade isn't 100. are you sure you want to proceed?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.CANCEL){
+                // prevent from the change or edit to be saved in case of cancellation.
+                return;
+            }
+        }
+        model.saveExam(title,duration,tNotes,sNotes,questionsId,questionsScoringList,model.getCurrentExamId());
 
     }
 }

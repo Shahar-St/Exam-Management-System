@@ -1,5 +1,5 @@
-/**
- * Sample Skeleton for 'ViewExamScreen.fxml' Controller Class
+/*
+  Sample Skeleton for 'ViewExamScreen.fxml' Controller Class
  */
 
 package org.args.GUI;
@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import org.args.Client.IExamData;
 
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -19,6 +20,8 @@ import java.util.ResourceBundle;
 public class ViewExamController {
 
     private IExamData model;
+
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     void setModel(IExamData dataModel) {
         if (model == null) {
@@ -77,13 +80,13 @@ public class ViewExamController {
         editButton.setDisable(!model.isExamDeletable());
         List<LightQuestion> questionList = model.getLightQuestionListFromCurrentExam();
         List<Double> questionsScores = model.getCurrentExamQuestionsScoreList();
-        String examDescription = model.getCurrentExamTitle();
+        String examTitle = model.getCurrentExamTitle();
         String examTeacherPrivateNotes = model.getCurrentExamTeacherNotes();
         String examStudentNotes = model.getCurrentExamStudentNotes();
         String examDuration = model.getCurrentExamDuration();
-        Label description_label = new Label("Exam Description:");
+        Label title_label = new Label("Exam Title:");
 
-        TextField description = new TextField(examDescription);
+        TextField title = new TextField(examTitle);
 
         Label privateNotes_label = new Label("Teacher Private Notes:");
 
@@ -96,45 +99,49 @@ public class ViewExamController {
         Label duration_label = new Label("Exam Duration In Minutes:");
 
         TextField duration = new TextField(examDuration);
+
         assert pageView != null;
-        pageView.setPageCount(questionList.size());
+        pageView.setPageCount(questionList.size()+1);
         pageView.setCurrentPageIndex(0);
         pageView.setMaxPageIndicatorCount(5);
         pageView.setPageFactory((pageIndex) -> {
 
+            if(pageIndex==0){
+                return new VBox(title_label, title, privateNotes_label, privateNotes,studentNotes_label,sNotes ,duration_label, duration);
+            }
             Label date_label = new Label("Last Modified:");
 
-            TextField lastModified = new TextField(questionList.get(pageIndex).getLastModified().toString());
+            TextField lastModified = new TextField(questionList.get(pageIndex-1).getLastModified().format(formatter));
 
             Label author_label = new Label("Author:");
 
-            TextField author = new TextField(questionList.get(pageIndex).getAuthor());
+            TextField author = new TextField(questionList.get(pageIndex-1).getAuthor());
 
             Label content_label = new Label("Content:");
 
-            TextArea content = new TextArea(questionList.get(pageIndex).getQuestionContent());
+            TextArea content = new TextArea(questionList.get(pageIndex-1).getQuestionContent());
 
             Label ans1_label = new Label("Answer 1:");
 
-            TextField answer1 = new TextField(questionList.get(pageIndex).getAnswers().get(0));
+            TextField answer1 = new TextField(questionList.get(pageIndex-1).getAnswers().get(0));
 
             Label ans2_label = new Label("Answer 2:");
 
-            TextField answer2 = new TextField(questionList.get(pageIndex).getAnswers().get(1));
+            TextField answer2 = new TextField(questionList.get(pageIndex-1).getAnswers().get(1));
 
             Label ans3_label = new Label("Answer 3:");
 
-            TextField answer3 = new TextField(questionList.get(pageIndex).getAnswers().get(2));
+            TextField answer3 = new TextField(questionList.get(pageIndex-1).getAnswers().get(2));
 
             Label ans4_label = new Label("Answer 4:");
 
-            TextField answer4 = new TextField(questionList.get(pageIndex).getAnswers().get(3));
+            TextField answer4 = new TextField(questionList.get(pageIndex-1).getAnswers().get(3));
 
             Label score_label = new Label("Question Score:");
 
-            TextField score = new TextField(questionsScores.get(pageIndex).toString());
+            TextField score = new TextField(questionsScores.get(pageIndex-1).toString());
 
-            description.setEditable(false);
+            title.setEditable(false);
             privateNotes.setEditable(false);
             duration.setEditable(false);
             lastModified.setEditable(false);
@@ -169,16 +176,9 @@ public class ViewExamController {
                     break;
             }
 
-            if(pageIndex==0){
-                return new VBox(description_label, description, privateNotes_label, privateNotes,studentNotes_label,sNotes ,duration_label, duration,
-                        date_label, lastModified, author_label, author, content_label, content, ans1_label, answer1, ans2_label,
-                        answer2, ans3_label, answer3, ans4_label, answer4, score_label, score);
-            }
+
             return new VBox(date_label, lastModified, author_label, author, content_label, content, ans1_label, answer1, ans2_label,
                     answer2, ans3_label, answer3, ans4_label, answer4, score_label, score);
-
-
-
         });
 
     }

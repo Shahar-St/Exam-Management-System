@@ -2,14 +2,22 @@ package org.args.Client;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.Exams.*;
+import DatabaseAccess.Requests.ExecuteExam.*;
 import DatabaseAccess.Requests.LoginRequest;
 import DatabaseAccess.Requests.Questions.*;
+import DatabaseAccess.Requests.ReviewExam.CheckedExamRequest;
+import DatabaseAccess.Requests.ReviewExam.EvaluateManualExamRequest;
+import DatabaseAccess.Requests.ReviewExam.PendingExamRequest;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
 import DatabaseAccess.Responses.Exams.AllExamsResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
+import DatabaseAccess.Responses.ExecuteExam.*;
 import DatabaseAccess.Responses.LoginResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
 import DatabaseAccess.Responses.Questions.QuestionResponse;
+import DatabaseAccess.Responses.ReviewExam.CheckedExamResponse;
+import DatabaseAccess.Responses.ReviewExam.EvaluateManualExamResponse;
+import DatabaseAccess.Responses.ReviewExam.PendingExamResponse;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
 import LightEntities.LightExam;
@@ -22,21 +30,30 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import org.args.GUI.ClientApp;
+import org.args.GUI.StudentExamType;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class DataModel implements IMainScreenData, IQuestionManagementData, IQuestionData, IStudentExamExecutionData,
-        IDeanViewStatsData, IStudentViewStatsData, IExamData, ITeacherExamExecutionData, IDeanExamExecutionData,
-        ITeacherViewStatsData, IExamManagementData, IExamReviewData {
+        IDeanViewStatsData, IStudentViewStatsData, IExamData, ITeacherViewStatsData, IExamManagementData, IExamReviewData, ITeacherExecuteExamData, IViewDeanTimeExtensionData {
 
-    private ClientApp app;
+    private final ClientApp app;
+
+    private final WordGenerator wordGenerator;
+
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public DataModel(ClientApp clientApp) {
         app = clientApp;
+        wordGenerator = new WordGenerator();
         EventBus.getDefault().register(this);
     }
 
@@ -85,6 +102,17 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    @Override
+    public void studentTakeComputerizedExam(String examCode, String id) {
+        ClientApp.sendRequest(new TakeExamRequest(Integer.parseInt(id), examCode));
+    }
+
+    @Override
+    public void studentTakeManualExam(String code) {
+        ClientApp.sendRequest(new TakeExamRequest(0, code));
+        setManualExam(true);
     }
 
     //question management - subjects and courses dropdowns and screen init
@@ -168,24 +196,14 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     private final ObservableList<String> observableQuestionsList = FXCollections.observableArrayList();
 
     private void addToObservableQuestionsList(String text) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                observableQuestionsList.add(text);
-            }
-        });
+        Platform.runLater(() -> observableQuestionsList.add(text));
     }
 
     @Subscribe
     public void handleAllQuestionsResponse(AllQuestionsResponse response) {
         if (response.getStatus() == 0) {
             if (observableQuestionsList.size() > 0) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        observableQuestionsList.clear();
-                    }
-                });
+                Platform.runLater(observableQuestionsList::clear);
             }
             generateQuestionDescriptors(response.getQuestionList());
         }
@@ -308,7 +326,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     public void saveQuestion(String questionId, String answer_1, String answer_2, String answer_3, String answer_4, String newContent) {
-        DatabaseRequest request = null;
+        DatabaseRequest request;
         if(isCreating){
              request = new AddQuestionRequest(newContent, Arrays.asList(answer_1, answer_2, answer_3, answer_4), correctAnswer,currentCourseId);
 
@@ -324,7 +342,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
         if (response.getStatus() == 0) {
             setQuestionId(((QuestionRequest) response.getRequest()).getQuestionID());
-            setLastModified(response.getLastModified().toString());
+            setLastModified(response.getLastModified().format(dateTimeFormatter));
             setAuthor(response.getAuthorUserName());
             setContent(response.getQuestionContent());
             setAnswers(response.getAnswers());
@@ -386,7 +404,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         for (Double score : currentExam.getQuestionsScores()) {
             observableQuestionsScoringList.add(Double.toString(score));
         }
-
     }
 
 
@@ -422,18 +439,18 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     public void initQuestionsScoringList() {
-        if (observableQuestionsScoringList.isEmpty() && !observableExamQuestionsList.isEmpty()) {
-            for (String str : observableExamQuestionsList) {
-                observableQuestionsScoringList.add("0");
-            }
-        } else if (observableExamQuestionsList.isEmpty()) {
-            observableQuestionsScoringList.clear();
-
-        }else if( observableQuestionsScoringList.size() != observableExamQuestionsList.size()){
-            for(int i=observableQuestionsScoringList.size();i<observableExamQuestionsList.size();i++){
-                observableQuestionsScoringList.add("0");
-            }
-        }
+//        if (observableQuestionsScoringList.isEmpty() && !observableExamQuestionsList.isEmpty()) {
+//            for (String str : observableExamQuestionsList) {
+//                observableQuestionsScoringList.add("0");
+//            }
+//        } else if (observableExamQuestionsList.isEmpty()) {
+//            observableQuestionsScoringList.clear();
+//
+//        }else if( observableQuestionsScoringList.size() != observableExamQuestionsList.size()){
+//            for(int i=observableQuestionsScoringList.size();i<observableExamQuestionsList.size();i++){
+//                observableQuestionsScoringList.add("0");
+//            }
+//        }
         setCurrentExamTotalScore(String.valueOf(calcQuestionsScoringListValue()));
 
     }
@@ -455,7 +472,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         }
         return true;
     }
-
 
     public StringProperty currentExamTitleProperty() {
         return currentExamTitle;
@@ -511,24 +527,20 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void addToExamQuestionsList(String question) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                observableExamQuestionsList.add(question);
+        Platform.runLater(() -> {
+            observableExamQuestionsList.add(question);
+            // check if new score need to be added
+            if(observableExamQuestionsList.size()>observableQuestionsScoringList.size())
                 observableQuestionsScoringList.add("0");
-            }
         });
 
     }
 
     @Override
     public void removeFromExamQuestionsList(String question) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                observableQuestionsScoringList.remove(observableExamQuestionsList.indexOf(question));
-                observableExamQuestionsList.remove(question);
-            }
+        Platform.runLater(() -> {
+            observableQuestionsScoringList.remove(observableExamQuestionsList.indexOf(question));
+            observableExamQuestionsList.remove(question);
         });
 
     }
@@ -568,6 +580,16 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private final ObservableList<String> observableExamList = FXCollections.observableArrayList();
 
+    String currentExamId;
+
+    public String getCurrentExamId() {
+        return currentExamId;
+    }
+
+    public void setCurrentExamId(String currentExamId) {
+        this.currentExamId = currentExamId;
+    }
+
     @Subscribe
     public void handleAllExamsResponse(AllExamsResponse response) {
         if (response.getStatus() == 0) {
@@ -579,13 +601,9 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         }
     }
 
-    @Override
-    public void deployExam(String examId, String examCode) {
-
-    }
 
     /*used to represent the exams as strings in the list view in the format: -#id: content-
-    (same as questions in question management*/
+        (same as questions in question management*/
     public void generateExamDescriptors(HashMap<String, Pair<LocalDateTime, String>> examList) {
         for (Map.Entry<String, Pair<LocalDateTime, String>> exam : examList.entrySet()) {
             String examId = exam.getKey();
@@ -597,12 +615,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     private void addToObservableExamList(String text) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                observableExamList.add(text);
-            }
-        });
+        Platform.runLater(() -> observableExamList.add(text));
     }
 
 
@@ -668,9 +681,63 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
 
     //TODO: implement IStudentExamExecutionData methods
+
+    private boolean raisedHand = false;
+
+    private boolean isManualExam = false;
+
+    private LightExam examForStudentExecution;
+
+    private HashMap<Integer, Integer> correctAnswersMap;
+
+    private File manualExamFile;
+
+    public LightExam getExamForStudentExecution() {
+        return examForStudentExecution;
+    }
+
+    public void setExamForStudentExecution(LightExam examForStudentExecution) {
+        this.examForStudentExecution = examForStudentExecution;
+    }
+
+    public HashMap<Integer, Integer> getCorrectAnswersMap() {
+        return correctAnswersMap;
+    }
+
+    public boolean isManualExam() {
+        return isManualExam;
+    }
+
+    public void setManualExam(boolean manualExam) {
+        isManualExam = manualExam;
+    }
+
+    public void setCorrectAnswersMap(HashMap<Integer, Integer> correctAnswersMap) {
+        this.correctAnswersMap = correctAnswersMap;
+    }
+
+    public File getManualExamFile() {
+        return manualExamFile;
+    }
+
+    public void setManualExamFile(File manualExamFile) {
+        this.manualExamFile = manualExamFile;
+    }
+
+    @Subscribe
+    public void handleTakeExamResponse(TakeExamResponse response) {
+        if (response.getStatus() == 0) {
+            setExamForStudentExecution(response.getLightExam());
+            if (correctAnswersMap == null)
+                correctAnswersMap = new HashMap<>();
+            else
+                correctAnswersMap.clear();
+        }
+    }
+
     @Override
     public void storeAnswer(int questionNumber, int answerNumber) {
-
+        correctAnswersMap.put(questionNumber, answerNumber);
     }
 
     @Override
@@ -680,12 +747,57 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void submitExam() {
+        if (isManualExam()) {
+            ClientApp.sendRequest(new SubmitManualExamRequest(getExamForStudentExecution().getId(), getManualExamFile()));
+            setManualExam(false);
+        } else {
+            List<Integer> correctAnswersList = new ArrayList<>();
+            for (Map.Entry<Integer, Integer> entry : getCorrectAnswersMap().entrySet())
+                correctAnswersList.add(entry.getKey(), entry.getValue());
+            ClientApp.sendRequest(new SubmitExamRequest(examForStudentExecution.getId(), correctAnswersList));
+        }
 
     }
 
     @Override
     public void raiseHand() {
+        if (!raisedHand) {
+            ClientApp.sendRequest(new RaiseHandRequest());
+            raisedHand = true;
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("INFO");
+                alert.setHeaderText(null);
+                alert.setContentText("A Massage Has Been Sent To You're Teacher");
+                alert.show();
+            });
+        } else {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("INFO");
+                alert.setHeaderText(null);
+                alert.setContentText("A Massage Has Been Sent Already, Please Wait To You're Teacher Response");
+                alert.show();
+            });
+        }
 
+    }
+
+    @Override
+    public void createManualTest(File path) {
+        // test of word generator
+        try {
+            wordGenerator.createWordFile(getExamForStudentExecution(), path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Subscribe
+    public void handleRaiseHandResponse(RaiseHandResponse response) {
+        if (response.getStatus() == 0) {
+            raisedHand = false;
+        }
     }
 
     //TODO: implement IExamData Method
@@ -696,34 +808,64 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         } else {
             ClientApp.sendRequest(new EditExamRequest(examId, title, generateListOfIds(questionList), questionsScoreList, teacherNotes, studentNotes, duration));
         }
+        ClientApp.popLastScene();
     }
 
-    private List<String> generateListOfIds(List<String> questions)
-    {
+    private List<String> generateListOfIds(List<String> questions) {
         List<String> questionIds = new Vector<>();
-        for (String question : questions)
-        {
-            questionIds.add(question.substring(1,6));
+        for (String question : questions) {
+            questionIds.add(question.substring(1, 6));
         }
         return questionIds;
 
     }
 
     //TODO: implement ITeacherExamExecutionData Methods
-    @Override
-    public void timeExtensionRequest(int minutes) {
+    //Teacher Execute Exam Data
 
+    String currentExecutedExamLaunchTime;
+    String currentExecutedExamTitle;
+    final ObservableList<String> currentHandsRaised = FXCollections.observableArrayList();
+
+    public ObservableList<String> getCurrentHandsRaised() {
+        return currentHandsRaised;
+    }
+
+    public String getCurrentExecutedExamLaunchTime() {
+        return currentExecutedExamLaunchTime;
+    }
+
+    public void setCurrentExecutedExamLaunchTime(String currentExecutedExamLaunchTime) {
+        this.currentExecutedExamLaunchTime = currentExecutedExamLaunchTime;
+    }
+
+    public String getCurrentExecutedExamTitle() {
+        return currentExecutedExamTitle;
+    }
+
+    public void setCurrentExecutedExamTitle(String currentExecutedExamTitle) {
+        this.currentExecutedExamTitle = currentExecutedExamTitle;
     }
 
     @Override
-    public void handleRaisedHand(String studentId) {
-
+    public void executeExam(String examId, String examCode) {
+        setCurrentExamId(examId);
+        ClientApp.sendRequest(new ExecuteExamRequest(examId, examCode));
     }
 
-    //TODO: implement IDeanExamExecutionData method NOTE: the request should be other type then String!!
     @Override
-    public void handleTimeExtensionRequest(String request) {
+    public void sendTimeExtensionRequest(int timeExtension, String reason) {
+        ClientApp.sendRequest(new TimeExtensionRequest(currentExamId, timeExtension, reason));
+    }
 
+    @Subscribe
+    public void handleRaisedHandResponse(RaiseHandResponse response) {
+        Platform.runLater(() -> currentHandsRaised.add(response.getStudentName()));
+    }
+
+    @Override
+    public void solveRaisedHand(String currentStudentName) {
+        Platform.runLater(() -> currentHandsRaised.remove(currentStudentName));
     }
 
 
@@ -741,6 +883,150 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void changeGrade(double newGrade, String reason, String examId) {
+
+    }
+
+    //Teacher pending exams data
+
+    ObservableList<String> pendingExamsObservableList = FXCollections.observableArrayList();
+
+    public ObservableList<String> getPendingExamsObservableList() {
+        return pendingExamsObservableList;
+    }
+
+    @Subscribe
+    public void handlePendingExamResponse(PendingExamResponse response) {
+        if (response.getStatus() == 0) {
+            for (Map.Entry<String, Pair<String, LocalDateTime>> entry : response.getCheckedExamsList().entrySet()) {
+                Platform.runLater(() -> {
+                    String examId = entry.getKey();
+                    String examTitle = entry.getValue().getFirst();
+                    String examDate = entry.getValue().getSecond().toString();
+                    String fullExamDescription = "#" + examId + ":" + examTitle + " from " + examDate;
+                    pendingExamsObservableList.add(fullExamDescription);
+                });
+            }
+        }
+    }
+
+    @Override
+    public void showPendingExamGrades(String examId) {
+        ClientApp.sendRequest(new CheckedExamRequest(examId));
+    }
+
+    @Override
+    public void loadPendingExams() {
+        ClientApp.sendRequest(new PendingExamRequest());
+    }
+
+    @Override
+    public void clearPendingExams() {
+        pendingExamsObservableList.clear();
+    }
+
+    //TODO: implements the manual exam review
+
+    private File manualExamForReview;
+
+    private String manualExamForReviewStudentId;
+
+    public File getManualExamForReview() {
+        return manualExamForReview;
+    }
+
+    public void setManualExamForReview(File manualExamForReview) {
+        this.manualExamForReview = manualExamForReview;
+    }
+
+    @Override
+    public String getManualExamForReviewStudentId() {
+        return manualExamForReviewStudentId;
+    }
+
+    public void setManualExamForReviewStudentId(String manualExamForReviewStudentId) {
+        this.manualExamForReviewStudentId = manualExamForReviewStudentId;
+    }
+
+    public void saveWordFile(File filePath){
+        try {
+            wordGenerator.saveWordFile(getManualExamForReview(),filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void submitExamReview(double grade,String notes,File manualExamFile){
+        ClientApp.sendRequest(new EvaluateManualExamRequest(grade,notes,manualExamFile));
+
+    }
+
+    @Subscribe
+    public void handleEvaluateManualExamResponse(EvaluateManualExamResponse response){
+        if(response.getStatus()==0){
+            // clean all the relevant attributes
+
+        }
+    }
+
+    ObservableList<StudentExamType> studentsGradesToReview = FXCollections.observableArrayList();
+
+    public ObservableList<StudentExamType> getStudentsGradesToReview() {
+        return studentsGradesToReview;
+    }
+
+    @Subscribe
+    public void handleCheckedExamResponse(CheckedExamResponse response) {
+        if (response.getStatus() == 0) {
+            Platform.runLater(() -> {
+                //HashMap<studentID,isComputerized>
+                for (Map.Entry<String, Boolean> entry : response.getCheckedExamsList().entrySet()) {
+                    String method = entry.getValue() ? "Computerized" : "Manual";
+                    studentsGradesToReview.add(new StudentExamType(entry.getKey(), method));
+                }
+            });
+        }
+    }
+
+    @Override
+    public void reviewComputerizedExam(String id) {
+
+    }
+
+    @Override
+    public void reviewManualExam(String id) {
+
+    }
+
+    // dean time extension
+
+    ObservableList<String> ObservableTimeExtensionRequestsList = FXCollections.observableArrayList();
+
+    public ObservableList<String> getObservableTimeExtensionRequestsList() {
+        return ObservableTimeExtensionRequestsList;
+    }
+
+    @Subscribe
+    public void handleConfirmTimeExtensionResponse (ConfirmTimeExtensionResponse response)
+    {
+        Platform.runLater(() -> {
+            String requestDescription = response.getExamId() + ": " + response.getDurationInMinutes() + "minutes request - " + response.getReasonForExtension();
+            ObservableTimeExtensionRequestsList.add(requestDescription);
+        });
+    }
+
+    @Override
+    public void removeRequest(String selectedItem) {
+        Platform.runLater(() -> getObservableTimeExtensionRequestsList().remove(selectedItem));
+    }
+
+    @Override
+    public void rejectExtension(String reason, String examId) {
+        ClientApp.sendRequest(new ConfirmTimeExtensionRequest(false,reason,0,examId));
+    }
+
+    @Override
+    public void acceptExtension(String extension, String examId) {
+        ClientApp.sendRequest(new ConfirmTimeExtensionRequest(true,"",Integer.parseInt(extension),examId));
 
     }
 }
