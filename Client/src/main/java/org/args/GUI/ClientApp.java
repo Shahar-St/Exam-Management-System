@@ -391,18 +391,20 @@ public class ClientApp extends Application {
     {
         if(response.getStatus() != 0)
             popUpAlert("Network Error: Failed to fetch Dean's response!");
-//        else
-//        {
-//            if(!response.isAccepted())
-//                popUpAlert("Time extension request was denied by the dean. \nReason: " + response.getDeanResponse());
-//            else
-//                popUpAlert("Time extension request was accepted by the dean. \nApproved added time: " + response.getAuthorizedTimeExtension());
-//        }
+        else
+        {
+            if(!response.isAccepted())
+                popUpAlert("Time extension request was denied by the dean. \nReason: " + response.getDeanResponse());
+            else
+                popUpAlert("Time extension request was accepted by the dean. \nApproved added time: " + response.getAuthorizedTimeExtension());
+        }
     }
 
     @Subscribe
     public void handleRaisedHandResponse(RaiseHandResponse response)
     {
+        if(response.getStatus() != 0)
+            popUpAlert("ooops, failed to fectch a raised hand request from the server!");
 
     }
 

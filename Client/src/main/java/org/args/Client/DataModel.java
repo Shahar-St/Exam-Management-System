@@ -978,6 +978,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void handleCheckedExamResponse(CheckedExamResponse response) {
         if (response.getStatus() == 0) {
             Platform.runLater(() -> {
+                studentsGradesToReview.clear();
                 //HashMap<studentID,isComputerized>
                 for (Map.Entry<String, Boolean> entry : response.getCheckedExamsList().entrySet()) {
                     String method = entry.getValue() ? "Computerized" : "Manual";
