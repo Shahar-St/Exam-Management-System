@@ -56,5 +56,6 @@ public class TeacherPendingExamsController {
     @FXML
     void switchToMainScreen(MouseEvent event) {
         ClientApp.setRoot("MainScreen");
+        model.clearPendingExams();
     }
 }

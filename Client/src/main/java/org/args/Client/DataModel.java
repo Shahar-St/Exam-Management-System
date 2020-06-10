@@ -913,6 +913,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.sendRequest(new PendingExamRequest());
     }
 
+    @Override
+    public void clearPendingExams() {
+        pendingExamsObservableList.clear();
+    }
+
     //TODO: implements the manual exam review
 
     private File manualExamForReview;
