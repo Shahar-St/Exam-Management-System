@@ -6,6 +6,7 @@ import LightEntities.LightExam;
 //this is what the teacher sends to the server when the teacher requests time extension.
 
 public class TimeExtensionRequest extends DatabaseRequest {
+
     private final String examId;
     private final int durationInMinutes;
     private final String reasonForExtension;

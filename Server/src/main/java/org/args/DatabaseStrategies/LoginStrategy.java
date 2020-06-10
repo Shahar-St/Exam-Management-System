@@ -4,6 +4,7 @@ import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.LoginRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.LoginResponse;
+import org.args.Entities.Dean;
 import org.args.Entities.User;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
@@ -41,6 +42,11 @@ public class LoginStrategy extends DatabaseStrategy {
 
         client.setInfo("userName", user.getUserName());
         loggedInUsers.put(user.getUserName(), client);
+        if (user instanceof Dean)
+        {
+            loggedInUsers.put("DeanConnection", client);
+            client.setInfo("Dean", true);
+        }
         return new LoginResponse(SUCCESS, user.getClass().getSimpleName().toLowerCase(),
                 user.getFullName(), request);
 
