@@ -6,9 +6,7 @@ import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.ExecuteExam.ExecuteExamResponse;
 
 import org.args.DatabaseStrategies.DatabaseStrategy;
-import org.args.Entities.ConcreteExam;
-import org.args.Entities.Exam;
-import org.args.Entities.Teacher;
+import org.args.Entities.*;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
@@ -33,13 +31,24 @@ public class ExecuteExamStrategy extends DatabaseStrategy {
             return new ExecuteExamResponse(UNAUTHORIZED, request);
 
         Exam exam = getTypeById(Exam.class, request1.getExamID(), session);
+        Course course = exam.getCourse();
+        List<Student> students = course.getStudentsList();
+
         if (exam == null)
             return new ExecuteExamResponse(ERROR2, request);
 
         Teacher teacher = (Teacher) getUser((String) client.getInfo("userName"), session);
         ConcreteExam concreteExam = new ConcreteExam(exam, teacher, request1.getExamCode());
-
         session.save(concreteExam);
+
+        for (int i = 0; i < students.size(); i++)
+        {
+            ExecutedExam executedExam = new ExecutedExam(concreteExam, students.get(i),"", null, "");
+            students.get(i).setIdExecutedExamCurrent(executedExam.getId());
+
+            session.save(concreteExam);
+        }
+
         session.flush();
 
         return new ExecuteExamResponse(SUCCESS, request);

@@ -49,8 +49,8 @@ public class ExecutedExam {
     private String commentsAfterCheck;
     private double grade = 0;
     private int duration; // exam duration in minutes
-//    private String executedExamDescription, teacherPrivateNotes; // teacherPrivateNotes only for the teacher
-
+    //    private String executedExamDescription, teacherPrivateNotes; // teacherPrivateNotes only for the teacher
+    private boolean isComputerized = false;
     //Group c'tors
     public ExecutedExam() { }
 
@@ -158,7 +158,15 @@ public class ExecutedExam {
         this.duration = duration;
     }
 
-//    public String getExecutedExamDescription() {
+    public boolean isComputerized() {
+        return isComputerized;
+    }
+
+    public void setComputerized(boolean computerized) {
+        isComputerized = computerized;
+    }
+
+    //    public String getExecutedExamDescription() {
 //        return executedExamDescription;
 //    }
 //    public void setExecutedExamDescription(String description) {
