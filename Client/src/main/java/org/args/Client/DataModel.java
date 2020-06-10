@@ -966,14 +966,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Subscribe
     public void handleCheckedExamResponse(CheckedExamResponse response) {
         if (response.getStatus() == 0) {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    //HashMap<studentID,isComputerized>
-                    for (Map.Entry<String, Boolean> entry : response.getCheckedExamsList().entrySet()) {
-                        String method = entry.getValue() ? "Computerized" : "Manual";
-                        studentsGradesToReview.add(new StudentExamType(entry.getKey(), method));
-                    }
+            Platform.runLater(() -> {
+                //HashMap<studentID,isComputerized>
+                for (Map.Entry<String, Boolean> entry : response.getCheckedExamsList().entrySet()) {
+                    String method = entry.getValue() ? "Computerized" : "Manual";
+                    studentsGradesToReview.add(new StudentExamType(entry.getKey(), method));
                 }
             });
         }
@@ -1000,23 +997,15 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Subscribe
     public void handleConfirmTimeExtensionResponse (ConfirmTimeExtensionResponse response)
     {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                String requestDescription = response.getExamId() + ": " + response.getDurationInMinutes() + "minutes request - " + response.getReasonForExtension();
-                ObservableTimeExtensionRequestsList.add(requestDescription);
-            }
+        Platform.runLater(() -> {
+            String requestDescription = response.getExamId() + ": " + response.getDurationInMinutes() + "minutes request - " + response.getReasonForExtension();
+            ObservableTimeExtensionRequestsList.add(requestDescription);
         });
     }
 
     @Override
     public void removeRequest(String selectedItem) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                getObservableTimeExtensionRequestsList().remove(selectedItem);
-            }
-        });
+        Platform.runLater(() -> getObservableTimeExtensionRequestsList().remove(selectedItem));
     }
 
     @Override

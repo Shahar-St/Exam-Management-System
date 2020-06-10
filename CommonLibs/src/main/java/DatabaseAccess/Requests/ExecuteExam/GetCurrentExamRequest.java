@@ -1,5 +1,7 @@
 package DatabaseAccess.Requests.ExecuteExam;
 
-public class GetCurrentExamRequest {
+import DatabaseAccess.Requests.DatabaseRequest;
+
+public class GetCurrentExamRequest extends DatabaseRequest {
 
 }
