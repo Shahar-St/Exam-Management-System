@@ -47,7 +47,7 @@ public class ExecutedExam {
 //    private String examId;
     private String reasonsForChangeGrade;
     private String commentsAfterCheck;
-    private int grade = 0;
+    private double grade = 0;
     private int duration; // exam duration in minutes
 //    private String executedExamDescription, teacherPrivateNotes; // teacherPrivateNotes only for the teacher
 
@@ -144,10 +144,10 @@ public class ExecutedExam {
 //        this.examId = examId;
 //    }
 
-    public int getGrade() {
+    public double getGrade() {
         return grade;
     }
-    public void setGrade(int grade) {
+    public void setGrade(double grade) {
         this.grade = grade;
     }
 
