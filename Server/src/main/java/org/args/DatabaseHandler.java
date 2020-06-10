@@ -4,6 +4,7 @@ import DatabaseAccess.Requests.*;
 import DatabaseAccess.Responses.*;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.DatabaseStrategies.Exams.*;
+import org.args.DatabaseStrategies.ExecuteExam.ExecuteExamStrategy;
 import org.args.DatabaseStrategies.LoginStrategy;
 import org.args.DatabaseStrategies.Questions.*;
 import org.args.DatabaseStrategies.SubjectAndCoursesStrategy;
@@ -38,6 +39,7 @@ public class DatabaseHandler {
         this.put("DeleteExamRequest", new DeleteExamStrategy());
         this.put("EditExamRequest", new EditExamStrategy());
         this.put("ViewExamRequest", new ViewExamStrategy());
+        this.put("ExecuteExamRequest", new ExecuteExamStrategy());
     }};
 
     private DatabaseHandler() {
