@@ -19,40 +19,24 @@ public class ExecutedExam {
     @JoinColumn(name = "student_id")
     private Student student;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @Cascade(CascadeType.SAVE_UPDATE)
-//    @JoinColumn(name = "course_id")
-//    private Course course;
-
-     @ManyToOne(fetch = FetchType.LAZY)
-     @Cascade(CascadeType.SAVE_UPDATE)
-     @JoinColumn(name = "concrete_id")
-     private ConcreteExam concreteExam;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @Cascade(CascadeType.SAVE_UPDATE)
-//    @JoinColumn(name = "teacher_id")
-//    private Teacher author;
-
-//    @ManyToMany(mappedBy = "containedInExecutedExams")
-//    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
-//    private List<Question> questionsList = new ArrayList<>();
-
-//    @ElementCollection
-//    private List<Double> questionsScores = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Cascade(CascadeType.SAVE_UPDATE)
+    @JoinColumn(name = "concrete_id")
+    private ConcreteExam concreteExam;
 
     @ElementCollection
-    private List<Integer> answersByStudent= new ArrayList<>();
+    private List<Integer> answersByStudent = new ArrayList<>();
 
-//    private String examId;
+
     private String reasonsForChangeGrade;
     private String commentsAfterCheck;
     private double grade = 0;
     private int duration; // exam duration in minutes
-    //    private String executedExamDescription, teacherPrivateNotes; // teacherPrivateNotes only for the teacher
     private boolean isComputerized = false;
+
     //Group c'tors
-    public ExecutedExam() { }
+    public ExecutedExam() {
+    }
 
     public ExecutedExam(ConcreteExam concreteExam, Student student, String commentsAfterCheck,
                         List<Integer> answersByStudent, String reasonsForChangeGrade) {
@@ -65,28 +49,7 @@ public class ExecutedExam {
         this.duration = concreteExam.getExam().getDurationInMinutes();
         if (student.getExtensionEligible())
             setOverTime();
-
-//        this.setCourse(exam.getCourse());
-//        for (Question question : exam.getQuestionsList())
-//            this.addQuestion(question);
-//        this.questionsScores.addAll(exam.getQuestionsScores());
-
-//        this.setAuthor(exam.getAuthor());
-//        this.examId = exam.getId();
-//          this.duration = exam.getDurationInMinutes();
-//        this.executedExamDescription = exam.getStudentNotes();
-//        this.teacherPrivateNotes = exam.getTeacherNotes();
-
     }
-
-//    public void addQuestion(Question question) {
-//        if (!questionsList.contains(question))
-//            questionsList.add(question);
-//
-//        if (!question.getContainedInExecutedExams().contains(this))
-//            question.getContainedInExecutedExams().add(this);
-//    }
-
 
     //Group setters and getters
     public int getId() {
@@ -112,37 +75,6 @@ public class ExecutedExam {
         if (!concreteExam.getExecutedExamsList().contains(this))
             concreteExam.addExecutedExam(this);
     }
-//
-//    public Teacher getAuthor() {
-//        return author;
-//    }
-//    public void setAuthor(Teacher author) {
-//
-//        this.author = author;
-//        if (!author.getExecutedExamsList().contains(this))
-//            author.addExecutedExam(this);
-//    }
-
-//    public List<Question> getQuestionsList() {
-//        return questionsList;
-//    }
-//    public void setQuestionsList(List<Question> questionsList) {
-//        this.questionsList = questionsList;
-//    }
-//
-//    public List<Double> getQuestionsScores() {
-//        return questionsScores;
-//    }
-//    public void setQuestionsScores(List<Double> questionsScores) {
-//        this.questionsScores = questionsScores;
-//    }
-//
-//    public String getExamId() {
-//        return examId;
-//    }
-//    public void setExamId(String examId) {
-//        this.examId = examId;
-//    }
 
     public double getGrade() {
         return grade;
@@ -165,20 +97,6 @@ public class ExecutedExam {
     public void setComputerized(boolean computerized) {
         isComputerized = computerized;
     }
-
-    //    public String getExecutedExamDescription() {
-//        return executedExamDescription;
-//    }
-//    public void setExecutedExamDescription(String description) {
-//        this.executedExamDescription = description;
-//    }
-//
-//    public String getTeacherPrivateNotes() {
-//        return teacherPrivateNotes;
-//    }
-//    public void setTeacherPrivateNotes(String teacherPrivateNotes) {
-//        this.teacherPrivateNotes = teacherPrivateNotes;
-//    }
 
     public void setOverTime() {
         this.duration += 0.25 * this.duration;

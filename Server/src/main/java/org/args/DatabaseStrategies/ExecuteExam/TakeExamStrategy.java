@@ -16,8 +16,9 @@ import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
 import java.util.List;
-
+//TODO
 public class TakeExamStrategy extends DatabaseStrategy {
+
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
                                    List<String> loggedInUsers) {
@@ -28,19 +29,17 @@ public class TakeExamStrategy extends DatabaseStrategy {
 
         Student student = (Student) getUser((String) client.getInfo("userName"), session);
         ExecutedExam executedExam = getTypeById(ExecutedExam.class, String.valueOf(student.getIdExecutedExamCurrent())
-                                    , session);
+                , session);
 
-        if(takeExamRequest.getSocialId() != 0)
-            executedExam.setComputerized(true);
-
-        if(executedExam==null)
+        if (executedExam == null)
             return new TakeExamResponse(ERROR2, takeExamRequest, null);
+
+        if (takeExamRequest.getSocialId() != 0)
+            executedExam.setComputerized(true);
 
         Exam exam = executedExam.getConcreteExam().getExam();
 
         LightExam lightExam = exam.createLightExam();
-
-
 
 
         return new TakeExamResponse(SUCCESS, takeExamRequest, lightExam);

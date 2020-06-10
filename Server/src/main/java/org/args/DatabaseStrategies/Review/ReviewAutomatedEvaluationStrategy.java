@@ -11,7 +11,7 @@ import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
 import java.util.List;
-
+//TODO
 public class ReviewAutomatedEvaluationStrategy extends DatabaseStrategy {
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session, List<String> loggedInUsers) {

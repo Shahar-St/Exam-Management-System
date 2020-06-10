@@ -10,10 +10,11 @@ import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
 import java.util.List;
-
+//TODO
 public class SubmitExamStrategy extends DatabaseStrategy {
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session, List<String> loggedInUsers) {
+
         SubmitExamRequest request1 = (SubmitExamRequest)request;
         if (client.getInfo("userName") == null)
             return new SubmitExamResponse(ERROR2, request);

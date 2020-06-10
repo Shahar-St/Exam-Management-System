@@ -14,7 +14,7 @@ import org.hibernate.Session;
 
 import java.util.HashMap;
 import java.util.List;
-
+//TODO
 public class CheckedExamStrartegy extends DatabaseStrategy {
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session, List<String> loggedInUsers) {
