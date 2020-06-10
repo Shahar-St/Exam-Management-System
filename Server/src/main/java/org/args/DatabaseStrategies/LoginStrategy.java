@@ -10,6 +10,15 @@ import org.hibernate.Session;
 
 import java.util.List;
 
+/**
+ * status dictionary:
+ * 0 - success
+ * 1 - unauthorized access - user isn't logged in
+ * 2 - username wasn't found
+ * 3 - user is currently logged in from a different terminal"
+ * 4 - wrong password
+ */
+
 public class LoginStrategy extends DatabaseStrategy {
 
     @Override
