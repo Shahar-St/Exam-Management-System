@@ -6,7 +6,10 @@ import DatabaseAccess.Responses.Exams.AddExamResponse;
 import DatabaseAccess.Responses.Exams.DeleteExamResponse;
 import DatabaseAccess.Responses.Exams.EditExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
+import DatabaseAccess.Responses.ExecuteExam.*;
 import DatabaseAccess.Responses.Questions.*;
+import DatabaseAccess.Responses.ReviewExam.CheckedExamResponse;
+import DatabaseAccess.Responses.ReviewExam.EvaluateManualExamResponse;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -37,11 +40,19 @@ public class ClientApp extends Application {
     // specify the server defaults
     private static String host = "127.0.0.1";
 
+    private static boolean isRunning;
+
     private static int port = 3000;
 
     private final String[] errors = {"SUCCESS", "UNAUTHORIZED", "NOT_FOUND", "NO_ACCESS", "WRONG_INFO"};
 
     private static Stack<String> lastScenes;
+
+    public static Stage primaryStage;
+
+    public static boolean isRunning() {
+        return isRunning;
+    }
 
     protected String getErrorMessage(int error_code) {
         return errors[error_code];
@@ -68,6 +79,16 @@ public class ClientApp extends Application {
         System.out.println("Stack State:");
         System.out.println("Stack Size:"+lastScenes.size());
         System.out.println(Arrays.toString(lastScenes.toArray()));
+    }
+
+    public static String popLastScene() {
+        if(!lastScenes.empty())
+            return lastScenes.pop();
+        return null;
+    }
+
+    public static void pushLastScene(String fxml) {
+        lastScenes.push(fxml);
     }
 
 
@@ -97,6 +118,8 @@ public class ClientApp extends Application {
     @Override
     public void start(Stage stage) {
         try {
+            primaryStage=stage;
+            isRunning = true;
             EventBus.getDefault().register(this);
             FXMLLoader loader = fxmlLoader("LoginScreen");
             scene = new Scene(loader.load());
@@ -105,24 +128,24 @@ public class ClientApp extends Application {
             stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
             stage.setResizable(false);
             stage.setTitle("HSTS");
-
             stage.show();
         } catch (Exception e) {
             System.out.println("Failed to start the app.. exiting: " + e.toString());
-
-
         }
 
     }
 
     @Override
     public void stop() throws Exception {
+        isRunning=false;
         EventBus.getDefault().unregister(this);
         super.stop();
     }
 
     private void closeWindowEvent(WindowEvent event) {
         System.out.println("Window close request ...");
+        // set false
+        isRunning=false;
         try {
             client.closeConnection();
         } catch (IOException e) {
@@ -172,6 +195,24 @@ public class ClientApp extends Application {
         client.setPort(port);
     }
 
+    public static boolean isNumeric(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
+    }
+
+    public static boolean isDouble(String str){
+        try {
+            Double.parseDouble(str);
+            return true;
+        }catch (NumberFormatException e){
+            return false;
+        }
+    }
+
 
     public static String getHost() {
         return host;
@@ -181,18 +222,12 @@ public class ClientApp extends Application {
         return port;
     }
 
+
+
     @Subscribe
     public void handleLoginResponse(LoginResponse response) {
         if (response.getStatus() == 0) {
-            FXMLLoader loader = fxmlLoader("MainScreen");
-
-            Parent screen = null;
-            try {
-                screen = loader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            scene.setRoot(screen);
+            setRoot("MainScreen");
             Platform.runLater(() -> {
                 ((Stage) scene.getWindow()).setResizable(true);
                 scene.getWindow().setWidth(800);
@@ -226,15 +261,7 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleQuestionResponse(QuestionResponse response) {
         if (response.getStatus() == 0) {
-            FXMLLoader loader = fxmlLoader("QuestionScreen");
-            Parent screen = null;
-            try {
-                screen = loader.load();
-                scene.setRoot(screen);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+            setRoot("QuestionScreen");
         } else {
             popUpAlert("Failed To Fetch The Question, Please Try Again." + getErrorMessage(response.getStatus()));
         }
@@ -268,6 +295,7 @@ public class ClientApp extends Application {
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Question Deleted");
                 alert.setContentText("Question Deleted Successfully!");
+                popLastScene();
                 setRoot("QuestionManagementScreen");
             } else {
                 alert = new Alert(Alert.AlertType.ERROR);
@@ -301,14 +329,7 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleViewExamResponse(ViewExamResponse response){
         if(response.getStatus()==0){
-            FXMLLoader loader = fxmlLoader("ViewExamScreen");
-            Parent screen = null;
-            try {
-                screen = loader.load();
-                scene.setRoot(screen);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            setRoot("ViewExamScreen");
         }
         else{
             popUpAlert("Failed to Fetch Exam");
@@ -319,7 +340,6 @@ public class ClientApp extends Application {
     public void handleAddExamResponse(AddExamResponse response){
         if(response.getStatus() == 0){
             popUpAlert("Add Exam Successfully");
-            popNScenes(4);
             setRoot("ExamManagementScreen");
         }else{
             popUpAlert("Add Exam Failed");
@@ -341,22 +361,86 @@ public class ClientApp extends Application {
     public void handleTeacherStatisticsResponse(TeacherStatisticsResponse response){
         setRoot("TeacherStatisticsScreen");
     }
-
-    public static String popLastScene() {
-        if(!lastScenes.empty())
-            return lastScenes.pop();
-        return null;
-    }
-
-    public static void pushLastScene(String fxml) {
-        lastScenes.push(fxml);
-    }
-
-    public static void popNScenes(int n){
-        int i=0;
-        while (!lastScenes.empty()&& i<n){
-            lastScenes.pop();
-            i++;
+    @Subscribe
+    public void handleExecuteExamResponse(ExecuteExamResponse response)
+    {
+        if (response.getStatus() != 0)
+            popUpAlert("Exam execution failed!");
+        else {
+            popUpAlert("Exam is being initiated...");
+            setRoot("TeacherExamExecutionScreen");
         }
     }
+
+    @Subscribe
+    public void handleStudentTakeExamResponse(TakeExamResponse response){
+        if(response.getStatus() == 0){
+            if(model.isManualExam()){
+                setRoot("StudentManualExamScreen");
+            }else{
+                setRoot("StudentExamExecutionScreen");
+            }
+
+        }else{
+            popUpAlert("Something went wrong while trying to take exam."+getErrorMessage(response.getStatus()));
+        }
+    }
+
+    @Subscribe
+    public void handleTimeExtensionResponse(TimeExtensionResponse response)
+    {
+        if(response.getStatus() != 0)
+            popUpAlert("Network Error: Failed to fetch Dean's response!");
+//        else
+//        {
+//            if(!response.isAccepted())
+//                popUpAlert("Time extension request was denied by the dean. \nReason: " + response.getDeanResponse());
+//            else
+//                popUpAlert("Time extension request was accepted by the dean. \nApproved added time: " + response.getAuthorizedTimeExtension());
+//        }
+    }
+
+    @Subscribe
+    public void handleRaisedHandResponse(RaiseHandResponse response)
+    {
+
+    }
+
+    @Subscribe
+    public void handleSubmitManualExamResponse(SubmitManualExamResponse response){
+        if(response.getStatus()==0){
+            setRoot("MainScreen");
+        }else{
+            popUpAlert("Submission Failed, Please Try Again.");
+        }
+    }
+
+    @Subscribe
+    public void handleEvaluateManualExamResponse(EvaluateManualExamResponse response){
+        if(response.getStatus()==0){
+            setRoot("MainScreen");
+        }else{
+            popUpAlert("Evaluation Failed, Please Try Again.");
+        }
+    }
+
+    @Subscribe
+    public void handleDeanTimeExtensionResponse (ConfirmTimeExtensionResponse response){
+        if(response.getStatus() == 0)
+        {
+            popUpAlert("There are new time extension requests!");
+        }
+        else
+        {
+            popUpAlert("Failed to fetch time extension requests from the server!");
+        }
+    }
+
+    @Subscribe
+    public void handleCheckedExamResponse(CheckedExamResponse response){
+        if(response.getStatus()==0){
+            setRoot("TeacherExamGradesReviewScreen");
+        }
+    }
+
 }

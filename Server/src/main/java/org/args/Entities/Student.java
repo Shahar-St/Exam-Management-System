@@ -21,6 +21,8 @@ public class Student extends User {
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
     private List<Course> coursesList = new ArrayList<>();
 
+    private int idExecutedExamCurrent = -1;
+
     private Boolean isExtensionEligible;
 
     //Group c'tors
@@ -67,5 +69,11 @@ public class Student extends User {
     }
     public void setExtensionEligible(Boolean extensionEligible) {
         isExtensionEligible = extensionEligible;
+    }
+
+    public int getIdExecutedExamCurrent() { return idExecutedExamCurrent; }
+
+    public void setIdExecutedExamCurrent(int idExecutedExamCurrent) {
+        this.idExecutedExamCurrent = idExecutedExamCurrent;
     }
 }

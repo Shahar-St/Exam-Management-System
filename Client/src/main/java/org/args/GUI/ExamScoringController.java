@@ -1,12 +1,10 @@
 package org.args.GUI;
 
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import org.args.Client.IExamData;
 
 import java.net.URL;
@@ -115,7 +113,7 @@ public class ExamScoringController {
             alert.setContentText("Exams Grade isn't 100. are you sure you want to proceed?");
 
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.CANCEL){
+            if (result.isPresent() && result.get() == ButtonType.CANCEL){
                 // prevent from the change or edit to be saved in case of cancellation.
                 return;
             }

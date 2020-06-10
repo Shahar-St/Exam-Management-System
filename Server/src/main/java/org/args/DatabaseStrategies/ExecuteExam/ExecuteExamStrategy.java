@@ -6,9 +6,7 @@ import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.ExecuteExam.ExecuteExamResponse;
 
 import org.args.DatabaseStrategies.DatabaseStrategy;
-import org.args.Entities.ConcreteExam;
-import org.args.Entities.Exam;
-import org.args.Entities.Teacher;
+import org.args.Entities.*;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
@@ -20,7 +18,7 @@ import java.util.List;
  * 1 - unauthorized access - user isn't logged in
  * 2 - exam wasn't found
  */
-
+//TODO
 public class ExecuteExamStrategy extends DatabaseStrategy {
 
     @Override
@@ -33,13 +31,20 @@ public class ExecuteExamStrategy extends DatabaseStrategy {
             return new ExecuteExamResponse(UNAUTHORIZED, request);
 
         Exam exam = getTypeById(Exam.class, request1.getExamID(), session);
-        if (exam == null)
-            return new ExecuteExamResponse(ERROR2, request);
+        List<Student> students = exam.getCourse().getStudentsList();
 
         Teacher teacher = (Teacher) getUser((String) client.getInfo("userName"), session);
         ConcreteExam concreteExam = new ConcreteExam(exam, teacher, request1.getExamCode());
+        session.saveOrUpdate(concreteExam);
 
-        session.save(concreteExam);
+        for (Student student : students)
+        {
+            ExecutedExam executedExam = new ExecutedExam(concreteExam, student, "",
+                    null, "");
+            session.save(executedExam);
+            student.setIdExecutedExamCurrent(executedExam.getId());
+            session.update(executedExam);
+        }
         session.flush();
 
         return new ExecuteExamResponse(SUCCESS, request);

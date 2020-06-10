@@ -47,6 +47,11 @@
             <artifactId>eventbus</artifactId>
             <version>3.2.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>4.1.2</version>
+        </dependency>
     </dependencies>
 
     <repositories>
@@ -64,7 +69,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <release>14</release>
+                    <release>11</release>
                 </configuration>
             </plugin>
             <plugin>

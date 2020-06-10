@@ -1,5 +1,5 @@
-/**
- * Sample Skeleton for 'LoginScreen.fxml' Controller Class
+/*
+  Sample Skeleton for 'LoginScreen.fxml' Controller Class
  */
 
 package org.args.GUI;

@@ -8,6 +8,8 @@ import org.args.Client.IExamData;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.args.GUI.ClientApp.isNumeric;
+
 public class ExamDetailsController {
 
 
@@ -36,8 +38,8 @@ public class ExamDetailsController {
     String origStudentNote;
     String origTeacherNote;
     String origDuration;
-    List<String> origQuestions = new ArrayList<>();
-    List<String> origScores = new ArrayList<>();
+    final List<String> origQuestions = new ArrayList<>();
+    final List<String> origScores = new ArrayList<>();
 
     private IExamData model;
 
@@ -132,12 +134,4 @@ public class ExamDetailsController {
     }
 
 
-    private boolean isNumeric(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch(NumberFormatException e){
-            return false;
-        }
-    }
 }

@@ -9,9 +9,12 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.args.Client.IExamManagementData;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ExamManagementController {
 
@@ -42,6 +45,8 @@ public class ExamManagementController {
     public void setModel(IExamManagementData model) {
         this.model = model;
     }
+
+    final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     @FXML
     private void bindButtonVisibility() {
@@ -81,7 +86,7 @@ public class ExamManagementController {
     }
 
     @FXML
-    public EventHandler<ActionEvent> displayCoursesFromSubject = new EventHandler<ActionEvent>() {
+    public final EventHandler<ActionEvent> displayCoursesFromSubject = new EventHandler<>() {
         @Override
         public void handle(ActionEvent event) {
             initializeCoursesDropdown();
@@ -112,14 +117,11 @@ public class ExamManagementController {
     @FXML
     public void addCourseToDropdown(String courseName) {
         MenuItem course = new MenuItem(courseName);
-        course.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                String text = ((MenuItem) event.getSource()).getText();
-                coursesDropdown.setText(text);
-                model.setCurrentCourseId(text.substring(0, 2));
-                model.fillExamList(text.substring(0, 2));
-            }
+        course.setOnAction(event -> {
+            String text = ((MenuItem) event.getSource()).getText();
+            coursesDropdown.setText(text);
+            model.setCurrentCourseId(text.substring(0, 2));
+            model.fillExamList(text.substring(0, 2));
         });
         coursesDropdown.getItems().add(course);
     }
@@ -198,14 +200,52 @@ public class ExamManagementController {
         String examId = getExamIdFromSelected();
         if (examId != null)
         {
+            AtomicBoolean advance = new AtomicBoolean(false);
             TextInputDialog examCodeDialog = new TextInputDialog();
             examCodeDialog.setTitle("Exam Code");
-            examCodeDialog.setHeaderText("Exam Code");
             examCodeDialog.setContentText("Please enter exam code:");
 
-            Optional<String> result = examCodeDialog.showAndWait();
-            result.ifPresent(code -> model.deployExam(examId, code));
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            while (!advance.get())
+            {
+                Optional<String> result = examCodeDialog.showAndWait();
+                result.ifPresent(code ->
+                        {
+                            if (code.length() != 4) {
+                                alert.setHeaderText("Wrong number of digits");
+                                alert.setContentText("Please enter a 4-digit code!");
+                                alert.showAndWait();
+                            } else if (!ClientApp.isNumeric(code)) {
+                                alert.setHeaderText("Invalid exam code");
+                                alert.setContentText("Code must only contain digits!");
+                                alert.showAndWait();
+                            }else
+                            {
+                                model.executeExam(examId, code);
+                                advance.set(true);
+                            }
+                        }
+                );
+                if (result.isEmpty())
+                    advance.set(true);
+            }
         }
+        model.setCurrentExecutedExamLaunchTime(LocalDateTime.now().format(formatter));
+        String currentTitle = examListView.getSelectionModel().getSelectedItem().substring(9);
+        model.setCurrentExecutedExamTitle(currentTitle);
+    }
+
+    private void disableDetailsAndExecuteButtons()
+    {
+        detailsButton.setDisable(true);
+        executeButton.setDisable(true);
+    }
+
+    private void enableDetailsAndExecuteButtons()
+    {
+        detailsButton.setDisable(false);
+        executeButton.setDisable(false);
     }
 
     private void disableDetailsAndExecuteButtons()
