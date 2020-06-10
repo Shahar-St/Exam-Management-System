@@ -21,7 +21,7 @@ public class Student extends User {
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
     private List<Course> coursesList = new ArrayList<>();
 
-    private int idExecutedExamCurrent = -1;
+    private int currentlyExecutedID = -1;
 
     private Boolean isExtensionEligible;
 
@@ -71,9 +71,9 @@ public class Student extends User {
         isExtensionEligible = extensionEligible;
     }
 
-    public int getIdExecutedExamCurrent() { return idExecutedExamCurrent; }
+    public int getCurrentlyExecutedID() { return currentlyExecutedID; }
 
-    public void setIdExecutedExamCurrent(int idExecutedExamCurrent) {
-        this.idExecutedExamCurrent = idExecutedExamCurrent;
+    public void setCurrentlyExecutedID(int idExecutedExamCurrent) {
+        this.currentlyExecutedID = idExecutedExamCurrent;
     }
 }

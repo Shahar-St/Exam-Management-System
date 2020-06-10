@@ -18,7 +18,7 @@ import java.util.List;
  * 1 - unauthorized access - user isn't logged in
  * 2 - exam wasn't found
  */
-//TODO
+
 public class ExecuteExamStrategy extends DatabaseStrategy {
 
     @Override
@@ -39,10 +39,9 @@ public class ExecuteExamStrategy extends DatabaseStrategy {
 
         for (Student student : students)
         {
-            ExecutedExam executedExam = new ExecutedExam(concreteExam, student, "",
-                    null, "");
+            ExecutedExam executedExam = new ExecutedExam(concreteExam, student);
             session.save(executedExam);
-            student.setIdExecutedExamCurrent(executedExam.getId());
+            student.setCurrentlyExecutedID(executedExam.getId());
             session.update(executedExam);
         }
         session.flush();

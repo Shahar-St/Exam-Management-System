@@ -1,22 +1,27 @@
 package org.args.DatabaseStrategies.ExecuteExam;
 
 import DatabaseAccess.Requests.DatabaseRequest;
-import DatabaseAccess.Requests.ExecuteExam.ExecuteExamRequest;
 import DatabaseAccess.Requests.ExecuteExam.TakeExamRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
-import DatabaseAccess.Responses.ExecuteExam.ExecuteExamResponse;
 import DatabaseAccess.Responses.ExecuteExam.TakeExamResponse;
 import LightEntities.LightExam;
 import org.args.DatabaseStrategies.DatabaseStrategy;
-import org.args.Entities.Course;
-import org.args.Entities.Exam;
 import org.args.Entities.ExecutedExam;
 import org.args.Entities.Student;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
 import java.util.List;
-//TODO
+
+/**
+ * status dictionary:
+ * 0 - success
+ * 1 - unauthorized access - user isn't logged in
+ * 2 - the student don't have any exam to take
+ * 3 - wrong exam code
+ * 4 - wrong ID
+ */
+
 public class TakeExamStrategy extends DatabaseStrategy {
 
     @Override
@@ -25,24 +30,24 @@ public class TakeExamStrategy extends DatabaseStrategy {
 
         TakeExamRequest takeExamRequest = (TakeExamRequest) request;
         if (client.getInfo("userName") == null)
-            return new TakeExamResponse(UNAUTHORIZED, takeExamRequest, null);
+            return new TakeExamResponse(UNAUTHORIZED, takeExamRequest);
 
         Student student = (Student) getUser((String) client.getInfo("userName"), session);
-        ExecutedExam executedExam = getTypeById(ExecutedExam.class, String.valueOf(student.getIdExecutedExamCurrent())
+        ExecutedExam executedExam = getTypeById(ExecutedExam.class, String.valueOf(student.getCurrentlyExecutedID())
                 , session);
 
         if (executedExam == null)
-            return new TakeExamResponse(ERROR2, takeExamRequest, null);
+            return new TakeExamResponse(ERROR2, takeExamRequest);
 
-        if (takeExamRequest.getSocialId() != 0)
-            executedExam.setComputerized(true);
+        if (!student.getSocialId().equals(String.valueOf(takeExamRequest.getSocialId())))
+            return new TakeExamResponse(ERROR4, takeExamRequest);
 
-        Exam exam = executedExam.getConcreteExam().getExam();
+        if (!executedExam.getConcreteExam().getExamCode().equals(takeExamRequest.getExamCode()))
+            return new TakeExamResponse(ERROR3, takeExamRequest);
 
-        LightExam lightExam = exam.createLightExam();
-
+        executedExam.setComputerized(takeExamRequest.isComputerized());
+        LightExam lightExam = executedExam.getConcreteExam().createLightExam();
 
         return new TakeExamResponse(SUCCESS, takeExamRequest, lightExam);
-
     }
 }

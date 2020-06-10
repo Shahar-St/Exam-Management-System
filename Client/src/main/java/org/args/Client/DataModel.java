@@ -106,12 +106,12 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void studentTakeComputerizedExam(String examCode, String id) {
-        ClientApp.sendRequest(new TakeExamRequest(Integer.parseInt(id), examCode));
+        ClientApp.sendRequest(new TakeExamRequest(Integer.parseInt(id), examCode, isComputerized));
     }
 
     @Override
     public void studentTakeManualExam(String code) {
-        ClientApp.sendRequest(new TakeExamRequest(0, code));
+        ClientApp.sendRequest(new TakeExamRequest(0, code, isComputerized));
         setManualExam(true);
     }
 

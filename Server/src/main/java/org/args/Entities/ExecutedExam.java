@@ -27,7 +27,6 @@ public class ExecutedExam {
     @ElementCollection
     private List<Integer> answersByStudent = new ArrayList<>();
 
-
     private String reasonsForChangeGrade;
     private String commentsAfterCheck;
     private double grade = 0;
@@ -49,6 +48,10 @@ public class ExecutedExam {
         this.duration = concreteExam.getExam().getDurationInMinutes();
         if (student.getExtensionEligible())
             setOverTime();
+    }
+
+    public ExecutedExam(ConcreteExam concreteExam, Student student) {
+        this(concreteExam, student, null, null, null);
     }
 
     //Group setters and getters
@@ -125,6 +128,4 @@ public class ExecutedExam {
     public void setCommentsAfterCheck(String commentsAfterCheck) {
         this.commentsAfterCheck = commentsAfterCheck;
     }
-
-
 }

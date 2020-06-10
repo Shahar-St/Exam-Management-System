@@ -214,17 +214,4 @@ public class Exam {
         return new LightExam(this.id, this.author.getUserName(), lightQuestionsList, new ArrayList<>(this.questionsScores),
                 this.durationInMinutes, this.title, this.teacherNotes, this.studentNotes);
     }
-
-//
-//    @Override
-//    public LightExam clone() throws CloneNotSupportedException {
-//        super.clone();
-//        List<LightQuestion> lightQuestionsList = new ArrayList<>();
-//
-//        for (Question question : this.getQuestionsList())
-//            lightQuestionsList.add(question.clone());
-//
-//        return new LightExam(this.id, this.author.getUserName(), lightQuestionsList, this.questionsScores,
-//                this.durationInMinutes, this.title, this.teacherNotes, this.studentNotes);
-//    }
 }
