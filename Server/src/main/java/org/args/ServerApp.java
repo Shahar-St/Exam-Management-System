@@ -19,10 +19,7 @@ import DatabaseAccess.Responses.Exams.AddExamResponse;
 import DatabaseAccess.Responses.Exams.AllExamsResponse;
 import DatabaseAccess.Responses.Exams.DeleteExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
-import DatabaseAccess.Responses.ExecuteExam.ExecuteExamResponse;
-import DatabaseAccess.Responses.ExecuteExam.RaiseHandResponse;
-import DatabaseAccess.Responses.ExecuteExam.TakeExamResponse;
-import DatabaseAccess.Responses.ExecuteExam.ConfirmTimeExtensionResponse;
+import DatabaseAccess.Responses.ExecuteExam.*;
 import DatabaseAccess.Responses.LoginResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
 import DatabaseAccess.Responses.Questions.EditQuestionResponse;
@@ -203,15 +200,15 @@ public class ServerApp extends AbstractServer {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //comment out until we figure out the entire process of time extension
-//        }else if(msg instanceof TimeExtensionRequest){
-//            TimeExtensionRequest request = (TimeExtensionRequest)msg;
-//            ConfirmTimeExtensionResponse response = new ConfirmTimeExtensionResponse(0,request,false,"Fuck off",0);
-//            try {
-//                client.sendToClient(response);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+
+        }else if(msg instanceof TimeExtensionRequest){
+            TimeExtensionRequest request = (TimeExtensionRequest)msg;
+            TimeExtensionResponse response = new TimeExtensionResponse(0,request,true,"yofi shel bulbul",23);
+            try {
+                client.sendToClient(response);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }else if(msg instanceof RaiseHandRequest)
         {
             RaiseHandRequest request = (RaiseHandRequest)msg;

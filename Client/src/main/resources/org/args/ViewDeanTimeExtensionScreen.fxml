@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.ViewDeanTimeExtensionController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.ViewDeanTimeExtensionController">
    <children>
       <Label layoutX="294.0" layoutY="37.0" prefHeight="32.0" prefWidth="244.0" text="Time Extension Requests">
          <font>
@@ -25,10 +25,11 @@
                   <Insets />
                </opaqueInsets>
             </Label>
-            <ListView fx:id="requestListView" prefHeight="294.0" prefWidth="287.0" />
+            <ListView fx:id="requestListView" onMouseClicked="#handleMouseEvent" prefHeight="294.0" prefWidth="287.0" />
          </children>
       </VBox>
-      <Button fx:id="acceptButton" layoutX="384.0" layoutY="329.0" mnemonicParsing="false" onAction="#acceptExtension" prefHeight="45.0" prefWidth="64.0" text="accept" />
-      <Button fx:id="rejectButton" layoutX="384.0" layoutY="214.0" mnemonicParsing="false" onAction="#rejectExtension" prefHeight="45.0" prefWidth="64.0" text="reject" />
+      <Button fx:id="acceptButton" disable="true" layoutX="368.0" layoutY="231.0" mnemonicParsing="false" onAction="#acceptExtension" prefHeight="45.0" prefWidth="64.0" styleClass="primary" text="accept" />
+      <Button fx:id="rejectButton" disable="true" layoutX="368.0" layoutY="300.0" mnemonicParsing="false" onAction="#rejectExtension" prefHeight="45.0" prefWidth="64.0" styleClass="danger" text="reject" />
+      <Button layoutX="653.0" layoutY="531.0" mnemonicParsing="false" onAction="#switchToMainScreen" prefHeight="32.0" prefWidth="75.0" styleClass="danger" text="Back" />
    </children>
 </AnchorPane>

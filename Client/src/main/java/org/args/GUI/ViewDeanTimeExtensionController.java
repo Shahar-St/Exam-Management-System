@@ -6,6 +6,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.MouseEvent;
 import org.args.Client.IViewDeanTimeExtensionData;
 
 import java.util.Optional;
@@ -69,6 +70,19 @@ public class ViewDeanTimeExtensionController {
         setModel(ClientApp.getModel());
         requestListView.setItems(model.getObservableTimeExtensionRequestsList());
         TextInputDialog dialog = new TextInputDialog();
+    }
+
+    @FXML
+    void switchToMainScreen() {
+        ClientApp.setRoot("MainScreen");
+    }
+
+    @FXML
+    void handleMouseEvent(MouseEvent event) {
+        if (!requestListView.getItems().isEmpty()) {
+            rejectButton.setDisable(false);
+            acceptButton.setDisable(false);
+        }
     }
 
 }

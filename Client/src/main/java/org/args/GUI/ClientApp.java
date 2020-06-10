@@ -129,8 +129,6 @@ public class ClientApp extends Application {
             stage.show();
         } catch (Exception e) {
             System.out.println("Failed to start the app.. exiting: " + e.toString());
-
-
         }
 
     }
@@ -387,7 +385,7 @@ public class ClientApp extends Application {
     }
 
     @Subscribe
-    public void handleTimeExtensionResponse(ConfirmTimeExtensionResponse response)
+    public void handleTimeExtensionResponse(TimeExtensionResponse response)
     {
         if(response.getStatus() != 0)
             popUpAlert("Network Error: Failed to fetch Dean's response!");
@@ -421,6 +419,18 @@ public class ClientApp extends Application {
             setRoot("MainScreen");
         }else{
             popUpAlert("Evaluation Failed, Please Try Again.");
+        }
+    }
+
+    @Subscribe
+    public void handleDeanTimeExtensionResponse (ConfirmTimeExtensionResponse response){
+        if(response.getStatus() == 0)
+        {
+            popUpAlert("There are new time extension requests!");
+        }
+        else
+        {
+            popUpAlert("Failed to fetch time extension requests from the server!");
         }
     }
 
