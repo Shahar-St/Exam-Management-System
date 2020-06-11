@@ -269,4 +269,9 @@ public class MainScreenController {
         ClientApp.setRoot("ViewDeanTimeExtensionScreen");
     }
 
+    @FXML
+    void logOutClicked(ActionEvent event){
+        model.logOut();
+    }
+
 }

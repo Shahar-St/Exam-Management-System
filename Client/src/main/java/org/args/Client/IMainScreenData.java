@@ -17,4 +17,6 @@ public interface IMainScreenData {
     void studentTakeComputerizedExam(String examCode, String id);
 
     void studentTakeManualExam(String code);
+
+    void logOut();
 }

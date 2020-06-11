@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class LightExam implements Serializable {
+
     private String id;
     private String authorUserName;
     private List<LightQuestion> lightQuestionList;
@@ -16,6 +17,7 @@ public class LightExam implements Serializable {
     public LightExam() {
     }
 
+    // c'tor for teacher
     public LightExam(String id, String authorUserName, List<LightQuestion> lightQuestionList, List<Double> questionsScores,
                      int durationInMinutes, String title, String teacherPrivateNotes, String studentNotes) {
         this.id = id;
@@ -26,6 +28,14 @@ public class LightExam implements Serializable {
         this.title = title;
         this.teacherNotes = teacherPrivateNotes;
         this.studentNotes = studentNotes;
+    }
+
+    //c'tor for student
+    public LightExam(String id, String authorUserName, List<LightQuestion> lightQuestionList, List<Double> questionsScores,
+                     int durationInMinutes, String title, String studentNotes) {
+
+        this(id, authorUserName, lightQuestionList, questionsScores, durationInMinutes,
+                title, null, studentNotes);
     }
 
     public String getId() {
@@ -48,7 +58,9 @@ public class LightExam implements Serializable {
         return lightQuestionList;
     }
 
-    public void setLightQuestionList(List<LightQuestion> lightQuestionList) {this.lightQuestionList = lightQuestionList;}
+    public void setLightQuestionList(List<LightQuestion> lightQuestionList) {
+        this.lightQuestionList = lightQuestionList;
+    }
 
     public List<Double> getQuestionsScores() {
         return questionsScores;
@@ -78,7 +90,9 @@ public class LightExam implements Serializable {
         return teacherNotes;
     }
 
-    public void setTeacherNotes(String teacherNotes) {this.teacherNotes = teacherNotes; }
+    public void setTeacherNotes(String teacherNotes) {
+        this.teacherNotes = teacherNotes;
+    }
 
     public String getStudentNotes() {
         return studentNotes;

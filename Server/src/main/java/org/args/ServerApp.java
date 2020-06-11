@@ -14,7 +14,8 @@ import DatabaseAccess.Requests.Questions.AllQuestionsRequest;
 import DatabaseAccess.Requests.Questions.EditQuestionRequest;
 import DatabaseAccess.Requests.Questions.QuestionRequest;
 import DatabaseAccess.Requests.ReviewExam.CheckedExamRequest;
-import DatabaseAccess.Requests.ReviewExam.PendingExamRequest;
+import DatabaseAccess.Requests.ReviewExam.PendingExamsRequest;
+import DatabaseAccess.Requests.ReviewExam.UncheckedExecutesOfConcreteRequest;
 import DatabaseAccess.Requests.Statistics.TeacherStatisticsRequest;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
 import DatabaseAccess.Responses.Exams.AddExamResponse;
@@ -28,10 +29,13 @@ import DatabaseAccess.Responses.Questions.EditQuestionResponse;
 import DatabaseAccess.Responses.Questions.QuestionResponse;
 import DatabaseAccess.Responses.ReviewExam.CheckedExamResponse;
 import DatabaseAccess.Responses.ReviewExam.PendingExamResponse;
+import DatabaseAccess.Responses.ReviewExam.PendingExamsResponse;
+import DatabaseAccess.Responses.ReviewExam.UncheckedExecutesOfConcreteResponse;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
 import LightEntities.LightExam;
 import LightEntities.LightQuestion;
+import Notifiers.TimeExtensionRequestNotifier;
 import Util.Pair;
 import org.args.server.AbstractServer;
 import org.args.server.ConnectionToClient;
@@ -207,7 +211,7 @@ public class ServerApp extends AbstractServer {
 
         }else if(msg instanceof TimeExtensionRequest){
             TimeExtensionRequest request = (TimeExtensionRequest)msg;
-            TimeExtensionResponse response = new TimeExtensionResponse(0,request,true,"yofi shel bulbul",23);
+            TimeExtensionRequestNotifier response = new TimeExtensionRequestNotifier("11","22","malki","kaki","1234",10,"kaka");
             try {
                 client.sendToClient(response);
             } catch (IOException e) {
@@ -222,24 +226,24 @@ public class ServerApp extends AbstractServer {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else if(msg instanceof PendingExamRequest){
-            PendingExamRequest request = (PendingExamRequest)msg;
-            HashMap<String,Pair<String,LocalDateTime>> map = new HashMap<>();
-            map.put("1111",new Pair<>("OS",LocalDateTime.now()));
-            map.put("2222",new Pair<>("DS",LocalDateTime.now()));
-            map.put("3333",new Pair<>("SE",LocalDateTime.now()));
+        }else if(msg instanceof PendingExamsRequest){
+            PendingExamsRequest request = (PendingExamsRequest)msg;
+            HashMap<Integer,String> map = new HashMap<>();
+            map.put(1111,"DS");
+            map.put(2222,"OS");
+            map.put(3333,"SE");
             try {
-                client.sendToClient(new PendingExamResponse(0,request,map));
+                client.sendToClient(new PendingExamsResponse(0,request,map));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else if(msg instanceof CheckedExamRequest){
-            CheckedExamRequest request = (CheckedExamRequest)msg;
+        }else if(msg instanceof UncheckedExecutesOfConcreteRequest){
+            UncheckedExecutesOfConcreteRequest request = (UncheckedExecutesOfConcreteRequest)msg;
             HashMap<String,Boolean> map = new HashMap<>();
             map.put("12346789",true);
             map.put("987654321",false);
             try {
-                client.sendToClient(new CheckedExamResponse(0,request,map));
+                client.sendToClient(new UncheckedExecutesOfConcreteResponse(0,request,map));
             } catch (IOException e) {
                 e.printStackTrace();
             }

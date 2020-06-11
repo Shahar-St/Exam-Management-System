@@ -26,13 +26,23 @@ public class EMSClient extends AbstractClient {
     public void sendToServer(Object msg) throws IOException {
         // check if the client is not connected to the server then connect
         // good for initial connection and for disconnections
-        if (!super.isConnected())
-        {
+        if (!super.isConnected()) {
             super.openConnection();
         }
         super.sendToServer(msg);
         System.out.println("Message Has Been Sent To The Server");
         System.out.println(msg.toString());
+    }
+
+    public void logOut() {
+        if (super.isConnected()) {
+
+            try {
+                super.closeConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
