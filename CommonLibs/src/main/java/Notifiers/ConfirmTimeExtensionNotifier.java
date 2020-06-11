@@ -2,6 +2,10 @@ package Notifiers;
 
 import java.io.Serializable;
 
+/**
+ * this is being sent to the teacher AND the student after the dean approved the time extension
+ */
+
 public class ConfirmTimeExtensionNotifier implements Serializable {
 
     private String deanResponse;

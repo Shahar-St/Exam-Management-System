@@ -10,7 +10,6 @@ import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * status dictionary:
@@ -25,7 +24,7 @@ public class DeleteQuestionStrategy extends DatabaseStrategy {
 
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
-                                   Map<String, ConnectionToClient> loggedInUsers) {
+                                   List<String> loggedInUsers) {
 
         DeleteQuestionRequest request1 = (DeleteQuestionRequest) request;
         if (client.getInfo("userName") == null)

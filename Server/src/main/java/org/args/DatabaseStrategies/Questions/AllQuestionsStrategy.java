@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * status dictionary:
@@ -28,7 +27,7 @@ public class AllQuestionsStrategy extends DatabaseStrategy {
 
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
-                                   Map<String, ConnectionToClient> loggedInUsers) {
+                                   List<String> loggedInUsers) {
 
         AllQuestionsRequest allQuestionsRequest = (AllQuestionsRequest) request;
 

@@ -2,7 +2,6 @@ package org.args.DatabaseStrategies;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
-import org.args.Entities.Question;
 import org.args.Entities.User;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
@@ -13,7 +12,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
-import java.util.Map;
 
 public abstract class DatabaseStrategy {
 
@@ -25,7 +23,7 @@ public abstract class DatabaseStrategy {
     protected final int ERROR4 = 4;
 
     public abstract DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
-                                            Map<String, ConnectionToClient> loggedInUsers);
+                                            List<String> loggedInUsers);
 
     protected <T> T getTypeById(Class<T> objectType, String ID, Session session) {
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();

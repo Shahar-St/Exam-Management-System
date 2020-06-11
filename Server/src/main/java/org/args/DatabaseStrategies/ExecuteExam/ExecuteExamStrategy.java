@@ -25,7 +25,7 @@ public class ExecuteExamStrategy extends DatabaseStrategy implements IExamInProg
 
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client,
-                                   Session session, Map<String, ConnectionToClient> loggedInUsers) {
+                                   Session session, List<String> loggedInUsers) {
 
         ExecuteExamRequest request1 = (ExecuteExamRequest) request;
 

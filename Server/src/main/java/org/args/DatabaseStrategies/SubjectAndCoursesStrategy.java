@@ -6,9 +6,9 @@ import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
 import org.args.Entities.*;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
+
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * status dictionary:
@@ -20,8 +20,7 @@ public class SubjectAndCoursesStrategy extends DatabaseStrategy {
 
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
-                                   Map<String, ConnectionToClient> loggedInUsers) {
-
+                                   List<String> loggedInUsers) {
 
         if (client.getInfo("userName") == null)
             return new SubjectsAndCoursesResponse(UNAUTHORIZED, request);

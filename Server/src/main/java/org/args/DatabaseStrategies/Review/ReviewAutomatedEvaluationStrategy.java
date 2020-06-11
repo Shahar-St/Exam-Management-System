@@ -11,12 +11,10 @@ import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
 import java.util.List;
-import java.util.Map;
-
 //TODO
 public class ReviewAutomatedEvaluationStrategy extends DatabaseStrategy {
     @Override
-    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session, Map<String, ConnectionToClient> loggedInUsers) {
+    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session, List<String> loggedInUsers) {
         ReviewAutomatedEvaluationRequest request1 = (ReviewAutomatedEvaluationRequest)request;
         if (client.getInfo("userName") == null)
             return new ReviewAutomatedEvaluationResponse(UNAUTHORIZED,request1);

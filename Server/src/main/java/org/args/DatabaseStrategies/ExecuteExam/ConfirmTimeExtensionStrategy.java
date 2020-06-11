@@ -24,8 +24,8 @@ import java.util.Map;
 public class ConfirmTimeExtensionStrategy extends DatabaseStrategy implements IExamInProgress {
 
     @Override
-    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session, List<String> loggedInUsers) {
-
+    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client,
+                                   Session session, List<String> loggedInUsers) {
 
         ConfirmTimeExtensionRequest request1 = (ConfirmTimeExtensionRequest) request;
 

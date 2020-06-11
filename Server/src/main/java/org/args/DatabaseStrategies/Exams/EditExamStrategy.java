@@ -12,7 +12,6 @@ import org.hibernate.Session;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * status dictionary:
@@ -26,7 +25,7 @@ import java.util.Map;
 public class EditExamStrategy extends DatabaseStrategy {
 
     @Override
-    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session, Map<String, ConnectionToClient> loggedInUsers) {
+    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session, List<String> loggedInUsers) {
 
         EditExamRequest editExamRequest = (EditExamRequest) request;
         if (client.getInfo("userName") == null)
