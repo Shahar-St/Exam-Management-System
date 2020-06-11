@@ -28,12 +28,17 @@ public class TeacherExamGradesReviewController {
     @FXML
     private Button detailsButton;
 
+    @FXML
+    private Button backButton;
+
+
     private IExamReviewData model;
 
     public void setModel(IExamReviewData model) {
         this.model = model;
     }
 
+    @FXML
     void initialize()
     {
         setModel(ClientApp.getModel());
@@ -52,6 +57,11 @@ public class TeacherExamGradesReviewController {
             else
                 model.reviewManualExam(studentExam.getId());
         }
+    }
+
+    @FXML
+    void back(ActionEvent event) {
+        ClientApp.setRoot("TeacherPendingExamsScreen");
     }
 
 }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+
+<StackPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.StudentPastExamsController">
+   <children>
+      <HBox alignment="TOP_CENTER" prefHeight="436.0" prefWidth="800.0" spacing="50.0">
+         <children>
+            <ImageView fx:id="backButton" fitHeight="58.0" fitWidth="89.0" onMouseClicked="#switchToMainScreen" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                  <Insets left="-100.0" />
+               </HBox.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <image>
+                  <Image url="@../../Assets/left-arrow.png" />
+               </image>
+            </ImageView>
+            <Label text="Select exam filters:">
+               <font>
+                  <Font name="Calibri" size="24.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Label>
+            <MenuButton fx:id="subjectsDropdown" mnemonicParsing="false" styleClass="primary" text="Subjects" />
+            <MenuButton fx:id="coursesDropdown" disable="true" mnemonicParsing="false" styleClass="primary" text="Courses" />
+            <MenuButton disable="true" mnemonicParsing="false" text="Method">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Computerized" />
+                <MenuItem mnemonicParsing="false" text="Manual" />
+              </items>
+            </MenuButton>
+         </children>
+         <StackPane.margin>
+            <Insets top="35.0" />
+         </StackPane.margin>
+      </HBox>
+   </children>
+</StackPane>

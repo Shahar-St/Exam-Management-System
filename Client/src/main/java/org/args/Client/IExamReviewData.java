@@ -28,4 +28,6 @@ public interface IExamReviewData {
     void reviewComputerizedExam(String id);
 
     void reviewManualExam(String id);
+
+    void clearPendingExams();
 }

@@ -21,7 +21,8 @@ import java.util.List;
 public class ViewExamStrategy extends DatabaseStrategy {
 
     @Override
-    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session, List<String> loggedInUsers) {
+    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
+                                   List<String> loggedInUsers) {
 
         ViewExamRequest viewExamRequest = (ViewExamRequest) request;
 

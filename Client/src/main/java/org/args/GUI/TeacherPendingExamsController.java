@@ -26,6 +26,7 @@ public class TeacherPendingExamsController {
         this.model = model;
     }
 
+    @FXML
     void initialize()
     {
         setModel(ClientApp.getModel());
@@ -51,10 +52,12 @@ public class TeacherPendingExamsController {
     private void showGradesOfSelectedExam() {
         String currentExamId = pendingListView.getSelectionModel().getSelectedItem().substring(1,7);
         model.showPendingExamGrades(currentExamId);
+        model.clearPendingExams();
     }
 
     @FXML
     void switchToMainScreen(MouseEvent event) {
         ClientApp.setRoot("MainScreen");
+        model.clearPendingExams();
     }
 }

@@ -8,6 +8,7 @@ import DatabaseAccess.Responses.Exams.EditExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
 import DatabaseAccess.Responses.ExecuteExam.*;
 import DatabaseAccess.Responses.Questions.*;
+import DatabaseAccess.Responses.ReviewExam.CheckedExamResponse;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -129,8 +130,6 @@ public class ClientApp extends Application {
             stage.show();
         } catch (Exception e) {
             System.out.println("Failed to start the app.. exiting: " + e.toString());
-
-
         }
 
     }
@@ -391,13 +390,13 @@ public class ClientApp extends Application {
     {
         if(response.getStatus() != 0)
             popUpAlert("Network Error: Failed to fetch Dean's response!");
-        else
-        {
-            if(!response.isAccepted())
-                popUpAlert("Time extension request was denied by the dean. \nReason: " + response.getDeanResponse());
-            else
-                popUpAlert("Time extension request was accepted by the dean. \nApproved added time: " + response.getAuthorizedTimeExtension());
-        }
+//        else
+//        {
+//            if(!response.isAccepted())
+//                popUpAlert("Time extension request was denied by the dean. \nReason: " + response.getDeanResponse());
+//            else
+//                popUpAlert("Time extension request was accepted by the dean. \nApproved added time: " + response.getAuthorizedTimeExtension());
+//        }
     }
 
     @Subscribe
@@ -421,6 +420,25 @@ public class ClientApp extends Application {
             setRoot("MainScreen");
         }else{
             popUpAlert("Evaluation Failed, Please Try Again.");
+        }
+    }
+
+    @Subscribe
+    public void handleDeanTimeExtensionResponse (ConfirmTimeExtensionResponse response){
+        if(response.getStatus() == 0)
+        {
+            popUpAlert("There are new time extension requests!");
+        }
+        else
+        {
+            popUpAlert("Failed to fetch time extension requests from the server!");
+        }
+    }
+
+    @Subscribe
+    public void handleCheckedExamResponse(CheckedExamResponse response){
+        if(response.getStatus()==0){
+            setRoot("TeacherExamGradesReviewScreen");
         }
     }
 

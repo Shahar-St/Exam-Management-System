@@ -84,6 +84,5 @@ public class TeacherExamExecutionController {
     void handleMouseEvent(MouseEvent event) {
         if (model.getCurrentHandsRaised().size() > 0)
             solveButton.setDisable(false);
-
     }
 }

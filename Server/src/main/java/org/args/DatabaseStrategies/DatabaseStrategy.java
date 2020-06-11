@@ -2,7 +2,6 @@ package org.args.DatabaseStrategies;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
-import org.args.Entities.Question;
 import org.args.Entities.User;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
