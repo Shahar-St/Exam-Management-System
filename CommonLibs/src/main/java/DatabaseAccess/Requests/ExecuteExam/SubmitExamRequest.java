@@ -5,6 +5,7 @@ import DatabaseAccess.Requests.DatabaseRequest;
 import java.util.List;
 
 public class SubmitExamRequest extends DatabaseRequest {
+
     private final String examID;
     private final List<Integer> answersList;
 

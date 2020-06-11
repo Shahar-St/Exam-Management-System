@@ -7,7 +7,13 @@
       <imported>true</imported>
       <remarks>Hibernate</remarks>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost/ems</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost/client</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="ems@localhost" uuid="9ff33256-9d54-434b-bcb1-14c82bdaef1f">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3306/ems</jdbc-url>
     </data-source>
   </component>
 </project>

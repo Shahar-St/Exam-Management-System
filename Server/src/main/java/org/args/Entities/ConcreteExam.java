@@ -1,5 +1,7 @@
 package org.args.Entities;
 
+import LightEntities.LightExam;
+import LightEntities.LightQuestion;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -27,13 +29,17 @@ public class ConcreteExam {
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     private List<ExecutedExam> executedExamsList = new ArrayList<>();
 
+    private String examCode;
+
     //Group c'tors
 
-    public ConcreteExam() { }
+    public ConcreteExam() {
+    }
 
-    public ConcreteExam(Exam exam, Teacher tester) {
+    public ConcreteExam(Exam exam, Teacher tester, String examCode) {
         this.setExam(exam);
         this.setTester(tester);
+        this.examCode = examCode;
     }
 
     public void addExecutedExam(ExecutedExam executedExam) {
@@ -53,13 +59,15 @@ public class ConcreteExam {
     public Teacher getTester() {
         return tester;
     }
-    public void setTester(Teacher tester){
+    public void setTester(Teacher tester) {
         this.tester = tester;
         if (!tester.getConcreteExamsList().contains(this))
             tester.addConcreteExam(this);
     }
 
-    public Exam getExam() { return exam; }
+    public Exam getExam() {
+        return exam;
+    }
     public void setExam(Exam exam) {
         this.exam = exam;
         if (!exam.getConcreteExamsList().contains(this))
@@ -73,4 +81,18 @@ public class ConcreteExam {
         this.executedExamsList = executedExamsList;
     }
 
+    public String getExamCode() {
+        return examCode;
+    }
+
+    public LightExam createLightExam() {
+        List<LightQuestion> lightQuestionsList = new ArrayList<>();
+
+        for (Question question : exam.getQuestionsList())
+            lightQuestionsList.add(question.createLightQuestion());
+
+        return new LightExam(String.valueOf(this.id), exam.getAuthor().getUserName(), lightQuestionsList,
+                new ArrayList<>(exam.getQuestionsScores()), exam.getDurationInMinutes(),
+                exam.getTitle(), exam.getStudentNotes());
+    }
 }
