@@ -233,6 +233,7 @@ public class StudentExamExecutionController {
                     timer.cancel();
                     timer.purge();
                     // submit and quit
+                    model.setFinishedOnTime(false);
                     model.submitExam();
                     Platform.runLater(()->{
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);

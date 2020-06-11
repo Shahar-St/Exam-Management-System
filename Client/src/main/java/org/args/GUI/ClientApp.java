@@ -8,7 +8,7 @@ import DatabaseAccess.Responses.Exams.EditExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
 import DatabaseAccess.Responses.ExecuteExam.*;
 import DatabaseAccess.Responses.Questions.*;
-import DatabaseAccess.Responses.ReviewExam.CheckedExamResponse;
+import DatabaseAccess.Responses.ReviewExam.UncheckedExecutesOfConcreteResponse;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -221,6 +221,12 @@ public class ClientApp extends Application {
         return port;
     }
 
+    public void logOut(){
+        client.logOut();
+        popUpAlert("You have logged out successfully.");
+        setRoot("LoginScreen");
+    }
+
 
 
     @Subscribe
@@ -347,7 +353,7 @@ public class ClientApp extends Application {
     }
 
     @Subscribe
-    public void handleEditExamResponse(EditExamResponse response){
+    public  void handleEditExamResponse(EditExamResponse response){
         if(response.getStatus() == 0){
             popUpAlert("Exam was successfully edited!");
             setRoot("ExamManagementScreen");
@@ -361,7 +367,7 @@ public class ClientApp extends Application {
         setRoot("TeacherStatisticsScreen");
     }
     @Subscribe
-    public void handleExecuteExamResponse(ExecuteExamResponse response)
+    public  void handleExecuteExamResponse(ExecuteExamResponse response)
     {
         if (response.getStatus() != 0)
             popUpAlert("Exam execution failed!");
@@ -400,7 +406,7 @@ public class ClientApp extends Application {
     }
 
     @Subscribe
-    public void handleRaisedHandResponse(RaiseHandResponse response)
+    public  void handleRaisedHandResponse(RaiseHandResponse response)
     {
 
     }
@@ -414,14 +420,14 @@ public class ClientApp extends Application {
         }
     }
 
-    @Subscribe
-    public void handleEvaluateManualExamResponse(EvaluateManualExamResponse response){
-        if(response.getStatus()==0){
-            setRoot("MainScreen");
-        }else{
-            popUpAlert("Evaluation Failed, Please Try Again.");
-        }
-    }
+//    @Subscribe
+//     void handleEvaluateManualExamResponse(EvaluateManualExamResponse response){
+//        if(response.getStatus()==0){
+//            setRoot("MainScreen");
+//        }else{
+//            popUpAlert("Evaluation Failed, Please Try Again.");
+//        }
+//    }
 
     @Subscribe
     public void handleDeanTimeExtensionResponse (ConfirmTimeExtensionResponse response){
@@ -436,7 +442,7 @@ public class ClientApp extends Application {
     }
 
     @Subscribe
-    public void handleCheckedExamResponse(CheckedExamResponse response){
+     public void handleCheckedExamResponse(UncheckedExecutesOfConcreteResponse response){
         if(response.getStatus()==0){
             setRoot("TeacherExamGradesReviewScreen");
         }

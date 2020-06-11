@@ -14,8 +14,8 @@ import DatabaseAccess.Responses.ExecuteExam.*;
 import DatabaseAccess.Responses.LoginResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
 import DatabaseAccess.Responses.Questions.QuestionResponse;
-import DatabaseAccess.Responses.ReviewExam.CheckedExamResponse;
 import DatabaseAccess.Responses.ReviewExam.PendingExamsResponse;
+import DatabaseAccess.Responses.ReviewExam.UncheckedExecutesOfConcreteResponse;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
 import LightEntities.LightExam;
@@ -37,6 +37,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -86,6 +87,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void login(String userName, String password) {
         ClientApp.sendRequest(new LoginRequest(userName, password));
     }
+
+    public void logOut(){app.logOut();}
 
     @Override
     public void loadSubjects() { //used to load subjects and courses to the model before switching screens
@@ -702,6 +705,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private boolean isManualExam = false;
 
+    private boolean finishedOnTime = true;
+
     private LightExam examForStudentExecution;
 
     private HashMap<Integer, Integer> correctAnswersMap;
@@ -740,6 +745,14 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         this.manualExamFile = manualExamFile;
     }
 
+    public boolean isFinishedOnTime() {
+        return finishedOnTime;
+    }
+
+    public void setFinishedOnTime(boolean finishedOnTime) {
+        this.finishedOnTime = finishedOnTime;
+    }
+
     @Subscribe
     public void handleTakeExamResponse(TakeExamResponse response) {
         if (response.getStatus() == 0)
@@ -762,11 +775,21 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     }
 
+    private byte[] fileToByteArray(File file){
+        try {
+            return Files.readAllBytes(file.toPath());
+        } catch (IOException e) {
+            System.out.println("Failed to convert file to bytes");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     @Override
     public void submitExam() {
         if (isManualExam())
         {
-            ClientApp.sendRequest(new SubmitManualExamRequest(getExamForStudentExecution().getId(), getManualExamFile()));
+            ClientApp.sendRequest(new SubmitManualExamRequest(getExamForStudentExecution().getId(), fileToByteArray(getManualExamFile())));
             setManualExam(false);
         }
         else
@@ -774,7 +797,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
             List<Integer> correctAnswersList = new ArrayList<>();
             for (Map.Entry<Integer, Integer> entry : getCorrectAnswersMap().entrySet())
                 correctAnswersList.add(entry.getKey(), entry.getValue());
-            ClientApp.sendRequest(new SubmitExamRequest(examForStudentExecution.getId(), correctAnswersList));
+            ClientApp.sendRequest(new SubmitExamRequest(examForStudentExecution.getId(), correctAnswersList,isFinishedOnTime()));
         }
 
     }
@@ -991,17 +1014,17 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     public void submitExamReview(double grade, String notes, File manualExamFile) {
-        ClientApp.sendRequest(new EvaluateManualExamRequest(grade, notes, manualExamFile));
+//        ClientApp.sendRequest(new EvaluateManualExamRequest(grade, notes, manualExamFile));
 
     }
 
     @Subscribe
-    public void handleEvaluateManualExamResponse(EvaluateManualExamResponse response) {
-        if (response.getStatus() == 0)
-        {
-            // clean all the relevant attributes
-
-        }
+    public void handleEvaluateManualExamResponse(DatabaseRequest response) {
+//        if (response.getStatus() == 0)
+//        {
+//            // clean all the relevant attributes
+//
+//        }
     }
 
     ObservableList<StudentExamType> studentsGradesToReview = FXCollections.observableArrayList();
@@ -1011,7 +1034,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     @Subscribe
-    public void handleCheckedExamResponse(CheckedExamResponse response) {
+    public void handleCheckedExamResponse(UncheckedExecutesOfConcreteResponse response) {
         if (response.getStatus() == 0)
         {
             Platform.runLater(() -> {
@@ -1059,12 +1082,12 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void rejectExtension(String reason, String examId) {
-        ClientApp.sendRequest(new ConfirmTimeExtensionRequest(false, reason, 0, examId));
+//        ClientApp.sendRequest(new ConfirmTimeExtensionRequest(false, reason, 0, examId));
     }
 
     @Override
     public void acceptExtension(String extension, String examId) {
-        ClientApp.sendRequest(new ConfirmTimeExtensionRequest(true, "", Integer.parseInt(extension), examId));
+//        ClientApp.sendRequest(new ConfirmTimeExtensionRequest(true, "", Integer.parseInt(extension), examId));
 
     }
 }
