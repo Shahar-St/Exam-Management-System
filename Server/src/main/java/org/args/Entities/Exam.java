@@ -33,10 +33,6 @@ public class Exam {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "exam")
     @Cascade(CascadeType.SAVE_UPDATE)
     private List<ConcreteExam> concreteExamsList = new ArrayList<>();
-//
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "exam")
-//    @Cascade(CascadeType.SAVE_UPDATE)
-//    private List<ExecutedExam> executedExamsList = new ArrayList<>();
 
     @ManyToMany(mappedBy = "containedInExams")
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
@@ -65,23 +61,14 @@ public class Exam {
         this.title = title;
         this.studentNotes = studentNotes;
         this.teacherNotes = teacherNotes;
-        //this.questionsList.addAll(questionsList);
-//        for (Question question : questionsList)
-//            this.addQuestion(question);
         this.setQuestionsList(questionsList);
         this.questionsScores.addAll(questionsScores);
         setLastModified();
 
-        //handle max size
         DecimalFormat decimalFormat = new DecimalFormat("00");
         this.id = course.getSubject().getId() + course.getId() +
                 decimalFormat.format(course.getAvailableExamCodes().remove(0));
     }
-//
-//    public Exam(Exam exam) {
-//        this(exam.course, exam.author, exam.durationInMinutes, exam.title, exam.studentNotes, exam.teacherNotes,
-//                exam.questionsList, exam.questionsScores);
-//    }
 
     @PreRemove
     private void preRemove() {
@@ -98,14 +85,6 @@ public class Exam {
         if (!question.getContainedInExams().contains(this))
             question.getContainedInExams().add(this);
     }
-
-//    public void addExecutedExam(ExecutedExam executedExam) {
-//        if (!executedExamsList.contains(executedExam))
-//            executedExamsList.add(executedExam);
-//
-//        if (executedExam.getExam() != this)
-//            executedExam.setExam(this);
-//    }
 
     public void addConcreteExam(ConcreteExam concreteExam) {
         if (!concreteExamsList.contains(concreteExam))
