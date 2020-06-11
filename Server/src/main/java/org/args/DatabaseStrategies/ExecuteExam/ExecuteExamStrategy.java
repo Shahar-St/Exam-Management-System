@@ -52,12 +52,11 @@ public class ExecuteExamStrategy extends DatabaseStrategy implements IExamInProg
     }
 
     @Override
-    public void handle(DatabaseRequest request, DatabaseResponse response, Map<ConcreteExam,
-            ExamManager> examManagers, ConnectionToClient client, Session session) {
+    public void handle(DatabaseRequest request, DatabaseResponse response, Map<Integer, ExamManager> examManagers, ConnectionToClient client, Session session) {
 
         ExecuteExamResponse response1 = (ExecuteExamResponse) response;
 
         ConcreteExam concreteExam = getTypeById(ConcreteExam.class, response1.getExamID(), session);
-        examManagers.put(concreteExam, new ExamManager(concreteExam, client));
+        examManagers.put(concreteExam.getId(), new ExamManager(client));
     }
 }

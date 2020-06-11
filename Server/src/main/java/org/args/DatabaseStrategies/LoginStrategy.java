@@ -5,7 +5,6 @@ import DatabaseAccess.Requests.LoginRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.LoginResponse;
 import org.args.DatabaseStrategies.ExecuteExam.IExamInProgress;
-import org.args.Entities.ConcreteExam;
 import org.args.Entities.Dean;
 import org.args.Entities.User;
 import org.args.ExamManager;
@@ -42,11 +41,16 @@ public class LoginStrategy extends DatabaseStrategy implements IExamInProgress {
     }
 
     @Override
-    public void handle(DatabaseRequest request, DatabaseResponse response, Map<ConcreteExam, ExamManager> examManagers,
+    public void handle(DatabaseRequest request, DatabaseResponse response, Map<Integer, ExamManager> examManagers,
                        ConnectionToClient client, Session session) {
 
         User user = getUser((String) client.getInfo("userName"), session);
         if (user instanceof Dean)
+        {
+            ExamManager.getDeanLock().lock();
             ExamManager.setDean(client);
+            ExamManager.notifyDean();
+            ExamManager.getDeanLock().unlock();
+        }
     }
 }

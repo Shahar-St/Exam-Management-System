@@ -55,13 +55,13 @@ public class TakeExamStrategy extends DatabaseStrategy implements IExamInProgres
     }
 
     @Override
-    public void handle(DatabaseRequest request, DatabaseResponse response, Map<ConcreteExam, ExamManager> examManagers,
+    public void handle(DatabaseRequest request, DatabaseResponse response, Map<Integer, ExamManager> examManagers,
                        ConnectionToClient client, Session session) {
 
         TakeExamResponse response1 = (TakeExamResponse) response;
 
         ConcreteExam concreteExam = getTypeById(ConcreteExam.class, response1.getLightExam().getId(), session);
-        ExamManager manager = examManagers.get(concreteExam);
-        manager.getStudents().add(client);
+        ExamManager manager = examManagers.get(concreteExam.getId());
+        manager.getStudents().put((String) client.getInfo("userName"), client);
     }
 }

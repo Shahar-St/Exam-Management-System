@@ -4,10 +4,7 @@ import DatabaseAccess.Requests.*;
 import DatabaseAccess.Responses.*;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.DatabaseStrategies.Exams.*;
-import org.args.DatabaseStrategies.ExecuteExam.ExecuteExamStrategy;
-import org.args.DatabaseStrategies.ExecuteExam.IExamInProgress;
-import org.args.DatabaseStrategies.ExecuteExam.TakeExamStrategy;
-import org.args.DatabaseStrategies.ExecuteExam.SubmitExamStrategy;
+import org.args.DatabaseStrategies.ExecuteExam.*;
 import org.args.DatabaseStrategies.LoginStrategy;
 import org.args.DatabaseStrategies.Questions.*;
 import org.args.DatabaseStrategies.SubjectAndCoursesStrategy;
@@ -29,7 +26,8 @@ public class DatabaseHandler {
 
     private static DatabaseHandler databaseHandler = null;
     private static Session session;
-    Map<ConcreteExam, ExamManager> examManagers = new HashMap<>();
+    Map<Integer, ExamManager> examManagers = new HashMap<Integer, ExamManager>();    //key = concreteExam ID
+
     private final HashMap<String, DatabaseStrategy> strategies = new HashMap<>() {{
         this.put("LoginRequest", new LoginStrategy());
         this.put("SubjectsAndCoursesRequest", new SubjectAndCoursesStrategy());
@@ -46,6 +44,8 @@ public class DatabaseHandler {
         this.put("ExecuteExamRequest", new ExecuteExamStrategy());
         this.put("TakeExamRequest", new TakeExamStrategy());
         this.put("SubmitExamRequest", new SubmitExamStrategy());
+        this.put("TimeExtensionRequest", new TimeExtensionStrategy());
+        this.put("ConfirmTimeExtensionRequest", new ConfirmTimeExtensionStrategy());
     }};
 
     private DatabaseHandler() {

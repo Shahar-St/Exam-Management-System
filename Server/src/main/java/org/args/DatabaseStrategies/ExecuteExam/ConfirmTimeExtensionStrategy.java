@@ -2,13 +2,9 @@ package org.args.DatabaseStrategies.ExecuteExam;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.ExecuteExam.ConfirmTimeExtensionRequest;
-import DatabaseAccess.Requests.ExecuteExam.TimeExtensionRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.ExecuteExam.ConfirmTimeExtensionResponse;
-import DatabaseAccess.Responses.ExecuteExam.ExecuteExamResponse;
-import DatabaseAccess.Responses.ExecuteExam.TimeExtensionResponse;
 import Notifiers.ConfirmTimeExtensionNotifier;
-import Notifiers.TimeExtensionRequestNotifier;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.Entities.ConcreteExam;
 import org.args.ExamManager;
@@ -18,26 +14,39 @@ import org.hibernate.Session;
 import java.util.List;
 import java.util.Map;
 
-//TODO
+/**
+ * status dictionary:
+ * 0 - success (message sent successfully)
+ * 1 - unauthorized access - user isn't logged in
+ * 2 - exam wasn't found
+ */
+
 public class ConfirmTimeExtensionStrategy extends DatabaseStrategy implements IExamInProgress {
 
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session, List<String> loggedInUsers) {
-        //get a TimeExtension request from teacher, send a ConfirmTime response to dean.
-        TimeExtensionRequest timeRequest = (TimeExtensionRequest) request;
+
+        ConfirmTimeExtensionRequest request1 = (ConfirmTimeExtensionRequest) request;
+
         if (client.getInfo("userName") == null)
-            return new ConfirmTimeExtensionResponse(UNAUTHORIZED, request, "", 0, "");
-        return new ConfirmTimeExtensionResponse(SUCCESS, request, timeRequest.getExamId(), timeRequest.getDurationInMinutes(), timeRequest.getReasonForExtension());
+            return new ConfirmTimeExtensionResponse(UNAUTHORIZED, request);
+
+        ConcreteExam concreteExam = getTypeById(ConcreteExam.class, request1.getExamId(), session);
+        if (concreteExam == null)
+            return new ConfirmTimeExtensionResponse(ERROR2, request);
+
+        return new ConfirmTimeExtensionResponse(SUCCESS, request);
     }
 
     @Override
-    public void handle(DatabaseRequest request, DatabaseResponse response, Map<ConcreteExam, ExamManager> examManagers,
+    public void handle(DatabaseRequest request, DatabaseResponse response, Map<Integer, ExamManager> examManagers,
                        ConnectionToClient client, Session session) {
 
         ConfirmTimeExtensionRequest request1 = (ConfirmTimeExtensionRequest) request;
-        ConcreteExam exam = getTypeById(ConcreteExam.class, request1.getExamId(), session);
-        ExamManager manager = examManagers.get(exam);
+        ConcreteExam concreteExam = getTypeById(ConcreteExam.class, request1.getExamId(), session);
+        ExamManager manager = examManagers.get(concreteExam.getId());
 
-        manager.respondToTimeExtension(new ConfirmTimeExtensionNotifier());
+        manager.respondToTimeExtension(new ConfirmTimeExtensionNotifier(request1.getDeanResponse(),
+                request1.getAuthorizedTimeExtension(), request1.isAccepted()));
     }
 }

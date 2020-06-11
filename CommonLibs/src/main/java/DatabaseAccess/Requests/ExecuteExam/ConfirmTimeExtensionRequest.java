@@ -1,7 +1,5 @@
 package DatabaseAccess.Requests.ExecuteExam;
 
-// Dean handles the ConfirmTimeExtensionResponse from the server, then sends this request.
-
 import DatabaseAccess.Requests.DatabaseRequest;
 
 public class ConfirmTimeExtensionRequest extends DatabaseRequest {
