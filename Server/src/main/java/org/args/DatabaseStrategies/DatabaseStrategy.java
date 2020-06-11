@@ -13,6 +13,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Map;
 
 public abstract class DatabaseStrategy {
 
@@ -24,7 +25,7 @@ public abstract class DatabaseStrategy {
     protected final int ERROR4 = 4;
 
     public abstract DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
-                                            List<String> loggedInUsers);
+                                            Map<String, ConnectionToClient> loggedInUsers);
 
     protected <T> T getTypeById(Class<T> objectType, String ID, Session session) {
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();

@@ -29,7 +29,7 @@ public class TakeExamStrategy extends DatabaseStrategy implements IExamInProgres
 
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
-                                   List<String> loggedInUsers) {
+                                   Map<String, ConnectionToClient> loggedInUsers) {
 
         TakeExamRequest takeExamRequest = (TakeExamRequest) request;
         if (client.getInfo("userName") == null)

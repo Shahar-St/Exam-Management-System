@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class PendingExamResponse extends DatabaseResponse {
+
     //HashMap<concreteExamID,Title>
     private final HashMap<Integer, String> checkedExamsList;
 

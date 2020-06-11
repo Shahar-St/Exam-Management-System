@@ -6,19 +6,21 @@ import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
 import org.args.Entities.*;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+/**
+ * status dictionary:
+ * 0 - success
+ * 1 - unauthorized access - user isn't logged in
+ */
 
 public class SubjectAndCoursesStrategy extends DatabaseStrategy {
 
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
-                                   List<String> loggedInUsers) {
+                                   Map<String, ConnectionToClient> loggedInUsers) {
 
 
         if (client.getInfo("userName") == null)

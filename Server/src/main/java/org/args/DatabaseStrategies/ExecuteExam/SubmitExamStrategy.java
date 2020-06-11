@@ -24,7 +24,7 @@ public class SubmitExamStrategy extends DatabaseStrategy implements IExamInProgr
 
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
-                                   List<String> loggedInUsers) {
+                                   Map<String, ConnectionToClient> loggedInUsers) {
 
         SubmitExamRequest request1 = (SubmitExamRequest) request;
 
