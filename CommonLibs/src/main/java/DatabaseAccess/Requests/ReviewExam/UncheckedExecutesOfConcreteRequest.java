@@ -2,10 +2,11 @@ package DatabaseAccess.Requests.ReviewExam;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 
-public class CheckedExamRequest extends DatabaseRequest {
+//
+public class UncheckedExecutesOfConcreteRequest extends DatabaseRequest {
     private final String examId;
 
-    public CheckedExamRequest(String examId) {
+    public UncheckedExecutesOfConcreteRequest(String examId) {
         this.examId = examId;
     }
 

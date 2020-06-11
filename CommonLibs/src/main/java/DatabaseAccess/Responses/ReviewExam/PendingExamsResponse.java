@@ -8,11 +8,12 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
-public class PendingExamResponse extends DatabaseResponse {
-    //HashMap<concreteExamID,Title>
+// returns every concrete exam that has at least one unchecked exam
+public class PendingExamsResponse extends DatabaseResponse {
+    //HashMap<concreteExamID, examTitle>
     private final HashMap<Integer, String> checkedExamsList;
 
-    public PendingExamResponse(int status, DatabaseRequest request, HashMap<Integer, String> checkedExamsList) {
+    public PendingExamsResponse(int status, DatabaseRequest request, HashMap<Integer, String> checkedExamsList) {
         super(status, request);
         this.checkedExamsList = checkedExamsList;
     }

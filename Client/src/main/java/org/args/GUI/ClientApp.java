@@ -9,7 +9,6 @@ import DatabaseAccess.Responses.Exams.ViewExamResponse;
 import DatabaseAccess.Responses.ExecuteExam.*;
 import DatabaseAccess.Responses.Questions.*;
 import DatabaseAccess.Responses.ReviewExam.CheckedExamResponse;
-import DatabaseAccess.Responses.ReviewExam.EvaluateManualExamResponse;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import javafx.application.Application;
 import javafx.application.Platform;

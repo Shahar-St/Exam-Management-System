@@ -5,9 +5,8 @@ import DatabaseAccess.Requests.Exams.*;
 import DatabaseAccess.Requests.ExecuteExam.*;
 import DatabaseAccess.Requests.LoginRequest;
 import DatabaseAccess.Requests.Questions.*;
-import DatabaseAccess.Requests.ReviewExam.CheckedExamRequest;
-import DatabaseAccess.Requests.ReviewExam.EvaluateManualExamRequest;
-import DatabaseAccess.Requests.ReviewExam.PendingExamRequest;
+import DatabaseAccess.Requests.ReviewExam.UncheckedExecutesOfConcreteRequest;
+import DatabaseAccess.Requests.ReviewExam.PendingExamsRequest;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
 import DatabaseAccess.Responses.Exams.AllExamsResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
@@ -16,13 +15,11 @@ import DatabaseAccess.Responses.LoginResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
 import DatabaseAccess.Responses.Questions.QuestionResponse;
 import DatabaseAccess.Responses.ReviewExam.CheckedExamResponse;
-import DatabaseAccess.Responses.ReviewExam.EvaluateManualExamResponse;
-import DatabaseAccess.Responses.ReviewExam.PendingExamResponse;
+import DatabaseAccess.Responses.ReviewExam.PendingExamsResponse;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
 import LightEntities.LightExam;
 import LightEntities.LightQuestion;
-import Notifiers.ConfirmTimeExtensionNotifier;
 import Notifiers.TimeExtensionRequestNotifier;
 import Util.Pair;
 import javafx.application.Platform;
@@ -929,7 +926,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     @Subscribe
-    public void handlePendingExamResponse(PendingExamResponse response) {
+    public void handlePendingExamResponse(PendingExamsResponse response) {
         if (response.getStatus() == 0)
         {
             for (Map.Entry<Integer, String> entry : response.getCheckedExamsList().entrySet())
@@ -946,12 +943,12 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void showPendingExamGrades(String examId) {
-        ClientApp.sendRequest(new CheckedExamRequest(examId));
+        ClientApp.sendRequest(new UncheckedExecutesOfConcreteRequest(examId));
     }
 
     @Override
     public void loadPendingExams() {
-        ClientApp.sendRequest(new PendingExamRequest());
+        ClientApp.sendRequest(new PendingExamsRequest());
     }
 
     @Override
