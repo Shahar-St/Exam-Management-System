@@ -897,12 +897,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Subscribe
     public void handlePendingExamResponse(PendingExamResponse response) {
         if (response.getStatus() == 0) {
-            for (Map.Entry<String, Pair<String, LocalDateTime>> entry : response.getCheckedExamsList().entrySet()) {
+            for (Map.Entry<Integer, String> entry : response.getCheckedExamsList().entrySet()) {
                 Platform.runLater(() -> {
-                    String examId = entry.getKey();
-                    String examTitle = entry.getValue().getFirst();
-                    String examDate = entry.getValue().getSecond().toString();
-                    String fullExamDescription = "#" + examId + ":" + examTitle + " from " + examDate;
+                    int examId = entry.getKey();
+                    String examTitle = entry.getValue();
+                    String fullExamDescription = "#" + examId + ":" + examTitle;
                     pendingExamsObservableList.add(fullExamDescription);
                 });
             }
@@ -978,7 +977,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void handleCheckedExamResponse(CheckedExamResponse response) {
         if (response.getStatus() == 0) {
             Platform.runLater(() -> {
-                studentsGradesToReview.clear();
                 //HashMap<studentID,isComputerized>
                 for (Map.Entry<String, Boolean> entry : response.getCheckedExamsList().entrySet()) {
                     String method = entry.getValue() ? "Computerized" : "Manual";
