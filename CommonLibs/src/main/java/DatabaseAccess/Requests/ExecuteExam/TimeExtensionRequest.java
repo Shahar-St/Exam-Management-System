@@ -1,7 +1,6 @@
 package DatabaseAccess.Requests.ExecuteExam;
 
 import DatabaseAccess.Requests.DatabaseRequest;
-import LightEntities.LightExam;
 
 //this is what the teacher sends to the server when the teacher requests time extension.
 

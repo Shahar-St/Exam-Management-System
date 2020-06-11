@@ -1,21 +1,24 @@
 package org.args;
 
 import DatabaseAccess.Requests.DatabaseRequest;
+import DatabaseAccess.Requests.Questions.DeleteQuestionRequest;
+import org.args.Entities.ConcreteExam;
 import org.args.OCSF.AbstractServer;
 import org.args.OCSF.ConnectionToClient;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 // server is a singleton
 public class EMSserver extends AbstractServer {
 
     private static EMSserver singleInstanceServer = null;
     private final DatabaseHandler databaseHandler;
-    private final Map<String, ConnectionToClient> loggedInUsers = new HashMap<>();
-
+    List<String> loggedInUsers = new ArrayList<>();
 
     private EMSserver(int port, DatabaseHandler databaseHandler) {
         super(port);
@@ -46,7 +49,8 @@ public class EMSserver extends AbstractServer {
         {
             try
             {
-                client.sendToClient(databaseHandler.produceResponse((DatabaseRequest) msg, client, loggedInUsers));
+                client.sendToClient(databaseHandler.produceResponse((DatabaseRequest) msg,
+                        client, loggedInUsers));
             }
             catch (Exception e)
             {
@@ -63,9 +67,6 @@ public class EMSserver extends AbstractServer {
     @Override
     protected synchronized void clientDisconnected(ConnectionToClient client) {
         System.out.print("Interrupted\nClient disconnected." + "\n>> ");
-
-        if ((Boolean) client.getInfo("Dean"))
-            loggedInUsers.remove("DeanConnection");
         loggedInUsers.remove((String) client.getInfo("userName"));
     }
 

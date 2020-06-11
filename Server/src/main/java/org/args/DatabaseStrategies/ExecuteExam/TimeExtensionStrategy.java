@@ -3,14 +3,16 @@ package org.args.DatabaseStrategies.ExecuteExam;
 import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.ExecuteExam.TimeExtensionRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
-import DatabaseAccess.Responses.ExecuteExam.ConfirmTimeExtensionResponse;
 import DatabaseAccess.Responses.ExecuteExam.TimeExtensionResponse;
+import Notifiers.TimeExtensionRequestNotifier;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.Entities.ConcreteExam;
+import org.args.Entities.Exam;
+import org.args.ExamManager;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
-import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,15 +20,13 @@ import java.util.Map;
  * 0 - success
  * 1 - unauthorized access - user isn't logged in
  * 2 - exam wasn't found
- * 3 - dean isn't logged in
- * 4 - error in communication with dean
  */
 
-public class TimeExtensionStrategy extends DatabaseStrategy {
+public class TimeExtensionStrategy extends DatabaseStrategy implements IExamInProgress {
 
     @Override
-    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session, Map<String,
-            ConnectionToClient> loggedInUsers) {
+    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
+                                   List<String> loggedInUsers) {
 
         TimeExtensionRequest request1 = (TimeExtensionRequest) request;
 
@@ -37,22 +37,21 @@ public class TimeExtensionStrategy extends DatabaseStrategy {
         if (concreteExam == null)
             return new TimeExtensionResponse(ERROR2, request);
 
-        ConnectionToClient dean = loggedInUsers.get("DeanConnection");
-        if (dean == null || !dean.isAlive())
-            return new TimeExtensionResponse(ERROR3, request);
-
-        ConfirmTimeExtensionResponse response = new ConfirmTimeExtensionResponse(SUCCESS, request,
-                String.valueOf(concreteExam.getId()), request1.getDurationInMinutes(), request1.getExamId());
-        try
-        {
-            dean.sendToClient(response);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-            return new TimeExtensionResponse(ERROR4, request1);
-        }
-        return null;
+        return new TimeExtensionResponse(SUCCESS, request);
     }
 
+    @Override
+    public void handle(DatabaseRequest request, DatabaseResponse response, Map<Integer, ExamManager> examManagers,
+                       ConnectionToClient client, Session session) {
+
+        TimeExtensionRequest request1 = (TimeExtensionRequest) request;
+        ConcreteExam concreteExam = getTypeById(ConcreteExam.class, request1.getExamId(), session);
+        Exam exam = concreteExam.getExam();
+
+        TimeExtensionRequestNotifier notifier = new TimeExtensionRequestNotifier(exam.getCourse().getSubject().getName(),
+                exam.getCourse().getName(), concreteExam.getTester().getFullName(), exam.getTitle(),
+                String.valueOf(concreteExam.getId()), request1.getDurationInMinutes(), request1.getReasonForExtension());
+
+        ExamManager.askForTimeExtension(notifier);
+    }
 }

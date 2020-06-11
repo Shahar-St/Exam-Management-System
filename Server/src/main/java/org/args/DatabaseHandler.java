@@ -26,6 +26,8 @@ public class DatabaseHandler {
 
     private static DatabaseHandler databaseHandler = null;
     private static Session session;
+    Map<Integer, ExamManager> examManagers = new HashMap<Integer, ExamManager>();    //key = concreteExam ID
+
     private final HashMap<String, DatabaseStrategy> strategies = new HashMap<>() {{
         this.put("LoginRequest", new LoginStrategy());
         this.put("SubjectsAndCoursesRequest", new SubjectAndCoursesStrategy());
@@ -114,9 +116,13 @@ public class DatabaseHandler {
     }
 
     public DatabaseResponse produceResponse(DatabaseRequest request, ConnectionToClient client,
-                                            Map<String, ConnectionToClient> loggedInUsers) {
-        DatabaseResponse response = strategies.get(request.getClass().getSimpleName())
-                .handle(request, client, session, loggedInUsers);
+                                            List<String> loggedInUsers) {
+        DatabaseStrategy strategy = strategies.get(request.getClass().getSimpleName());
+        DatabaseResponse response = strategy.handle(request, client, session, loggedInUsers);
+
+        if (strategy instanceof IExamInProgress && response.getStatus() == 0)
+            ((IExamInProgress) strategy).handle(request, response, examManagers, client, session);
+
         session.clear();
         return response;
     }

@@ -6,6 +6,7 @@ import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.ExecuteExam.SubmitExamResponse;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.Entities.*;
+import org.args.ExamManager;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
@@ -19,7 +20,7 @@ import java.util.Map;
  * 2 - exam wasn't found
  */
 
-public class SubmitExamStrategy extends DatabaseStrategy {
+public class SubmitExamStrategy extends DatabaseStrategy implements IExamInProgress {
 
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
@@ -45,5 +46,15 @@ public class SubmitExamStrategy extends DatabaseStrategy {
         session.flush();
 
         return new SubmitExamResponse(SUCCESS, request1);
+    }
+
+    @Override
+    public void handle(DatabaseRequest request, DatabaseResponse response, Map<Integer, ExamManager> examManagers, ConnectionToClient client, Session session) {
+
+        SubmitExamRequest request1 = (SubmitExamRequest) request;
+
+        ConcreteExam concreteExam = getTypeById(ConcreteExam.class, request1.getExamID(), session);
+        ExamManager manager = examManagers.get(concreteExam.getId());
+        manager.getStudents().remove((String) client.getInfo("userName"), client);
     }
 }

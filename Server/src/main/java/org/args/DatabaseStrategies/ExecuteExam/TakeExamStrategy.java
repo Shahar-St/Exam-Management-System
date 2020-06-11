@@ -6,8 +6,10 @@ import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.ExecuteExam.TakeExamResponse;
 import LightEntities.LightExam;
 import org.args.DatabaseStrategies.DatabaseStrategy;
+import org.args.Entities.ConcreteExam;
 import org.args.Entities.ExecutedExam;
 import org.args.Entities.Student;
+import org.args.ExamManager;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
@@ -23,7 +25,7 @@ import java.util.Map;
  * 4 - wrong ID
  */
 
-public class TakeExamStrategy extends DatabaseStrategy {
+public class TakeExamStrategy extends DatabaseStrategy implements IExamInProgress {
 
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
@@ -50,5 +52,16 @@ public class TakeExamStrategy extends DatabaseStrategy {
         LightExam lightExam = executedExam.getConcreteExam().createLightExam();
 
         return new TakeExamResponse(SUCCESS, takeExamRequest, lightExam);
+    }
+
+    @Override
+    public void handle(DatabaseRequest request, DatabaseResponse response, Map<Integer, ExamManager> examManagers,
+                       ConnectionToClient client, Session session) {
+
+        TakeExamResponse response1 = (TakeExamResponse) response;
+
+        ConcreteExam concreteExam = getTypeById(ConcreteExam.class, response1.getLightExam().getId(), session);
+        ExamManager manager = examManagers.get(concreteExam.getId());
+        manager.getStudents().put((String) client.getInfo("userName"), client);
     }
 }

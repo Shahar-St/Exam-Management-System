@@ -1,34 +1,29 @@
-package DatabaseAccess.Requests.ExecuteExam;
+package Notifiers;
 
-import DatabaseAccess.Requests.DatabaseRequest;
+import java.io.Serializable;
 
-public class ConfirmTimeExtensionRequest extends DatabaseRequest {
+public class ConfirmTimeExtensionNotifier implements Serializable {
 
-    private final String deanResponse;
+    private String deanResponse;
     private final int authorizedTimeExtension;
     private final boolean isAccepted;
-    private final String examId;
 
-    public ConfirmTimeExtensionRequest(Boolean isAccepted, String deanResponse, int authorizedTimeExtension, String examId) {
+    public ConfirmTimeExtensionNotifier(String deanResponse, int authorizedTimeExtension, boolean isAccepted) {
         this.deanResponse = deanResponse;
         this.authorizedTimeExtension = authorizedTimeExtension;
         this.isAccepted = isAccepted;
-        this.examId = examId;
     }
 
+    public void setDeanResponse(String deanResponse) {
+        this.deanResponse = deanResponse;
+    }
     public String getDeanResponse() {
         return deanResponse;
     }
-
     public int getAuthorizedTimeExtension() {
         return authorizedTimeExtension;
     }
-
     public boolean isAccepted() {
         return isAccepted;
-    }
-
-    public String getExamId() {
-        return examId;
     }
 }
