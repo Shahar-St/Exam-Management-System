@@ -26,6 +26,7 @@ public class ConfirmTimeExtensionStrategy extends DatabaseStrategy implements IE
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session, List<String> loggedInUsers) {
 
+
         ConfirmTimeExtensionRequest request1 = (ConfirmTimeExtensionRequest) request;
 
         if (client.getInfo("userName") == null)
