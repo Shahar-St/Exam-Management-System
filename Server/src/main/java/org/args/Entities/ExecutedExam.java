@@ -1,10 +1,13 @@
 package org.args.Entities;
 
+import LightEntities.LightExecutedExam;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -33,6 +36,8 @@ public class ExecutedExam {
     private int duration; // exam duration in minutes
     private boolean isComputerized = false;
     private boolean checked = false;
+    private boolean finishedOnTime = false;
+    private Date startedDate;
 
     //Group c'tors
     public ExecutedExam() {
@@ -135,5 +140,23 @@ public class ExecutedExam {
     }
     public void setChecked(boolean checked) {
         this.checked = checked;
+    }
+
+    public boolean isFinishedOnTime() {
+        return finishedOnTime;
+    }
+    public void setFinishedOnTime(boolean finishedOnTime) {
+        this.finishedOnTime = finishedOnTime;
+    }
+    public Date getStartedDate() {
+        return startedDate;
+    }
+    public void setStartedDate(Date startedDate) {
+        this.startedDate = startedDate;
+    }
+
+    public LightExecutedExam getLightVersion() {
+        //TODO
+        return null;
     }
 }

@@ -30,9 +30,11 @@ public class ConcreteExam {
     private List<ExecutedExam> executedExamsList = new ArrayList<>();
 
     private String examCode;
+    private int numOfTakers;
+    private int finishedOnTime;
+    private int UnfinishedOnTime;
 
     //Group c'tors
-
     public ConcreteExam() {
     }
 
@@ -94,5 +96,24 @@ public class ConcreteExam {
         return new LightExam(String.valueOf(this.id), exam.getAuthor().getUserName(), lightQuestionsList,
                 new ArrayList<>(exam.getQuestionsScores()), exam.getDurationInMinutes(),
                 exam.getTitle(), exam.getStudentNotes());
+    }
+
+    public int getNumOfTakers() {
+        return numOfTakers;
+    }
+    public void setNumOfTakers(int numOfTakers) {
+        this.numOfTakers = numOfTakers;
+    }
+    public int getFinishedOnTime() {
+        return finishedOnTime;
+    }
+    public void setFinishedOnTime(int finishedOnTime) {
+        this.finishedOnTime = finishedOnTime;
+    }
+    public int getUnfinishedOnTime() {
+        return UnfinishedOnTime;
+    }
+    public void setUnfinishedOnTime(int unfinishedOnTime) {
+        UnfinishedOnTime = unfinishedOnTime;
     }
 }

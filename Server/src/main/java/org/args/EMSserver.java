@@ -66,6 +66,7 @@ public class EMSserver extends AbstractServer {
 
     @Override
     protected synchronized void clientDisconnected(ConnectionToClient client) {
+        //TODO student disconnected in exam to remove from exam manager
         System.out.print("Interrupted\nClient disconnected." + "\n>> ");
         loggedInUsers.remove((String) client.getInfo("userName"));
     }
