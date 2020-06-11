@@ -4,13 +4,18 @@ import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.LoginRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.LoginResponse;
+import org.args.DatabaseStrategies.ExecuteExam.IExamInProgress;
+import org.args.Entities.ConcreteExam;
+import org.args.Entities.Dean;
 import org.args.Entities.User;
+import org.args.ExamManager;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
 import java.util.List;
+import java.util.Map;
 
-public class LoginStrategy extends DatabaseStrategy {
+public class LoginStrategy extends DatabaseStrategy implements IExamInProgress {
 
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
@@ -34,5 +39,14 @@ public class LoginStrategy extends DatabaseStrategy {
         return new LoginResponse(SUCCESS, user.getClass().getSimpleName().toLowerCase(),
                 user.getFullName(), request);
 
+    }
+
+    @Override
+    public void handle(DatabaseRequest request, DatabaseResponse response, Map<ConcreteExam, ExamManager> examManagers,
+                       ConnectionToClient client, Session session) {
+
+        User user = getUser((String) client.getInfo("userName"), session);
+        if (user instanceof Dean)
+            ExamManager.setDean(client);
     }
 }
