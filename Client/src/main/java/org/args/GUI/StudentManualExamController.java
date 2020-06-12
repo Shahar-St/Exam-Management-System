@@ -26,7 +26,7 @@ public class StudentManualExamController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Microsoft Word Open XML Format Document", "*.docx","*.doc"));
         downloadButton.setOnAction(event->{
             fileChooser.setTitle("Download Exam");
-            File defaultDirectory = new File("C:\\");
+            File defaultDirectory = new File("/home/");
             fileChooser.setInitialDirectory(defaultDirectory);
             fileChooser.setInitialFileName(model.getExamForStudentExecution().getId()+"_exam.docx");
             File selectedFile = fileChooser.showSaveDialog(ClientApp.primaryStage);
@@ -42,7 +42,7 @@ public class StudentManualExamController {
 
         submitButton.setOnAction(event -> {
             fileChooser.setTitle("Upload Exam");
-            File defaultDirectory = new File("C:\\");
+            File defaultDirectory = new File("/home/");
             fileChooser.setInitialDirectory(defaultDirectory);
             File selectedFile = fileChooser.showOpenDialog(ClientApp.primaryStage);
             model.setManualExamFile(selectedFile);

@@ -52,6 +52,7 @@ public class TeacherPendingExamsController {
     private void showGradesOfSelectedExam() {
         String currentExamId = pendingListView.getSelectionModel().getSelectedItem().substring(1,7);
         model.showPendingExamGrades(currentExamId);
+        model.setCurrentConcreteExamTitle(pendingListView.getSelectionModel().getSelectedItem().substring(6));
         model.clearPendingExams();
     }
 

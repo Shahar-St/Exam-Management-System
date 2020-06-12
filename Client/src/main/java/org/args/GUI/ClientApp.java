@@ -1,13 +1,15 @@
 package org.args.GUI;
 
 
-import DatabaseAccess.Responses.*;
 import DatabaseAccess.Responses.Exams.AddExamResponse;
 import DatabaseAccess.Responses.Exams.DeleteExamResponse;
 import DatabaseAccess.Responses.Exams.EditExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
 import DatabaseAccess.Responses.ExecuteExam.*;
+import DatabaseAccess.Responses.LoginResponse;
 import DatabaseAccess.Responses.Questions.*;
+import DatabaseAccess.Responses.ReviewExam.EvaluateExamResponse;
+import DatabaseAccess.Responses.ReviewExam.GetExecutedExamResponse;
 import DatabaseAccess.Responses.ReviewExam.UncheckedExecutesOfConcreteResponse;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import javafx.application.Application;
@@ -33,35 +35,26 @@ import java.util.Stack;
  */
 public class ClientApp extends Application {
 
+    public static Stage primaryStage;
     private static Scene scene;
     private static EMSClient client;
     private static DataModel model;
     // specify the server defaults
     private static String host = "127.0.0.1";
-
     private static boolean isRunning;
-
     private static int port = 3000;
-
-    private final String[] errors = {"SUCCESS", "UNAUTHORIZED", "NOT_FOUND", "NO_ACCESS", "WRONG_INFO"};
-
     private static Stack<String> lastScenes;
-
-    public static Stage primaryStage;
+    private final String[] errors = {"SUCCESS", "UNAUTHORIZED", "NOT_FOUND", "NO_ACCESS", "WRONG_INFO"};
 
     public static boolean isRunning() {
         return isRunning;
-    }
-
-    protected String getErrorMessage(int error_code) {
-        return errors[error_code];
     }
 
     public static void setRoot(String fxml) {
         try {
             scene.setRoot(loadFXML(fxml));
             System.out.println("Stack State:");
-            System.out.println("Stack Size:"+lastScenes.size());
+            System.out.println("Stack Size:" + lastScenes.size());
             System.out.println(Arrays.toString(lastScenes.toArray()));
         } catch (IOException e) {
             System.out.println("Failed to change the root of the scene: " + e.toString());
@@ -69,19 +62,19 @@ public class ClientApp extends Application {
         }
     }
 
-    public static void backToLastScene(){
+    public static void backToLastScene() {
         try {
             scene.setRoot(loadFXML(popLastScene()));
         } catch (IOException e) {
             e.printStackTrace();
         }
         System.out.println("Stack State:");
-        System.out.println("Stack Size:"+lastScenes.size());
+        System.out.println("Stack Size:" + lastScenes.size());
         System.out.println(Arrays.toString(lastScenes.toArray()));
     }
 
     public static String popLastScene() {
-        if(!lastScenes.empty())
+        if (!lastScenes.empty())
             return lastScenes.pop();
         return null;
     }
@@ -90,7 +83,6 @@ public class ClientApp extends Application {
         lastScenes.push(fxml);
     }
 
-
     public static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ClientApp.class.getResource("/org/args/" + fxml + ".fxml"));
         return fxmlLoader.load();
@@ -98,6 +90,60 @@ public class ClientApp extends Application {
 
     public static DataModel getModel() {
         return model;
+    }
+
+    public static void main(String[] args) {
+        launch();
+    }
+
+    public static void sendRequest(Object data) {
+        try {
+            client.sendToServer(data);
+        } catch (IOException e) {
+            System.out.println("Failed to send request to server");
+            e.printStackTrace();
+
+        }
+    }
+
+    public static boolean isNumeric(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public static boolean isDouble(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public static String getHost() {
+        return host;
+    }
+
+    public static void setHost(String host) {
+        ClientApp.host = host;
+        client.setHost(host);
+    }
+
+    public static int getPort() {
+        return port;
+    }
+
+    public static void setPort(int port) {
+        ClientApp.port = port;
+        client.setPort(port);
+    }
+
+    protected String getErrorMessage(int error_code) {
+        return errors[error_code];
     }
 
     @Override
@@ -117,7 +163,7 @@ public class ClientApp extends Application {
     @Override
     public void start(Stage stage) {
         try {
-            primaryStage=stage;
+            primaryStage = stage;
             isRunning = true;
             EventBus.getDefault().register(this);
             FXMLLoader loader = fxmlLoader("LoginScreen");
@@ -136,7 +182,7 @@ public class ClientApp extends Application {
 
     @Override
     public void stop() throws Exception {
-        isRunning=false;
+        isRunning = false;
         EventBus.getDefault().unregister(this);
         super.stop();
     }
@@ -144,7 +190,7 @@ public class ClientApp extends Application {
     private void closeWindowEvent(WindowEvent event) {
         System.out.println("Window close request ...");
         // set false
-        isRunning=false;
+        isRunning = false;
         try {
             client.closeConnection();
         } catch (IOException e) {
@@ -153,27 +199,12 @@ public class ClientApp extends Application {
         Platform.exit();
     }
 
-    public static void main(String[] args) {
-        launch();
-    }
-
     public FXMLLoader fxmlLoader(String fxml) {
         return new FXMLLoader(getClass().getResource("/org/args/" + fxml + ".fxml"));
     }
 
-    public static void sendRequest(Object data) {
-        try {
-            client.sendToServer(data);
-        } catch (IOException e) {
-            System.out.println("Failed to send request to server");
-            e.printStackTrace();
-
-        }
-    }
-
-
     public void popUpAlert(String message) {
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Alert");
             alert.setHeaderText(null);
@@ -183,50 +214,11 @@ public class ClientApp extends Application {
 
     }
 
-
-    public static void setHost(String host) {
-        ClientApp.host = host;
-        client.setHost(host);
-    }
-
-    public static void setPort(int port) {
-        ClientApp.port = port;
-        client.setPort(port);
-    }
-
-    public static boolean isNumeric(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch(NumberFormatException e){
-            return false;
-        }
-    }
-
-    public static boolean isDouble(String str){
-        try {
-            Double.parseDouble(str);
-            return true;
-        }catch (NumberFormatException e){
-            return false;
-        }
-    }
-
-
-    public static String getHost() {
-        return host;
-    }
-
-    public static int getPort() {
-        return port;
-    }
-
-    public void logOut(){
+    public void logOut() {
         client.logOut();
         popUpAlert("You have logged out successfully.");
         setRoot("LoginScreen");
     }
-
 
 
     @Subscribe
@@ -274,8 +266,8 @@ public class ClientApp extends Application {
     }
 
     @Subscribe
-    public void handleAddQuestionResponse(AddQuestionResponse response){
-        Platform.runLater(()->{
+    public void handleAddQuestionResponse(AddQuestionResponse response) {
+        Platform.runLater(() -> {
             Alert alert;
             if (response.getStatus() == 0) {
                 alert = new Alert(Alert.AlertType.INFORMATION);
@@ -293,8 +285,8 @@ public class ClientApp extends Application {
     }
 
     @Subscribe
-    public void handleDeleteQuestionResponse(DeleteQuestionResponse response){
-        Platform.runLater(()->{
+    public void handleDeleteQuestionResponse(DeleteQuestionResponse response) {
+        Platform.runLater(() -> {
             Alert alert;
             if (response.getStatus() == 0) {
                 alert = new Alert(Alert.AlertType.INFORMATION);
@@ -315,7 +307,7 @@ public class ClientApp extends Application {
 
     @Subscribe
     public void handleDeleteExamResponse(DeleteExamResponse response) {
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             Alert alert;
             if (response.getStatus() == 0) {
                 alert = new Alert(Alert.AlertType.INFORMATION);
@@ -332,43 +324,42 @@ public class ClientApp extends Application {
     }
 
     @Subscribe
-    public void handleViewExamResponse(ViewExamResponse response){
-        if(response.getStatus()==0){
+    public void handleViewExamResponse(ViewExamResponse response) {
+        if (response.getStatus() == 0) {
             setRoot("ViewExamScreen");
-        }
-        else{
+        } else {
             popUpAlert("Failed to Fetch Exam");
         }
     }
 
     @Subscribe
-    public void handleAddExamResponse(AddExamResponse response){
-        if(response.getStatus() == 0){
+    public void handleAddExamResponse(AddExamResponse response) {
+        if (response.getStatus() == 0) {
             popUpAlert("Add Exam Successfully");
             setRoot("ExamManagementScreen");
-        }else{
+        } else {
             popUpAlert("Add Exam Failed");
         }
 
     }
 
     @Subscribe
-    public  void handleEditExamResponse(EditExamResponse response){
-        if(response.getStatus() == 0){
+    public void handleEditExamResponse(EditExamResponse response) {
+        if (response.getStatus() == 0) {
             popUpAlert("Exam was successfully edited!");
             setRoot("ExamManagementScreen");
-        }else{
+        } else {
             popUpAlert("Exam editing failed");
         }
     }
 
     @Subscribe
-    public void handleTeacherStatisticsResponse(TeacherStatisticsResponse response){
+    public void handleTeacherStatisticsResponse(TeacherStatisticsResponse response) {
         setRoot("TeacherStatisticsScreen");
     }
+
     @Subscribe
-    public  void handleExecuteExamResponse(ExecuteExamResponse response)
-    {
+    public void handleExecuteExamResponse(ExecuteExamResponse response) {
         if (response.getStatus() != 0)
             popUpAlert("Exam execution failed!");
         else {
@@ -378,23 +369,22 @@ public class ClientApp extends Application {
     }
 
     @Subscribe
-    public void handleStudentTakeExamResponse(TakeExamResponse response){
-        if(response.getStatus() == 0){
-            if(model.isManualExam()){
+    public void handleStudentTakeExamResponse(TakeExamResponse response) {
+        if (response.getStatus() == 0) {
+            if (model.isManualExam()) {
                 setRoot("StudentManualExamScreen");
-            }else{
+            } else {
                 setRoot("StudentExamExecutionScreen");
             }
 
-        }else{
-            popUpAlert("Something went wrong while trying to take exam."+getErrorMessage(response.getStatus()));
+        } else {
+            popUpAlert("Something went wrong while trying to take exam." + getErrorMessage(response.getStatus()));
         }
     }
 
     @Subscribe
-    public void handleTimeExtensionResponse(TimeExtensionResponse response)
-    {
-        if(response.getStatus() != 0)
+    public void handleTimeExtensionResponse(TimeExtensionResponse response) {
+        if (response.getStatus() != 0)
             popUpAlert("Network Error: Failed to fetch Dean's response!");
 //        else
 //        {
@@ -406,45 +396,55 @@ public class ClientApp extends Application {
     }
 
     @Subscribe
-    public  void handleRaisedHandResponse(RaiseHandResponse response)
-    {
+    public void handleRaisedHandResponse(RaiseHandResponse response) {
 
     }
 
     @Subscribe
-    public void handleSubmitManualExamResponse(SubmitManualExamResponse response){
-        if(response.getStatus()==0){
+    public void handleSubmitManualExamResponse(SubmitManualExamResponse response) {
+        if (response.getStatus() == 0) {
             setRoot("MainScreen");
-        }else{
+        } else {
             popUpAlert("Submission Failed, Please Try Again.");
         }
     }
 
-//    @Subscribe
-//     void handleEvaluateManualExamResponse(EvaluateManualExamResponse response){
-//        if(response.getStatus()==0){
-//            setRoot("MainScreen");
-//        }else{
-//            popUpAlert("Evaluation Failed, Please Try Again.");
-//        }
-//    }
-
     @Subscribe
-    public void handleDeanTimeExtensionResponse (ConfirmTimeExtensionResponse response){
-        if(response.getStatus() == 0)
-        {
+    public void handleDeanTimeExtensionResponse(ConfirmTimeExtensionResponse response) {
+        if (response.getStatus() == 0) {
             popUpAlert("There are new time extension requests!");
-        }
-        else
-        {
+        } else {
             popUpAlert("Failed to fetch time extension requests from the server!");
         }
     }
 
     @Subscribe
-     public void handleCheckedExamResponse(UncheckedExecutesOfConcreteResponse response){
-        if(response.getStatus()==0){
+    public void handleUncheckedExecutesOfConcreteResponse(UncheckedExecutesOfConcreteResponse response) {
+        if (response.getStatus() == 0) {
             setRoot("TeacherExamGradesReviewScreen");
+        }
+    }
+
+    @Subscribe
+    public void handleGetExecutedExamResponse(GetExecutedExamResponse response) {
+        if (response.getStatus() == 0) {
+            if (!response.getExam().isComputerized())
+                setRoot("TeacherReviewManualExamScreen");
+            else
+                setRoot("TeacherReviewCompExamScreen");
+
+
+        } else {
+            popUpAlert("Failed to fetch exam from the sever");
+        }
+    }
+
+    @Subscribe
+    public void handleEvaluateExamResponse(EvaluateExamResponse response) {
+        if (response.getStatus() == 0) {
+            setRoot("TeacherExamGradesReviewScreen");
+        }else{
+            popUpAlert("Failed To Submit Exam Evaluation, Please Try Again.");
         }
     }
 

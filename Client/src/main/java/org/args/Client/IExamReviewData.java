@@ -1,5 +1,6 @@
 package org.args.Client;
 
+import LightEntities.LightExecutedExam;
 import javafx.collections.ObservableList;
 import org.args.GUI.StudentExamType;
 
@@ -24,10 +25,10 @@ public interface IExamReviewData {
     void saveWordFile(File filePath);
     void submitExamReview(double grade,String notes,File manualExamFile);
     ObservableList<StudentExamType> getStudentsGradesToReview();
-
-    void reviewComputerizedExam(String id);
-
-    void reviewManualExam(String id);
-
+    void reviewExam(String id);
     void clearPendingExams();
+    LightExecutedExam getCurrentLightExecutedExam();
+    void clearStudentsGradesToReview();
+    String getCurrentConcreteExamTitle();
+    void setCurrentConcreteExamTitle(String currentConcreteExamTitle);
 }

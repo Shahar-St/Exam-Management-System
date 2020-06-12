@@ -5,14 +5,13 @@ import DatabaseAccess.Requests.Exams.AddExamRequest;
 import DatabaseAccess.Requests.Exams.AllExamsRequest;
 import DatabaseAccess.Requests.Exams.DeleteExamRequest;
 import DatabaseAccess.Requests.Exams.ViewExamRequest;
-import DatabaseAccess.Requests.ExecuteExam.ExecuteExamRequest;
-import DatabaseAccess.Requests.ExecuteExam.RaiseHandRequest;
-import DatabaseAccess.Requests.ExecuteExam.TakeExamRequest;
-import DatabaseAccess.Requests.ExecuteExam.TimeExtensionRequest;
+import DatabaseAccess.Requests.ExecuteExam.*;
 import DatabaseAccess.Requests.LoginRequest;
 import DatabaseAccess.Requests.Questions.AllQuestionsRequest;
 import DatabaseAccess.Requests.Questions.EditQuestionRequest;
 import DatabaseAccess.Requests.Questions.QuestionRequest;
+import DatabaseAccess.Requests.ReviewExam.EvaluateExamRequest;
+import DatabaseAccess.Requests.ReviewExam.GetExecutedExamRequest;
 import DatabaseAccess.Requests.ReviewExam.PendingExamsRequest;
 import DatabaseAccess.Requests.ReviewExam.UncheckedExecutesOfConcreteRequest;
 import DatabaseAccess.Requests.Statistics.TeacherStatisticsRequest;
@@ -21,21 +20,28 @@ import DatabaseAccess.Responses.Exams.AddExamResponse;
 import DatabaseAccess.Responses.Exams.AllExamsResponse;
 import DatabaseAccess.Responses.Exams.DeleteExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
-import DatabaseAccess.Responses.ExecuteExam.*;
+import DatabaseAccess.Responses.ExecuteExam.ExecuteExamResponse;
+import DatabaseAccess.Responses.ExecuteExam.RaiseHandResponse;
+import DatabaseAccess.Responses.ExecuteExam.SubmitExamResponse;
+import DatabaseAccess.Responses.ExecuteExam.TakeExamResponse;
 import DatabaseAccess.Responses.LoginResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
 import DatabaseAccess.Responses.Questions.EditQuestionResponse;
 import DatabaseAccess.Responses.Questions.QuestionResponse;
+import DatabaseAccess.Responses.ReviewExam.EvaluateExamResponse;
+import DatabaseAccess.Responses.ReviewExam.GetExecutedExamResponse;
 import DatabaseAccess.Responses.ReviewExam.PendingExamsResponse;
 import DatabaseAccess.Responses.ReviewExam.UncheckedExecutesOfConcreteResponse;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
 import LightEntities.LightExam;
+import LightEntities.LightExecutedExam;
 import LightEntities.LightQuestion;
 import Notifiers.TimeExtensionRequestNotifier;
 import Util.Pair;
 import org.args.server.AbstractServer;
 import org.args.server.ConnectionToClient;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -67,15 +73,26 @@ public class ServerApp extends AbstractServer {
 
     int counter = 0;
 
+    byte[] data;
+
     @Override
     protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
         System.out.println("message received:");
         System.out.println(msg);
+        List<LightQuestion> questionList = new ArrayList<>();
+        questionList.add(new LightQuestion("1 + 0 = ? ", Arrays.asList("1", "2", "3", "4"), 0, "FuckThisShit!", "malki", LocalDateTime.now(), "5"));
+        questionList.add(new LightQuestion("0 + 4 = ? ", Arrays.asList("11", "12", "13", "14"), 0, "FuckThisShit!", "malki", LocalDateTime.now(), "6"));
+        questionList.add(new LightQuestion("cat is a/an:", Arrays.asList("shit", "shitty", "a", "an"), 0, "FuckThisShit!", "malki", LocalDateTime.now(), "7"));
+        questionList.add(new LightQuestion("same meaning of happy is:", Arrays.asList("shimon", "shimon", "shimon", "shimon"), 0, "FuckThisShit!", "malki", LocalDateTime.now(), "8"));
+        LightExam exam = new LightExam("1111", "malki", questionList, Arrays.asList(25.0, 25.0, 25.0, 25.0), 90, "exampleTest", "teacher sucks", "student rocks");
 
         if (msg instanceof LoginRequest) {
             LoginRequest request = (LoginRequest) msg;
             try {
-                client.sendToClient(new LoginResponse(0, "teacher", "malki", request));
+            if(request.getUserName().equals("KK"))
+                client.sendToClient(new LoginResponse(0, "teacher", "yoni", request));
+            else
+                client.sendToClient(new LoginResponse(0, "student", "malki", request));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -128,12 +145,6 @@ public class ServerApp extends AbstractServer {
             }
 
         } else if (msg instanceof ViewExamRequest) {
-            List<LightQuestion> questionList = new ArrayList<>();
-            questionList.add(new LightQuestion("1 + 0 = ? ", Arrays.asList("1", "2", "3", "4"), 0, "FuckThisShit!", "malki", LocalDateTime.now(), "5"));
-            questionList.add(new LightQuestion("0 + 4 = ? ", Arrays.asList("11", "12", "13", "14"), 0, "FuckThisShit!", "malki", LocalDateTime.now(), "6"));
-            questionList.add(new LightQuestion("cat is a/an:", Arrays.asList("shit", "shitty", "a", "an"), 0, "FuckThisShit!", "malki", LocalDateTime.now(), "7"));
-            questionList.add(new LightQuestion("same meaning of happy is:", Arrays.asList("shimon", "shimon", "shimon", "shimon"), 0, "FuckThisShit!", "malki", LocalDateTime.now(), "8"));
-            LightExam exam = new LightExam("1111", "malki", questionList, Arrays.asList(25.0, 25.0, 25.0, 25.0), 90, "exampleTest", "teacher sucks", "student rocks");
             ViewExamRequest request = (ViewExamRequest) msg;
             ViewExamResponse response = new ViewExamResponse(0, request, exam);
             try {
@@ -162,85 +173,100 @@ public class ServerApp extends AbstractServer {
             }
         } else if (msg instanceof AddExamRequest) {
             AddExamRequest request = (AddExamRequest) msg;
-            List<LightQuestion> questionList = new ArrayList<>();
-            questionList.add(new LightQuestion("1 + 0 = ? ", Arrays.asList("1", "2", "3", "4"), 0, "FuckThisShit!", "malki", LocalDateTime.now(), "5"));
-            questionList.add(new LightQuestion("0 + 4 = ? ", Arrays.asList("11", "12", "13", "14"), 0, "FuckThisShit!", "malki", LocalDateTime.now(), "6"));
-            questionList.add(new LightQuestion("cat is a/an:", Arrays.asList("shit", "shitty", "a", "an"), 0, "FuckThisShit!", "malki", LocalDateTime.now(), "7"));
-            questionList.add(new LightQuestion("same meaning of happy is:", Arrays.asList("shimon", "shimon", "shimon", "shimon"), 0, "FuckThisShit!", "malki", LocalDateTime.now(), "8"));
-            LightExam exam = new LightExam("1111", "malki", questionList, Arrays.asList(25.0, 25.0, 25.0, 25.0), 90, "exampleTest", "teacher sucks", "student rocks");
             try {
                 client.sendToClient(new AddExamResponse(0, request));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else if(msg instanceof TeacherStatisticsRequest){
-            TeacherStatisticsRequest request = (TeacherStatisticsRequest)msg;
-            HashMap<String,Double> map = new HashMap<>();
-            map.put("123456",100.0);
-            map.put("122222",99.0);
+        } else if (msg instanceof TeacherStatisticsRequest) {
+            TeacherStatisticsRequest request = (TeacherStatisticsRequest) msg;
+            HashMap<String, Double> map = new HashMap<>();
+            map.put("123456", 100.0);
+            map.put("122222", 99.0);
             try {
-                client.sendToClient(new TeacherStatisticsResponse(0,request,map));
+                client.sendToClient(new TeacherStatisticsResponse(0, request, map));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else if(msg instanceof ExecuteExamRequest){
-            ExecuteExamRequest request = (ExecuteExamRequest)msg;
-            ExecuteExamResponse response = new ExecuteExamResponse(0,request);
+        } else if (msg instanceof ExecuteExamRequest) {
+            ExecuteExamRequest request = (ExecuteExamRequest) msg;
+            ExecuteExamResponse response = new ExecuteExamResponse(0, request);
             try {
                 client.sendToClient(response);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else if(msg instanceof TakeExamRequest){
-            TakeExamRequest request = (TakeExamRequest)msg;
-            List<LightQuestion> questionList = new ArrayList<>();
-            questionList.add(new LightQuestion("1 + 0 = ? ", Arrays.asList("1", "2", "3", "4"), 0, "FuckThisShit!", "malki", LocalDateTime.now(), "5"));
-            questionList.add(new LightQuestion("0 + 4 = ? ", Arrays.asList("11", "12", "13", "14"), 0, "FuckThisShit!", "malki", LocalDateTime.now(), "6"));
-            questionList.add(new LightQuestion("cat is a/an:", Arrays.asList("shit", "shitty", "a", "an"), 0, "FuckThisShit!", "malki", LocalDateTime.now(), "7"));
-            questionList.add(new LightQuestion("same meaning of happy is:", Arrays.asList("shimon", "shimon", "shimon", "shimon"), 0, "FuckThisShit!", "malki", LocalDateTime.now(), "8"));
-            LightExam exam = new LightExam("1111", "malki", questionList, Arrays.asList(25.0, 25.0, 25.0, 25.0), 90, "exampleTest", "teacher sucks", "student rocks");
-            TakeExamResponse response = new TakeExamResponse(0,request,exam);
+        } else if (msg instanceof TakeExamRequest) {
+            TakeExamRequest request = (TakeExamRequest) msg;
+            TakeExamResponse response = new TakeExamResponse(0, request, exam);
             try {
                 client.sendToClient(response);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-        }else if(msg instanceof TimeExtensionRequest){
-            TimeExtensionRequest request = (TimeExtensionRequest)msg;
-            TimeExtensionRequestNotifier response = new TimeExtensionRequestNotifier("11","22","malki","kaki","1234",10,"kaka");
+        } else if (msg instanceof TimeExtensionRequest) {
+            TimeExtensionRequest request = (TimeExtensionRequest) msg;
+            TimeExtensionRequestNotifier response = new TimeExtensionRequestNotifier("11", "22", "malki", "kaki", "1234", 10, "kaka");
             try {
                 client.sendToClient(response);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else if(msg instanceof RaiseHandRequest)
-        {
-            RaiseHandRequest request = (RaiseHandRequest)msg;
-            RaiseHandResponse response = new RaiseHandResponse(0,request,"SHIMON");
+        } else if (msg instanceof RaiseHandRequest) {
+            RaiseHandRequest request = (RaiseHandRequest) msg;
+            RaiseHandResponse response = new RaiseHandResponse(0, request, "SHIMON");
             try {
                 client.sendToClient(response);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else if(msg instanceof PendingExamsRequest){
-            PendingExamsRequest request = (PendingExamsRequest)msg;
-            HashMap<Integer,String> map = new HashMap<>();
-            map.put(1111,"DS");
-            map.put(2222,"OS");
-            map.put(3333,"SE");
+        } else if (msg instanceof PendingExamsRequest) {
+            PendingExamsRequest request = (PendingExamsRequest) msg;
+            HashMap<Integer, String> map = new HashMap<>();
+            map.put(1111, "DS");
+            map.put(2222, "OS");
+            map.put(3333, "SE");
             try {
-                client.sendToClient(new PendingExamsResponse(0,request,map));
+                client.sendToClient(new PendingExamsResponse(0, request, map));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else if(msg instanceof UncheckedExecutesOfConcreteRequest){
-            UncheckedExecutesOfConcreteRequest request = (UncheckedExecutesOfConcreteRequest)msg;
-            HashMap<String,Boolean> map = new HashMap<>();
-            map.put("12346789",true);
-            map.put("987654321",false);
+        } else if (msg instanceof UncheckedExecutesOfConcreteRequest) {
+            UncheckedExecutesOfConcreteRequest request = (UncheckedExecutesOfConcreteRequest) msg;
+            HashMap<String, Boolean> map = new HashMap<>();
+            map.put("12346789", true);
+            map.put("987654321", false);
             try {
-                client.sendToClient(new UncheckedExecutesOfConcreteResponse(0,request,map));
+                client.sendToClient(new UncheckedExecutesOfConcreteResponse(0, request, map));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (msg instanceof GetExecutedExamRequest) {
+            GetExecutedExamRequest request = (GetExecutedExamRequest) msg;
+            LightExecutedExam lightExecutedExam = new LightExecutedExam("DS", "shimon", "1234", "12346789", exam.getLightQuestionList(), exam.getQuestionsScores(), exam.getDurationInMinutes(), true);
+            lightExecutedExam.setManualExam(data);
+            lightExecutedExam.setAnswersByStudent(Arrays.asList(0,0,0,0));
+            GetExecutedExamResponse response = new GetExecutedExamResponse(0, request, lightExecutedExam);
+            try {
+                client.sendToClient(response);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else if(msg instanceof SubmitManualExamRequest){
+            SubmitManualExamRequest request = (SubmitManualExamRequest)msg;
+            data = request.getExamFile();
+            try {
+                client.sendToClient(new SubmitExamResponse(0,request));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }else if (msg instanceof EvaluateExamRequest){
+            EvaluateExamRequest request = (EvaluateExamRequest)msg;
+            EvaluateExamResponse response = new EvaluateExamResponse(0,request);
+            try {
+                client.sendToClient(response);
             } catch (IOException e) {
                 e.printStackTrace();
             }

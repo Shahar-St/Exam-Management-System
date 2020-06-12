@@ -5,6 +5,8 @@ import DatabaseAccess.Requests.Exams.*;
 import DatabaseAccess.Requests.ExecuteExam.*;
 import DatabaseAccess.Requests.LoginRequest;
 import DatabaseAccess.Requests.Questions.*;
+import DatabaseAccess.Requests.ReviewExam.EvaluateExamRequest;
+import DatabaseAccess.Requests.ReviewExam.GetExecutedExamRequest;
 import DatabaseAccess.Requests.ReviewExam.UncheckedExecutesOfConcreteRequest;
 import DatabaseAccess.Requests.ReviewExam.PendingExamsRequest;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
@@ -14,11 +16,14 @@ import DatabaseAccess.Responses.ExecuteExam.*;
 import DatabaseAccess.Responses.LoginResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
 import DatabaseAccess.Responses.Questions.QuestionResponse;
+import DatabaseAccess.Responses.ReviewExam.EvaluateExamResponse;
+import DatabaseAccess.Responses.ReviewExam.GetExecutedExamResponse;
 import DatabaseAccess.Responses.ReviewExam.PendingExamsResponse;
 import DatabaseAccess.Responses.ReviewExam.UncheckedExecutesOfConcreteResponse;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
 import LightEntities.LightExam;
+import LightEntities.LightExecutedExam;
 import LightEntities.LightQuestion;
 import Notifiers.TimeExtensionRequestNotifier;
 import Util.Pair;
@@ -943,6 +948,24 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     //Teacher pending exams data
 
     ObservableList<String> pendingExamsObservableList = FXCollections.observableArrayList();
+    private String currentConcreteExamId;
+    private String currentConcreteExamTitle;
+
+    public String getCurrentConcreteExamTitle() {
+        return currentConcreteExamTitle;
+    }
+
+    public void setCurrentConcreteExamTitle(String currentConcreteExamTitle) {
+        this.currentConcreteExamTitle = currentConcreteExamTitle;
+    }
+
+    public String getCurrentConcreteExamId() {
+        return currentConcreteExamId;
+    }
+
+    public void setCurrentConcreteExamId(String currentConcreteExamId) {
+        this.currentConcreteExamId = currentConcreteExamId;
+    }
 
     public ObservableList<String> getPendingExamsObservableList() {
         return pendingExamsObservableList;
@@ -966,6 +989,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void showPendingExamGrades(String examId) {
+        setCurrentConcreteExamId(examId);
         ClientApp.sendRequest(new UncheckedExecutesOfConcreteRequest(examId));
     }
 
@@ -981,9 +1005,34 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     //TODO: implements the manual exam review
 
+    private byte[] manualExamBytes;
+
+    private LightExecutedExam currentLightExecutedExam;
+
     private File manualExamForReview;
 
     private String manualExamForReviewStudentId;
+
+
+    public void setStudentsGradesToReview(ObservableList<StudentExamType> studentsGradesToReview) {
+        this.studentsGradesToReview = studentsGradesToReview;
+    }
+
+    public LightExecutedExam getCurrentLightExecutedExam() {
+        return currentLightExecutedExam;
+    }
+
+    public void setCurrentLightExecutedExam(LightExecutedExam currentLightExecutedExam) {
+        this.currentLightExecutedExam = currentLightExecutedExam;
+    }
+
+    public byte[] getManualExamBytes() {
+        return manualExamBytes;
+    }
+
+    public void setManualExamBytes(byte[] manualExamBytes) {
+        this.manualExamBytes = manualExamBytes;
+    }
 
     public File getManualExamForReview() {
         return manualExamForReview;
@@ -1005,7 +1054,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void saveWordFile(File filePath) {
         try
         {
-            wordGenerator.saveWordFile(getManualExamForReview(), filePath);
+            wordGenerator.saveWordFile(getManualExamBytes(), filePath);
         }
         catch (IOException e)
         {
@@ -1014,18 +1063,21 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     public void submitExamReview(double grade, String notes, File manualExamFile) {
-//        ClientApp.sendRequest(new EvaluateManualExamRequest(grade, notes, manualExamFile));
+
+        if(!currentLightExecutedExam.isComputerized())
+            currentLightExecutedExam.setManualExam(fileToByteArray(manualExamFile));
+        else
+            currentLightExecutedExam.setManualExam(null);
+
+        currentLightExecutedExam.setGrade(grade);
+        currentLightExecutedExam.setCommentsAfterCheck(notes);
+        currentLightExecutedExam.setChecked(true);
+        ClientApp.sendRequest(new EvaluateExamRequest(currentLightExecutedExam));
+
 
     }
 
-    @Subscribe
-    public void handleEvaluateManualExamResponse(DatabaseRequest response) {
-//        if (response.getStatus() == 0)
-//        {
-//            // clean all the relevant attributes
-//
-//        }
-    }
+
 
     ObservableList<StudentExamType> studentsGradesToReview = FXCollections.observableArrayList();
 
@@ -1033,8 +1085,13 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return studentsGradesToReview;
     }
 
+    public void clearStudentsGradesToReview(){
+        if(!studentsGradesToReview.isEmpty())
+            studentsGradesToReview.clear();
+    }
+
     @Subscribe
-    public void handleCheckedExamResponse(UncheckedExecutesOfConcreteResponse response) {
+    public void handleUncheckedExecutesOfConcreteResponse(UncheckedExecutesOfConcreteResponse response) {
         if (response.getStatus() == 0)
         {
             Platform.runLater(() -> {
@@ -1049,14 +1106,30 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     @Override
-    public void reviewComputerizedExam(String id) {
+    public void reviewExam(String studentId) {
+        ClientApp.sendRequest(new GetExecutedExamRequest(getCurrentConcreteExamId(),studentId));
+    }
+
+    @Subscribe
+    public void handleGetExecutedExamResponse(GetExecutedExamResponse response){
+        if(response.getStatus()==0){
+            setCurrentLightExecutedExam(response.getExam());
+            if(!response.getExam().isComputerized())
+                setManualExamBytes(response.getExam().getManualExam());
+
+        }
+    }
+
+    @Subscribe
+    public void handleEvaluateExamResponse(EvaluateExamResponse response){
+        if(response.getStatus()==0){
+            EvaluateExamRequest request = (EvaluateExamRequest)response.getRequest();
+            getStudentsGradesToReview().removeIf(type -> type.getId().equals(request.getExam().getStudentID()));
+        }
 
     }
 
-    @Override
-    public void reviewManualExam(String id) {
 
-    }
 
     // dean time extension
 
