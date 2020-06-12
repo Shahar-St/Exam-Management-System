@@ -157,13 +157,13 @@ public class ExecutedExam {
     }
 
     public LightExecutedExam getLightExecutedExam() {
-
         List<LightQuestion> lightQuestionsList = new ArrayList<>();;
         for (Question question : concreteExam.getExam().getQuestionsList())
             lightQuestionsList.add(question.createLightQuestion());
+        List<Double> questionScoreList = new ArrayList<>(concreteExam.getExam().getQuestionsScores());
 
         return new LightExecutedExam(concreteExam.getExam().getTitle(), concreteExam.getTester().getUserName(),
-                String.valueOf(id), student.getSocialId(), lightQuestionsList,  concreteExam.getExam().getQuestionsScores(),
+                String.valueOf(id), student.getSocialId(), lightQuestionsList,  questionScoreList,
                 duration, isComputerized);
     }
 }

@@ -16,14 +16,10 @@ import java.util.ResourceBundle;
 
 public class TeacherReviewCompExamController {
 
-    private IExamReviewData model;
-
-    private double finalScore = 0;
-
-    private boolean isChangingGrade=false;
-
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
+    private IExamReviewData model;
+    private double finalScore = 0;
+    private boolean isChangingGrade = false;
     @FXML
     private ResourceBundle resources;
 
@@ -83,12 +79,12 @@ public class TeacherReviewCompExamController {
         pageView.setPageFactory((pageIndex) -> {
 
             if (pageIndex == 0) {
-                VBox details = new VBox(title_label, title,tester_label,tester,duration_label, duration);
-                details.setPadding(new Insets(20,20,20,20));
+                VBox details = new VBox(title_label, title, tester_label, tester, duration_label, duration);
+                details.setPadding(new Insets(20, 20, 20, 20));
                 details.setSpacing(20);
                 return new ScrollPane(details);
             }
-            if (pageIndex == exam.getLightQuestionList().size()+1) {
+            if (pageIndex == exam.getLightQuestionList().size() + 1) {
 
                 calcFinalGrade(exam);
 
@@ -128,8 +124,8 @@ public class TeacherReviewCompExamController {
 
                 editButton.setFont(Font.font(fontStyle, fontSize));
 
-                confirmButton.setOnAction(event->{
-                    if(!ClientApp.isDouble(finalGrade.getText())){
+                confirmButton.setOnAction(event -> {
+                    if (!ClientApp.isDouble(finalGrade.getText())) {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Alert");
                         alert.setHeaderText(null);
@@ -138,18 +134,18 @@ public class TeacherReviewCompExamController {
                         return;
                     }
 
-                    model.submitExamReview(finalScore,notes.getText(),null);
+                    model.submitExamReview(finalScore, notes.getText(), null);
                 });
 
                 editButton.setOnAction(event -> {
-                    if(!isChangingGrade){
+                    if (!isChangingGrade) {
                         isChangingGrade = true;
                         finalGrade.setEditable(true);
                         reasonForChangeGrade.setEditable(true);
                         confirmButton.setDisable(true);
                         editButton.setText("Done Editing.");
-                    }else {
-                        isChangingGrade=false;
+                    } else {
+                        isChangingGrade = false;
                         finalGrade.setEditable(false);
                         reasonForChangeGrade.setEditable(false);
                         confirmButton.setDisable(false);
@@ -163,9 +159,9 @@ public class TeacherReviewCompExamController {
 
                 buttonBar.getButtons().add(confirmButton);
 
-                VBox details = new VBox(finalGrade_label,finalGrade,notes_label,notes,reasonForChangeGrade_label,reasonForChangeGrade,buttonBar);
+                VBox details = new VBox(finalGrade_label, finalGrade, notes_label, notes, reasonForChangeGrade_label, reasonForChangeGrade, buttonBar);
 
-                details.setPadding(new Insets(20,20,20,20));
+                details.setPadding(new Insets(20, 20, 20, 20));
 
                 details.setSpacing(20);
 
@@ -227,9 +223,12 @@ public class TeacherReviewCompExamController {
             answer3.setEditable(false);
             answer4.setEditable(false);
 
-            if (exam.getAnswersByStudent().get(pageIndex-1) == null || exam.getLightQuestionList().get(pageIndex-1).getCorrectAnswer() != exam.getAnswersByStudent().get(pageIndex-1)) {
+            if (exam.getAnswersByStudent().isEmpty() || (pageIndex-1) >= exam.getAnswersByStudent().size())
+                answer1.setStyle("-fx-background-color: #ff0000 ;");
 
-                switch (exam.getAnswersByStudent().get(pageIndex-1)) {
+            else if (exam.getLightQuestionList().get(pageIndex - 1).getCorrectAnswer() != exam.getAnswersByStudent().get(pageIndex - 1)) {
+
+                switch (exam.getAnswersByStudent().get(pageIndex - 1)) {
                     case 0:
                         answer1.setStyle("-fx-background-color: #ff0000 ;");
 
@@ -252,7 +251,7 @@ public class TeacherReviewCompExamController {
                 }
 
             } else {
-                switch (exam.getLightQuestionList().get(pageIndex-1).getCorrectAnswer()) {
+                switch (exam.getLightQuestionList().get(pageIndex - 1).getCorrectAnswer()) {
                     case 0:
                         answer1.setStyle("-fx-background-color: #00ff00 ;");
 
@@ -278,7 +277,7 @@ public class TeacherReviewCompExamController {
             VBox details = new VBox(content_label, content, ans1_label, answer1, ans2_label,
                     answer2, ans3_label, answer3, ans4_label, answer4, score_label, score);
             details.setSpacing(20);
-            details.setPadding(new Insets(20,20,20,20));
+            details.setPadding(new Insets(20, 20, 20, 20));
 
             return new ScrollPane(details);
         });
@@ -290,12 +289,12 @@ public class TeacherReviewCompExamController {
         this.model = model;
     }
 
-    public void calcFinalGrade(LightExecutedExam exam){
+    public void calcFinalGrade(LightExecutedExam exam) {
         finalScore = 0;
-        for(LightQuestion question:exam.getLightQuestionList()){
+        for (LightQuestion question : exam.getLightQuestionList()) {
             int index = exam.getLightQuestionList().indexOf(question);
-            if(question.getCorrectAnswer()==exam.getAnswersByStudent().get(index))
-                finalScore+=exam.getQuestionsScores().get(index);
+            if (index < exam.getAnswersByStudent().size() && question.getCorrectAnswer() == exam.getAnswersByStudent().get(index))
+                finalScore += exam.getQuestionsScores().get(index);
         }
     }
 }

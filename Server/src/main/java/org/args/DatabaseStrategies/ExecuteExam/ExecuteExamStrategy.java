@@ -38,6 +38,7 @@ public class ExecuteExamStrategy extends DatabaseStrategy implements IExamInProg
         Teacher teacher = (Teacher) getUser((String) client.getInfo("userName"), session);
         ConcreteExam concreteExam = new ConcreteExam(exam, teacher, request1.getExamCode());
         session.saveOrUpdate(concreteExam);
+        session.flush();
 
         for (Student student : students)
         {
@@ -56,7 +57,7 @@ public class ExecuteExamStrategy extends DatabaseStrategy implements IExamInProg
 
         ExecuteExamResponse response1 = (ExecuteExamResponse) response;
 
-        ConcreteExam concreteExam = getTypeById(ConcreteExam.class, response1.getExamID(), session);
+        ConcreteExam concreteExam = getTypeById(ConcreteExam.class, response1.getConcreteExamID(), session);
         examManagers.put(concreteExam.getId(), new ExamManager(client));
     }
 }

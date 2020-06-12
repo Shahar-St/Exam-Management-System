@@ -12,18 +12,18 @@ import DatabaseAccess.Responses.DatabaseResponse;
 
 public class ExecuteExamResponse extends DatabaseResponse {
 
-    private final String examID;
+    private final String concreteExamID;
 
-    public ExecuteExamResponse(int status, DatabaseRequest request, String examID) {
+    public ExecuteExamResponse(int status, DatabaseRequest request, String concreteExamID) {
         super(status, request);
-        this.examID = examID;
+        this.concreteExamID = concreteExamID;
     }
 
     public ExecuteExamResponse(int status, DatabaseRequest request) {
         this(status, request, null);
     }
 
-    public String getExamID() {
-        return examID;
+    public String getConcreteExamID() {
+        return concreteExamID;
     }
 }

@@ -232,7 +232,8 @@ public class ExamManagementController {
             }
         }
         model.setCurrentExecutedExamLaunchTime(LocalDateTime.now().format(formatter));
-        String currentTitle = examListView.getSelectionModel().getSelectedItem().substring(9);
+        String currentTitle = examListView.getSelectionModel().getSelectedItem();
+        currentTitle = currentTitle.substring(currentTitle.indexOf(":")+1);
         model.setCurrentExecutedExamTitle(currentTitle);
     }
 

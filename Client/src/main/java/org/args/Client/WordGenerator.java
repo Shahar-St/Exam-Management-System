@@ -63,7 +63,13 @@ public class WordGenerator {
         document.close();
     }
 
+    /**
+     * method get byte array and file path , writes the byte array to docx file located in filepath.
+     **/
     public void saveWordFile(byte[] source, File filePath) throws IOException {
+        // handle non existing source bytes
+        if(source == null)
+            return;
         FileOutputStream outputStream = new FileOutputStream(filePath);
         outputStream.write(source);
         outputStream.close();

@@ -117,12 +117,12 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void studentTakeComputerizedExam(String examCode, String id) {
-        ClientApp.sendRequest(new TakeExamRequest(Integer.parseInt(id), examCode, true));
+        ClientApp.sendRequest(new TakeExamRequest(id, examCode, true));
     }
 
     @Override
     public void studentTakeManualExam(String code) {
-        ClientApp.sendRequest(new TakeExamRequest(0, code, false));
+        ClientApp.sendRequest(new TakeExamRequest("0", code, false));
         setManualExam(true);
     }
 
@@ -786,8 +786,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         else
         {
             List<Integer> correctAnswersList = new ArrayList<>();
-            for (Map.Entry<Integer, Integer> entry : getCorrectAnswersMap().entrySet())
-                correctAnswersList.add(entry.getKey(), entry.getValue());
+            for (int i=0;i<examForStudentExecution.getLightQuestionList().size();++i){
+
+                correctAnswersList.add(getCorrectAnswersMap().get(i));
+
+            }
             ClientApp.sendRequest(new SubmitExamRequest(examForStudentExecution.getId(), correctAnswersList,isFinishedOnTime()));
         }
 
@@ -955,6 +958,13 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     public ObservableList<String> getPendingExamsObservableList() {
         return pendingExamsObservableList;
+    }
+
+    @Subscribe
+    public void handleExecuteExamResponse(ExecuteExamResponse response) {
+        if (response.getStatus() == 0){
+            setCurrentConcreteExamId(response.getConcreteExamID());
+        }
     }
 
     @Subscribe

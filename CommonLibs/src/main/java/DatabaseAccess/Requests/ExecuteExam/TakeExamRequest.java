@@ -5,17 +5,17 @@ import DatabaseAccess.Requests.DatabaseRequest;
 // student side
 public class TakeExamRequest extends DatabaseRequest {
 
-    private final int socialId;
+    private final String socialId;
     private final String examCode;
     private final boolean computerized;
 
-    public TakeExamRequest(int socialId, String examCode, boolean computerized) {
+    public TakeExamRequest(String socialId, String examCode, boolean computerized) {
         this.socialId = socialId;
         this.examCode = examCode;
         this.computerized = computerized;
     }
 
-    public int getSocialId() {
+    public String getSocialId() {
         return socialId;
     }
 

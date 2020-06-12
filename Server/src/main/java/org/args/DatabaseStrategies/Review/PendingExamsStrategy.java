@@ -26,8 +26,7 @@ public class PendingExamsStrategy extends DatabaseStrategy {
         if (client.getInfo("userName") == null)
             return new PendingExamsResponse(ERROR2, pendingExamsRequest, null);
 
-        Teacher teacher = getTypeById(Teacher.class, getUser((String) client.getInfo("userName"),
-                         session).getSocialId(),session);
+        Teacher teacher = (Teacher) getUser((String) client.getInfo("userName"), session);
 
         HashMap<Integer, String> map = new HashMap<>();
         boolean needToCheck;

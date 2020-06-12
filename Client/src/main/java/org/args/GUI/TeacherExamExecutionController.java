@@ -3,8 +3,11 @@ package org.args.GUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import org.args.Client.ITeacherExecuteExamData;
+
+
 
 public class TeacherExamExecutionController {
 
@@ -28,6 +31,9 @@ public class TeacherExamExecutionController {
 
     @FXML
     private Button sendButton;
+
+    @FXML
+    private ImageView imageBackButton;
 
     ITeacherExecuteExamData model;
 
@@ -84,5 +90,10 @@ public class TeacherExamExecutionController {
     void handleMouseEvent(MouseEvent event) {
         if (model.getCurrentHandsRaised().size() > 0)
             solveButton.setDisable(false);
+    }
+
+    @FXML
+    void backButtonClicked(MouseEvent event) {
+        ClientApp.setRoot("MainScreen");
     }
 }

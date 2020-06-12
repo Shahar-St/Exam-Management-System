@@ -409,6 +409,15 @@ public class ClientApp extends Application {
     }
 
     @Subscribe
+    public void handleSubmitExamResponse(SubmitExamResponse response){
+        if(response.getStatus()==0){
+            setRoot("MainScreen");
+        }else{
+            popUpAlert("Submission Failed, Please Try Again.");
+        }
+    }
+
+    @Subscribe
     public void handleDeanTimeExtensionResponse(ConfirmTimeExtensionResponse response) {
         if (response.getStatus() == 0) {
             popUpAlert("There are new time extension requests!");

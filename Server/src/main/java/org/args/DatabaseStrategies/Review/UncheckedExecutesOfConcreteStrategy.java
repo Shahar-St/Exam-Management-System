@@ -30,7 +30,8 @@ public class UncheckedExecutesOfConcreteStrategy extends DatabaseStrategy {
         HashMap<String, Boolean> map = new HashMap<>();
         for (ExecutedExam executedExam : concreteExam.getExecutedExamsList())
         {
-            map.put(executedExam.getStudent().getSocialId(), executedExam.isComputerized());
+            if(!executedExam.isChecked())
+                map.put(executedExam.getStudent().getSocialId(), executedExam.isComputerized());
         }
 
         return new UncheckedExecutesOfConcreteResponse(SUCCESS, uncheckedExecutesOfConcreteRequest, map);

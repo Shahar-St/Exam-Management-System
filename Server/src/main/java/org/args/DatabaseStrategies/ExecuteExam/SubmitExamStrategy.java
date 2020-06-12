@@ -10,6 +10,7 @@ import org.args.ExamManager;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -39,10 +40,12 @@ public class SubmitExamStrategy extends DatabaseStrategy implements IExamInProgr
         if (concreteExam == null || executedExam == null || concreteExam != executedExam.getConcreteExam())
             return new SubmitExamResponse(ERROR2, request);
 
-        executedExam.setAnswersByStudent(request1.getAnswersList());
+        List<Integer> answersList = new ArrayList<>(request1.getAnswersList());
+        executedExam.setAnswersByStudent(answersList);
+        executedExam.setComputerized(true);
         concreteExam.addExecutedExam(executedExam);
 
-        session.update(executedExam);
+        session.saveOrUpdate(executedExam);
         session.flush();
 
         return new SubmitExamResponse(SUCCESS, request1);
