@@ -12,6 +12,7 @@ import DatabaseAccess.Responses.ReviewExam.EvaluateExamResponse;
 import DatabaseAccess.Responses.ReviewExam.GetExecutedExamResponse;
 import DatabaseAccess.Responses.ReviewExam.UncheckedExecutesOfConcreteResponse;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
+import Notifiers.ExamEndedNotifier;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -384,20 +385,24 @@ public class ClientApp extends Application {
 
     @Subscribe
     public void handleTimeExtensionResponse(TimeExtensionResponse response) {
-        if (response.getStatus() != 0)
-            popUpAlert("Network Error: Failed to fetch Dean's response!");
-//        else
-//        {
-//            if(!response.isAccepted())
-//                popUpAlert("Time extension request was denied by the dean. \nReason: " + response.getDeanResponse());
-//            else
-//                popUpAlert("Time extension request was accepted by the dean. \nApproved added time: " + response.getAuthorizedTimeExtension());
-//        }
+        if(response.getStatus()==0){
+            popUpAlert("Time Extension Request Was Successfully Sent.");
+
+        }else{
+            popUpAlert("Something Went Wrong With Time Extension Request, Please Try Again. ");
+
+        }
+
     }
 
     @Subscribe
     public void handleRaisedHandResponse(RaiseHandResponse response) {
-
+        if(response.getStatus()==0)
+        {
+            popUpAlert("You're Raise Hand Request Was Received Successfully.");
+        }else {
+            popUpAlert("Failed To Send Raise Hand Request, Please Try Again.");
+        }
     }
 
     @Subscribe
@@ -446,6 +451,12 @@ public class ClientApp extends Application {
         }else{
             popUpAlert("Failed To Submit Exam Evaluation, Please Try Again.");
         }
+    }
+
+    @Subscribe
+    public void handleExamEndedNotifier(ExamEndedNotifier notifier){
+        setRoot("MainScreen");
+
     }
 
 }
