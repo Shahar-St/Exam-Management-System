@@ -582,11 +582,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     }
 
-    @Override
-    public void showQuestionInfo(String questionId) {
-
-    }
-
 
     //exam management data
 

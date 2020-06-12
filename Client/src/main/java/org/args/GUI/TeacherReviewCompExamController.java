@@ -4,6 +4,7 @@ import LightEntities.LightExecutedExam;
 import LightEntities.LightQuestion;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -45,7 +46,7 @@ public class TeacherReviewCompExamController {
     void initialize() {
         setModel(ClientApp.getModel());
 
-        int fontSize = 32;
+        int fontSize = 24;
 
         String fontStyle = "Cambria";
 
@@ -55,7 +56,7 @@ public class TeacherReviewCompExamController {
 
         title_label.setFont(Font.font(fontStyle, fontSize));
 
-        TextField title = new TextField(exam.getTitle());
+        Label title = new Label(exam.getTitle());
 
         title.setFont(Font.font(fontStyle, fontSize));
 
@@ -63,7 +64,7 @@ public class TeacherReviewCompExamController {
 
         tester_label.setFont(Font.font(fontStyle, fontSize));
 
-        TextField tester = new TextField(exam.getTesterUserName());
+        Label tester = new Label(exam.getTesterUserName());
 
         tester.setFont(Font.font(fontStyle, fontSize));
 
@@ -71,7 +72,7 @@ public class TeacherReviewCompExamController {
 
         duration_label.setFont(Font.font(fontStyle, fontSize));
 
-        TextField duration = new TextField(String.valueOf(exam.getDuration()));
+        Label duration = new Label(String.valueOf(exam.getDuration()));
 
         duration.setFont(Font.font(fontStyle, fontSize));
 
@@ -82,7 +83,10 @@ public class TeacherReviewCompExamController {
         pageView.setPageFactory((pageIndex) -> {
 
             if (pageIndex == 0) {
-                return new VBox(title_label, title,tester_label,tester,duration_label, duration);
+                VBox details = new VBox(title_label, title,tester_label,tester,duration_label, duration);
+                details.setPadding(new Insets(20,20,20,20));
+                details.setSpacing(20);
+                return new ScrollPane(details);
             }
             if (pageIndex == exam.getLightQuestionList().size()+1) {
 
@@ -90,23 +94,39 @@ public class TeacherReviewCompExamController {
 
                 Label finalGrade_label = new Label("Final Grade: ");
 
+                finalGrade_label.setFont(Font.font(fontStyle, fontSize));
+
                 TextField finalGrade = new TextField(String.valueOf(finalScore));
+
+                finalGrade.setFont(Font.font(fontStyle, fontSize));
 
                 finalGrade.setEditable(false);
 
                 Label notes_label = new Label("Notes: ");
 
+                notes_label.setFont(Font.font(fontStyle, fontSize));
+
                 TextArea notes = new TextArea();
+
+                notes.setFont(Font.font(fontStyle, fontSize));
 
                 Label reasonForChangeGrade_label = new Label("Reasons For Grade Change:");
 
+                reasonForChangeGrade_label.setFont(Font.font(fontStyle, fontSize));
+
                 TextArea reasonForChangeGrade = new TextArea();
+
+                reasonForChangeGrade.setFont(Font.font(fontStyle, fontSize));
 
                 reasonForChangeGrade.setEditable(false);
 
                 Button confirmButton = new Button("Confirm Grade");
 
+                confirmButton.setFont(Font.font(fontStyle, fontSize));
+
                 Button editButton = new Button(("Edit Grade"));
+
+                editButton.setFont(Font.font(fontStyle, fontSize));
 
                 confirmButton.setOnAction(event->{
                     if(!ClientApp.isDouble(finalGrade.getText())){
@@ -143,52 +163,69 @@ public class TeacherReviewCompExamController {
 
                 buttonBar.getButtons().add(confirmButton);
 
-                return new VBox(finalGrade_label,finalGrade,notes_label,notes,reasonForChangeGrade_label,reasonForChangeGrade,buttonBar);
+                VBox details = new VBox(finalGrade_label,finalGrade,notes_label,notes,reasonForChangeGrade_label,reasonForChangeGrade,buttonBar);
+
+                details.setPadding(new Insets(20,20,20,20));
+
+                details.setSpacing(20);
+
+                return new ScrollPane(details);
 
 
             }
-            Label date_label = new Label("Last Modified:");
-
-            TextField lastModified = new TextField(exam.getLightQuestionList().get(pageIndex - 1).getLastModified().format(formatter));
-
-            Label author_label = new Label("Author:");
-
-            TextField author = new TextField(exam.getLightQuestionList().get(pageIndex - 1).getAuthor());
 
             Label content_label = new Label("Content:");
 
-            TextArea content = new TextArea(exam.getLightQuestionList().get(pageIndex - 1).getQuestionContent());
+            content_label.setFont(Font.font(fontStyle, fontSize));
+
+            Label content = new Label(exam.getLightQuestionList().get(pageIndex - 1).getQuestionContent());
+
+            content.setFont(Font.font(fontStyle, fontSize));
 
             Label ans1_label = new Label("Answer 1:");
 
+            ans1_label.setFont(Font.font(fontStyle, fontSize));
+
             TextField answer1 = new TextField(exam.getLightQuestionList().get(pageIndex - 1).getAnswers().get(0));
+
+            answer1.setFont(Font.font(fontStyle, fontSize));
 
             Label ans2_label = new Label("Answer 2:");
 
+            ans2_label.setFont(Font.font(fontStyle, fontSize));
+
             TextField answer2 = new TextField(exam.getLightQuestionList().get(pageIndex - 1).getAnswers().get(1));
+
+            answer2.setFont(Font.font(fontStyle, fontSize));
 
             Label ans3_label = new Label("Answer 3:");
 
+            ans3_label.setFont(Font.font(fontStyle, fontSize));
+
             TextField answer3 = new TextField(exam.getLightQuestionList().get(pageIndex - 1).getAnswers().get(2));
+
+            answer3.setFont(Font.font(fontStyle, fontSize));
 
             Label ans4_label = new Label("Answer 4:");
 
+            ans4_label.setFont(Font.font(fontStyle, fontSize));
+
             TextField answer4 = new TextField(exam.getLightQuestionList().get(pageIndex - 1).getAnswers().get(3));
+
+            answer4.setFont(Font.font(fontStyle, fontSize));
 
             Label score_label = new Label("Question Score:");
 
-            TextField score = new TextField(exam.getQuestionsScores().get(pageIndex - 1).toString());
+            score_label.setFont(Font.font(fontStyle, fontSize));
 
-            title.setEditable(false);
-            duration.setEditable(false);
-            lastModified.setEditable(false);
-            author.setEditable(false);
-            content.setEditable(false);
+            Label score = new Label(exam.getQuestionsScores().get(pageIndex - 1).toString());
+
+            score.setFont(Font.font(fontStyle, fontSize));
+
             answer1.setEditable(false);
             answer2.setEditable(false);
             answer3.setEditable(false);
             answer4.setEditable(false);
-            score.setEditable(false);
 
             if (exam.getAnswersByStudent().get(pageIndex-1) == null || exam.getLightQuestionList().get(pageIndex-1).getCorrectAnswer() != exam.getAnswersByStudent().get(pageIndex-1)) {
 
@@ -238,9 +275,12 @@ public class TeacherReviewCompExamController {
                 }
             }
 
-
-            return new VBox(date_label, lastModified, author_label, author, content_label, content, ans1_label, answer1, ans2_label,
+            VBox details = new VBox(content_label, content, ans1_label, answer1, ans2_label,
                     answer2, ans3_label, answer3, ans4_label, answer4, score_label, score);
+            details.setSpacing(20);
+            details.setPadding(new Insets(20,20,20,20));
+
+            return new ScrollPane(details);
         });
 
 

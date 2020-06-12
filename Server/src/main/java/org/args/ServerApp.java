@@ -20,10 +20,7 @@ import DatabaseAccess.Responses.Exams.AddExamResponse;
 import DatabaseAccess.Responses.Exams.AllExamsResponse;
 import DatabaseAccess.Responses.Exams.DeleteExamResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
-import DatabaseAccess.Responses.ExecuteExam.ExecuteExamResponse;
-import DatabaseAccess.Responses.ExecuteExam.RaiseHandResponse;
-import DatabaseAccess.Responses.ExecuteExam.SubmitExamResponse;
-import DatabaseAccess.Responses.ExecuteExam.TakeExamResponse;
+import DatabaseAccess.Responses.ExecuteExam.*;
 import DatabaseAccess.Responses.LoginResponse;
 import DatabaseAccess.Responses.Questions.AllQuestionsResponse;
 import DatabaseAccess.Responses.Questions.EditQuestionResponse;
@@ -37,6 +34,7 @@ import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
 import LightEntities.LightExam;
 import LightEntities.LightExecutedExam;
 import LightEntities.LightQuestion;
+import Notifiers.RaiseHandNotifier;
 import Notifiers.TimeExtensionRequestNotifier;
 import Util.Pair;
 import org.args.server.AbstractServer;
@@ -91,8 +89,10 @@ public class ServerApp extends AbstractServer {
             try {
             if(request.getUserName().equals("KK"))
                 client.sendToClient(new LoginResponse(0, "teacher", "yoni", request));
+            else if(request.getUserName().equals("dean"))
+                client.sendToClient(new LoginResponse(0, "dean", "dean", request));
             else
-                client.sendToClient(new LoginResponse(0, "student", "malki", request));
+                client.sendToClient(new LoginResponse(0,"teacher","malki",request));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -207,7 +207,9 @@ public class ServerApp extends AbstractServer {
 
         } else if (msg instanceof TimeExtensionRequest) {
             TimeExtensionRequest request = (TimeExtensionRequest) msg;
-            TimeExtensionRequestNotifier response = new TimeExtensionRequestNotifier("11", "22", "malki", "kaki", "1234", 10, "kaka");
+            TimeExtensionResponse response = new TimeExtensionResponse(0,request);
+            TimeExtensionRequestNotifier notifier = new TimeExtensionRequestNotifier("11", "22", "malki", "kaki", "1234", 10, "kaka");
+            sendToAllClients(notifier);
             try {
                 client.sendToClient(response);
             } catch (IOException e) {
@@ -215,12 +217,9 @@ public class ServerApp extends AbstractServer {
             }
         } else if (msg instanceof RaiseHandRequest) {
             RaiseHandRequest request = (RaiseHandRequest) msg;
-            RaiseHandResponse response = new RaiseHandResponse(0, request, "SHIMON");
-            try {
-                client.sendToClient(response);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            RaiseHandResponse response = new RaiseHandResponse(0,request,"Yoni");
+            RaiseHandNotifier notifier = new RaiseHandNotifier("Yoni");
+            sendToAllClients(notifier);
         } else if (msg instanceof PendingExamsRequest) {
             PendingExamsRequest request = (PendingExamsRequest) msg;
             HashMap<Integer, String> map = new HashMap<>();

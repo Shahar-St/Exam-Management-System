@@ -54,9 +54,6 @@ public class ClientApp extends Application {
     public static void setRoot(String fxml) {
         try {
             scene.setRoot(loadFXML(fxml));
-            System.out.println("Stack State:");
-            System.out.println("Stack Size:" + lastScenes.size());
-            System.out.println(Arrays.toString(lastScenes.toArray()));
         } catch (IOException e) {
             System.out.println("Failed to change the root of the scene: " + e.toString());
 
@@ -69,9 +66,6 @@ public class ClientApp extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Stack State:");
-        System.out.println("Stack Size:" + lastScenes.size());
-        System.out.println(Arrays.toString(lastScenes.toArray()));
     }
 
     public static String popLastScene() {
