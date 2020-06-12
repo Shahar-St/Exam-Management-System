@@ -6,14 +6,14 @@ import LightEntities.LightExecutedExam;
 
 public class GetExecutedExamResponse extends DatabaseResponse {
 
-    private final LightExecutedExam exam;
+    private final LightExecutedExam lightExecutedExam;
 
-    public GetExecutedExamResponse(int status, DatabaseRequest request, LightExecutedExam exam) {
+    public GetExecutedExamResponse(int status, DatabaseRequest request, LightExecutedExam lightExecutedExam) {
         super(status, request);
-        this.exam = exam;
+        this.lightExecutedExam = lightExecutedExam;
     }
 
     public LightExecutedExam getExam() {
-        return exam;
+        return lightExecutedExam;
     }
 }

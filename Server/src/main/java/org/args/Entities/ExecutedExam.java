@@ -1,6 +1,7 @@
 package org.args.Entities;
 
 import LightEntities.LightExecutedExam;
+import LightEntities.LightQuestion;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -155,8 +156,14 @@ public class ExecutedExam {
         this.startedDate = startedDate;
     }
 
-    public LightExecutedExam getLightVersion() {
-        //TODO
-        return null;
+    public LightExecutedExam getLightExecutedExam() {
+
+        List<LightQuestion> lightQuestionsList = new ArrayList<>();;
+        for (Question question : concreteExam.getExam().getQuestionsList())
+            lightQuestionsList.add(question.createLightQuestion());
+
+        return new LightExecutedExam(concreteExam.getExam().getTitle(), concreteExam.getTester().getUserName(),
+                String.valueOf(id), student.getSocialId(), lightQuestionsList,  concreteExam.getExam().getQuestionsScores(),
+                duration, isComputerized);
     }
 }

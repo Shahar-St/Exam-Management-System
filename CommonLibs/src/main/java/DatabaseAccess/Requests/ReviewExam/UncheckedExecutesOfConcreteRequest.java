@@ -4,13 +4,13 @@ import DatabaseAccess.Requests.DatabaseRequest;
 
 //
 public class UncheckedExecutesOfConcreteRequest extends DatabaseRequest {
-    private final String examId;
+    private final String concreteExamId;
 
     public UncheckedExecutesOfConcreteRequest(String examId) {
-        this.examId = examId;
+        this.concreteExamId = examId;
     }
 
     public String getExamId() {
-        return examId;
+        return concreteExamId;
     }
 }

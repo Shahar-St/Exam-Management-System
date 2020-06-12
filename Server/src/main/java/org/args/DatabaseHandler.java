@@ -7,6 +7,10 @@ import org.args.DatabaseStrategies.Exams.*;
 import org.args.DatabaseStrategies.ExecuteExam.*;
 import org.args.DatabaseStrategies.LoginStrategy;
 import org.args.DatabaseStrategies.Questions.*;
+import org.args.DatabaseStrategies.Review.EvaluateExamStrategy;
+import org.args.DatabaseStrategies.Review.GetExecutedExamStrategy;
+import org.args.DatabaseStrategies.Review.PendingExamsStrategy;
+import org.args.DatabaseStrategies.Review.UncheckedExecutesOfConcreteStrategy;
 import org.args.DatabaseStrategies.SubjectAndCoursesStrategy;
 import org.args.Entities.*;
 import org.args.OCSF.ConnectionToClient;
@@ -46,6 +50,13 @@ public class DatabaseHandler {
         this.put("SubmitExamRequest", new SubmitExamStrategy());
         this.put("TimeExtensionRequest", new TimeExtensionStrategy());
         this.put("ConfirmTimeExtensionRequest", new ConfirmTimeExtensionStrategy());
+        this.put("EvaluateExamRequest", new EvaluateExamStrategy());
+        this.put("GetExecutedExamRequest", new GetExecutedExamStrategy());
+        this.put("PendingExamsRequest", new PendingExamsStrategy());
+        this.put("UncheckedExecutesOfConcreteRequest", new UncheckedExecutesOfConcreteStrategy());
+
+
+
     }};
 
     private DatabaseHandler() {
