@@ -12,14 +12,14 @@ public class LightExecutedExam implements Serializable {
     private final String studentID;
     private final List<LightQuestion> lightQuestionList;
     private final List<Double> questionsScores;
-    private final List<Integer> answersByStudent = new ArrayList<>();
+    private  List<Integer> answersByStudent = new ArrayList<>();
     private String reasonsForChangeGrade;
     private String commentsAfterCheck;
     private double grade = 0;
     private final int duration; // exam duration in minutes
     private final boolean isComputerized;
     private boolean checked = false;
-    private Byte[] manualExam = null;
+    private byte[] manualExam = null;
 
     public LightExecutedExam(String title, String testerUserName, String executedID, String studentID,
                              List<LightQuestion> lightQuestionList, List<Double> questionsScores,
@@ -85,10 +85,14 @@ public class LightExecutedExam implements Serializable {
     public void setChecked(boolean checked) {
         this.checked = checked;
     }
-    public Byte[] getManualExam() {
+    public byte[] getManualExam() {
         return manualExam;
     }
-    public void setManualExam(Byte[] manualExam) {
+    public void setManualExam(byte[] manualExam) {
         this.manualExam = manualExam;
+    }
+
+    public void setAnswersByStudent(List<Integer> answersByStudent) {
+        this.answersByStudent = answersByStudent;
     }
 }

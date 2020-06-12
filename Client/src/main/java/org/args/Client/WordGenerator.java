@@ -5,7 +5,6 @@ import LightEntities.LightQuestion;
 import org.apache.poi.xwpf.usermodel.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -64,15 +63,10 @@ public class WordGenerator {
         document.close();
     }
 
-    public void saveWordFile(File origin, File filePath) throws IOException {
-
-        FileInputStream inputStream = new FileInputStream(origin);
-        XWPFDocument document = new XWPFDocument(inputStream);
+    public void saveWordFile(byte[] source, File filePath) throws IOException {
         FileOutputStream outputStream = new FileOutputStream(filePath);
-        document.write(outputStream);
+        outputStream.write(source);
         outputStream.close();
-        document.close();
-
 
     }
 }

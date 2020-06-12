@@ -25,8 +25,6 @@ public interface IExamData {
 
     void removeFromExamQuestionsList(String question);
 
-    void showQuestionInfo(String questionId);
-
     void cancelExamAddition();
 
     void viewExam(String examId);

@@ -69,7 +69,7 @@ public class ViewDeanTimeExtensionController {
     public void initialize() {
         setModel(ClientApp.getModel());
         requestListView.setItems(model.getObservableTimeExtensionRequestsList());
-        TextInputDialog dialog = new TextInputDialog();
+        dialog = new TextInputDialog();
     }
 
     @FXML

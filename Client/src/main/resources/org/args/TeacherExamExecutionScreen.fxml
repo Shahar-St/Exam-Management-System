@@ -8,84 +8,98 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/11.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.TeacherExamExecutionController">
-    <StackPane>
-        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-              minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@bootstrap3.css">
-            <HBox alignment="CENTER" prefHeight="127.0" prefWidth="800.0">
-                <Label alignment="CENTER" prefHeight="45.0" prefWidth="224.0" text="Exam Execution">
-                    <font>
-                        <Font name="Centaur" size="36.0"/>
-                    </font>
-                </Label>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="524.0" prefWidth="800.0">
-                <Pane prefHeight="499.0" prefWidth="237.0">
-                    <Label layoutX="22.0" layoutY="6.0" text="Raised Hands:">
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.TeacherExamExecutionController">
+     <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@bootstrap3.css">
+         <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+             <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Exam Execution">
+                 <font>
+                     <Font name="Centaur" size="36.0" />
+                 </font>
+             </Label>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+         </HBox>
+         <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20.0">
+         <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="30.0">
+            <children>
+                    <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Raised Hands:">
                         <font>
-                            <Font name="Candara" size="24.0"/>
+                            <Font name="Candara" size="24.0" />
                         </font>
                     </Label>
-                    <ListView fx:id="raisedHandsListView" layoutX="14.0" layoutY="42.0"
-                              onMouseClicked="#handleMouseEvent" prefHeight="306.0" prefWidth="158.0"/>
-                    <Button fx:id="solveButton" disable="true" layoutX="47.0" layoutY="367.0"
-                            mnemonicParsing="false" onAction="#solveSelected" prefHeight="39.0"
-                            prefWidth="82.0" styleClass="info" text="Solved"/>
-                </Pane>
-                <VBox alignment="TOP_CENTER" prefHeight="499.0" prefWidth="288.0" spacing="30.0">
-                    <Label fx:id="examNameLabel" alignment="CENTER" prefHeight="81.0" prefWidth="266.0"
-                           text="Exam Name Placeholder" textAlignment="CENTER">
+                    <ListView fx:id="raisedHandsListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#handleMouseEvent">
+                  <padding>
+                     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  </padding>
+               </ListView>
+                    <Button fx:id="solveButton" disable="true" mnemonicParsing="false" onAction="#solveSelected" prefHeight="39.0" prefWidth="82.0" styleClass="info" text="Solved" />
+            </children>
+            <padding>
+               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+         </VBox>
+             <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="30.0">
+                 <Label fx:id="examNameLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Exam Name Placeholder" textAlignment="CENTER">
+                     <font>
+                         <Font size="24.0" />
+                     </font>
+                 </Label>
+                 <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Start time:" textAlignment="CENTER">
+                     <font>
+                         <Font size="24.0" />
+                     </font>
+                 </Label>
+                 <Label fx:id="launchTimeLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Launch Time Placeholder" textAlignment="CENTER">
+                     <font>
+                         <Font size="18.0" />
+                     </font>
+                     <VBox.margin>
+                         <Insets top="-10.0" />
+                     </VBox.margin>
+                 </Label>
+            <padding>
+               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+             </VBox>
+         <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="30.0">
+            <children>
+                    <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Time Extension Request:">
                         <font>
-                            <Font size="24.0"/>
+                            <Font name="Candara" size="18.0" />
                         </font>
                     </Label>
-                    <Label alignment="CENTER" prefHeight="35.0" prefWidth="112.0" text="Start time:"
-                           textAlignment="CENTER">
+                    <TextField fx:id="extensionTimeField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+                    <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Added Time:">
                         <font>
-                            <Font size="24.0"/>
+                            <Font size="18.0" />
                         </font>
                     </Label>
-                    <Label fx:id="launchTimeLabel" alignment="CENTER" prefHeight="35.0" prefWidth="217.0"
-                           text="Launch Time Placeholder" textAlignment="CENTER">
+               <TextField fx:id="extensionTimeField" />
+                    <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Reason:">
                         <font>
-                            <Font size="18.0"/>
-                        </font>
-                        <VBox.margin>
-                            <Insets top="-10.0"/>
-                        </VBox.margin>
-                    </Label>
-                </VBox>
-                <Pane prefHeight="424.0" prefWidth="245.0">
-                    <Label layoutX="23.0" layoutY="24.0" prefHeight="30.0" prefWidth="200.0"
-                           text="Time Extension Request:">
-                        <font>
-                            <Font name="Candara" size="18.0"/>
+                            <Font size="18.0" />
                         </font>
                     </Label>
-                    <Label layoutX="12.0" layoutY="90.0" text="Added Time:">
-                        <font>
-                            <Font size="18.0"/>
-                        </font>
-                    </Label>
-                    <TextField fx:id="extensionTimeField" layoutX="123.0" layoutY="88.0" prefHeight="25.0"
-                               prefWidth="91.0"/>
-                    <TextArea fx:id="extensionReasonField" layoutX="12.0" layoutY="185.0" prefHeight="200.0"
-                              prefWidth="200.0"/>
-                    <Label layoutX="92.0" layoutY="144.0" text="Reason:">
-                        <font>
-                            <Font size="18.0"/>
-                        </font>
-                    </Label>
-                    <Button fx:id="sendButton" layoutX="86.0" layoutY="405.0" mnemonicParsing="false"
-                            onAction="#sendTimeExtensionRequest" styleClass="info" text="Send"/>
-                </Pane>
-            </HBox>
-        </VBox>
-    </StackPane>
+                    <TextArea fx:id="extensionReasonField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+                    <Button fx:id="sendButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#sendTimeExtensionRequest" styleClass="info" text="Send" />
+            </children>
+            <padding>
+               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+            <HBox.margin>
+               <Insets />
+            </HBox.margin>
+         </VBox>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+         </HBox>
+     </VBox>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
 </ScrollPane>
