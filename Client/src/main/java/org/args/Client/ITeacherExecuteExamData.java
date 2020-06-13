@@ -1,5 +1,6 @@
 package org.args.Client;
 
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
 public interface ITeacherExecuteExamData {
@@ -8,6 +9,6 @@ public interface ITeacherExecuteExamData {
     String getCurrentExecutedExamLaunchTime();
     void sendTimeExtensionRequest(int parseInt, String text);
     ObservableList<String> getCurrentHandsRaised();
-
     void solveRaisedHand(String currentStudentName);
+    StringProperty getCurrentExecutedExamEndTimeProperty();
 }

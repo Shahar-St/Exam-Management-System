@@ -53,7 +53,7 @@ public class TeacherExamExecutionController {
         examNameLabel.setText(model.getCurrentExecutedExamTitle());
         launchTimeLabel.setText(model.getCurrentExecutedExamLaunchTime());
         raisedHandsListView.setItems(model.getCurrentHandsRaised());
-
+        endTimeLabel.textProperty().bind(model.getCurrentExecutedExamEndTimeProperty());
     }
 
     @FXML

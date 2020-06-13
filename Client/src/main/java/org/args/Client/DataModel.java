@@ -58,7 +58,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     private final WordGenerator wordGenerator;
 
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    private final DateTimeFormatter HourMinutesformatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+    private final DateTimeFormatter hourMinutesformatter = DateTimeFormatter.ofPattern("HH:mm");
 
     public DataModel(ClientApp clientApp) {
         app = clientApp;
@@ -917,10 +917,20 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         Platform.runLater(() -> currentHandsRaised.remove(currentStudentName));
     }
 
-    String currentExecutedExamEndTime;
+    StringProperty currentExecutedExamEndTime = new SimpleStringProperty();
+    LocalDateTime currentExecutedExamStartLocalDateTime;
+    LocalDateTime currentExecutedExamEndLocalDateTime;
 
     public String getCurrentExecutedExamEndTime() {
+        return currentExecutedExamEndTime.get();
+    }
+
+    public StringProperty getCurrentExecutedExamEndTimeProperty() {
         return currentExecutedExamEndTime;
+    }
+
+    public void setCurrentExecutedExamEndTime(String currentExecutedExamEndTime) {
+        this.currentExecutedExamEndTime.set(currentExecutedExamEndTime);
     }
 
     @Subscribe
@@ -928,7 +938,19 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         if (response.getStatus() == 0){
             setCurrentConcreteExamId(response.getConcreteExamID());
         }
-        currentExecutedExamLaunchTime = LocalDateTime.now().format(HourMinutesformatter);
+        currentExecutedExamStartLocalDateTime = LocalDateTime.now();
+        currentExecutedExamLaunchTime = currentExecutedExamStartLocalDateTime.format(hourMinutesformatter);
+        currentExecutedExamEndLocalDateTime = currentExecutedExamStartLocalDateTime.plusMinutes(response.getDuration());
+        currentExecutedExamEndTime.setValue(currentExecutedExamEndLocalDateTime.format(hourMinutesformatter));
+    }
+
+    @Subscribe
+    public void handleConfirmTimeExtensionNotifier(ConfirmTimeExtensionNotifier notifier)
+    {
+        if(notifier.isAccepted())
+        {
+            currentExecutedExamEndTime.setValue(currentExecutedExamEndLocalDateTime.plusMinutes(notifier.getAuthorizedTimeExtension()).format(hourMinutesformatter));
+        }
     }
 
 
