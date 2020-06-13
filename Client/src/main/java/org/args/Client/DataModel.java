@@ -976,7 +976,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void endExam() {
-        ClientApp.sendRequest(new TeacherEndExamRequest());
+        ClientApp.sendRequest(new TeacherEndExamRequest(getCurrentConcreteExamId()));
     }
 
     //TODO: implement IStudentViewStatsData methods
