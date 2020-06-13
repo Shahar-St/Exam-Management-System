@@ -13,17 +13,23 @@ import DatabaseAccess.Responses.DatabaseResponse;
 public class ExecuteExamResponse extends DatabaseResponse {
 
     private final String concreteExamID;
+    private final int duration;
 
-    public ExecuteExamResponse(int status, DatabaseRequest request, String concreteExamID) {
+    public ExecuteExamResponse(int status, DatabaseRequest request, String concreteExamID,int duration) {
         super(status, request);
         this.concreteExamID = concreteExamID;
+        this.duration = duration;
     }
 
     public ExecuteExamResponse(int status, DatabaseRequest request) {
-        this(status, request, null);
+        this(status, request, null,0);
     }
 
     public String getConcreteExamID() {
         return concreteExamID;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }

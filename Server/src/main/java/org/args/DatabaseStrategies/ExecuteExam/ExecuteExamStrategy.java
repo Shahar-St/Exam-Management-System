@@ -49,7 +49,7 @@ public class ExecuteExamStrategy extends DatabaseStrategy implements IExamInProg
         }
         session.flush();
 
-        return new ExecuteExamResponse(SUCCESS, request, String.valueOf(concreteExam.getId()));
+        return new ExecuteExamResponse(SUCCESS, request, String.valueOf(concreteExam.getId()),concreteExam.getExam().getDurationInMinutes());
     }
 
     @Override
