@@ -59,7 +59,6 @@ public class TakeExamStrategy extends DatabaseStrategy implements IExamInProgres
                        ConnectionToClient client, Session session) {
 
         TakeExamResponse response1 = (TakeExamResponse) response;
-
         ConcreteExam concreteExam = getTypeById(ConcreteExam.class, response1.getLightExam().getId(), session);
         ExamManager manager = examManagers.get(concreteExam.getId());
         manager.getStudents().put((String) client.getInfo("userName"), client);

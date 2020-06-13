@@ -1196,7 +1196,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void handleTimeExtensionRequestNotifier(TimeExtensionRequestNotifier notifier) {
         setCurrentConcreteExamId(notifier.getExamId());
         Platform.runLater(() -> {
-            String requestDescription = notifier.getExamId() + ": " + notifier.getDurationInMinutes() +
+            String requestDescription = notifier.getExamId() + ": " + notifier.getExamTitle()+ " "+ notifier.getDurationInMinutes() +
                     "minutes request - " + notifier.getReasonForExtension();
             ObservableTimeExtensionRequestsList.add(requestDescription);
         });

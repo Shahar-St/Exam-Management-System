@@ -1,7 +1,9 @@
 package org.args;
 
 import Notifiers.ConfirmTimeExtensionNotifier;
+import Notifiers.RaiseHandNotifier;
 import Notifiers.TimeExtensionRequestNotifier;
+import org.args.Entities.Teacher;
 import org.args.OCSF.ConnectionToClient;
 
 import java.io.IOException;
@@ -33,6 +35,11 @@ public class ExamManager {
     public static void setDean(ConnectionToClient dean) {
         ExamManager.dean = dean;
     }
+
+    public static void notifyTeacherAboutRaisedHand(RaiseHandNotifier raiseHandNotifier, Teacher teacher) {
+
+    }
+
     public ConnectionToClient getTeacher() {
         return teacher;
     }
@@ -105,7 +112,6 @@ public class ExamManager {
         try
         {
             teacher.sendToClient(notifier);
-
             notifier.setDeanResponse(null);
             for (Map.Entry<String, ConnectionToClient> entry : students.entrySet())
             {
