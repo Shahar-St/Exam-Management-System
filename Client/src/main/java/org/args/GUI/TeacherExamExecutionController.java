@@ -52,6 +52,7 @@ public class TeacherExamExecutionController {
 
     public void initialize() {
         setModel(ClientApp.getModel());
+        setTimer();
         examNameLabel.setText(model.getCurrentExecutedExamTitle());
         launchTimeLabel.setText(model.getCurrentExecutedExamLaunchTime());
         raisedHandsListView.setItems(model.getCurrentHandsRaised());
@@ -70,11 +71,6 @@ public class TeacherExamExecutionController {
             alert.setContentText("Reason field cannot be empty!");
             alert.showAndWait();
         } else {
-            alert.setAlertType(Alert.AlertType.INFORMATION);
-            alert.setTitle("Time Extension Request");
-            alert.setHeaderText(null);
-            alert.setContentText("Time Extension Request sent to the dean successfully!");
-            alert.showAndWait();
             model.sendTimeExtensionRequest(Integer.parseInt(extensionTimeField.getText()), extensionReasonField.getText());
             sendButton.setDisable(true);
             extensionTimeField.setDisable(true);

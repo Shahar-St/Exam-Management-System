@@ -391,9 +391,7 @@ public class ClientApp extends Application {
 
         }else{
             popUpAlert("Something Went Wrong With Time Extension Request, Please Try Again. ");
-
         }
-
     }
 
     @Subscribe
