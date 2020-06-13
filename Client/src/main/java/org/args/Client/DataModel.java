@@ -920,6 +920,23 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     StringProperty currentExecutedExamEndTime = new SimpleStringProperty();
     LocalDateTime currentExecutedExamStartLocalDateTime;
     LocalDateTime currentExecutedExamEndLocalDateTime;
+    int currentExecutedExamDuration;
+
+    public int getCurrentExecutedExamDuration() {
+        return currentExecutedExamDuration;
+    }
+
+    public LocalDateTime getCurrentExecutedExamStartLocalDateTime() {
+        return currentExecutedExamStartLocalDateTime;
+    }
+
+    public LocalDateTime getCurrentExecutedExamEndLocalDateTime() {
+        return currentExecutedExamEndLocalDateTime;
+    }
+
+    public void setCurrentExecutedExamEndLocalDateTime(LocalDateTime currentExecutedExamEndLocalDateTime) {
+        this.currentExecutedExamEndLocalDateTime = currentExecutedExamEndLocalDateTime;
+    }
 
     public String getCurrentExecutedExamEndTime() {
         return currentExecutedExamEndTime.get();
@@ -935,13 +952,14 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Subscribe
     public void handleExecuteExamResponse(ExecuteExamResponse response) {
-        if (response.getStatus() == 0){
+        if (response.getStatus() == 0) {
             setCurrentConcreteExamId(response.getConcreteExamID());
+            currentExecutedExamDuration = response.getDuration();
+            currentExecutedExamStartLocalDateTime = LocalDateTime.now();
+            currentExecutedExamLaunchTime = currentExecutedExamStartLocalDateTime.format(hourMinutesformatter);
+            currentExecutedExamEndLocalDateTime = currentExecutedExamStartLocalDateTime.plusMinutes(response.getDuration());
+            currentExecutedExamEndTime.setValue(currentExecutedExamEndLocalDateTime.format(hourMinutesformatter));
         }
-        currentExecutedExamStartLocalDateTime = LocalDateTime.now();
-        currentExecutedExamLaunchTime = currentExecutedExamStartLocalDateTime.format(hourMinutesformatter);
-        currentExecutedExamEndLocalDateTime = currentExecutedExamStartLocalDateTime.plusMinutes(response.getDuration());
-        currentExecutedExamEndTime.setValue(currentExecutedExamEndLocalDateTime.format(hourMinutesformatter));
     }
 
     @Subscribe
@@ -953,6 +971,10 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         }
     }
 
+    @Override
+    public void endExam() {
+        ClientApp.sendRequest(new TeacherEndExamRequest());
+    }
 
     //TODO: implement IStudentViewStatsData methods
 
