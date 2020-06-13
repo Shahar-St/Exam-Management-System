@@ -121,6 +121,6 @@ public class TeacherExamExecutionController {
                     });
                 }
             }
-        }, model.getCurrentExecutedExamDuration() * 60 * 1000, 60000 ); //initial check is original duration, then check every minute.
+        },   30*1000, 1000 ); //initial check is original duration, then check every minute.
     }
 }
