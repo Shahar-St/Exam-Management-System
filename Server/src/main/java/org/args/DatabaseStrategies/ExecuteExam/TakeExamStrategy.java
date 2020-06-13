@@ -47,7 +47,8 @@ public class TakeExamStrategy extends DatabaseStrategy implements IExamInProgres
 
         if (!executedExam.getConcreteExam().getExamCode().equals(takeExamRequest.getExamCode()))
             return new TakeExamResponse(ERROR3, takeExamRequest);
-
+        // set student currently executed id to concrete id
+        student.setCurrentlyExecutedID(executedExam.getConcreteExam().getId());
         executedExam.setComputerized(takeExamRequest.isComputerized());
         LightExam lightExam = executedExam.getConcreteExam().createLightExam();
         TakeExamResponse response = new TakeExamResponse(SUCCESS, takeExamRequest, lightExam);

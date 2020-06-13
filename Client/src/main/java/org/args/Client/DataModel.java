@@ -885,6 +885,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Subscribe
     public void handleRaiseHandNotifier(RaiseHandNotifier notifier) {
+        System.out.println("raise hand notifier");
         Platform.runLater(() -> currentHandsRaised.add(notifier.getStudentName()));
     }
 
