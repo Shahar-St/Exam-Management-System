@@ -45,8 +45,9 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="455.0" prefWidth="800.0" spacing="30.0">
                <children>
-                  <TableView fx:id="gradesTable" onMouseClicked="#handleMouseEvent" prefHeight="441.0" prefWidth="151.0">
+                  <TableView fx:id="gradesTable" onMouseClicked="#handleMouseEvent" prefHeight="455.0" prefWidth="227.0">
                     <columns>
+                        <TableColumn fx:id="idColumn" prefWidth="75.0" text="Exam ID" />
                       <TableColumn fx:id="titleColumn" prefWidth="75.0" text="Exam Title" />
                       <TableColumn fx:id="gradeColumn" prefWidth="75.0" text="Grade" />
                     </columns>
