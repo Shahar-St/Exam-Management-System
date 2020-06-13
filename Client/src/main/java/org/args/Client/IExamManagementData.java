@@ -7,10 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface IExamManagementData {
-    List getExams(String courseName);
     Set<String> getSubjects();
-    List getCourses(String subjectName);
-
     ObservableList<String> getObservableExamList();
     boolean dataWasAlreadyInitialized();
     String getCurrentSubject();
