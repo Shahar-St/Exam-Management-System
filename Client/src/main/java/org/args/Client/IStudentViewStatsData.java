@@ -28,4 +28,6 @@ public interface IStudentViewStatsData {
     void setCurrentCourseId(String currentCourseId);
 
     void clearStudentPastExamsList();
+
+    void setCourseSelected(boolean b);
 }

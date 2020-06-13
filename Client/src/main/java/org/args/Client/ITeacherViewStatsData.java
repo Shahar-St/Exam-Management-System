@@ -39,4 +39,7 @@ public interface ITeacherViewStatsData {
     void loadResults();
 
     public ObservableList<String> getPastExamsResultsObservableList();
+
+    void setCourseSelected(boolean courseSelected);
+
 }

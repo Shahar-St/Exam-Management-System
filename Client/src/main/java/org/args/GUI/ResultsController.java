@@ -59,6 +59,7 @@ public class ResultsController {
 
     @FXML
     void back(ActionEvent event) {
+        clearScreen();
         ClientApp.setRoot("Main Screen");
     }
 
@@ -117,7 +118,7 @@ public class ResultsController {
             String text = ((MenuItem) event.getSource()).getText();
             coursesDropdown.setText(text);
             model.setCurrentCourseId(text.substring(0,2));
-            model.loadPastExams();
+            model.loadResults();
         });
         coursesDropdown.getItems().add(course);
     }
@@ -127,6 +128,15 @@ public class ResultsController {
         {
             addSubjectToSubjectDropdown(subject);
         }
+    }
+
+    void clearScreen()
+    {
+        subjectsDropdown.getItems().clear();
+        coursesDropdown.getItems().clear();
+        model.setCurrentSubject(null);
+        model.setCourseSelected(false);
+        model.getPastExamsResultsObservableList().clear();
     }
 
 

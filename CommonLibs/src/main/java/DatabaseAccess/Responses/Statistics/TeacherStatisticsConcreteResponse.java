@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class TeacherStatisticsConcreteResponse extends DatabaseResponse {
 
-    //hashMap: executedExamId, (date, title)
+    //hashMap: executedExamId, (title, grade)
     private final HashMap<String, Pair<String, Double>> executedExamsList;
 
     public TeacherStatisticsConcreteResponse(int status, DatabaseRequest request,

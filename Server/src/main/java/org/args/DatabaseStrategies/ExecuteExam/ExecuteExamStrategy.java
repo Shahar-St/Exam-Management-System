@@ -38,7 +38,7 @@ public class ExecuteExamStrategy extends DatabaseStrategy implements IExamInProg
 
         Teacher teacher = (Teacher) getUser((String) client.getInfo("userName"), session);
         ConcreteExam concreteExam = new ConcreteExam(exam, teacher, request1.getExamCode());
-        concreteExam.setInitExamForExecutionDate(LocalDateTime.now());
+        concreteExam.setExamForExecutionInitDate(LocalDateTime.now());
         session.saveOrUpdate(concreteExam);
         session.flush();
 

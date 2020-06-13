@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class TeacherGetAllPastExamsResponse extends DatabaseResponse {
 
-    //hashMap: executedExamId, (date, title)
+    //hashMap: concreteExamId, (date, title)
     private final HashMap<String, Pair<LocalDateTime, String>> concreteExamsList;
 
     public TeacherGetAllPastExamsResponse(int status, DatabaseRequest request,

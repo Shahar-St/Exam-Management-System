@@ -83,6 +83,7 @@ public class StudentPastExamsController {
 
     @FXML
     void switchToMainScreen(MouseEvent event) {
+        clearScreen();
         ClientApp.setRoot("MainScreen");
     }
 
@@ -137,6 +138,15 @@ public class StudentPastExamsController {
         {
             addSubjectToSubjectDropdown(subject);
         }
+    }
+
+    void clearScreen()
+    {
+        subjectsDropdown.getItems().clear();
+        coursesDropdown.getItems().clear();
+        model.setCurrentSubject(null);
+        model.setCourseSelected(false);
+        model.clearStudentPastExamsList();
     }
 
     //TODO clear screen

@@ -34,7 +34,7 @@ public class ConcreteExam {
     private int numOfTakers;
     private int finishedOnTime;
     private int UnfinishedOnTime;
-    private LocalDateTime initExamForExecutionDate;
+    private LocalDateTime examForExecutionInitDate;
 
     //Group c'tors
     public ConcreteExam() {
@@ -44,6 +44,7 @@ public class ConcreteExam {
         this.setExam(exam);
         this.setTester(tester);
         this.examCode = examCode;
+        this. examForExecutionInitDate = LocalDateTime.now();
     }
 
     public void addExecutedExam(ExecutedExam executedExam) {
@@ -119,11 +120,11 @@ public class ConcreteExam {
         UnfinishedOnTime = unfinishedOnTime;
     }
 
-    public LocalDateTime getInitExamForExecutionDate() {
-        return initExamForExecutionDate;
+    public LocalDateTime getExamForExecutionInitDate() {
+        return examForExecutionInitDate;
     }
 
-    public void setInitExamForExecutionDate(LocalDateTime initExamForExecutionDate) {
-        this.initExamForExecutionDate = initExamForExecutionDate;
+    public void setExamForExecutionInitDate(LocalDateTime examForExecutionInitDate) {
+        this.examForExecutionInitDate = examForExecutionInitDate;
     }
 }

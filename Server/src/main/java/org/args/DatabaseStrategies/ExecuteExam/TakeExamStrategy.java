@@ -52,7 +52,7 @@ public class TakeExamStrategy extends DatabaseStrategy implements IExamInProgres
         executedExam.setComputerized(takeExamRequest.isComputerized());
         LightExam lightExam = executedExam.getConcreteExam().createLightExam();
         TakeExamResponse response = new TakeExamResponse(SUCCESS, takeExamRequest, lightExam);
-        response.setInitExamForExecutionDate(executedExam.getConcreteExam().getInitExamForExecutionDate());
+        response.setInitExamForExecutionDate(executedExam.getConcreteExam().getExamForExecutionInitDate());
         return response;
     }
 
