@@ -39,6 +39,7 @@ public class ExecutedExam {
     private boolean checked = false;
     private boolean finishedOnTime = false;
     private Date startedDate;
+    private byte[] fileBytes;
 
     //Group c'tors
     public ExecutedExam() {
@@ -165,5 +166,13 @@ public class ExecutedExam {
         return new LightExecutedExam(concreteExam.getExam().getTitle(), concreteExam.getTester().getUserName(),
                 String.valueOf(id), student.getSocialId(), lightQuestionsList,  questionScoreList,
                 duration, isComputerized);
+    }
+
+    public byte[] getFileBytes() {
+        return fileBytes;
+    }
+
+    public void setFileBytes(byte[] fileBytes) {
+        this.fileBytes = fileBytes;
     }
 }
