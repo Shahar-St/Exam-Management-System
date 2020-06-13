@@ -34,7 +34,8 @@ public class SubmitManualExamStrategy extends DatabaseStrategy implements IExamI
         byte[] file = ((SubmitManualExamRequest) request).getExamFile();
         executedExam.setFileBytes(file);
         executedExam.setComputerized(false);
-        concreteExam.addExecutedExam(executedExam);
+        executedExam.setSubmitted(true);
+//        concreteExam.addExecutedExam(executedExam);
 
         session.saveOrUpdate(executedExam);
         session.flush();
@@ -43,7 +44,7 @@ public class SubmitManualExamStrategy extends DatabaseStrategy implements IExamI
 
     @Override
     public void handle(DatabaseRequest request, DatabaseResponse response, Map<Integer, ExamManager> examManagers, ConnectionToClient client, Session session) {
-        SubmitExamRequest request1 = (SubmitExamRequest) request;
+        SubmitManualExamRequest request1 = (SubmitManualExamRequest) request;
 
         ConcreteExam concreteExam = getTypeById(ConcreteExam.class, request1.getExamID(), session);
         ExamManager manager = examManagers.get(concreteExam.getId());

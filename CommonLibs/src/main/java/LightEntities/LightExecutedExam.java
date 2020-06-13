@@ -22,7 +22,7 @@ public class LightExecutedExam implements Serializable {
     private byte[] manualExam = null;
 
     public LightExecutedExam(String title, String testerUserName, String executedID, String studentID,
-                             List<LightQuestion> lightQuestionList, List<Double> questionsScores,
+                             List<LightQuestion> lightQuestionList, List<Double> questionsScores,List<Integer> answersByStudent,
                              int duration, boolean isComputerized) {
         this.title = title;
         this.testerUserName = testerUserName;
@@ -32,6 +32,7 @@ public class LightExecutedExam implements Serializable {
         this.questionsScores = questionsScores;
         this.duration = duration;
         this.isComputerized = isComputerized;
+        this.answersByStudent = answersByStudent;
     }
 
     public String getTitle() {

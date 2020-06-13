@@ -765,7 +765,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void displayExam() {
 
     }
-
+    // take care of empty byte array
     private byte[] fileToByteArray(File file){
         try {
             return Files.readAllBytes(file.toPath());
@@ -898,7 +898,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void sendTimeExtensionRequest(int timeExtension, String reason) {
-        ClientApp.sendRequest(new TimeExtensionRequest(currentExamId, timeExtension, reason));
+        ClientApp.sendRequest(new TimeExtensionRequest(getCurrentConcreteExamId(), timeExtension, reason));
     }
 
     @Subscribe

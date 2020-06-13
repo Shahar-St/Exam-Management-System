@@ -36,7 +36,7 @@ public class PendingExamsStrategy extends DatabaseStrategy {
             needToCheck = true;
             for(int i=0; i< executedExamList.size() && needToCheck; i++)
             {
-                if( (!executedExamList.get(i).isChecked()) && (!executedExamList.get(i).isSubmitted()))
+                if( (!executedExamList.get(i).isChecked()) && (executedExamList.get(i).isSubmitted()))
                 {
                     map.put(concreteExam.getId(), concreteExam.getExam().getTitle());
                     needToCheck = false;
