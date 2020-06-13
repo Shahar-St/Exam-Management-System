@@ -7,7 +7,7 @@ public interface IViewDeanTimeExtensionData {
 
     void removeRequest(String selectedItem);
 
-    void rejectExtension(String reason, String selectedExamId);
+    void rejectExtension(String reason);
 
-    void acceptExtension(String extension, String selectedExamId);
+    void acceptExtension(String extension);
 }

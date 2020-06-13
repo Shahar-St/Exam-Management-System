@@ -12,6 +12,7 @@ import DatabaseAccess.Responses.ReviewExam.EvaluateExamResponse;
 import DatabaseAccess.Responses.ReviewExam.GetExecutedExamResponse;
 import DatabaseAccess.Responses.ReviewExam.UncheckedExecutesOfConcreteResponse;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
+import Notifiers.ConfirmTimeExtensionNotifier;
 import Notifiers.ExamEndedNotifier;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -458,6 +459,22 @@ public class ClientApp extends Application {
             setRoot("TeacherExamGradesReviewScreen");
         }else{
             popUpAlert("Failed To Submit Exam Evaluation, Please Try Again.");
+        }
+    }
+
+    @Subscribe
+    public void handleConfirmTimeExtensionNotifier(ConfirmTimeExtensionNotifier notifier)
+    {
+        if(notifier.isAccepted())
+        {
+            System.out.println("time extension confirmed");
+            popUpAlert("Time Extension Confirmed!");
+
+        }
+        else
+        {
+            System.out.println("time extension rejected");
+            popUpAlert("Time Extension Rejected!");
         }
     }
 

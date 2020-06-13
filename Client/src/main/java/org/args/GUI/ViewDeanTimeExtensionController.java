@@ -44,7 +44,7 @@ public class ViewDeanTimeExtensionController {
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(extension -> {
             if (ClientApp.isNumeric(extension)) {
-                model.acceptExtension(extension, getSelectedExamId());
+                model.acceptExtension(extension);
                 model.removeRequest(requestListView.getSelectionModel().getSelectedItem());
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -61,7 +61,7 @@ public class ViewDeanTimeExtensionController {
         dialog.setContentText("Please enter reason for rejecting:");
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(reason -> {
-            model.rejectExtension(reason, getSelectedExamId());
+            model.rejectExtension(reason);
             model.removeRequest(requestListView.getSelectionModel().getSelectedItem());
         });
     }

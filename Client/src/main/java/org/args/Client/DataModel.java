@@ -967,8 +967,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     {
         if(notifier.isAccepted())
         {
-            currentExecutedExamEndTime.setValue(currentExecutedExamEndLocalDateTime.plusMinutes(notifier.getAuthorizedTimeExtension()).format(hourMinutesformatter));
+            Platform.runLater(()->{
+                currentExecutedExamEndTime.setValue(currentExecutedExamEndLocalDateTime.plusMinutes(notifier.getAuthorizedTimeExtension()).format(hourMinutesformatter));
+            });
         }
+
     }
 
     @Override
@@ -1191,6 +1194,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Subscribe
     public void handleTimeExtensionRequestNotifier(TimeExtensionRequestNotifier notifier) {
+        setCurrentConcreteExamId(notifier.getExamId());
         Platform.runLater(() -> {
             String requestDescription = notifier.getExamId() + ": " + notifier.getDurationInMinutes() +
                     "minutes request - " + notifier.getReasonForExtension();
@@ -1204,13 +1208,13 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     @Override
-    public void rejectExtension(String reason, String examId) {
-        ClientApp.sendRequest(new ConfirmTimeExtensionNotifier(reason,0,false));
+    public void rejectExtension(String reason) {
+        ClientApp.sendRequest(new ConfirmTimeExtensionRequest(false,reason,0,getCurrentConcreteExamId()));
     }
 
     @Override
-    public void acceptExtension(String extension, String examId) {
-        ClientApp.sendRequest(new ConfirmTimeExtensionRequest(true, "", Integer.parseInt(extension), examId));
+    public void acceptExtension(String extension) {
+        ClientApp.sendRequest(new ConfirmTimeExtensionRequest(true, "", Integer.parseInt(extension), getCurrentConcreteExamId()));
 
     }
 }
