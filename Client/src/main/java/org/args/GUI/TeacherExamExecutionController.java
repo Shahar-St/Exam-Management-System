@@ -7,6 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import org.args.Client.ITeacherExecuteExamData;
 
+import java.time.format.DateTimeFormatter;
 
 
 public class TeacherExamExecutionController {
@@ -35,7 +36,12 @@ public class TeacherExamExecutionController {
     @FXML
     private ImageView imageBackButton;
 
+    @FXML
+    private Label endTimeLabel;
+
     ITeacherExecuteExamData model;
+
+
 
     public void setModel(ITeacherExecuteExamData model) {
         this.model = model;
@@ -47,6 +53,7 @@ public class TeacherExamExecutionController {
         examNameLabel.setText(model.getCurrentExecutedExamTitle());
         launchTimeLabel.setText(model.getCurrentExecutedExamLaunchTime());
         raisedHandsListView.setItems(model.getCurrentHandsRaised());
+
     }
 
     @FXML

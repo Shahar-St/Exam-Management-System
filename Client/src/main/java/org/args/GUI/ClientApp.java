@@ -349,6 +349,13 @@ public class ClientApp extends Application {
     }
 
     @Subscribe
+    public void handleExamEndedNotifier(ExamEndedNotifier notifier)
+    {
+        popUpAlert("All exams were submitted!");
+        setRoot("MainScreen");
+    }
+
+    @Subscribe
     public void handleTeacherStatisticsResponse(TeacherStatisticsResponse response) {
         setRoot("TeacherStatisticsScreen");
     }
@@ -456,10 +463,6 @@ public class ClientApp extends Application {
         }
     }
 
-    @Subscribe
-    public void handleExamEndedNotifier(ExamEndedNotifier notifier){
-        setRoot("MainScreen");
 
-    }
 
 }

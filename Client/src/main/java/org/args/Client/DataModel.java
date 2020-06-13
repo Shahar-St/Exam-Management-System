@@ -58,6 +58,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     private final WordGenerator wordGenerator;
 
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private final DateTimeFormatter HourMinutesformatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     public DataModel(ClientApp clientApp) {
         app = clientApp;
@@ -604,7 +605,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
             if (observableExamList.size() > 0)
             {
                 Platform.runLater(observableExamList::clear);
-
             }
             generateExamDescriptors(response.getExamList());
         }
@@ -862,6 +862,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     }
 
+
     //TODO: implement ITeacherExamExecutionData Methods
     //Teacher Execute Exam Data
 
@@ -916,6 +917,20 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         Platform.runLater(() -> currentHandsRaised.remove(currentStudentName));
     }
 
+    String currentExecutedExamEndTime;
+
+    public String getCurrentExecutedExamEndTime() {
+        return currentExecutedExamEndTime;
+    }
+
+    @Subscribe
+    public void handleExecuteExamResponse(ExecuteExamResponse response) {
+        if (response.getStatus() == 0){
+            setCurrentConcreteExamId(response.getConcreteExamID());
+        }
+        currentExecutedExamLaunchTime = LocalDateTime.now().format(HourMinutesformatter);
+    }
+
 
     //TODO: implement IStudentViewStatsData methods
 
@@ -960,12 +975,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return pendingExamsObservableList;
     }
 
-    @Subscribe
-    public void handleExecuteExamResponse(ExecuteExamResponse response) {
-        if (response.getStatus() == 0){
-            setCurrentConcreteExamId(response.getConcreteExamID());
-        }
-    }
+
 
     @Subscribe
     public void handlePendingExamResponse(PendingExamsResponse response) {
