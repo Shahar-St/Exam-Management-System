@@ -24,8 +24,7 @@ public class UncheckedExecutesOfConcreteStrategy extends DatabaseStrategy {
         if (client.getInfo("userName") == null)
             return new UncheckedExecutesOfConcreteResponse(UNAUTHORIZED, uncheckedExecutesOfConcreteRequest, null);
 
-        ConcreteExam concreteExam = getTypeById(ConcreteExam.class,
-                                    uncheckedExecutesOfConcreteRequest.getExamId(), session);
+        ConcreteExam concreteExam = getTypeById(ConcreteExam.class, uncheckedExecutesOfConcreteRequest.getExamId(), session);
 
         HashMap<String, Boolean> map = new HashMap<>();
         for (ExecutedExam executedExam : concreteExam.getExecutedExamsList())

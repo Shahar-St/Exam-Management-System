@@ -26,17 +26,15 @@ public class GetExecutedExamStrategy extends DatabaseStrategy {
         ConcreteExam concreteExam = getTypeById(ConcreteExam.class, getExecutedExamRequest.getConcreteID(), session);
 
         List<ExecutedExam> executedExamsList = concreteExam.getExecutedExamsList();
-        LightExecutedExam lightExecutedExam = null;
-        boolean flag = true;
-        for (int i = 0; i < executedExamsList.size() && flag; i++)
+        int k = 0;
+        for (int i = 0; i < executedExamsList.size(); i++)
         {
             if (executedExamsList.get(i).getStudent().getSocialId().equals(getExecutedExamRequest.getStudentID()))
-            {
-                lightExecutedExam = executedExamsList.get(i).getLightExecutedExam();
-                flag = false;
-            }
+                k=i;
         }
 
-        return new GetExecutedExamResponse(SUCCESS, getExecutedExamRequest, lightExecutedExam);
+        ExecutedExam executedExam = getTypeById(ExecutedExam.class, String.valueOf(executedExamsList.get(k).getId())
+                                    , session);
+        return new GetExecutedExamResponse(SUCCESS, getExecutedExamRequest, executedExam.getLightExecutedExam());
         }
     }
