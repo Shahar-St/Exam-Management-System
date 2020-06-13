@@ -9,6 +9,7 @@ import DatabaseAccess.Requests.ReviewExam.EvaluateExamRequest;
 import DatabaseAccess.Requests.ReviewExam.GetExecutedExamRequest;
 import DatabaseAccess.Requests.ReviewExam.UncheckedExecutesOfConcreteRequest;
 import DatabaseAccess.Requests.ReviewExam.PendingExamsRequest;
+import DatabaseAccess.Requests.Statistics.GetAllPastExamsRequest;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
 import DatabaseAccess.Responses.Exams.AllExamsResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
@@ -20,6 +21,7 @@ import DatabaseAccess.Responses.ReviewExam.EvaluateExamResponse;
 import DatabaseAccess.Responses.ReviewExam.GetExecutedExamResponse;
 import DatabaseAccess.Responses.ReviewExam.PendingExamsResponse;
 import DatabaseAccess.Responses.ReviewExam.UncheckedExecutesOfConcreteResponse;
+import DatabaseAccess.Responses.Statistics.GetAllPastExamsResponse;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
 import LightEntities.LightExam;
@@ -669,15 +671,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return subjectsAndCourses.keySet();
     }
 
-    @Override
-    public List getCourses(String subjectName) {
-        return null;
-    }
 
-    @Override
-    public double getAverageGrade(String courseName) {
-        return 0;
-    }
 
     @Override
     public void viewExamStatistics(String examId) {
@@ -979,12 +973,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.sendRequest(new TeacherEndExamRequest(getCurrentConcreteExamId()));
     }
 
-    //TODO: implement IStudentViewStatsData methods
-
-    @Override
-    public List getExams(String courseName) {
-        return null;
-    }
 
     @Override
     public void confirmGrade(String examId) {
@@ -1215,6 +1203,21 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Override
     public void acceptExtension(String extension) {
         ClientApp.sendRequest(new ConfirmTimeExtensionRequest(true, "", Integer.parseInt(extension), getCurrentConcreteExamId()));
+
+    }
+
+    //Student past exams screen
+
+    ObservableList<String> studentPastExamsObservableList = FXCollections.observableArrayList();
+
+    @Override
+    public void loadPastExams() {
+        ClientApp.sendRequest(new GetAllPastExamsRequest(currentCourseId));
+    }
+    @Subscribe
+    public void handleGetAllPastExamsResponse(GetAllPastExamsResponse response)
+    {
+        response.getExecutedExamsList()
 
     }
 }
