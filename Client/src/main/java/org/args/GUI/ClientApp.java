@@ -28,7 +28,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Stack;
 
 
@@ -199,20 +198,29 @@ public class ClientApp extends Application {
         return new FXMLLoader(getClass().getResource("/org/args/" + fxml + ".fxml"));
     }
 
-    public void popUpAlert(String message) {
+    public void infoAlert(String message) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Alert");
+            alert.setTitle("Information");
             alert.setHeaderText(null);
             alert.setContentText(message);
             alert.showAndWait();
         });
+    }
 
+    public void errorAlert(String message) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        });
     }
 
     public void logOut() {
         client.logOut();
-        popUpAlert("You have logged out successfully.");
+        infoAlert("You have logged out successfully.");
         setRoot("LoginScreen");
     }
 
@@ -228,7 +236,7 @@ public class ClientApp extends Application {
                 scene.getWindow().centerOnScreen();
             });
         } else {
-            popUpAlert("Login Failed, Please Try Again.");
+            errorAlert("Login Failed, Please Try Again.");
         }
 
     }
@@ -236,17 +244,17 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleAllQuestionsResponse(AllQuestionsResponse response) {
         if (response.getStatus() != 0)
-            popUpAlert("Failed To Fetch Question List, Please Try Again. " + getErrorMessage(response.getStatus()));
+            errorAlert("Failed To Fetch Question List, Please Try Again. " + getErrorMessage(response.getStatus()));
     }
 
     @Subscribe
     public void handleEditQuestionResponse(EditQuestionResponse response) {
         if (response.getStatus() == 0) {
-            popUpAlert("Edit Question Success");
+            infoAlert("Edit Question Success");
             popLastScene();
             setRoot("QuestionManagementScreen");
         } else {
-            popUpAlert("Edit Question Failed, Please Try Again." + getErrorMessage(response.getStatus()));
+            errorAlert("Edit Question Failed, Please Try Again." + getErrorMessage(response.getStatus()));
         }
 
     }
@@ -256,7 +264,7 @@ public class ClientApp extends Application {
         if (response.getStatus() == 0) {
             setRoot("QuestionScreen");
         } else {
-            popUpAlert("Failed To Fetch The Question, Please Try Again." + getErrorMessage(response.getStatus()));
+            errorAlert("Failed To Fetch The Question, Please Try Again." + getErrorMessage(response.getStatus()));
         }
 
     }
@@ -324,17 +332,17 @@ public class ClientApp extends Application {
         if (response.getStatus() == 0) {
             setRoot("ViewExamScreen");
         } else {
-            popUpAlert("Failed to Fetch Exam");
+            infoAlert("Failed to Fetch Exam");
         }
     }
 
     @Subscribe
     public void handleAddExamResponse(AddExamResponse response) {
         if (response.getStatus() == 0) {
-            popUpAlert("Add Exam Successfully");
+            infoAlert("Add Exam Successfully");
             setRoot("ExamManagementScreen");
         } else {
-            popUpAlert("Add Exam Failed");
+            infoAlert("Add Exam Failed");
         }
 
     }
@@ -342,10 +350,10 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleEditExamResponse(EditExamResponse response) {
         if (response.getStatus() == 0) {
-            popUpAlert("Exam was successfully edited!");
+            infoAlert("Exam was successfully edited!");
             setRoot("ExamManagementScreen");
         } else {
-            popUpAlert("Exam editing failed");
+            infoAlert("Exam editing failed");
         }
     }
 
@@ -363,6 +371,7 @@ public class ClientApp extends Application {
             });
         else if(model.getPermission().equals("teacher")){
             //do teacher stuff
+            //TODO: what do you need here? -Ronnie
         }else{
             // do dean stuff
         }
@@ -371,9 +380,9 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleExecuteExamResponse(ExecuteExamResponse response) {
         if (response.getStatus() != 0)
-            popUpAlert("Exam execution failed!");
+            infoAlert("Exam execution failed!");
         else {
-            popUpAlert("Exam is being initiated...");
+            errorAlert("Exam is being initiated...");
             setRoot("TeacherExamExecutionScreen");
         }
     }
@@ -388,17 +397,17 @@ public class ClientApp extends Application {
             }
 
         } else {
-            popUpAlert("Something went wrong while trying to take exam." + getErrorMessage(response.getStatus()));
+            errorAlert("Something went wrong while trying to take exam." + getErrorMessage(response.getStatus()));
         }
     }
 
     @Subscribe
     public void handleTimeExtensionResponse(TimeExtensionResponse response) {
         if(response.getStatus()==0){
-            popUpAlert("Time Extension Request Was Successfully Sent.");
+            infoAlert("Time Extension Request Was Successfully Sent.");
 
         }else{
-            popUpAlert("Something Went Wrong With Time Extension Request, Please Try Again. ");
+            errorAlert("Something Went Wrong With Time Extension Request, Please Try Again. ");
         }
     }
 
@@ -406,9 +415,9 @@ public class ClientApp extends Application {
     public void handleRaisedHandResponse(RaiseHandResponse response) {
         if(response.getStatus()==0)
         {
-            popUpAlert("You're Raise Hand Request Was Received Successfully.");
+            infoAlert("You're Raise Hand Request Was Received Successfully.");
         }else {
-            popUpAlert("Failed To Send Raise Hand Request, Please Try Again.");
+            errorAlert("Failed To Send Raise Hand Request, Please Try Again.");
         }
     }
 
@@ -416,9 +425,9 @@ public class ClientApp extends Application {
     public void handleSubmitManualExamResponse(SubmitManualExamResponse response) {
         if (response.getStatus() == 0) {
             setRoot("MainScreen");
-            popUpAlert("Exam Was Successfully Submitted.");
+            infoAlert("Exam Was Successfully Submitted.");
         } else {
-            popUpAlert("Submission Failed, Please Try Again.");
+            errorAlert("Submission Failed, Please Try Again.");
         }
     }
 
@@ -426,18 +435,18 @@ public class ClientApp extends Application {
     public void handleSubmitExamResponse(SubmitExamResponse response){
         if(response.getStatus()==0){
             setRoot("MainScreen");
-            popUpAlert("Exam Was Successfully Submitted.");
+            infoAlert("Exam Was Successfully Submitted.");
         }else{
-            popUpAlert("Submission Failed, Please Try Again.");
+            errorAlert("Submission Failed, Please Try Again.");
         }
     }
 
     @Subscribe
     public void handleDeanTimeExtensionResponse(ConfirmTimeExtensionResponse response) {
         if (response.getStatus() == 0) {
-            popUpAlert("There are new time extension requests!");
+            infoAlert("There are new time extension requests!");
         } else {
-            popUpAlert("Failed to fetch time extension requests from the server!");
+            errorAlert("Failed to fetch time extension requests from the server!");
         }
     }
 
@@ -458,7 +467,7 @@ public class ClientApp extends Application {
 
 
         } else {
-            popUpAlert("Failed to fetch exam from the sever");
+            errorAlert("Failed to fetch exam from the sever");
         }
     }
 
@@ -467,7 +476,7 @@ public class ClientApp extends Application {
         if (response.getStatus() == 0) {
             setRoot("TeacherExamGradesReviewScreen");
         }else{
-            popUpAlert("Failed To Submit Exam Evaluation, Please Try Again.");
+            errorAlert("Failed To Submit Exam Evaluation, Please Try Again.");
         }
     }
 
@@ -477,13 +486,13 @@ public class ClientApp extends Application {
         if(notifier.isAccepted())
         {
             System.out.println("time extension confirmed");
-            popUpAlert("Time Extension Confirmed!");
+            infoAlert("Time Extension Confirmed!");
 
         }
         else
         {
             System.out.println("time extension rejected");
-            popUpAlert("Time Extension Rejected!");
+            errorAlert("Time Extension Rejected!");
         }
     }
 
@@ -493,7 +502,7 @@ public class ClientApp extends Application {
         if (response.getStatus() == 0)
             ClientApp.setRoot("TeacherStatisticsScreen");
         else
-            popUpAlert("Failed to fetch required results!");
+            errorAlert("Failed to fetch required results!");
 
 
     }

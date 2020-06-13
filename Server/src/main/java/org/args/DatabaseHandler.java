@@ -14,7 +14,7 @@ import org.args.DatabaseStrategies.Review.UncheckedExecutesOfConcreteStrategy;
 import org.args.DatabaseStrategies.Statistics.GetAllPastExamsStrategy;
 import org.args.DatabaseStrategies.Statistics.StudentStatisticsStrategy;
 import org.args.DatabaseStrategies.Statistics.TeacherGetAllPastExamsStrategy;
-import org.args.DatabaseStrategies.Statistics.TeacherStatisticsConcreteStrategy;
+import org.args.DatabaseStrategies.Statistics.TeacherStatisticsStrategy;
 import org.args.DatabaseStrategies.SubjectAndCoursesStrategy;
 import org.args.Entities.*;
 import org.args.OCSF.ConnectionToClient;
@@ -60,9 +60,8 @@ public class DatabaseHandler {
         this.put("UncheckedExecutesOfConcreteRequest", new UncheckedExecutesOfConcreteStrategy());
         this.put("GetAllPastExamsRequest", new GetAllPastExamsStrategy());
         this.put("StudentStatisticsRequest", new StudentStatisticsStrategy());
-
         this.put("TeacherGetAllPastExamsRequest", new TeacherGetAllPastExamsStrategy());
-        this.put("TeacherStatisticsConcreteRequest", new TeacherStatisticsConcreteStrategy());
+        this.put("TeacherStatisticsRequest", new TeacherStatisticsStrategy());
     }};
 
     private DatabaseHandler() {

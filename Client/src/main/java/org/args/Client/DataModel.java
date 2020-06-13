@@ -286,7 +286,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void alert(String message) {
-        app.popUpAlert(message);
+        app.infoAlert(message);
     }
 
 
