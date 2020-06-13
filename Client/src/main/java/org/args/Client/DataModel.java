@@ -831,6 +831,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         }
     }
 
+    public void submitAndQuit() {
+        setFinishedOnTime(false);
+        submitExam();
+    }
+
 
     //TODO: implement IExamData Method
     @Override
@@ -902,7 +907,14 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Subscribe
     public void handleExamEndedNotifier(ExamEndedNotifier notifier){
-        currentHandsRaised.clear();
+        if(getPermission().equals("student")){
+            submitAndQuit();
+        }else if(getPermission().equals("teacher")){
+            currentHandsRaised.clear();
+        }else{
+
+        }
+
 
     }
 

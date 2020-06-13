@@ -233,16 +233,7 @@ public class StudentExamExecutionController {
                     timer.cancel();
                     timer.purge();
                     // submit and quit
-                    model.setFinishedOnTime(false);
-                    model.submitExam();
-                    Platform.runLater(()->{
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Attention!");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Attention!, Exam Time Has Ended, You're Exam Has Been Submitted And You're Now Being Redirected To Main Screen");
-                        alert.showAndWait();
-                        ClientApp.setRoot("MainScreen"); // redirect client to main screen because of exam timeout.
-                    });
+                    model.submitAndQuit();
 
                     return;
                 }
@@ -252,6 +243,8 @@ public class StudentExamExecutionController {
             }
         }, 1000, 1000);
     }
+
+
 
 }
 
