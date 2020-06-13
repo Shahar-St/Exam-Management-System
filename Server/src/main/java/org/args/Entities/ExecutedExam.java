@@ -38,7 +38,9 @@ public class ExecutedExam {
     private boolean isComputerized = false;
     private boolean checked = false;
     private boolean finishedOnTime = false;
+    private boolean isSubmitted = false;
     private Date startedDate;
+    @Column(length = 3000)
     private byte[] fileBytes;
 
     //Group c'tors
@@ -144,6 +146,14 @@ public class ExecutedExam {
         this.checked = checked;
     }
 
+    public boolean isSubmitted() {
+        return isSubmitted;
+    }
+
+    public void setSubmitted(boolean submitted) {
+        isSubmitted = submitted;
+    }
+
     public boolean isFinishedOnTime() {
         return finishedOnTime;
     }
@@ -157,6 +167,14 @@ public class ExecutedExam {
         this.startedDate = startedDate;
     }
 
+    public byte[] getFileBytes() {
+        return fileBytes;
+    }
+
+    public void setFileBytes(byte[] fileBytes) {
+        this.fileBytes = fileBytes;
+    }
+
     public LightExecutedExam getLightExecutedExam() {
         List<LightQuestion> lightQuestionsList = new ArrayList<>();;
         for (Question question : concreteExam.getExam().getQuestionsList())
@@ -164,15 +182,7 @@ public class ExecutedExam {
         List<Double> questionScoreList = new ArrayList<>(concreteExam.getExam().getQuestionsScores());
 
         return new LightExecutedExam(concreteExam.getExam().getTitle(), concreteExam.getTester().getUserName(),
-                String.valueOf(id), student.getSocialId(), lightQuestionsList,  questionScoreList,
-                duration, isComputerized);
-    }
-
-    public byte[] getFileBytes() {
-        return fileBytes;
-    }
-
-    public void setFileBytes(byte[] fileBytes) {
-        this.fileBytes = fileBytes;
+                String.valueOf(id), student.getSocialId(), lightQuestionsList, questionScoreList,
+                new ArrayList<>(this.answersByStudent), duration, isComputerized);
     }
 }

@@ -42,7 +42,7 @@ public class TakeExamStrategy extends DatabaseStrategy implements IExamInProgres
         if (executedExam == null)
             return new TakeExamResponse(ERROR2, takeExamRequest);
 
-        if (!student.getSocialId().equals(String.valueOf(takeExamRequest.getSocialId())))
+        if (!student.getSocialId().equals(String.valueOf(takeExamRequest.getSocialId()))&& takeExamRequest.isComputerized())
             return new TakeExamResponse(ERROR4, takeExamRequest);
 
         if (!executedExam.getConcreteExam().getExamCode().equals(takeExamRequest.getExamCode()))
