@@ -40,7 +40,8 @@ public class RaiseHandStrategy extends DatabaseStrategy {
         RaiseHandRequest raiseHandRequest = (RaiseHandRequest) request;
         Student student = (Student) getUser((String) client.getInfo("userName"), session);
         ExecutedExam exam = getTypeById(ExecutedExam.class,String.valueOf(student.getCurrentlyExecutedID()),session);
-        ExamManager.notifyTeacherAboutRaisedHand(new RaiseHandNotifier(student.getFullName()),exam.getConcreteExam().getTester());
-        //***Need to find the ConnectionToClient object instance of the current teacher so she can be notified about it.
+        ConnectionToClient teacher = examManagers.get(exam.getConcreteExam().getId()).getTeacher();
+        ExamManager.notifyTeacherAboutRaisedHand(new RaiseHandNotifier(student.getFullName()),teacher);
+        //FIXME This doesn't work. Please check it out!
     }
 }
