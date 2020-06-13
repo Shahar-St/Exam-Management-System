@@ -4,6 +4,8 @@ import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import LightEntities.LightExam;
 
+import java.time.LocalDateTime;
+
 /**
  * status dictionary:
  * 0 - success
@@ -16,6 +18,7 @@ import LightEntities.LightExam;
 public class TakeExamResponse extends DatabaseResponse {
 
     private final LightExam lightExam;
+    private LocalDateTime initExamForExecutionDate;
 
     //successful c'tor
     public TakeExamResponse(int status, DatabaseRequest request, LightExam lightExam) {
@@ -30,5 +33,13 @@ public class TakeExamResponse extends DatabaseResponse {
 
     public LightExam getLightExam() {
         return lightExam;
+    }
+
+    public void setInitExamForExecutionDate(LocalDateTime initExamForExecutionDate) {
+        this.initExamForExecutionDate = initExamForExecutionDate;
+    }
+
+    public LocalDateTime getInitExamForExecutionDate() {
+        return initExamForExecutionDate;
     }
 }

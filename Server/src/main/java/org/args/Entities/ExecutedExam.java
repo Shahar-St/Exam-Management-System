@@ -39,7 +39,6 @@ public class ExecutedExam {
     private boolean checked = false;
     private boolean finishedOnTime = false;
     private boolean isSubmitted = false;
-    private Date startedDate;
     @Column(length = 3000)
     private byte[] fileBytes;
 
@@ -159,12 +158,6 @@ public class ExecutedExam {
     }
     public void setFinishedOnTime(boolean finishedOnTime) {
         this.finishedOnTime = finishedOnTime;
-    }
-    public Date getStartedDate() {
-        return startedDate;
-    }
-    public void setStartedDate(Date startedDate) {
-        this.startedDate = startedDate;
     }
 
     public byte[] getFileBytes() {

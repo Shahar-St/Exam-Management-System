@@ -11,6 +11,7 @@ import org.args.ExamManager;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,7 @@ public class ExecuteExamStrategy extends DatabaseStrategy implements IExamInProg
 
         Teacher teacher = (Teacher) getUser((String) client.getInfo("userName"), session);
         ConcreteExam concreteExam = new ConcreteExam(exam, teacher, request1.getExamCode());
+        concreteExam.setInitExamForExecutionDate(LocalDateTime.now());
         session.saveOrUpdate(concreteExam);
         session.flush();
 

@@ -704,6 +704,16 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private File manualExamFile;
 
+    private LocalDateTime examForStudentExecutionInitDate;
+
+    public LocalDateTime getExamForStudentExecutionInitDate() {
+        return examForStudentExecutionInitDate;
+    }
+
+    public void setExamForStudentExecutionInitDate(LocalDateTime examForStudentExecutionInitDate) {
+        this.examForStudentExecutionInitDate = examForStudentExecutionInitDate;
+    }
+
     public LightExam getExamForStudentExecution() {
         return examForStudentExecution;
     }
@@ -749,6 +759,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         if (response.getStatus() == 0)
         {
             setExamForStudentExecution(response.getLightExam());
+            setExamForStudentExecutionInitDate(response.getInitExamForExecutionDate());
             if (correctAnswersMap == null)
                 correctAnswersMap = new HashMap<>();
             else

@@ -106,6 +106,7 @@ public class TeacherExamExecutionController {
                     // in case that the window has been closed
                     timer.cancel();
                     timer.purge();
+                    return;
                 } else if (LocalDateTime.now().isEqual(model.getCurrentExecutedExamEndLocalDateTime())
                 || LocalDateTime.now().isAfter(model.getCurrentExecutedExamEndLocalDateTime())) {
                     timer.cancel();

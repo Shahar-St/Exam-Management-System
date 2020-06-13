@@ -11,7 +11,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import org.args.Client.IStudentExamExecutionData;
+import org.joda.time.PeriodType;
 
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -22,7 +27,7 @@ public class StudentExamExecutionController {
 
     private final Label timeElapsed = new Label();
 
-    private int examDuration;
+    private long examDuration;
 
     private final int fontSize = 32;
 
@@ -41,7 +46,10 @@ public class StudentExamExecutionController {
     @FXML
     void initialize() {
         setModel(ClientApp.getModel());
-        examDuration = model.getExamForStudentExecution().getDurationInMinutes() * 60; // convert into seconds
+        LocalDateTime start = model.getExamForStudentExecutionInitDate();
+        LocalDateTime now = LocalDateTime.now();
+        long dateDelta = start.until(now, ChronoUnit.SECONDS);
+        examDuration = (model.getExamForStudentExecution().getDurationInMinutes()*60)-dateDelta; // convert into seconds
         timeElapsed.setFont(Font.font(fontStyle, fontSize));
         assert questionsPagination != null;
         questionsPagination.setPageCount(model.getExamForStudentExecution().getLightQuestionList().size()+1);

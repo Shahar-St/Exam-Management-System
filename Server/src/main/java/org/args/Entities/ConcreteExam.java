@@ -5,6 +5,7 @@ import LightEntities.LightQuestion;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class ConcreteExam {
     private int numOfTakers;
     private int finishedOnTime;
     private int UnfinishedOnTime;
+    private LocalDateTime initExamForExecutionDate;
 
     //Group c'tors
     public ConcreteExam() {
@@ -115,5 +117,13 @@ public class ConcreteExam {
     }
     public void setUnfinishedOnTime(int unfinishedOnTime) {
         UnfinishedOnTime = unfinishedOnTime;
+    }
+
+    public LocalDateTime getInitExamForExecutionDate() {
+        return initExamForExecutionDate;
+    }
+
+    public void setInitExamForExecutionDate(LocalDateTime initExamForExecutionDate) {
+        this.initExamForExecutionDate = initExamForExecutionDate;
     }
 }

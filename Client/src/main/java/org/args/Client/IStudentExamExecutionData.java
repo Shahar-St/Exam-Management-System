@@ -3,6 +3,7 @@ package org.args.Client;
 import LightEntities.LightExam;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public interface IStudentExamExecutionData {
@@ -17,4 +18,5 @@ public interface IStudentExamExecutionData {
 
     void setFinishedOnTime(boolean finishedOnTime);
     void submitAndQuit();
+    LocalDateTime getExamForStudentExecutionInitDate();
 }
