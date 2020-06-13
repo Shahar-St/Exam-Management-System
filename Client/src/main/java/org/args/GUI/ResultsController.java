@@ -3,19 +3,17 @@ package org.args.GUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
-import org.args.Client.IStudentViewStatsData;
+import org.args.Client.ITeacherViewStatsData;
 
 import java.util.List;
 import java.util.Set;
 
-public class StudentPastExamsController {
-
-    @FXML
-    private ImageView backButton;
+public class ResultsController {
 
     @FXML
     private MenuButton subjectsDropdown;
@@ -24,23 +22,17 @@ public class StudentPastExamsController {
     private MenuButton coursesDropdown;
 
     @FXML
-    private TableView<StudentPastExam> gradesTable;
+    private ListView<String> examListView;
 
     @FXML
-    private Button reviewExam;
+    private Button detailsButton;
 
     @FXML
-    private TableColumn<String,Double> titleColumn;
+    private Button backButton;
 
-    @FXML
-    private TableColumn<String,Double> idColumn;
+    ITeacherViewStatsData model;
 
-    @FXML
-    private TableColumn<String,Double> gradeColumn;
-
-    IStudentViewStatsData model;
-
-    public void setModel(IStudentViewStatsData model) {
+    public void setModel(ITeacherViewStatsData model) {
         this.model = model;
     }
 
@@ -48,13 +40,9 @@ public class StudentPastExamsController {
     public void initialize()
     {
         setModel(ClientApp.getModel());
-        initializeGradesTable();
-        if(model.getStudentPastExamsObservableList().size() > 0)
-        {
-            model.clearStudentPastExamsList();
-        }
+        examListView.setItems(model.getPastExamsResultsObservableList());
         if (model.dataWasAlreadyInitialized()) {
-            for (String subjectName : model.getSubjects()) //iterate through every subject in the hashmap
+            for (String subjectName : model.getSubjects())
             {
                 addSubjectToSubjectDropdown(subjectName);
             }
@@ -62,26 +50,28 @@ public class StudentPastExamsController {
             coursesDropdown.setText(model.getCurrentCourseId());
             initializeCoursesDropdown();
             fillCoursesDropdown(model.getCurrentSubject());
-            model.loadPastExams();
+            model.loadResults();
         } else {
-           fillSubjectsDropDown(model.getSubjects());
+            fillSubjectsDropDown(model.getSubjects());
         }
+
     }
 
-    private void initializeGradesTable() {
-        titleColumn.setCellValueFactory(new PropertyValueFactory<>("examTitle"));
-        gradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("examId"));
-        gradesTable.setItems(model.getStudentPastExamsObservableList());
+    @FXML
+    void back(ActionEvent event) {
+        ClientApp.setRoot("Main Screen");
     }
 
     @FXML
     void handleMouseEvent(MouseEvent event) {
-        //will show a certain exam's details
-        reviewExam.setDisable(false);
+
     }
 
     @FXML
+    void showExamDetails(ActionEvent event) {
+
+    }
+
     void switchToMainScreen(MouseEvent event) {
         ClientApp.setRoot("MainScreen");
     }
@@ -138,8 +128,6 @@ public class StudentPastExamsController {
             addSubjectToSubjectDropdown(subject);
         }
     }
-
-    //TODO clear screen
 
 
 }

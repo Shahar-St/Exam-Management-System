@@ -13,7 +13,6 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import org.args.Client.IMainScreenData;
-import java.io.IOException;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -72,7 +71,7 @@ public class MainScreenController {
         button1.setText("Question Management");
         button1.setOnAction(this::switchToQuestionManagement);
         button2.setText("Statistical Analysis");
-        button2.setOnAction(this::switchToStatsScreen);
+        button2.setOnAction(this::switchToResultsScreen);
         button3.setText("Exam Management");
         button3.setOnAction(this::switchToExamManagementScreen);
         button4.setOnAction(this::switchToPendingScreen);
@@ -87,7 +86,7 @@ public class MainScreenController {
         button1.setText("Exam Execution");
         button1.setOnAction(this::switchToStudentExamExecutionScreen);
         button2.setText("Past Exams");
-        button2.setOnAction(this::switchToStatsScreen);
+        button2.setOnAction(this::switchToPastExamsScreen);
         button3.setVisible(false);
         button4.setVisible(false);
     }
@@ -95,13 +94,16 @@ public class MainScreenController {
     private void initDean()
     {
         button1.setText("Statistical Analysis");
-        button1.setOnAction(this::switchToStatsScreen);
+        button1.setOnAction(this::switchToResultsScreen);
         button2.setText("Time Extensions");
         button2.setOnAction(this::switchToExtensionRequestsScreen);
         button3.setVisible(false);
         button4.setVisible(false);
     }
 
+    private void switchToResultsScreen(ActionEvent event) {
+        ClientApp.setRoot("ResultsScreen");
+    }
 
 
     private void initAccordingToPermission() {
@@ -123,6 +125,7 @@ public class MainScreenController {
         setModel(ClientApp.getModel());
         generateGreeting();
         initAccordingToPermission();
+        model.loadSubjects();
     }
 
     @FXML
@@ -132,8 +135,9 @@ public class MainScreenController {
         ClientApp.setRoot("ExamManagementScreen");
     }
     @FXML
-    void switchToStatsScreen (ActionEvent event)
+    void switchToPastExamsScreen(ActionEvent event)
     {
+        ClientApp.setRoot("StudentPastExamsScreen");
 
     }
     @FXML

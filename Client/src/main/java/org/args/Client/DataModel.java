@@ -10,6 +10,7 @@ import DatabaseAccess.Requests.ReviewExam.GetExecutedExamRequest;
 import DatabaseAccess.Requests.ReviewExam.UncheckedExecutesOfConcreteRequest;
 import DatabaseAccess.Requests.ReviewExam.PendingExamsRequest;
 import DatabaseAccess.Requests.Statistics.GetAllPastExamsRequest;
+import DatabaseAccess.Requests.Statistics.TeacherGetAllPastExamsRequest;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
 import DatabaseAccess.Responses.Exams.AllExamsResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
@@ -22,6 +23,7 @@ import DatabaseAccess.Responses.ReviewExam.GetExecutedExamResponse;
 import DatabaseAccess.Responses.ReviewExam.PendingExamsResponse;
 import DatabaseAccess.Responses.ReviewExam.UncheckedExecutesOfConcreteResponse;
 import DatabaseAccess.Responses.Statistics.GetAllPastExamsResponse;
+import DatabaseAccess.Responses.Statistics.TeacherGetAllPastExamsResponse;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import DatabaseAccess.Responses.SubjectsAndCoursesResponse;
 import LightEntities.LightExam;
@@ -130,6 +132,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.sendRequest(new TakeExamRequest("0", code, false));
         setManualExam(true);
     }
+
 
     //question management - subjects and courses dropdowns and screen init
 
@@ -1222,6 +1225,38 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
             @Override
             public void run() {
                 studentPastExamsObservableList.clear();
+            }
+        });
+    }
+
+    //Results data
+
+    @Override
+    public void loadResults() {
+        ClientApp.sendRequest(new TeacherGetAllPastExamsRequest(currentCourseId));
+    }
+
+    ObservableList<String> pastExamsResultsObservableList = FXCollections.observableArrayList();
+
+    public ObservableList<String> getPastExamsResultsObservableList() {
+        return pastExamsResultsObservableList;
+    }
+
+    @Subscribe
+    public void handleTeacherGetAllPastExamsResponse(TeacherGetAllPastExamsResponse response)
+    {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                //hashMap: executedExamId, (date, title)
+                for(Map.Entry<String,Pair<LocalDateTime,String>> entry : response.getConcreteExamsList().entrySet())
+                {
+                    String examId = entry.getKey();
+                    String date = entry.getValue().getFirst().toString();
+                    String tite = entry.getValue().getSecond();
+                    String examToAdd = examId +": "+tite + "from " + date;
+                    pastExamsResultsObservableList.add(examToAdd);
+                }
             }
         });
     }

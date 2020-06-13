@@ -11,6 +11,8 @@ import org.args.DatabaseStrategies.Review.EvaluateExamStrategy;
 import org.args.DatabaseStrategies.Review.GetExecutedExamStrategy;
 import org.args.DatabaseStrategies.Review.PendingExamsStrategy;
 import org.args.DatabaseStrategies.Review.UncheckedExecutesOfConcreteStrategy;
+import org.args.DatabaseStrategies.Statistics.GetAllPastExamsStrategy;
+import org.args.DatabaseStrategies.Statistics.StudentStatisticsStrategy;
 import org.args.DatabaseStrategies.SubjectAndCoursesStrategy;
 import org.args.Entities.*;
 import org.args.OCSF.ConnectionToClient;
@@ -48,13 +50,14 @@ public class DatabaseHandler {
         this.put("ExecuteExamRequest", new ExecuteExamStrategy());
         this.put("TakeExamRequest", new TakeExamStrategy());
         this.put("SubmitExamRequest", new SubmitExamStrategy());
-        this.put("SubmitManualExamRequest", new SubmitManualExamStrategy());
         this.put("TimeExtensionRequest", new TimeExtensionStrategy());
         this.put("ConfirmTimeExtensionRequest", new ConfirmTimeExtensionStrategy());
         this.put("EvaluateExamRequest", new EvaluateExamStrategy());
         this.put("GetExecutedExamRequest", new GetExecutedExamStrategy());
         this.put("PendingExamsRequest", new PendingExamsStrategy());
         this.put("UncheckedExecutesOfConcreteRequest", new UncheckedExecutesOfConcreteStrategy());
+        this.put("GetAllPastExamsRequest", new GetAllPastExamsStrategy());
+        this.put("StudentStatisticsRequest", new StudentStatisticsStrategy());
         this.put("TeacherEndExamRequest",new TeacherEndExamStrategy());
         this.put("RaiseHandRequest", new RaiseHandStrategy());
 
