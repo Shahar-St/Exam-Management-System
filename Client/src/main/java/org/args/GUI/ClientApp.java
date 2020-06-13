@@ -369,11 +369,6 @@ public class ClientApp extends Application {
     }
 
     @Subscribe
-    public void handleTeacherStatisticsResponse(TeacherStatisticsResponse response) {
-        setRoot("TeacherStatisticsScreen");
-    }
-
-    @Subscribe
     public void handleExecuteExamResponse(ExecuteExamResponse response) {
         if (response.getStatus() != 0)
             popUpAlert("Exam execution failed!");
@@ -490,6 +485,17 @@ public class ClientApp extends Application {
             System.out.println("time extension rejected");
             popUpAlert("Time Extension Rejected!");
         }
+    }
+
+    @Subscribe
+    public void handleTeacherStatisticsResponse(TeacherStatisticsResponse response)
+    {
+        if (response.getStatus() == 0)
+            ClientApp.setRoot("TeacherStatisticsScreen");
+        else
+            popUpAlert("Failed to fetch required results!");
+
+
     }
 
 

@@ -1,16 +1,11 @@
 package org.args.DatabaseStrategies.Statistics;
 
 import DatabaseAccess.Requests.DatabaseRequest;
-import DatabaseAccess.Requests.Statistics.GetAllPastExamsRequest;
-import DatabaseAccess.Requests.Statistics.TeacherStatisticsConcreteRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
-import DatabaseAccess.Responses.Statistics.GetAllPastExamsResponse;
-import DatabaseAccess.Responses.Statistics.TeacherStatisticsConcreteResponse;
 import Util.Pair;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.Entities.ConcreteExam;
 import org.args.Entities.ExecutedExam;
-import org.args.Entities.Student;
 import org.args.Entities.Teacher;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;

@@ -15,7 +15,7 @@ public class TeacherStatisticsResponse extends DatabaseResponse {
         this.examHashMap = examHashMap;
     }
 
-    public HashMap<String, Double> getExamHashMap() {
+    public HashMap<String, Double> getStudentGrades() {
         return examHashMap;
     }
 }

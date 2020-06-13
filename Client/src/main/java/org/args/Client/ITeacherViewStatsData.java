@@ -1,6 +1,7 @@
 package org.args.Client;
 
 import javafx.collections.ObservableList;
+import org.args.GUI.StudentGrade;
 import org.args.GUI.StudentPastExam;
 
 import java.util.HashMap;
@@ -14,7 +15,6 @@ public interface ITeacherViewStatsData {
 
     void viewExamStatistics(String examId);
 
-    HashMap<String, Double> getCurrentExamForStats();
 
     void loadPastExams();
 
@@ -42,4 +42,9 @@ public interface ITeacherViewStatsData {
 
     void setCourseSelected(boolean courseSelected);
 
+    ObservableList<StudentGrade> getStudentGradesObservableList();
+
+    void clearStudentGradesList();
+
+    void showGradesOf(String examId);
 }

@@ -60,17 +60,19 @@ public class ResultsController {
     @FXML
     void back(ActionEvent event) {
         clearScreen();
-        ClientApp.setRoot("Main Screen");
+        ClientApp.setRoot("MainScreen");
     }
 
     @FXML
     void handleMouseEvent(MouseEvent event) {
+        detailsButton.setDisable(false);
 
     }
 
     @FXML
     void showExamDetails(ActionEvent event) {
-
+        String examId = examListView.getSelectionModel().getSelectedItem().substring(7);
+        model.showGradesOf(examId);
     }
 
     void switchToMainScreen(MouseEvent event) {

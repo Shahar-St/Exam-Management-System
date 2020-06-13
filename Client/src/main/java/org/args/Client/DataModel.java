@@ -11,6 +11,7 @@ import DatabaseAccess.Requests.ReviewExam.UncheckedExecutesOfConcreteRequest;
 import DatabaseAccess.Requests.ReviewExam.PendingExamsRequest;
 import DatabaseAccess.Requests.Statistics.GetAllPastExamsRequest;
 import DatabaseAccess.Requests.Statistics.TeacherGetAllPastExamsRequest;
+import DatabaseAccess.Requests.Statistics.TeacherStatisticsRequest;
 import DatabaseAccess.Requests.SubjectsAndCoursesRequest;
 import DatabaseAccess.Responses.Exams.AllExamsResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
@@ -44,6 +45,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import org.args.GUI.ClientApp;
 import org.args.GUI.StudentExamType;
+import org.args.GUI.StudentGrade;
 import org.args.GUI.StudentPastExam;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -640,15 +642,32 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     // TODO: implement method for ITeacherViewStatsData
-    private final HashMap<String, Double> currentExamForStats = new HashMap<>();
+    ObservableList<StudentGrade> studentGradesObservableList = FXCollections.observableArrayList();
 
-    public HashMap<String, Double> getCurrentExamForStats() {
-        return currentExamForStats;
+    public ObservableList<StudentGrade> getStudentGradesObservableList() {
+        return studentGradesObservableList;
     }
 
     @Subscribe
     public void handleTeacherStatisticsResponse(TeacherStatisticsResponse response) {
-        getCurrentExamForStats().putAll(response.getExamHashMap());
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                for(Map.Entry<String,Double> e: response.getStudentGrades().entrySet()){
+                    studentGradesObservableList.add(new StudentGrade(e.getKey(),e.getValue()));
+                }
+            }
+        });
+    }
+
+    @Override
+    public void clearStudentGradesList() {
+        studentGradesObservableList.clear();
+    }
+
+    @Override
+    public void showGradesOf(String examId) {
+        ClientApp.sendRequest(new TeacherStatisticsRequest(examId));
     }
 
     @Override
