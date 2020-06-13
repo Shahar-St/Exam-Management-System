@@ -2,6 +2,7 @@ package org.args;
 
 import Notifiers.ConfirmTimeExtensionNotifier;
 import Notifiers.RaiseHandNotifier;
+import Notifiers.ExamEndedNotifier;
 import Notifiers.TimeExtensionRequestNotifier;
 import org.args.Entities.Teacher;
 import org.args.OCSF.ConnectionToClient;
@@ -124,5 +125,20 @@ public class ExamManager {
             e.printStackTrace();
         }
 
+    }
+
+
+
+    public void notifyAboutExamEnd(ExamEndedNotifier notifier, List<String> studentsList) {
+        for (String s : studentsList) {
+            if (getStudents().containsKey(s)) {
+                try {
+                    getStudents().get(s).sendToClient(notifier);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
     }
 }

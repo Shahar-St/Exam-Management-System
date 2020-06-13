@@ -42,7 +42,7 @@ public class TeacherReviewCompExamController {
     void initialize() {
         setModel(ClientApp.getModel());
 
-        int fontSize = 24;
+        int fontSize = 18;
 
         String fontStyle = "Cambria";
 
@@ -165,7 +165,7 @@ public class TeacherReviewCompExamController {
 
                 details.setSpacing(20);
 
-                return new ScrollPane(details);
+                return details;
 
 
             }

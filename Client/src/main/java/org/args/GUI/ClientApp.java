@@ -409,6 +409,7 @@ public class ClientApp extends Application {
     public void handleSubmitManualExamResponse(SubmitManualExamResponse response) {
         if (response.getStatus() == 0) {
             setRoot("MainScreen");
+            popUpAlert("Exam Was Successfully Submitted.");
         } else {
             popUpAlert("Submission Failed, Please Try Again.");
         }
@@ -418,6 +419,7 @@ public class ClientApp extends Application {
     public void handleSubmitExamResponse(SubmitExamResponse response){
         if(response.getStatus()==0){
             setRoot("MainScreen");
+            popUpAlert("Exam Was Successfully Submitted.");
         }else{
             popUpAlert("Submission Failed, Please Try Again.");
         }
