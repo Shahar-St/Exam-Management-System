@@ -130,10 +130,12 @@ public class ExamManager {
 
 
     public void notifyAboutExamEnd(ExamEndedNotifier notifier, List<String> studentsList) {
+        Map<String, ConnectionToClient> studentsMap = getStudents();
         for (String s : studentsList) {
-            if (getStudents().containsKey(s)) {
+            if (studentsMap.containsKey(s)) {
                 try {
-                    getStudents().get(s).sendToClient(notifier);
+                    ConnectionToClient student = studentsMap.get(s);
+                    student.sendToClient(notifier);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

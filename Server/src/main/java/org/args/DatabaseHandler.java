@@ -55,6 +55,7 @@ public class DatabaseHandler {
         this.put("GetExecutedExamRequest", new GetExecutedExamStrategy());
         this.put("PendingExamsRequest", new PendingExamsStrategy());
         this.put("UncheckedExecutesOfConcreteRequest", new UncheckedExecutesOfConcreteStrategy());
+        this.put("TeacherEndExamRequest",new TeacherEndExamStrategy());
 
 
 

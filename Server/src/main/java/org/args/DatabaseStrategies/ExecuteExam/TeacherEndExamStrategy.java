@@ -4,7 +4,6 @@ import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.ExecuteExam.TeacherEndExamRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.ExecuteExam.TeacherEndExamResponse;
-import DatabaseAccess.Responses.ExecuteExam.TimeExtensionResponse;
 import Notifiers.ExamEndedNotifier;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.Entities.ConcreteExam;

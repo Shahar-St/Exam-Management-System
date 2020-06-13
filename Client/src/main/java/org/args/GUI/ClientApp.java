@@ -352,8 +352,20 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleExamEndedNotifier(ExamEndedNotifier notifier)
     {
-        popUpAlert("All exams were submitted!");
-        setRoot("MainScreen");
+        if(model.getPermission().equals("student"))
+            Platform.runLater(()->{
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Attention!");
+                alert.setHeaderText(null);
+                alert.setContentText("Attention!, Exam Time Has Ended, You're Exam Has Been Submitted And You're Now Being Redirected To Main Screen");
+                alert.showAndWait();
+                setRoot("MainScreen"); // redirect client to main screen because of exam timeout.
+            });
+        else if(model.getPermission().equals("teacher")){
+            //do teacher stuff
+        }else{
+            // do dean stuff
+        }
     }
 
     @Subscribe
