@@ -10,8 +10,6 @@ import java.util.Set;
 
 public interface IExamReviewData {
     Set<String> getSubjects();
-    List<String> getCourses(String subjectName);
-    List<String> getExams(String courseName);
     void confirmGrade(String examId);
     void changeGrade(double newGrade,String reason,String examId);
     void viewExam(String examId);
