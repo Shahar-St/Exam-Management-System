@@ -37,8 +37,13 @@ public class ExamManager {
         ExamManager.dean = dean;
     }
 
-    public static void notifyTeacherAboutRaisedHand(RaiseHandNotifier raiseHandNotifier, Teacher teacher) {
-
+    public static void notifyTeacherAboutRaisedHand(RaiseHandNotifier raiseHandNotifier, ConnectionToClient teacher) {
+        try {
+            teacher.sendToClient(raiseHandNotifier);
+        }catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public ConnectionToClient getTeacher() {
