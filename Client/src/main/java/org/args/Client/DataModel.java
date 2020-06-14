@@ -829,7 +829,10 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Override
     public void submitExam() {
         if (isManualExam()) {
-            ClientApp.sendRequest(new SubmitManualExamRequest(getExamForStudentExecution().getId(), fileToByteArray(getManualExamFile())));
+            if(getManualExamFile()!=null)
+                ClientApp.sendRequest(new SubmitManualExamRequest(getExamForStudentExecution().getId(), fileToByteArray(getManualExamFile())));
+            else
+                ClientApp.sendRequest(new SubmitManualExamRequest(getExamForStudentExecution().getId(), null));
             setManualExam(false);
         } else {
             List<Integer> correctAnswersList = new ArrayList<>();
@@ -880,6 +883,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     public void submitAndQuit() {
+        if(isManualExam())
+            setManualExamFile(null);
         setFinishedOnTime(false);
         submitExam();
     }
