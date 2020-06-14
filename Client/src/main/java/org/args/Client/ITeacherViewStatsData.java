@@ -52,7 +52,7 @@ public interface ITeacherViewStatsData {
 
     void setCurrentExamTitle(String currentExamTitle);
 
-    String getExamTitleFromId(String examId);
+    String getExamIdFromTitle(String examId);
 
     void clearTeacherPastExamsData();
 }

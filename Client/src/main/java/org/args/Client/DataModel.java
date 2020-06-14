@@ -1335,16 +1335,16 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
                     String examId = entry.getKey();
                     String date = entry.getValue().getFirst().format(dateTimeFormatter);
                     String title = entry.getValue().getSecond();
-                    pastExamsMap.put(examId,title);
-                    String examToAdd = examId +": "+title + " from date " + date;
+                    pastExamsMap.put(title,examId);
+                    String examToAdd = title + "-" + " Executed at: " + date;
                     pastExamsResultsObservableList.add(examToAdd);
                 }
             }
         });
     }
 
-    public String getExamTitleFromId(String examId)
+    public String getExamIdFromTitle(String title)
     {
-        return pastExamsMap.get(examId);
+        return pastExamsMap.get(title);
     }
 }

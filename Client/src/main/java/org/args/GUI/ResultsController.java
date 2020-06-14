@@ -75,8 +75,8 @@ public class ResultsController {
     @FXML
     void showExamDetails(ActionEvent event) {
         String selectedItem = examListView.getSelectionModel().getSelectedItem();
-        String examId = selectedItem.substring(0,selectedItem.indexOf(":"));
-        String examTitle = model.getExamTitleFromId(examId);
+        String examTitle = selectedItem.substring(0,selectedItem.indexOf("-"));
+        String examId = model.getExamIdFromTitle(examTitle);
         model.setCurrentExamTitle(examTitle);
         model.showGradesOf(examId);
     }
