@@ -4,6 +4,7 @@ import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.ExecuteExam.SubmitExamRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.ExecuteExam.SubmitExamResponse;
+import Notifiers.ExamEndedNotifier;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.Entities.*;
 import org.args.ExamManager;
@@ -60,5 +61,13 @@ public class SubmitExamStrategy extends DatabaseStrategy implements IExamInProgr
         ConcreteExam concreteExam = getTypeById(ConcreteExam.class, request1.getExamID(), session);
         ExamManager manager = examManagers.get(concreteExam.getId());
         manager.getStudents().remove((String) client.getInfo("userName"), client);
+        if(concreteExam.getExecutedExamsList().size() == concreteExam.getFinishedOnTime()){
+            List<String> studentsList = new ArrayList<>();
+            for(ExecutedExam executedExam: concreteExam.getExecutedExamsList()){
+                studentsList.add(executedExam.getStudent().getUserName());
+            }
+            manager.notifyAboutExamEnd(new ExamEndedNotifier(),studentsList);
+        }
+
     }
 }
