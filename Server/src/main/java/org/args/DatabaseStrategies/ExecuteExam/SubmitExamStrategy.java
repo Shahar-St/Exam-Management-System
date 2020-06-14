@@ -45,6 +45,16 @@ public class SubmitExamStrategy extends DatabaseStrategy implements IExamInProgr
         executedExam.setAnswersByStudent(answersList);
         executedExam.setComputerized(true);
         executedExam.setSubmitted(true);
+
+        int grade = 0;
+        for (int i = 0; i < request1.getAnswersList().size(); ++i)
+        {
+            if (concreteExam.getExam().getQuestionsList().get(i).getCorrectAnswer() ==
+                    request1.getAnswersList().get(i))
+                grade += concreteExam.getExam().getQuestionsScores().get(i);
+        }
+        executedExam.setGrade(grade);
+
         student.getExecutedExamsList().add(executedExam);
         student.setCurrentlyExecutedID(-1);
 
@@ -67,12 +77,14 @@ public class SubmitExamStrategy extends DatabaseStrategy implements IExamInProgr
         ConcreteExam concreteExam = getTypeById(ConcreteExam.class, request1.getExamID(), session);
         ExamManager manager = examManagers.get(concreteExam.getId());
         manager.getStudents().remove((String) client.getInfo("userName"), client);
-        if(concreteExam.getExecutedExamsList().size() == concreteExam.getFinishedOnTime()){
+        if (concreteExam.getExecutedExamsList().size() == concreteExam.getFinishedOnTime())
+        {
             List<String> studentsList = new ArrayList<>();
-            for(ExecutedExam executedExam: concreteExam.getExecutedExamsList()){
+            for (ExecutedExam executedExam : concreteExam.getExecutedExamsList())
+            {
                 studentsList.add(executedExam.getStudent().getUserName());
             }
-            manager.notifyAboutExamEnd(new ExamEndedNotifier(),studentsList);
+            manager.notifyAboutExamEnd(new ExamEndedNotifier(), studentsList);
         }
 
     }
