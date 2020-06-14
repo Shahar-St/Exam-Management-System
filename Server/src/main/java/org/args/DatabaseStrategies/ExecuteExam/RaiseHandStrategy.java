@@ -34,6 +34,7 @@ public class RaiseHandStrategy extends DatabaseStrategy implements IExamInProgre
         return new RaiseHandResponse(SUCCESS, raiseHandRequest);
     }
 
+    @Override
     public void handle(DatabaseRequest request, DatabaseResponse response, Map<Integer, ExamManager> examManagers,
                        ConnectionToClient client, Session session) {
 

@@ -7,7 +7,15 @@ import Util.Pair;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * status dictionary:
+ * 0 - success
+ * 1 - unauthorized access - user isn't logged in
+ * 2 - exam wasn't found
+ */
+
 public class UncheckedExecutesOfConcreteResponse extends DatabaseResponse {
+
     //HashMap<studentID, isComputerized>
     private final HashMap<String, Boolean> checkedExamsList;
 
@@ -15,6 +23,12 @@ public class UncheckedExecutesOfConcreteResponse extends DatabaseResponse {
         super(status, request);
         this.checkedExamsList = checkedExamsList;
     }
+
+    public UncheckedExecutesOfConcreteResponse(int error, DatabaseRequest request) {
+        this(error, request, null);
+    }
+
+
     public HashMap<String, Boolean> getCheckedExamsList() {
         return checkedExamsList;
     }

@@ -7,7 +7,6 @@ import DatabaseAccess.Responses.ReviewExam.PendingExamsResponse;
 import Util.Pair;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.Entities.ConcreteExam;
-import org.args.Entities.Exam;
 import org.args.Entities.ExecutedExam;
 import org.args.Entities.Teacher;
 import org.args.OCSF.ConnectionToClient;
@@ -37,6 +36,7 @@ public class PendingExamsStrategy extends DatabaseStrategy {
         Teacher teacher = (Teacher) getUser((String) client.getInfo("userName"), session);
 
         HashMap<String, Pair<LocalDateTime, String>> map = new HashMap<>();
+
         boolean needToCheck;
         for (ConcreteExam concreteExam : teacher.getConcreteExamsList())
         {
@@ -52,9 +52,6 @@ public class PendingExamsStrategy extends DatabaseStrategy {
                 }
             }
         }
-
-        if (map.isEmpty())
-            return new PendingExamsResponse(ERROR3, pendingExamsRequest, null);
 
         return new PendingExamsResponse(SUCCESS, pendingExamsRequest, map);
     }

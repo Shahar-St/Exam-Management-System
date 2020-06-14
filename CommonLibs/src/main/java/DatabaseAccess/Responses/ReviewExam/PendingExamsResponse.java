@@ -1,18 +1,22 @@
 package DatabaseAccess.Responses.ReviewExam;
 
 import DatabaseAccess.Requests.DatabaseRequest;
-import DatabaseAccess.Requests.ReviewExam.PendingExamsRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import Util.Pair;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
+
+/**
+ * status dictionary:
+ * 0 - success
+ * 1 - unauthorized access - user isn't logged in
+ */
 
 // returns every concrete exam that has at least one unchecked exam
 public class PendingExamsResponse extends DatabaseResponse {
 
-    // hashMap: concreteExamID, (title,title)
+    // hashMap: concreteExamID, (Date,title)
     private final HashMap<String, Pair<LocalDateTime, String>> concreteExamsList;
 
     public PendingExamsResponse(int status, DatabaseRequest request, HashMap<String, Pair<LocalDateTime, String>> concreteExamsList) {
