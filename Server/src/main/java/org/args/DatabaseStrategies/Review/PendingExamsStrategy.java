@@ -4,6 +4,7 @@ import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.ReviewExam.PendingExamsRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.ReviewExam.PendingExamsResponse;
+import Util.Pair;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.Entities.ConcreteExam;
 import org.args.Entities.Exam;
@@ -28,7 +29,7 @@ public class PendingExamsStrategy extends DatabaseStrategy {
 
         Teacher teacher = (Teacher) getUser((String) client.getInfo("userName"), session);
 
-        HashMap<Integer, String> map = new HashMap<>();
+        HashMap<String, Pair<String, Double>> map = new HashMap<>();
         boolean needToCheck;
         for(ConcreteExam concreteExam : teacher.getConcreteExamsList())
         {
@@ -38,7 +39,8 @@ public class PendingExamsStrategy extends DatabaseStrategy {
             {
                 if( (!executedExamList.get(i).isChecked()) && (executedExamList.get(i).isSubmitted()))
                 {
-                    map.put(concreteExam.getId(), concreteExam.getExam().getTitle());
+                    map.put(String.valueOf(concreteExam.getId()),
+                            new Pair<>(,concreteExam.getExam().getTitle());
                     needToCheck = false;
                 }
             }

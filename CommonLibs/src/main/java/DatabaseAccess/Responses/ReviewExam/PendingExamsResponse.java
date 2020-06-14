@@ -10,16 +10,17 @@ import java.util.List;
 
 // returns every concrete exam that has at least one unchecked exam
 public class PendingExamsResponse extends DatabaseResponse {
-    //HashMap<concreteExamID, examTitle>
-    private final HashMap<Integer, String> checkedExamsList;
 
-    public PendingExamsResponse(int status, DatabaseRequest request, HashMap<Integer, String> checkedExamsList) {
+    // hashMap: concreteExamID, (title,grade)
+    private final HashMap<String, Pair<LocalDateTime, String>> concreteExamsList;
+
+    public PendingExamsResponse(int status, DatabaseRequest request, HashMap<String, Pair<LocalDateTime, String>> concreteExamsList) {
         super(status, request);
-        this.checkedExamsList = checkedExamsList;
+        this.concreteExamsList = concreteExamsList;
     }
 
-    public HashMap<Integer, String> getCheckedExamsList() {
+    public HashMap<String, Pair<LocalDateTime, String>> getConcreteExamsList() {
 
-        return checkedExamsList;
+        return concreteExamsList;
     }
 }
