@@ -64,7 +64,6 @@ public class ExamManager {
         return deanLock;
     }
 
-    //TODO
     public static void askForTimeExtension(TimeExtensionRequestNotifier notifier) {
 
         deanLock.lock();
@@ -121,28 +120,42 @@ public class ExamManager {
     }
 
     public void notifyTeacherAboutRaisedHand(RaiseHandNotifier raiseHandNotifier) {
-        try {
+        try
+        {
             teacher.sendToClient(raiseHandNotifier);
-        }catch (IOException e)
+        }
+        catch (IOException e)
         {
             e.printStackTrace();
         }
     }
 
+    public void notifyAboutExamEnd() {
 
-
-    public void notifyAboutExamEnd(ExamEndedNotifier notifier, List<String> studentsList) {
-        Map<String, ConnectionToClient> studentsMap = getStudents();
-        for (String s : studentsList) {
-            if (studentsMap.containsKey(s)) {
-                try {
-                    ConnectionToClient student = studentsMap.get(s);
-                    student.sendToClient(notifier);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        ExamEndedNotifier notifier = new ExamEndedNotifier();
+        for (Map.Entry<String, ConnectionToClient> entry : students.entrySet())
+        {
+            try
+            {
+                entry.getValue().sendToClient(notifier);
             }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
 
+    public void notifyAllSubmittedExamEnd() {
+
+        notifyAboutExamEnd();
+        try
+        {
+            teacher.sendToClient(new ExamEndedNotifier());
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
         }
     }
 }
