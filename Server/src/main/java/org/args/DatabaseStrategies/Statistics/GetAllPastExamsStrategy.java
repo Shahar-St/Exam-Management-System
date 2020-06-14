@@ -33,7 +33,7 @@ public class GetAllPastExamsStrategy extends DatabaseStrategy {
 
         for(ExecutedExam executedExam : student.getExecutedExamsList())
         {
-            if(executedExam.isChecked())
+            if(executedExam.isChecked() && executedExam.isComputerized())
             {
                 if (executedExam.getConcreteExam().getExam().getCourse().getId().equals(getAllPastExamsRequest.getCourseId()))
                     map.put(String.valueOf(executedExam.getId()),

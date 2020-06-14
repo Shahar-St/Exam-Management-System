@@ -32,20 +32,27 @@ public class TeacherGetAllPastExamsStrategy extends DatabaseStrategy {
         boolean needToCheck;
         if( user instanceof Teacher)
         {
+            Course course = getTypeById(Course.class, teacherGetAllPastExamsRequest.getCourseId(), session);
+            List<Exam> exams = course.getExamsList();
+
             Teacher teacher = (Teacher) user;
-            for(Exam exam : teacher.getExamsList())
+            for(Exam exam : exams)
             {
-                for(ConcreteExam concreteExam : teacher.getConcreteExamsList())
+                if(exam.getAuthor().equals(teacher.getUserName()))
                 {
-                    needToCheck = true;
-                    for (int i = 0; i < concreteExam.getExecutedExamsList().size() && needToCheck; i++)
-                        if(concreteExam.getExecutedExamsList().get(i).isChecked())
-                        {
-                            map.put(String.valueOf(concreteExam.getId()),
-                                    new Pair<>(concreteExam.getExamForExecutionInitDate(),
-                                            concreteExam.getExam().getTitle()));
-                            needToCheck = false;
-                        }
+                    for (ConcreteExam concreteExam : exam.getConcreteExamsList())
+                    {
+                        needToCheck = true;
+                        for (int i = 0; i < concreteExam.getExecutedExamsList().size() && needToCheck; i++)
+                            if (concreteExam.getExecutedExamsList().get(i).isChecked() &&
+                                concreteExam.getExecutedExamsList().get(i).isComputerized())
+                            {
+                                map.put(String.valueOf(concreteExam.getId()),
+                                        new Pair<>(concreteExam.getExamForExecutionInitDate(),
+                                                concreteExam.getExam().getTitle()));
+                                needToCheck = false;
+                            }
+                    }
                 }
             }
         }
@@ -59,7 +66,8 @@ public class TeacherGetAllPastExamsStrategy extends DatabaseStrategy {
                 {
                     needToCheck = true;
                     for (int i = 0; i < concreteExam.getExecutedExamsList().size() && needToCheck; i++)
-                        if(concreteExam.getExecutedExamsList().get(i).isChecked())
+                        if(concreteExam.getExecutedExamsList().get(i).isChecked() &&
+                           concreteExam.getExecutedExamsList().get(i).isComputerized())
                         {
                             map.put(String.valueOf(concreteExam.getId()),
                                     new Pair<>(concreteExam.getExamForExecutionInitDate(),
@@ -71,6 +79,5 @@ public class TeacherGetAllPastExamsStrategy extends DatabaseStrategy {
         }
 
         return new TeacherGetAllPastExamsResponse(SUCCESS, request, map);
-
     }
 }

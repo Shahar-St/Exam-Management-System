@@ -30,7 +30,6 @@ public class TeacherStatisticsStrategy extends DatabaseStrategy {
 
         for (ExecutedExam executedExam : concreteExam.getExecutedExamsList())
         {
-            if(executedExam.isChecked())
                 map.put(executedExam.getStudent().getSocialId(), executedExam.getGrade());
         }
 
