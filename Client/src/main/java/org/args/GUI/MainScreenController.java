@@ -36,8 +36,8 @@ public class MainScreenController {
     private Label welcomeLabel;
 
     //variables used for the student's exam execution details popups
-    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-    AtomicBoolean advance = new AtomicBoolean(false);
+    Alert errorAlert;
+    AtomicBoolean advance;
 
     @FXML
     void switchToQuestionManagement(ActionEvent event) {
@@ -169,6 +169,8 @@ public class MainScreenController {
 
 
     private void prepManualExam() {
+        errorAlert = new Alert(Alert.AlertType.ERROR);
+        advance = new AtomicBoolean(false);
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Exam Code");
         dialog.setContentText("Please enter exam code:");
@@ -193,6 +195,8 @@ public class MainScreenController {
 
 
     void prepCompExam() {
+        errorAlert = new Alert(Alert.AlertType.ERROR);
+        advance = new AtomicBoolean(false);
         Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Personal Details");
         dialog.setHeaderText("Please enter your personal details:");

@@ -29,10 +29,10 @@ public class TeacherGetAllPastExamsStrategy extends DatabaseStrategy {
         HashMap<String, Pair<LocalDateTime, String>> map = new HashMap<>();
 
         User user = getUser((String) client.getInfo("userName"), session);
+        boolean needToCheck;
         if( user instanceof Teacher)
         {
             Teacher teacher = (Teacher) user;
-            boolean needToCheck;
             for(Exam exam : teacher.getExamsList())
             {
                 for(ConcreteExam concreteExam : teacher.getConcreteExamsList())
@@ -52,7 +52,22 @@ public class TeacherGetAllPastExamsStrategy extends DatabaseStrategy {
         else
         {
             Dean dean = (Dean) user;
-
+            List<Exam> exams = getAllOfType(session, Exam.class);
+            for(Exam exam : exams)
+            {
+                for(ConcreteExam concreteExam : exam.getConcreteExamsList())
+                {
+                    needToCheck = true;
+                    for (int i = 0; i < concreteExam.getExecutedExamsList().size() && needToCheck; i++)
+                        if(concreteExam.getExecutedExamsList().get(i).isChecked())
+                        {
+                            map.put(String.valueOf(concreteExam.getId()),
+                                    new Pair<>(concreteExam.getExamForExecutionInitDate(),
+                                            concreteExam.getExam().getTitle()));
+                            needToCheck = false;
+                        }
+                }
+            }
         }
 
         return new TeacherGetAllPastExamsResponse(SUCCESS, request, map);

@@ -1314,6 +1314,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                clearTeacherPastExamsData();
                 //hashMap: executedExamId, (date, title)
                 for(Map.Entry<String,Pair<LocalDateTime,String>> entry : response.getConcreteExamsList().entrySet())
                 {

@@ -59,9 +59,8 @@ public class DatabaseHandler {
         this.put("PendingExamsRequest", new PendingExamsStrategy());
         this.put("UncheckedExecutesOfConcreteRequest", new UncheckedExecutesOfConcreteStrategy());
         this.put("GetAllPastExamsRequest", new GetAllPastExamsStrategy());
-        this.put("TeacherEndExamRequest",new TeacherEndExamStrategy());
-        this.put("RaiseHandRequest",new RaiseHandStrategy());
         this.put("StudentStatisticsRequest", new StudentStatisticsStrategy());
+
         this.put("TeacherGetAllPastExamsRequest", new TeacherGetAllPastExamsStrategy());
         this.put("TeacherStatisticsRequest", new TeacherStatisticsStrategy());
     }};
@@ -281,12 +280,7 @@ public class DatabaseHandler {
         //creating exams by teachers
         String[] titlesArr = {"functions", "Jerusalem", "circles", "Germany", "letters", "nikud", "spelling", "vocabulary"};
         List<Double> questionsScores = Arrays.asList(50.0, 50.0);
-
-        List<Integer> answersByStudent = new ArrayList<>();
-        answersByStudent.add(1);
-        answersByStudent.add(1);
-        answersByStudent.add(1);
-        answersByStudent.add(1);
+        List<Integer> answersByStudent = Arrays.asList(2,3,2,3);
         k = 0;
         for (int j = 0; j < NUM_OF_TEACHERS; j++)
         {
