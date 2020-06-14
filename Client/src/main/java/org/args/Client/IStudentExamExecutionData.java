@@ -15,8 +15,10 @@ public interface IStudentExamExecutionData {
     HashMap<Integer,Integer> getCorrectAnswersMap();
     void createManualTest(File path);
     void setManualExamFile(File manualExamFile);
-
     void setFinishedOnTime(boolean finishedOnTime);
     void submitAndQuit();
     LocalDateTime getExamForStudentExecutionInitDate();
+    int getTimeExtensionDuration();
+    boolean isTimeExtensionGranted();
+    void setTimeExtensionGranted(boolean timeExtensionGranted);
 }

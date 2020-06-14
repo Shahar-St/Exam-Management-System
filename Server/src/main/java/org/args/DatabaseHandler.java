@@ -59,8 +59,9 @@ public class DatabaseHandler {
         this.put("PendingExamsRequest", new PendingExamsStrategy());
         this.put("UncheckedExecutesOfConcreteRequest", new UncheckedExecutesOfConcreteStrategy());
         this.put("GetAllPastExamsRequest", new GetAllPastExamsStrategy());
+        this.put("TeacherEndExamRequest",new TeacherEndExamStrategy());
+        this.put("RaiseHandRequest",new RaiseHandStrategy());
         this.put("StudentStatisticsRequest", new StudentStatisticsStrategy());
-
         this.put("TeacherGetAllPastExamsRequest", new TeacherGetAllPastExamsStrategy());
         this.put("TeacherStatisticsRequest", new TeacherStatisticsStrategy());
     }};

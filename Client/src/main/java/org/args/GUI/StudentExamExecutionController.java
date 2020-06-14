@@ -11,12 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import org.args.Client.IStudentExamExecutionData;
-import org.joda.time.PeriodType;
-
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -244,6 +240,17 @@ public class StudentExamExecutionController {
                     model.submitAndQuit();
 
                     return;
+                }else if(model.isTimeExtensionGranted()){
+                    examDuration+=model.getTimeExtensionDuration()*60;
+                    // set to false to prevent multiple additions for the same extension
+                    model.setTimeExtensionGranted(false);
+                    Platform.runLater(()->{
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Attention!");
+                        alert.setHeaderText(null);
+                        alert.setContentText("A Time Extension Has Been Approved For Your'e Exam, You Have Another: "+model.getTimeExtensionDuration()+" Minutes, Good Luck!");
+                        alert.showAndWait();
+                    });
                 }
                 Platform.runLater(() -> timeElapsed.setText("Remaining Time: " + (examDuration / 60) + ":" + (examDuration % 60)));
                 examDuration--;

@@ -707,6 +707,36 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private LocalDateTime examForStudentExecutionInitDate;
 
+    private boolean timeExtensionGranted = false;
+
+    private int timeExtensionDuration = 0 ;
+
+    private boolean isSubmitted=false;
+
+    public boolean isSubmitted() {
+        return isSubmitted;
+    }
+
+    public void setSubmitted(boolean submitted) {
+        isSubmitted = submitted;
+    }
+
+    public boolean isTimeExtensionGranted() {
+        return timeExtensionGranted;
+    }
+
+    public void setTimeExtensionGranted(boolean timeExtensionGranted) {
+        this.timeExtensionGranted = timeExtensionGranted;
+    }
+
+    public int getTimeExtensionDuration() {
+        return timeExtensionDuration;
+    }
+
+    public void setTimeExtensionDuration(int timeExtensionDuration) {
+        this.timeExtensionDuration = timeExtensionDuration;
+    }
+
     public LocalDateTime getExamForStudentExecutionInitDate() {
         return examForStudentExecutionInitDate;
     }
@@ -758,8 +788,10 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Subscribe
     public void handleTakeExamResponse(TakeExamResponse response) {
         if (response.getStatus() == 0) {
+            setSubmitted(false);
             setExamForStudentExecution(response.getLightExam());
             setExamForStudentExecutionInitDate(response.getInitExamForExecutionDate());
+            setTimeExtensionGranted(false);
             if (correctAnswersMap == null)
                 correctAnswersMap = new HashMap<>();
             else
@@ -802,6 +834,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
             }
             ClientApp.sendRequest(new SubmitExamRequest(examForStudentExecution.getId(), correctAnswersList, isFinishedOnTime()));
         }
+        setSubmitted(true);
 
     }
 
@@ -914,7 +947,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Subscribe
     public void handleExamEndedNotifier(ExamEndedNotifier notifier) {
         if (getPermission().equals("student")) {
-            submitAndQuit();
+            if(!isSubmitted())
+                submitAndQuit();
         } else if (getPermission().equals("teacher")) {
             currentHandsRaised.clear();
         } else {
@@ -932,11 +966,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     StringProperty currentExecutedExamEndTime = new SimpleStringProperty();
     LocalDateTime currentExecutedExamStartLocalDateTime;
     LocalDateTime currentExecutedExamEndLocalDateTime;
-    int currentExecutedExamDuration;
-
-    public int getCurrentExecutedExamDuration() {
-        return currentExecutedExamDuration;
-    }
 
     public LocalDateTime getCurrentExecutedExamStartLocalDateTime() {
         return currentExecutedExamStartLocalDateTime;
@@ -966,7 +995,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void handleExecuteExamResponse(ExecuteExamResponse response) {
         if (response.getStatus() == 0) {
             setCurrentConcreteExamId(response.getConcreteExamID());
-            currentExecutedExamDuration = response.getDuration();
             currentExecutedExamStartLocalDateTime = LocalDateTime.now();
             currentExecutedExamLaunchTime = currentExecutedExamStartLocalDateTime.format(hourMinutesformatter);
             currentExecutedExamEndLocalDateTime = currentExecutedExamStartLocalDateTime.plusMinutes(response.getDuration());
@@ -977,9 +1005,15 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Subscribe
     public void handleConfirmTimeExtensionNotifier(ConfirmTimeExtensionNotifier notifier) {
         if (notifier.isAccepted()) {
-            Platform.runLater(() -> {
-                currentExecutedExamEndTime.setValue(currentExecutedExamEndLocalDateTime.plusMinutes(notifier.getAuthorizedTimeExtension()).format(hourMinutesformatter));
-            });
+            if(getPermission().equals("student")){
+                setTimeExtensionGranted(true);
+                setTimeExtensionDuration(notifier.getAuthorizedTimeExtension());
+            }else if(getPermission().equals("teacher")){
+                Platform.runLater(() -> {
+                    currentExecutedExamEndTime.setValue(currentExecutedExamEndLocalDateTime.plusMinutes(notifier.getAuthorizedTimeExtension()).format(hourMinutesformatter));
+                });
+            }
+
         }
 
     }
