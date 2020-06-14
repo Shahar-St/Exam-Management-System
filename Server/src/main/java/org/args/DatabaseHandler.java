@@ -12,7 +12,6 @@ import org.args.DatabaseStrategies.Review.GetExecutedExamStrategy;
 import org.args.DatabaseStrategies.Review.PendingExamsStrategy;
 import org.args.DatabaseStrategies.Review.UncheckedExecutesOfConcreteStrategy;
 import org.args.DatabaseStrategies.Statistics.GetAllPastExamsStrategy;
-import org.args.DatabaseStrategies.Statistics.StudentStatisticsStrategy;
 import org.args.DatabaseStrategies.Statistics.TeacherGetAllPastExamsStrategy;
 import org.args.DatabaseStrategies.Statistics.TeacherStatisticsStrategy;
 import org.args.DatabaseStrategies.SubjectAndCoursesStrategy;
@@ -60,7 +59,6 @@ public class DatabaseHandler {
         this.put("PendingExamsRequest", new PendingExamsStrategy());
         this.put("UncheckedExecutesOfConcreteRequest", new UncheckedExecutesOfConcreteStrategy());
         this.put("GetAllPastExamsRequest", new GetAllPastExamsStrategy());
-        this.put("StudentStatisticsRequest", new StudentStatisticsStrategy());
         this.put("TeacherEndExamRequest",new TeacherEndExamStrategy());
         this.put("RaiseHandRequest",new RaiseHandStrategy());
         this.put("TeacherGetAllPastExamsRequest", new TeacherGetAllPastExamsStrategy());

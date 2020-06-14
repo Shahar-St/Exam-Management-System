@@ -4,7 +4,6 @@ import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.ReviewExam.GetExecutedExamRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.ReviewExam.GetExecutedExamResponse;
-import LightEntities.LightExecutedExam;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.Entities.ConcreteExam;
 import org.args.Entities.ExecutedExam;
@@ -13,7 +12,16 @@ import org.hibernate.Session;
 
 import java.util.List;
 
+/**
+ * status dictionary:
+ * 0 - success
+ * 1 - unauthorized access - user isn't logged in
+ * 2 - concrete exam wasn't found
+ * 3 - didn't find student's exam
+ */
+
 public class GetExecutedExamStrategy extends DatabaseStrategy {
+
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
                                    List<String> loggedInUsers) {
@@ -21,20 +29,21 @@ public class GetExecutedExamStrategy extends DatabaseStrategy {
         GetExecutedExamRequest getExecutedExamRequest = (GetExecutedExamRequest) request;
 
         if (client.getInfo("userName") == null)
-            return new GetExecutedExamResponse(UNAUTHORIZED, getExecutedExamRequest, null);
+            return new GetExecutedExamResponse(UNAUTHORIZED, request);
 
-        ConcreteExam concreteExam = getTypeById(ConcreteExam.class, getExecutedExamRequest.getConcreteID(), session);
-        //FIXME: split to student and teacher
-        List<ExecutedExam> executedExamsList = concreteExam.getExecutedExamsList();
-        int k = 0;
-        for (int i = 0; i < executedExamsList.size(); i++)
+        ConcreteExam concreteExam = getTypeById(ConcreteExam.class, getExecutedExamRequest.getConcreteID(),
+                session);
+
+        if (concreteExam == null)
+            return new GetExecutedExamResponse(ERROR2, request);
+
+        for (ExecutedExam executedExam : concreteExam.getExecutedExamsList())
         {
-            if (executedExamsList.get(i).getStudent().getSocialId().equals(getExecutedExamRequest.getStudentID()))
-                k=i;
+            if (executedExam.getStudent().getSocialId().equals(getExecutedExamRequest.getStudentID()))
+                return new GetExecutedExamResponse(SUCCESS, getExecutedExamRequest,
+                        executedExam.getLightExecutedExam());
         }
 
-        ExecutedExam executedExam = getTypeById(ExecutedExam.class, String.valueOf(executedExamsList.get(k).getId())
-                                    , session);
-        return new GetExecutedExamResponse(SUCCESS, getExecutedExamRequest, executedExam.getLightExecutedExam());
-        }
+        return new GetExecutedExamResponse(ERROR3, request);
     }
+}

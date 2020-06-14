@@ -2,7 +2,6 @@ package DatabaseAccess.Requests.ReviewExam;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 
-//
 public class UncheckedExecutesOfConcreteRequest extends DatabaseRequest {
     private final String concreteExamId;
 
