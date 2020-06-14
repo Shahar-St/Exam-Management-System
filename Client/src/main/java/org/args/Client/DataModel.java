@@ -81,15 +81,21 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private String userName;
 
+    private String id;
+
     @Subscribe
     public void handleLoginResponse(LoginResponse response) {
         if (response.getStatus() == 0) {
             setName(response.getName());
             permission = response.getPermission();
+            id = response.getId();
         }
 
     }
 
+    public String getId() {
+        return id;
+    }
 
     public String getName() { //used by multiple screens to identify user's name
         return name;
@@ -1294,12 +1300,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void clearStudentPastExamsList() {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                studentPastExamsObservableList.clear();
-            }
-        });
+        Platform.runLater(() -> studentPastExamsObservableList.clear());
     }
 
     @Override
@@ -1315,7 +1316,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     ObservableList<String> pastExamsResultsObservableList = FXCollections.observableArrayList();
-    private HashMap<String,String> pastExamsMap = new HashMap<>();
+    private final HashMap<String,String> pastExamsMap = new HashMap<>();
 
     public ObservableList<String> getPastExamsResultsObservableList() {
         return pastExamsResultsObservableList;
