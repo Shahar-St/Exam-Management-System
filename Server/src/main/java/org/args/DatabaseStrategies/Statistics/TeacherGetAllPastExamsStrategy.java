@@ -29,16 +29,15 @@ public class TeacherGetAllPastExamsStrategy extends DatabaseStrategy {
         HashMap<String, Pair<LocalDateTime, String>> map = new HashMap<>();
 
         User user = getUser((String) client.getInfo("userName"), session);
+        Course course = getTypeById(Course.class, teacherGetAllPastExamsRequest.getCourseId(), session);
+        List<Exam> exams = course.getExamsList();
         boolean needToCheck;
         if( user instanceof Teacher)
         {
-            Course course = getTypeById(Course.class, teacherGetAllPastExamsRequest.getCourseId(), session);
-            List<Exam> exams = course.getExamsList();
-
             Teacher teacher = (Teacher) user;
             for(Exam exam : exams)
             {
-                if(exam.getAuthor().equals(teacher.getUserName()))
+                if(exam.getAuthor().getUserName().equals(teacher.getUserName()))
                 {
                     for (ConcreteExam concreteExam : exam.getConcreteExamsList())
                     {
@@ -59,7 +58,6 @@ public class TeacherGetAllPastExamsStrategy extends DatabaseStrategy {
         else
         {
             Dean dean = (Dean) user;
-            List<Exam> exams = getAllOfType(session, Exam.class);
             for(Exam exam : exams)
             {
                 for(ConcreteExam concreteExam : exam.getConcreteExamsList())
