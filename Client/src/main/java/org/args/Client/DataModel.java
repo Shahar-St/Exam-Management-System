@@ -843,9 +843,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         } else {
             List<Integer> correctAnswersList = new ArrayList<>();
             for (int i = 0; i < examForStudentExecution.getLightQuestionList().size(); ++i) {
-
-                correctAnswersList.add(getCorrectAnswersMap().get(i));
-
+                correctAnswersList.add(getCorrectAnswersMap().getOrDefault(i, -1));
             }
             ClientApp.sendRequest(new SubmitExamRequest(examForStudentExecution.getId(), correctAnswersList, isFinishedOnTime()));
         }
