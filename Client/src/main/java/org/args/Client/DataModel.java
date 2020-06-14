@@ -64,7 +64,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private final WordGenerator wordGenerator;
 
-    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
     private final DateTimeFormatter hourMinutesformatter = DateTimeFormatter.ofPattern("HH:mm");
 
     public DataModel(ClientApp clientApp) {
@@ -1324,7 +1324,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
                 for(Map.Entry<String,Pair<LocalDateTime,String>> entry : response.getConcreteExamsList().entrySet())
                 {
                     String examId = entry.getKey();
-                    String date = entry.getValue().getFirst().toString();
+                    String date = entry.getValue().getFirst().format(dateTimeFormatter);
                     String title = entry.getValue().getSecond();
                     pastExamsMap.put(examId,title);
                     String examToAdd = examId +": "+title + " from date " + date;
