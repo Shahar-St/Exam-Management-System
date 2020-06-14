@@ -14,6 +14,7 @@ import org.hibernate.Session;
 import java.util.List;
 
 public class GetExecutedExamStrategy extends DatabaseStrategy {
+
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
                                    List<String> loggedInUsers) {

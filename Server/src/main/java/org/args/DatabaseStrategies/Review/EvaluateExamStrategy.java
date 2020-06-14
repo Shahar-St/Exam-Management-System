@@ -10,30 +10,38 @@ import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
 import java.util.List;
-//TODO
+
+/**
+ * status dictionary:
+ * 0 - success
+ * 1 - unauthorized access - user isn't logged in
+ * 2 - exam wasn't found
+ */
+
 public class EvaluateExamStrategy extends DatabaseStrategy {
+
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
                                    List<String> loggedInUsers) {
 
-        EvaluateExamRequest evaluateExamStrategy = (EvaluateExamRequest)request;
+        EvaluateExamRequest request1 = (EvaluateExamRequest) request;
 
         if (client.getInfo("userName") == null)
-            return new EvaluateExamResponse(UNAUTHORIZED, evaluateExamStrategy);
+            return new EvaluateExamResponse(UNAUTHORIZED, request1);
 
-        ExecutedExam executedExam = getTypeById(ExecutedExam.class, evaluateExamStrategy.getExam().getExecutedID(),
-                                    session);
+        ExecutedExam executedExam = getTypeById(ExecutedExam.class, request1.getExam().getExecutedID(),
+                session);
 
-        if(executedExam == null)
-            return new EvaluateExamResponse(ERROR2,evaluateExamStrategy);
+        if (executedExam == null)
+            return new EvaluateExamResponse(ERROR2, request1);
 
-        executedExam.setGrade(evaluateExamStrategy.getExam().getGrade());
-        executedExam.setCommentsAfterCheck(evaluateExamStrategy.getExam().getCommentsAfterCheck());
-        executedExam.setReasonsForChangeGrade(evaluateExamStrategy.getExam().getReasonsForChangeGrade());
-        executedExam.setChecked(evaluateExamStrategy.getExam().isChecked());
+        executedExam.setGrade(request1.getExam().getGrade());
+        executedExam.setCommentsAfterCheck(request1.getExam().getCommentsAfterCheck());
+        executedExam.setReasonsForChangeGrade(request1.getExam().getReasonsForChangeGrade());
+        executedExam.setChecked(request1.getExam().isChecked());
         session.saveOrUpdate(executedExam);
         session.flush();
 
-        return new EvaluateExamResponse(SUCCESS,evaluateExamStrategy);
+        return new EvaluateExamResponse(SUCCESS, request1);
     }
 }

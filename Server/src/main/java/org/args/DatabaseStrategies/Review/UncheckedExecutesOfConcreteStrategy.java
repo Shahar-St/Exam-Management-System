@@ -12,14 +12,16 @@ import org.hibernate.Session;
 
 import java.util.HashMap;
 import java.util.List;
+
 //TODO
 public class UncheckedExecutesOfConcreteStrategy extends DatabaseStrategy {
+
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
                                    List<String> loggedInUsers) {
 
         UncheckedExecutesOfConcreteRequest uncheckedExecutesOfConcreteRequest =
-                                    (UncheckedExecutesOfConcreteRequest) request;
+                (UncheckedExecutesOfConcreteRequest) request;
 
         if (client.getInfo("userName") == null)
             return new UncheckedExecutesOfConcreteResponse(UNAUTHORIZED, uncheckedExecutesOfConcreteRequest, null);
@@ -29,7 +31,7 @@ public class UncheckedExecutesOfConcreteStrategy extends DatabaseStrategy {
         HashMap<String, Boolean> map = new HashMap<>();
         for (ExecutedExam executedExam : concreteExam.getExecutedExamsList())
         {
-            if(!executedExam.isChecked() && executedExam.isSubmitted())
+            if (!executedExam.isChecked() && executedExam.isSubmitted())
                 map.put(executedExam.getStudent().getSocialId(), executedExam.isComputerized());
         }
 
