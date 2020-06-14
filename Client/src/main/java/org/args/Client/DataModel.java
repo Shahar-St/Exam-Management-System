@@ -1181,8 +1181,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         currentLightExecutedExam.setCommentsAfterCheck(notes);
         currentLightExecutedExam.setChecked(true);
         ClientApp.sendRequest(new EvaluateExamRequest(currentLightExecutedExam));
-
-
     }
 
 
@@ -1215,8 +1213,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.sendRequest(new GetExecutedExamRequest(getCurrentConcreteExamId(), studentId));
     }
 
-
-
     @Subscribe
     public void handleGetExecutedExamResponse(GetExecutedExamResponse response) {
         if (response.getStatus() == 0) {
@@ -1235,7 +1231,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         }
 
     }
-
 
     // dean time extension
 
@@ -1286,13 +1281,13 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Subscribe
     public void handleGetAllPastExamsResponse(GetAllPastExamsResponse response) {
+        studentPastExamsObservableList.clear();
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 // hashMap: executedExamId, (title,grade)
-                clearStudentPastExamsList();
                 for (Map.Entry<String, Pair<String, Double>> entry : response.getExecutedExamsList().entrySet()) {
-                    studentPastExamsObservableList.add(new StudentPastExam(entry.getKey(), entry.getValue().getFirst(), entry.getValue().getSecond()));
+                    studentPastExamsObservableList.add(new StudentPastExam( entry.getValue().getFirst(), entry.getKey(),entry.getValue().getSecond()));
                 }
             }
         });

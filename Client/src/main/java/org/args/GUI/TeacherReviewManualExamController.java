@@ -37,7 +37,7 @@ public class TeacherReviewManualExamController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Microsoft Word Open XML Format Document", "*.docx","*.doc"));
         downloadButton.setOnAction(event -> {
             fileChooser.setTitle("Download Exam");
-            File defaultDirectory = new File("/home");
+            File defaultDirectory = new File("C:\\");
             fileChooser.setInitialDirectory(defaultDirectory);
             fileChooser.setInitialFileName(model.getManualExamForReviewStudentId()+"_exam.docx");
             File selectedFile = fileChooser.showSaveDialog(ClientApp.primaryStage);
@@ -58,7 +58,7 @@ public class TeacherReviewManualExamController {
                 return;
             }
             fileChooser.setTitle("Upload Exam");
-            File defaultDirectory = new File("/home");
+            File defaultDirectory = new File("C:\\");
             fileChooser.setInitialDirectory(defaultDirectory);
             File selectedFile = fileChooser.showOpenDialog(ClientApp.primaryStage);
             model.submitExamReview(Double.parseDouble(grade.getText()),notes.getText(),selectedFile);
