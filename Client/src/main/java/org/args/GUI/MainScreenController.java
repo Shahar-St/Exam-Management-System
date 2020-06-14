@@ -35,6 +35,10 @@ public class MainScreenController {
     @FXML
     private Label welcomeLabel;
 
+    //variables used for the student's exam execution details popups
+    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+    AtomicBoolean advance = new AtomicBoolean(false);
+
     @FXML
     void switchToQuestionManagement(ActionEvent event) {
         ClientApp.setRoot("QuestionManagementScreen");
@@ -161,25 +165,22 @@ public class MainScreenController {
         });
     }
 
+
+
+
     private void prepManualExam() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Exam Code");
         dialog.setContentText("Please enter exam code:");
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        AtomicBoolean advance = new AtomicBoolean(false);
+        errorAlert.setTitle("Error");
         while (!advance.get())
         {
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(code -> {
                 if (result.get().length() != 4) {
-                    alert.setHeaderText("Wrong number of digits");
-                    alert.setContentText("Please enter a 4-digit code!");
-                    alert.showAndWait();
+                    codeIdLengthAlert();
                 } else if (!ClientApp.isNumeric(result.get())) {
-                    alert.setHeaderText("Invalid exam code");
-                    alert.setContentText("Code must only contain digits!");
-                    alert.showAndWait();
+                    codeIdInvalidInputAlert();
                 }else {
                     model.studentTakeManualExam(code);
                     advance.set(true);
@@ -199,6 +200,7 @@ public class MainScreenController {
         ButtonType loginButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
 
+        //create grid for the login screen
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -214,7 +216,7 @@ public class MainScreenController {
         grid.add(new Label("ID:"), 0, 1);
         grid.add(id, 1, 1);
 
-// Enable/Disable login button depending on whether a username was entered.
+        // Enable/Disable login button depending on whether a username was entered.
         Node OkButton = dialog.getDialogPane().lookupButton(loginButtonType);
         OkButton.setDisable(true);
         code.textProperty().addListener((observable, oldValue, newValue) -> OkButton.setDisable(newValue.trim().isEmpty()));
@@ -223,32 +225,24 @@ public class MainScreenController {
         dialog.getDialogPane().setContent(grid);
         Platform.runLater(code::requestFocus);
 
-// Convert the result to a username-password-pair when the login button is clicked.
+        // Convert the result to a username-password-pair when the login button is clicked.
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {
                 return new Pair<>(code.getText(), id.getText());
             }
             return null;
         });
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        AtomicBoolean advance = new AtomicBoolean(false);
+        errorAlert.setTitle("Error");
         while (!advance.get())
         {
             Optional<Pair<String, String>> result = dialog.showAndWait();
             result.ifPresent(codeId -> {
                 if (codeId.getFirst().length() != 4) {
-                    alert.setHeaderText("Wrong number of digits");
-                    alert.setContentText("Please enter a 4-digit code!");
-                    alert.showAndWait();
+                    codeIdLengthAlert();
                 } else if (!ClientApp.isNumeric(codeId.getFirst())) {
-                    alert.setHeaderText("Invalid exam code");
-                    alert.setContentText("Code must only contain digits!");
-                    alert.showAndWait();
+                    codeIdInvalidInputAlert();
                 } else if (!ClientApp.isNumeric(codeId.getSecond())) {
-                    alert.setHeaderText("Invalid ID");
-                    alert.setContentText("ID must only contain digits!");
-                    alert.showAndWait();
+                    studentIdInvalidInputAlert();
                 }
                 else {
                     model.studentTakeComputerizedExam(codeId.getFirst(),codeId.getSecond());
@@ -258,6 +252,24 @@ public class MainScreenController {
             if (result.isEmpty())
                 advance.set(true);
         }
+    }
+
+    private void studentIdInvalidInputAlert() {
+        errorAlert.setHeaderText("Invalid ID");
+        errorAlert.setContentText("ID must only contain digits!");
+        errorAlert.showAndWait();
+    }
+
+    private void codeIdInvalidInputAlert() {
+        errorAlert.setHeaderText("Invalid exam code");
+        errorAlert.setContentText("Code must only contain digits!");
+        errorAlert.showAndWait();
+    }
+
+    private void codeIdLengthAlert() {
+        errorAlert.setHeaderText("Wrong number of digits");
+        errorAlert.setContentText("Please enter a 4-digit code!");
+        errorAlert.showAndWait();
     }
 
     @FXML

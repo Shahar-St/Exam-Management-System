@@ -33,7 +33,6 @@ public class TeacherStatisticsController {
 
     @FXML
     void okButtonOnAction(ActionEvent event) {
-        //TODO: back?
         clearScreen();
         ClientApp.setRoot("ResultsScreen");
     }

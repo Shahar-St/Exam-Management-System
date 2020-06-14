@@ -149,7 +149,6 @@ public class StudentPastExamsController {
         model.clearStudentPastExamsList();
     }
 
-    //TODO clear screen
 
 
 }
