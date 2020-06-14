@@ -17,12 +17,14 @@ public class LoginResponse extends DatabaseResponse {
 
     private final String permission;
     private final String name;
+    private final String id;
 
     // successful request
-    public LoginResponse(int status, String permission, String name, DatabaseRequest request) {
+    public LoginResponse(int status, String permission, String name, String id, DatabaseRequest request) {
         super(status, request);
         this.permission = permission;
         this.name = name;
+        this.id = id;
     }
 
     // unsuccessful request
@@ -30,6 +32,7 @@ public class LoginResponse extends DatabaseResponse {
         super(status, request);
         this.permission = null;
         this.name = null;
+        this.id = null;
     }
     public String getPermission() {
         return permission;
@@ -37,5 +40,9 @@ public class LoginResponse extends DatabaseResponse {
 
     public String getName() {
         return name;
+    }
+
+    public String getId() {
+        return id;
     }
 }
