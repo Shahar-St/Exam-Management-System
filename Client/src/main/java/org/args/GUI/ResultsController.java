@@ -50,7 +50,7 @@ public class ResultsController {
             coursesDropdown.setText(model.getCurrentCourseId());
             initializeCoursesDropdown();
             fillCoursesDropdown(model.getCurrentSubject());
-            model.loadResults();
+            //model.loadResults();
         } else {
             fillSubjectsDropDown(model.getSubjects());
         }
@@ -73,6 +73,8 @@ public class ResultsController {
     void showExamDetails(ActionEvent event) {
         String selectedItem = examListView.getSelectionModel().getSelectedItem();
         String examId = selectedItem.substring(0,selectedItem.indexOf(":"));
+        String examTitle = model.getExamTitleFromId(examId);
+        model.setCurrentExamTitle(examTitle);
         model.showGradesOf(examId);
     }
 
@@ -127,7 +129,7 @@ public class ResultsController {
     }
 
     public void fillSubjectsDropDown(Set<String> subjects) {
-        for (String subject : subjects) //iterate through every subject in the hashmap
+        for (String subject : subjects) //iterate through every subject
         {
             addSubjectToSubjectDropdown(subject);
         }

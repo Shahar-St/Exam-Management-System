@@ -1,5 +1,6 @@
 package org.args.Client;
 
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import org.args.GUI.StudentGrade;
 import org.args.GUI.StudentPastExam;
@@ -47,4 +48,10 @@ public interface ITeacherViewStatsData {
     void clearStudentGradesList();
 
     void showGradesOf(String examId);
+
+    StringProperty currentExamTitleProperty();
+
+    void setCurrentExamTitle(String currentExamTitle);
+
+    String getExamTitleFromId(String examId);
 }

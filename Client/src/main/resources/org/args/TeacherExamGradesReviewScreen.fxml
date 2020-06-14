@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.TeacherExamGradesReviewController">
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.TeacherExamGradesReviewController">
    <content>
       <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@bootstrap3.css">
          <children>
@@ -19,7 +19,7 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label fx:id="titleLabel" text="EXAM TITLE PLACEHOLDER">
+                        <Label fx:id="titleLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="53.0" prefWidth="697.0" text="EXAM TITLE PLACEHOLDER" textAlignment="CENTER">
                            <font>
                               <Font size="36.0" />
                            </font>

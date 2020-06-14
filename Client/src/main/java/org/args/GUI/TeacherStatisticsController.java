@@ -45,6 +45,7 @@ public class TeacherStatisticsController {
     @FXML
     void initialize() {
         setModel(ClientApp.getModel());
+        examTitleLabel.textProperty().bind(model.currentExamTitleProperty());
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         gradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
         gradesTableView.setItems(model.getStudentGradesObservableList());

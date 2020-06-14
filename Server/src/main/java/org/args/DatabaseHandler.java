@@ -60,6 +60,7 @@ public class DatabaseHandler {
         this.put("UncheckedExecutesOfConcreteRequest", new UncheckedExecutesOfConcreteStrategy());
         this.put("GetAllPastExamsRequest", new GetAllPastExamsStrategy());
         this.put("StudentStatisticsRequest", new StudentStatisticsStrategy());
+
         this.put("TeacherGetAllPastExamsRequest", new TeacherGetAllPastExamsStrategy());
         this.put("TeacherStatisticsRequest", new TeacherStatisticsStrategy());
     }};
@@ -280,6 +281,11 @@ public class DatabaseHandler {
         String[] titlesArr = {"functions", "Jerusalem", "circles", "Germany", "letters", "nikud", "spelling", "vocabulary"};
         List<Double> questionsScores = Arrays.asList(50.0, 50.0);
 
+        List<Integer> answersByStudent = new ArrayList<>();
+        answersByStudent.add(1);
+        answersByStudent.add(1);
+        answersByStudent.add(1);
+        answersByStudent.add(1);
         k = 0;
         for (int j = 0; j < NUM_OF_TEACHERS; j++)
         {
@@ -287,14 +293,29 @@ public class DatabaseHandler {
             for (int i = 0; i < NUM_OF_EXAMS / NUM_OF_TEACHERS; i++)
             {
                 Course course = teacher.getCoursesList().get(i % teacher.getCoursesList().size());
-                Exam exam = teacher.createExam(course, 90, titlesArr[k], "good luck!", "my private notes",
+                Exam exam = teacher.createExam(course, 1, titlesArr[k], "good luck!", "my private notes",
                         course.getQuestionsList(), questionsScores);
                 session.save(exam);
                 session.update(teacher);
+                ConcreteExam concreteExam = new ConcreteExam(exam, teacher, "1111");
+                session.save(concreteExam);
+                ExecutedExam executedExam1 = new ExecutedExam(concreteExam, exam.getCourse().getStudentsList().get(0),
+                        "perfect", answersByStudent, "");
+                session.save(executedExam1);
+                executedExam1.setSubmitted(true);
+                executedExam1.setComputerized(true);
+                executedExam1.setChecked(true);
+                ExecutedExam executedExam2 = new ExecutedExam(concreteExam, exam.getCourse().getStudentsList().get(1),
+                        "", answersByStudent, "");
+                session.save(executedExam2);
+                executedExam2.setSubmitted(true);
                 k++;
             }
         }
         session.flush();
+
+        ConcreteExam concreteExam = new ConcreteExam();
+
     }
 
     private static <T> List<T> getAllOfType(Session session, Class<T> objectType) {

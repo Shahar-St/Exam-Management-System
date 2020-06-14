@@ -1256,6 +1256,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     ObservableList<String> pastExamsResultsObservableList = FXCollections.observableArrayList();
+    private HashMap<String,String> idToTitleMap = new HashMap<>();
 
     public ObservableList<String> getPastExamsResultsObservableList() {
         return pastExamsResultsObservableList;
@@ -1272,11 +1273,17 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
                 {
                     String examId = entry.getKey();
                     String date = entry.getValue().getFirst().toString();
-                    String tite = entry.getValue().getSecond();
-                    String examToAdd = examId +": "+tite + "from " + date;
+                    String title = entry.getValue().getSecond();
+                    idToTitleMap.put(examId,title);
+                    String examToAdd = examId +": "+title + " from date " + date;
                     pastExamsResultsObservableList.add(examToAdd);
                 }
             }
         });
+    }
+
+    public String getExamTitleFromId(String examId)
+    {
+        return idToTitleMap.get(examId);
     }
 }

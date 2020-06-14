@@ -379,11 +379,13 @@ public class ClientApp extends Application {
 
     @Subscribe
     public void handleExecuteExamResponse(ExecuteExamResponse response) {
-        if (response.getStatus() != 0)
-            infoAlert("Exam execution failed!");
-        else {
-            errorAlert("Exam is being initiated...");
+        if (response.getStatus() == 0)
+        {
+            infoAlert("Exam Initiated. Students Can Now Start!");
             setRoot("TeacherExamExecutionScreen");
+        }
+        else {
+            errorAlert("Exam failed to start! (Server Error)");
         }
     }
 
