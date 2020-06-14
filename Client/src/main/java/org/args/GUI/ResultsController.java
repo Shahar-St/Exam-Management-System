@@ -42,18 +42,22 @@ public class ResultsController {
         setModel(ClientApp.getModel());
         examListView.setItems(model.getPastExamsResultsObservableList());
         if (model.dataWasAlreadyInitialized()) {
-            for (String subjectName : model.getSubjects())
-            {
-                addSubjectToSubjectDropdown(subjectName);
-            }
-            subjectsDropdown.setText(model.getCurrentSubject());
-            coursesDropdown.setText(model.getCurrentCourseId());
-            initializeCoursesDropdown();
-            fillCoursesDropdown(model.getCurrentSubject());
+            initializeFormerData();
         } else {
             fillSubjectsDropDown(model.getSubjects());
         }
 
+    }
+
+    private void initializeFormerData() {
+        for (String subjectName : model.getSubjects())
+        {
+            addSubjectToSubjectDropdown(subjectName);
+        }
+        subjectsDropdown.setText(model.getCurrentSubject());
+        coursesDropdown.setText(model.getCurrentCourseId());
+        initializeCoursesDropdown();
+        fillCoursesDropdown(model.getCurrentSubject());
     }
 
     @FXML

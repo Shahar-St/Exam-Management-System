@@ -56,18 +56,22 @@ public class QuestionManagementController {
             model.clearQuestionsList();
         bindButtonVisibility();
         if (model.dataWasAlreadyInitialized()) {
-            for (String subjectName : model.getSubjects()) //iterate through every subject in the hashmap
-            {
-                addSubjectToSubjectDropdown(subjectName);
-            }
-            subjectsDropdown.setText(model.getCurrentSubject());
-            coursesDropdown.setText(model.getCurrentCourseId());
-            initializeCoursesDropdown();
-            fillCoursesDropdown(model.getCurrentSubject());
+            initializeFormerData();
             model.fillQuestionsList(model.getCurrentCourseId());
         } else {
             fillSubjectsDropDown(model.getSubjects());
         }
+    }
+
+    private void initializeFormerData() {
+        for (String subjectName : model.getSubjects()) //iterate through every subject in the hashmap
+        {
+            addSubjectToSubjectDropdown(subjectName);
+        }
+        subjectsDropdown.setText(model.getCurrentSubject());
+        coursesDropdown.setText(model.getCurrentCourseId());
+        initializeCoursesDropdown();
+        fillCoursesDropdown(model.getCurrentSubject());
     }
 
     private void bindButtonVisibility() {
