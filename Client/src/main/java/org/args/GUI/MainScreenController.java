@@ -37,7 +37,6 @@ public class MainScreenController {
 
     @FXML
     void switchToQuestionManagement(ActionEvent event) {
-        model.loadSubjects();
         ClientApp.setRoot("QuestionManagementScreen");
     }
 
@@ -131,7 +130,6 @@ public class MainScreenController {
     @FXML
     void switchToExamManagementScreen (ActionEvent event)
     {
-        model.loadSubjects();
         ClientApp.setRoot("ExamManagementScreen");
     }
     @FXML
