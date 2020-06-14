@@ -13,7 +13,6 @@ public interface ITeacherExecuteExamData {
     ObservableList<String> getCurrentHandsRaised();
     void solveRaisedHand(String currentStudentName);
     StringProperty getCurrentExecutedExamEndTimeProperty();
-    int getCurrentExecutedExamDuration();
     LocalDateTime getCurrentExecutedExamEndLocalDateTime();
     LocalDateTime getCurrentExecutedExamStartLocalDateTime();
     void endExam();

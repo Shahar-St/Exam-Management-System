@@ -1,6 +1,7 @@
 package org.args.GUI;
 
 
+import DatabaseAccess.Requests.ExecuteExam.SubmitExamRequest;
 import DatabaseAccess.Responses.Exams.AddExamResponse;
 import DatabaseAccess.Responses.Exams.DeleteExamResponse;
 import DatabaseAccess.Responses.Exams.EditExamResponse;
@@ -437,7 +438,9 @@ public class ClientApp extends Application {
     public void handleSubmitExamResponse(SubmitExamResponse response){
         if(response.getStatus()==0){
             setRoot("MainScreen");
-            infoAlert("Exam Was Successfully Submitted.");
+            SubmitExamRequest request = (SubmitExamRequest)response.getRequest();
+            if(request.isFinishedOnTime())
+                infoAlert("Exam Was Successfully Submitted.");
         }else{
             errorAlert("Submission Failed, Please Try Again.");
         }
