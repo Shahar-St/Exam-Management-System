@@ -1,5 +1,6 @@
 package org.args.Client;
 
+import LightEntities.LightExecutedExam;
 import javafx.collections.ObservableList;
 import org.args.GUI.StudentPastExam;
 
@@ -30,6 +31,8 @@ public interface IStudentViewStatsData {
     void clearStudentPastExamsList();
 
     void setCourseSelected(boolean b);
+
+    LightExecutedExam getCurrentLightExecutedExam();
 
     void reviewStudentExam(String examId);
 }
