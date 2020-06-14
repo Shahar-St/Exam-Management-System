@@ -469,10 +469,14 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleGetExecutedExamResponse(GetExecutedExamResponse response) {
         if (response.getStatus() == 0) {
-            if (!response.getExam().isComputerized())
-                setRoot("TeacherReviewManualExamScreen");
-            else
-                setRoot("TeacherReviewCompExamScreen");
+            if(model.getPermission().equals("teacher")){
+                if (!response.getExam().isComputerized())
+                    setRoot("TeacherReviewManualExamScreen");
+                else
+                    setRoot("TeacherReviewCompExamScreen");
+            }else if(model.getPermission().equals("student"))
+                setRoot("StudentReviewPastExamScreen");
+
 
 
         } else {
