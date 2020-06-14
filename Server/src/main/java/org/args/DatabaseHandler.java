@@ -290,7 +290,7 @@ public class DatabaseHandler {
             for (int i = 0; i < NUM_OF_EXAMS / NUM_OF_TEACHERS; i++)
             {
                 Course course = teacher.getCoursesList().get(i % teacher.getCoursesList().size());
-                Exam exam = teacher.createExam(course, 1, titlesArr[k], "good luck!", "my private notes",
+                Exam exam = teacher.createExam(course, 2, titlesArr[k], "good luck!", "my private notes",
                         course.getQuestionsList(), questionsScores);
                 session.save(exam);
                 session.update(teacher);
@@ -302,10 +302,12 @@ public class DatabaseHandler {
                 executedExam1.setSubmitted(true);
                 executedExam1.setComputerized(true);
                 executedExam1.setChecked(true);
+                executedExam1.setGrade(50);
                 ExecutedExam executedExam2 = new ExecutedExam(concreteExam, exam.getCourse().getStudentsList().get(1),
                         "", answersByStudent, "");
                 session.save(executedExam2);
                 executedExam2.setSubmitted(true);
+                executedExam2.setChecked(true);
                 k++;
             }
         }
