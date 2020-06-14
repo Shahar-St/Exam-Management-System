@@ -2,6 +2,7 @@ package org.args.GUI;
 
 import LightEntities.LightExecutedExam;
 import LightEntities.LightQuestion;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -134,8 +135,7 @@ public class TeacherReviewCompExamController {
                         return;
                     }
 
-                    //model.submitExamReview(finalScore, notes.getText(), null);
-                    model.submitExamReview(Integer.valueOf(finalGrade.getText()), notes.getText(),reasonForChangeGrade.getText(), null);
+                    model.submitExamReview(Integer.parseInt(finalGrade.getText()), notes.getText(),reasonForChangeGrade.getText(), null);
                 });
 
                 editButton.setOnAction(event -> {
@@ -146,6 +146,16 @@ public class TeacherReviewCompExamController {
                         confirmButton.setDisable(true);
                         editButton.setText("Done Editing.");
                     } else {
+                        if(reasonForChangeGrade.getText().equals("")){
+                            Platform.runLater(()->{
+                                Alert alert = new Alert(Alert.AlertType.ERROR);
+                                alert.setHeaderText(null);
+                                alert.setContentText("You Have To Enter Reason For Change");
+                                alert.showAndWait();
+                            });
+                            return;
+                        }
+
                         isChangingGrade = false;
                         finalGrade.setEditable(false);
                         reasonForChangeGrade.setEditable(false);

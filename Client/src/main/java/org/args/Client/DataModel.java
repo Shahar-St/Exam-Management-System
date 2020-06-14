@@ -1289,7 +1289,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
             public void run() {
                 // hashMap: executedExamId, (title,grade)
                 for (Map.Entry<String, Pair<String, Double>> entry : response.getExecutedExamsList().entrySet()) {
-                    studentPastExamsObservableList.add(new StudentPastExam( entry.getValue().getFirst(), entry.getKey(),entry.getValue().getSecond()));
+                    String id = entry.getKey();
+                    String examDate = response.getExecutedExamsDates().get(id).format(dateTimeFormatter);
+                    String examTitle = entry.getValue().getFirst();
+                    Double grade = entry.getValue().getSecond();
+                    studentPastExamsObservableList.add(new StudentPastExam( examTitle, id,grade,examDate));
                 }
             }
         });

@@ -63,6 +63,10 @@ public class StudentReviewPastExamController {
 
         grade.setFont(Font.font(fontStyle, fontSize));
 
+        Label notes_label = new Label("Notes:");
+
+        Label notes = new Label(exam.getCommentsAfterCheck());
+
         assert pageView != null;
         pageView.setPageCount(exam.getLightQuestionList().size() + 1);
         pageView.setCurrentPageIndex(0);
@@ -70,7 +74,7 @@ public class StudentReviewPastExamController {
         pageView.setPageFactory((pageIndex) -> {
 
             if (pageIndex == 0) {
-                VBox details = new VBox(title_label, title, tester_label, tester, grade_label, grade);
+                VBox details = new VBox(title_label, title, tester_label, tester, grade_label, grade,notes_label,notes);
                 details.setPadding(new Insets(20, 20, 20, 20));
                 details.setSpacing(20);
                 return new ScrollPane(details);

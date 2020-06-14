@@ -45,11 +45,11 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="455.0" prefWidth="800.0" spacing="30.0">
                <children>
-                  <TableView fx:id="gradesTable" onMouseClicked="#handleMouseEvent" prefHeight="455.0" prefWidth="227.0">
+                  <TableView fx:id="gradesTable" onMouseClicked="#handleMouseEvent" prefHeight="455.0" prefWidth="499.0">
                     <columns>
-                        <TableColumn fx:id="idColumn" prefWidth="75.0" text="Exam ID" />
-                      <TableColumn fx:id="titleColumn" prefWidth="75.0" text="Exam Title" />
-                      <TableColumn fx:id="gradeColumn" prefWidth="75.0" text="Grade" />
+                        <TableColumn fx:id="dateColumn" prefWidth="202.0" text="Date" />
+                      <TableColumn fx:id="titleColumn" minWidth="0.0" prefWidth="181.0" text="Exam Title" />
+                      <TableColumn fx:id="gradeColumn" prefWidth="116.0" text="Grade" />
                     </columns>
                   </TableView>
                   <Button fx:id="reviewExam" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#showExamDetails" styleClass="info" text="Show Details" />
