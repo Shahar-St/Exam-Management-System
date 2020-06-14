@@ -33,7 +33,7 @@ public class StudentPastExamsController {
     private TableColumn<String,Double> titleColumn;
 
     @FXML
-    private TableColumn<String,Double> idColumn;
+    private TableColumn<String,Double> dateColumn;
 
     @FXML
     private TableColumn<String,Double> gradeColumn;
@@ -71,7 +71,7 @@ public class StudentPastExamsController {
     private void initializeGradesTable() {
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("examTitle"));
         gradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("examId"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         gradesTable.setItems(model.getStudentPastExamsObservableList());
 
     }
