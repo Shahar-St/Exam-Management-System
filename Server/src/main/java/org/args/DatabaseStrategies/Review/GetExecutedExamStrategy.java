@@ -24,7 +24,7 @@ public class GetExecutedExamStrategy extends DatabaseStrategy {
             return new GetExecutedExamResponse(UNAUTHORIZED, getExecutedExamRequest, null);
 
         ConcreteExam concreteExam = getTypeById(ConcreteExam.class, getExecutedExamRequest.getConcreteID(), session);
-
+        //FIXME: split to student and teacher
         List<ExecutedExam> executedExamsList = concreteExam.getExecutedExamsList();
         int k = 0;
         for (int i = 0; i < executedExamsList.size(); i++)
