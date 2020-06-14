@@ -12,6 +12,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class DatabaseStrategy {
 
@@ -21,6 +23,8 @@ public abstract class DatabaseStrategy {
     protected final int ERROR2 = 2;
     protected final int ERROR3 = 3;
     protected final int ERROR4 = 4;
+
+    protected static Lock readWriteLock = new ReentrantLock();
 
     public abstract DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
                                             List<String> loggedInUsers);
