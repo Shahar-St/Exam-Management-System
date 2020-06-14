@@ -39,23 +39,20 @@ public class TakeExamStrategy extends DatabaseStrategy implements IExamInProgres
         ExecutedExam executedExam = getTypeById(ExecutedExam.class, String.valueOf(student.getCurrentlyExecutedID())
                 , session);
 
-
         if (executedExam == null)
             return new TakeExamResponse(ERROR2, takeExamRequest);
 
-        if (!student.getSocialId().equals(String.valueOf(takeExamRequest.getSocialId()))&& takeExamRequest.isComputerized())
+        if (!student.getSocialId().equals(String.valueOf(takeExamRequest.getSocialId())) && takeExamRequest.isComputerized())
             return new TakeExamResponse(ERROR4, takeExamRequest);
 
         if (!executedExam.getConcreteExam().getExamCode().equals(takeExamRequest.getExamCode()))
             return new TakeExamResponse(ERROR3, takeExamRequest);
 
-
         executedExam.setComputerized(takeExamRequest.isComputerized());
         session.saveOrUpdate(executedExam);
         LightExam lightExam = executedExam.getConcreteExam().createLightExam();
-        TakeExamResponse response = new TakeExamResponse(SUCCESS, takeExamRequest, lightExam);
-        response.setInitExamForExecutionDate(executedExam.getConcreteExam().getExamForExecutionInitDate());
-        return response;
+        return new TakeExamResponse(SUCCESS, takeExamRequest, lightExam,
+                executedExam.getConcreteExam().getExamForExecutionInitDate());
     }
 
     @Override

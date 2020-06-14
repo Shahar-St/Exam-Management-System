@@ -1,6 +1,7 @@
 package DatabaseAccess.Responses.ExecuteExam;
 
 import DatabaseAccess.Requests.DatabaseRequest;
+import DatabaseAccess.Requests.ExecuteExam.TakeExamRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import LightEntities.LightExam;
 
@@ -18,25 +19,23 @@ import java.time.LocalDateTime;
 public class TakeExamResponse extends DatabaseResponse {
 
     private final LightExam lightExam;
-    private LocalDateTime initExamForExecutionDate;
+    private final LocalDateTime initExamForExecutionDate;
 
     //successful c'tor
-    public TakeExamResponse(int status, DatabaseRequest request, LightExam lightExam) {
+    public TakeExamResponse(int status, DatabaseRequest request,
+                            LightExam lightExam, LocalDateTime examForExecutionInitDate) {
         super(status, request);
         this.lightExam = lightExam;
+        initExamForExecutionDate = examForExecutionInitDate;
     }
 
     //unsuccessful c'tor
     public TakeExamResponse(int status, DatabaseRequest request) {
-        this(status, request, null);
+        this(status, request, null, null);
     }
 
     public LightExam getLightExam() {
         return lightExam;
-    }
-
-    public void setInitExamForExecutionDate(LocalDateTime initExamForExecutionDate) {
-        this.initExamForExecutionDate = initExamForExecutionDate;
     }
 
     public LocalDateTime getInitExamForExecutionDate() {
