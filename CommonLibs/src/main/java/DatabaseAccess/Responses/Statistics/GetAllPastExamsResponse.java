@@ -13,7 +13,8 @@ public class GetAllPastExamsResponse extends DatabaseResponse {
     private final HashMap<String, Pair<String, Double>> executedExamsList;
     private final HashMap<String, LocalDateTime> executedExamsDates;
 
-    public GetAllPastExamsResponse(int status, DatabaseRequest request, HashMap<String, Pair<String, Double>> executedExamsList, HashMap<String, LocalDateTime> executedExamsDates) {
+    public GetAllPastExamsResponse(int status, DatabaseRequest request,
+           HashMap<String, Pair<String, Double>> executedExamsList, HashMap<String, LocalDateTime> executedExamsDates) {
 
         super(status, request);
         this.executedExamsList = executedExamsList;
