@@ -1077,26 +1077,28 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public ObservableList<String> getPendingExamsObservableList() {
         return pendingExamsObservableList;
     }
-    HashMap<Integer,String> pendingExamsMap = new HashMap<>();
+    HashMap<String,String> pendingExamsMap = new HashMap<>();
 
     @Subscribe
     public void handlePendingExamResponse(PendingExamsResponse response) {
         if (response.getStatus() == 0) {
-            pendingExamsMap = response.getCheckedExamsList();
-            for (Map.Entry<Integer, String> entry : response.getCheckedExamsList().entrySet()) {
+            // hashMap: concreteExamID, (date,title)
+            for (Map.Entry<String, Pair<LocalDateTime, String>> entry : response.getConcreteExamsList().entrySet()) {
                 Platform.runLater(() -> {
-                    int examId = entry.getKey();
-                    String examTitle = entry.getValue();
-                    String fullExamDescription = "#" + examId + ":" + examTitle;
-                    pendingExamsObservableList.add(fullExamDescription);
+                    String examId = entry.getKey();
+                    String examTitle = entry.getValue().getSecond();
+                    String examDate = entry.getValue().getFirst().format(dateTimeFormatter);
+                    pendingExamsMap.put(examTitle,examId);
+                    String examToAdd = examTitle + "-" + " Executed at: " + examDate;
+                    pendingExamsObservableList.add(examToAdd);
                 });
             }
         }
     }
 
-    public String getPendingExamTitle(int id)
+    public String getPendingExamId(String title)
     {
-        return pendingExamsMap.get(id);
+        return pendingExamsMap.get(title);
     }
 
     @Override
