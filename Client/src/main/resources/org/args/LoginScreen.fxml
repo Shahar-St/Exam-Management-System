@@ -22,41 +22,38 @@
        <VBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT">
            <TilePane alignment="CENTER">
                <padding>
-                   <Insets bottom="50.0"/>
+                   <Insets bottom="50.0" />
                </padding>
                <Label alignment="BOTTOM_LEFT" text="Username:" textOverrun="CENTER_ELLIPSIS">
                    <font>
-                       <Font size="24.0"/>
+                       <Font size="24.0" />
                    </font>
                    <TilePane.margin>
-                       <Insets/>
+                       <Insets />
                    </TilePane.margin>
                </Label>
-               <TextField fx:id="usernameField" styleClass="first" text="1_1"/>
+               <TextField fx:id="usernameField" styleClass="first" text="Yoni_Cohen" />
            </TilePane>
            <TilePane alignment="CENTER">
                <Label text="Password:">
                    <font>
-                       <Font size="24.0"/>
+                       <Font size="24.0" />
                    </font>
                </Label>
-               <PasswordField fx:id="passwordField" text="1"/>
+               <PasswordField fx:id="passwordField" text="Yoni" />
            </TilePane>
        </VBox>
    </center>
    <bottom>
        <TilePane alignment="CENTER" hgap="30.0" prefHeight="74.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-           <Button fx:id="networkButton" alignment="CENTER" mnemonicParsing="false"
-                   onAction="#switchToNetworkConfigScreen" prefHeight="32.0" prefWidth="180.0" styleClass="primary"
-                   stylesheets="@bootstrap3.css" text="Network Configuration">
+           <Button fx:id="networkButton" alignment="CENTER" mnemonicParsing="false" onAction="#switchToNetworkConfigScreen" prefHeight="32.0" prefWidth="180.0" styleClass="primary" stylesheets="@bootstrap3.css" text="Network Configuration">
               <font>
-                  <Font name="Bell MT" size="24.0"/>
+                  <Font name="Bell MT" size="24.0" />
               </font>
            </Button>
-           <Button fx:id="loginButton" alignment="CENTER" mnemonicParsing="false" onAction="#loginAttempt"
-                   prefHeight="59.0" prefWidth="122.0" styleClass="primary" stylesheets="@bootstrap3.css" text="Login">
+           <Button fx:id="loginButton" alignment="CENTER" mnemonicParsing="false" onAction="#loginAttempt" prefHeight="59.0" prefWidth="122.0" styleClass="primary" stylesheets="@bootstrap3.css" text="Login">
                <font>
-                   <Font name="Bell MT" size="24.0"/>
+                   <Font name="Bell MT" size="24.0" />
                </font>
            </Button>
        </TilePane>

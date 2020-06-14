@@ -21,7 +21,7 @@ public interface IExamReviewData {
     File getManualExamForReview();
     String getManualExamForReviewStudentId();
     void saveWordFile(File filePath);
-    void submitExamReview(double grade,String notes,File manualExamFile);
+    void submitExamReview(double grade,String notes,String reason, File manualExamFile);
     ObservableList<StudentExamType> getStudentsGradesToReview();
     void reviewExam(String id);
     void clearPendingExams();

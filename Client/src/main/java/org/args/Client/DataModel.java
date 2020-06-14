@@ -970,6 +970,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
             currentHandsRaised.clear();
         } else {
 
+
         }
 
 
@@ -1170,7 +1171,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         }
     }
 
-    public void submitExamReview(double grade, String notes, File manualExamFile) {
+    public void submitExamReview(double grade, String notes, String reason, File manualExamFile) {
 
         if (!currentLightExecutedExam.isComputerized())
             currentLightExecutedExam.setManualExam(fileToByteArray(manualExamFile));
@@ -1179,10 +1180,9 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
         currentLightExecutedExam.setGrade(grade);
         currentLightExecutedExam.setCommentsAfterCheck(notes);
+        currentLightExecutedExam.setReasonsForChangeGrade(reason);
         currentLightExecutedExam.setChecked(true);
         ClientApp.sendRequest(new EvaluateExamRequest(currentLightExecutedExam));
-
-
     }
 
 
@@ -1215,8 +1215,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.sendRequest(new GetExecutedExamRequest(getCurrentConcreteExamId(), studentId));
     }
 
-
-
     @Subscribe
     public void handleGetExecutedExamResponse(GetExecutedExamResponse response) {
         if (response.getStatus() == 0) {
@@ -1235,7 +1233,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         }
 
     }
-
 
     // dean time extension
 
@@ -1286,13 +1283,13 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Subscribe
     public void handleGetAllPastExamsResponse(GetAllPastExamsResponse response) {
+        studentPastExamsObservableList.clear();
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 // hashMap: executedExamId, (title,grade)
-                clearStudentPastExamsList();
                 for (Map.Entry<String, Pair<String, Double>> entry : response.getExecutedExamsList().entrySet()) {
-                    studentPastExamsObservableList.add(new StudentPastExam(entry.getKey(), entry.getValue().getFirst(), entry.getValue().getSecond()));
+                    studentPastExamsObservableList.add(new StudentPastExam( entry.getValue().getFirst(), entry.getKey(),entry.getValue().getSecond()));
                 }
             }
         });

@@ -6,6 +6,7 @@ import DatabaseAccess.Requests.ExecuteExam.SubmitManualExamRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.ExecuteExam.SubmitExamResponse;
 import DatabaseAccess.Responses.ExecuteExam.SubmitManualExamResponse;
+import Notifiers.ExamEndedNotifier;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.Entities.ConcreteExam;
 import org.args.Entities.ExecutedExam;
@@ -14,6 +15,7 @@ import org.args.ExamManager;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -49,5 +51,12 @@ public class SubmitManualExamStrategy extends DatabaseStrategy implements IExamI
         ConcreteExam concreteExam = getTypeById(ConcreteExam.class, request1.getExamID(), session);
         ExamManager manager = examManagers.get(concreteExam.getId());
         manager.getStudents().remove((String) client.getInfo("userName"), client);
+        if(concreteExam.getExecutedExamsList().size() == concreteExam.getFinishedOnTime()){
+            List<String> studentsList = new ArrayList<>();
+            for(ExecutedExam executedExam: concreteExam.getExecutedExamsList()){
+                studentsList.add(executedExam.getStudent().getUserName());
+            }
+            manager.notifyAboutExamEnd(new ExamEndedNotifier(),studentsList);
+        }
     }
 }

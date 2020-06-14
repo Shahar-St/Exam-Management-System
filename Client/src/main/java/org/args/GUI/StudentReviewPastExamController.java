@@ -64,7 +64,7 @@ public class StudentReviewPastExamController {
         grade.setFont(Font.font(fontStyle, fontSize));
 
         assert pageView != null;
-        pageView.setPageCount(exam.getLightQuestionList().size() + 2);
+        pageView.setPageCount(exam.getLightQuestionList().size() + 1);
         pageView.setCurrentPageIndex(0);
         pageView.setMaxPageIndicatorCount(5);
         pageView.setPageFactory((pageIndex) -> {

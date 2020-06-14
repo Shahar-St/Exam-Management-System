@@ -32,7 +32,8 @@ public class RaiseHandStrategy extends DatabaseStrategy implements IExamInProgre
                        ConnectionToClient client, Session session) {
         RaiseHandRequest raiseHandRequest = (RaiseHandRequest) request;
         Student student = (Student) getUser((String) client.getInfo("userName"), session);
-        ExamManager manager = examManagers.get(student.getCurrentlyExecutedID());
+        ExecutedExam executedExam = getTypeById(ExecutedExam.class,String.valueOf(student.getCurrentlyExecutedID()),session);
+        ExamManager manager = examManagers.get(executedExam.getConcreteExam().getId());
         manager.notifyTeacherAboutRaisedHand(new RaiseHandNotifier(student.getFullName()));
     }
 }

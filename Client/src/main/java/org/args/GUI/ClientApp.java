@@ -367,15 +367,13 @@ public class ClientApp extends Application {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Attention!");
                 alert.setHeaderText(null);
-                alert.setContentText("Attention!, Exam Time Has Ended, You're Exam Has Been Submitted And You're Now Being Redirected To Main Screen");
+                alert.setContentText("Attention! \nExam Time Has Ended, Your'e Exam Has Been Submitted And You're Now Being Redirected To The Main Screen");
                 alert.showAndWait();
                 setRoot("MainScreen"); // redirect client to main screen because of exam timeout.
             });
         else if(model.getPermission().equals("teacher")){
             //do teacher stuff
             //TODO: what do you need here? -Ronnie
-        }else{
-            // do dean stuff
         }
     }
 
@@ -424,7 +422,7 @@ public class ClientApp extends Application {
     public void handleRaisedHandResponse(RaiseHandResponse response) {
         if(response.getStatus()==0)
         {
-            infoAlert("You're Raise Hand Request Was Received Successfully.");
+            infoAlert("Your've Successfully Raised Your Hand :)");
         }else {
             errorAlert("Failed To Send Raise Hand Request, Please Try Again.");
         }

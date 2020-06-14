@@ -49,10 +49,6 @@ public class StudentPastExamsController {
     {
         setModel(ClientApp.getModel());
         initializeGradesTable();
-        if(model.getStudentPastExamsObservableList().size() > 0)
-        {
-            model.clearStudentPastExamsList();
-        }
         if (model.dataWasAlreadyInitialized()) {
             restoreInitializedData();
             model.loadPastExams();
@@ -77,6 +73,7 @@ public class StudentPastExamsController {
         gradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
         idColumn.setCellValueFactory(new PropertyValueFactory<>("examId"));
         gradesTable.setItems(model.getStudentPastExamsObservableList());
+
     }
 
     @FXML
