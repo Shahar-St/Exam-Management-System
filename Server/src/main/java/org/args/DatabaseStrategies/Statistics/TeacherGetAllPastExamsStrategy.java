@@ -8,10 +8,7 @@ import DatabaseAccess.Responses.Statistics.GetAllPastExamsResponse;
 import DatabaseAccess.Responses.Statistics.TeacherGetAllPastExamsResponse;
 import Util.Pair;
 import org.args.DatabaseStrategies.DatabaseStrategy;
-import org.args.Entities.ConcreteExam;
-import org.args.Entities.Exam;
-import org.args.Entities.Student;
-import org.args.Entities.Teacher;
+import org.args.Entities.*;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
@@ -31,22 +28,31 @@ public class TeacherGetAllPastExamsStrategy extends DatabaseStrategy {
 
         HashMap<String, Pair<LocalDateTime, String>> map = new HashMap<>();
 
-        Teacher teacher = (Teacher) getUser((String) client.getInfo("userName"), session);
-        boolean needToCheck;
-        for(Exam exam : teacher.getExamsList())
+        User user = getUser((String) client.getInfo("userName"), session);
+        if( user instanceof Teacher)
         {
-            for(ConcreteExam concreteExam : teacher.getConcreteExamsList())
+            Teacher teacher = (Teacher) user;
+            boolean needToCheck;
+            for(Exam exam : teacher.getExamsList())
             {
-                needToCheck = true;
-                for (int i = 0; i < concreteExam.getExecutedExamsList().size() && needToCheck; i++)
-                    if(concreteExam.getExecutedExamsList().get(i).isChecked())
-                    {
-                        map.put(String.valueOf(concreteExam.getId()),
-                                         new Pair<>(concreteExam.getExamForExecutionInitDate(),
-                                          concreteExam.getExam().getTitle()));
-                        needToCheck = false;
-                    }
+                for(ConcreteExam concreteExam : teacher.getConcreteExamsList())
+                {
+                    needToCheck = true;
+                    for (int i = 0; i < concreteExam.getExecutedExamsList().size() && needToCheck; i++)
+                        if(concreteExam.getExecutedExamsList().get(i).isChecked())
+                        {
+                            map.put(String.valueOf(concreteExam.getId()),
+                                    new Pair<>(concreteExam.getExamForExecutionInitDate(),
+                                            concreteExam.getExam().getTitle()));
+                            needToCheck = false;
+                        }
+                }
             }
+        }
+        else
+        {
+            Dean dean = (Dean) user;
+
         }
 
         return new TeacherGetAllPastExamsResponse(SUCCESS, request, map);
