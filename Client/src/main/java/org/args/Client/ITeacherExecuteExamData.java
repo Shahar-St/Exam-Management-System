@@ -16,4 +16,5 @@ public interface ITeacherExecuteExamData {
     LocalDateTime getCurrentExecutedExamEndLocalDateTime();
     LocalDateTime getCurrentExecutedExamStartLocalDateTime();
     void endExam();
+    boolean isTimeExtensionGranted();
 }

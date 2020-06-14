@@ -301,13 +301,15 @@ public class DatabaseHandler {
                 session.save(executedExam1);
                 executedExam1.setSubmitted(true);
                 executedExam1.setComputerized(true);
-                executedExam1.setChecked(true);
+                if(i%2==0)
+                    executedExam1.setChecked(true);
                 executedExam1.setGrade(50);
                 ExecutedExam executedExam2 = new ExecutedExam(concreteExam, exam.getCourse().getStudentsList().get(1),
                         "", answersByStudent, "");
                 session.save(executedExam2);
                 executedExam2.setSubmitted(true);
-                executedExam2.setChecked(true);
+                if(i%2==0)
+                    executedExam2.setChecked(true);
                 k++;
             }
         }
