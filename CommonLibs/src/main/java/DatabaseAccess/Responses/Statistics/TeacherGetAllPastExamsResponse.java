@@ -6,6 +6,12 @@ import Util.Pair;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
+/**
+ * status dictionary:
+ * 0 - success
+ * 1 - unauthorized access - user isn't logged in
+ */
+
 public class TeacherGetAllPastExamsResponse extends DatabaseResponse {
 
     //hashMap: concreteExamId, (date, title)
