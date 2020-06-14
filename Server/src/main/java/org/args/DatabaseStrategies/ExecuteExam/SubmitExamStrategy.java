@@ -44,7 +44,6 @@ public class SubmitExamStrategy extends DatabaseStrategy implements IExamInProgr
         executedExam.setAnswersByStudent(answersList);
         executedExam.setComputerized(true);
         executedExam.setSubmitted(true);
-//        concreteExam.addExecutedExam(executedExam);
 
         session.saveOrUpdate(executedExam);
         session.flush();

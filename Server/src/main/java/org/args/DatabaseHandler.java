@@ -52,6 +52,7 @@ public class DatabaseHandler {
         this.put("ExecuteExamRequest", new ExecuteExamStrategy());
         this.put("TakeExamRequest", new TakeExamStrategy());
         this.put("SubmitExamRequest", new SubmitExamStrategy());
+        this.put("SubmitManualExamRequest",new SubmitManualExamStrategy());
         this.put("TimeExtensionRequest", new TimeExtensionStrategy());
         this.put("ConfirmTimeExtensionRequest", new ConfirmTimeExtensionStrategy());
         this.put("EvaluateExamRequest", new EvaluateExamStrategy());
