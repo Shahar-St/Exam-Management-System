@@ -13,6 +13,7 @@ import org.args.Entities.Teacher;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 //TODO
@@ -29,7 +30,7 @@ public class PendingExamsStrategy extends DatabaseStrategy {
 
         Teacher teacher = (Teacher) getUser((String) client.getInfo("userName"), session);
 
-        HashMap<String, Pair<String, Double>> map = new HashMap<>();
+        HashMap<String, Pair<LocalDateTime, String>> map = new HashMap<>();
         boolean needToCheck;
         for(ConcreteExam concreteExam : teacher.getConcreteExamsList())
         {
@@ -40,7 +41,7 @@ public class PendingExamsStrategy extends DatabaseStrategy {
                 if( (!executedExamList.get(i).isChecked()) && (executedExamList.get(i).isSubmitted()))
                 {
                     map.put(String.valueOf(concreteExam.getId()),
-                            new Pair<>(,concreteExam.getExam().getTitle());
+                            new Pair<>(concreteExam.getExamForExecutionInitDate(),concreteExam.getExam().getTitle()));
                     needToCheck = false;
                 }
             }
@@ -50,6 +51,5 @@ public class PendingExamsStrategy extends DatabaseStrategy {
             return new PendingExamsResponse(ERROR3, pendingExamsRequest, null);
 
         return new PendingExamsResponse(SUCCESS, pendingExamsRequest, map);
-
     }
 }
