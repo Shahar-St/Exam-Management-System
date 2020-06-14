@@ -47,6 +47,12 @@ public class SubmitExamStrategy extends DatabaseStrategy implements IExamInProgr
         executedExam.setSubmitted(true);
         student.getExecutedExamsList().add(executedExam);
         student.setCurrentlyExecutedID(-1);
+
+        if (request1.isFinishedOnTime())
+            concreteExam.addFinishedOnTime();
+        else
+            concreteExam.addUnfinishedOnTime();
+
         session.saveOrUpdate(executedExam);
         session.flush();
 
