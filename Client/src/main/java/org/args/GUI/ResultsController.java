@@ -50,7 +50,6 @@ public class ResultsController {
             coursesDropdown.setText(model.getCurrentCourseId());
             initializeCoursesDropdown();
             fillCoursesDropdown(model.getCurrentSubject());
-            //model.loadResults();
         } else {
             fillSubjectsDropDown(model.getSubjects());
         }
@@ -141,7 +140,7 @@ public class ResultsController {
         coursesDropdown.getItems().clear();
         model.setCurrentSubject(null);
         model.setCourseSelected(false);
-        model.getPastExamsResultsObservableList().clear();
+        model.clearTeacherPastExamsData();
     }
 
 

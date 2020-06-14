@@ -661,6 +661,12 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     @Override
+    public void clearTeacherPastExamsData() {
+        pastExamsResultsObservableList.clear();
+        pastExamsMap.clear();
+    }
+
+    @Override
     public void clearStudentGradesList() {
         studentGradesObservableList.clear();
     }
@@ -1025,11 +1031,12 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public ObservableList<String> getPendingExamsObservableList() {
         return pendingExamsObservableList;
     }
-
+    HashMap<Integer,String> pendingExamsMap = new HashMap<>();
 
     @Subscribe
     public void handlePendingExamResponse(PendingExamsResponse response) {
         if (response.getStatus() == 0) {
+            pendingExamsMap = response.getCheckedExamsList();
             for (Map.Entry<Integer, String> entry : response.getCheckedExamsList().entrySet()) {
                 Platform.runLater(() -> {
                     int examId = entry.getKey();
@@ -1039,6 +1046,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
                 });
             }
         }
+    }
+
+    public String getPendingExamTitle(int id)
+    {
+        return pendingExamsMap.get(id);
     }
 
     @Override
@@ -1256,7 +1268,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     ObservableList<String> pastExamsResultsObservableList = FXCollections.observableArrayList();
-    private HashMap<String,String> idToTitleMap = new HashMap<>();
+    private HashMap<String,String> pastExamsMap = new HashMap<>();
 
     public ObservableList<String> getPastExamsResultsObservableList() {
         return pastExamsResultsObservableList;
@@ -1274,7 +1286,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
                     String examId = entry.getKey();
                     String date = entry.getValue().getFirst().toString();
                     String title = entry.getValue().getSecond();
-                    idToTitleMap.put(examId,title);
+                    pastExamsMap.put(examId,title);
                     String examToAdd = examId +": "+title + " from date " + date;
                     pastExamsResultsObservableList.add(examToAdd);
                 }
@@ -1284,6 +1296,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     public String getExamTitleFromId(String examId)
     {
-        return idToTitleMap.get(examId);
+        return pastExamsMap.get(examId);
     }
 }

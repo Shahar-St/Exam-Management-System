@@ -29,4 +29,5 @@ public interface IExamReviewData {
     void clearStudentsGradesToReview();
     String getCurrentConcreteExamTitle();
     void setCurrentConcreteExamTitle(String currentConcreteExamTitle);
+    public String getPendingExamTitle(int id);
 }
