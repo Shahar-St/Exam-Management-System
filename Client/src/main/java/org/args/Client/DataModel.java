@@ -1209,6 +1209,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.sendRequest(new GetExecutedExamRequest(getCurrentConcreteExamId(), studentId));
     }
 
+
+
     @Subscribe
     public void handleGetExecutedExamResponse(GetExecutedExamResponse response) {
         if (response.getStatus() == 0) {
@@ -1298,6 +1300,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
                 studentPastExamsObservableList.clear();
             }
         });
+    }
+
+    @Override
+    public void reviewStudentExam(String examId) {
+        ClientApp.sendRequest(new GetExecutedExamRequest(examId,getId()));
     }
 
     //Results data

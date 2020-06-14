@@ -30,4 +30,6 @@ public interface IStudentViewStatsData {
     void clearStudentPastExamsList();
 
     void setCourseSelected(boolean b);
+
+    void reviewStudentExam(String examId);
 }

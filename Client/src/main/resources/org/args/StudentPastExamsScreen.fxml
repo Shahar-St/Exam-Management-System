@@ -52,7 +52,7 @@
                       <TableColumn fx:id="gradeColumn" prefWidth="75.0" text="Grade" />
                     </columns>
                   </TableView>
-                  <Button fx:id="reviewExam" alignment="CENTER" disable="true" mnemonicParsing="false" styleClass="info" text="Show Details" />
+                  <Button fx:id="reviewExam" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#showExamDetails" styleClass="info" text="Show Details" />
                </children>
             </HBox>
          </children>

@@ -54,18 +54,22 @@ public class StudentPastExamsController {
             model.clearStudentPastExamsList();
         }
         if (model.dataWasAlreadyInitialized()) {
-            for (String subjectName : model.getSubjects()) //iterate through every subject in the hashmap
-            {
-                addSubjectToSubjectDropdown(subjectName);
-            }
-            subjectsDropdown.setText(model.getCurrentSubject());
-            coursesDropdown.setText(model.getCurrentCourseId());
-            initializeCoursesDropdown();
-            fillCoursesDropdown(model.getCurrentSubject());
+            restoreInitializedData();
             model.loadPastExams();
         } else {
            fillSubjectsDropDown(model.getSubjects());
         }
+    }
+
+    private void restoreInitializedData() {
+        for (String subjectName : model.getSubjects()) //iterate through every subject in the hashmap
+        {
+            addSubjectToSubjectDropdown(subjectName);
+        }
+        subjectsDropdown.setText(model.getCurrentSubject());
+        coursesDropdown.setText(model.getCurrentCourseId());
+        initializeCoursesDropdown();
+        fillCoursesDropdown(model.getCurrentSubject());
     }
 
     private void initializeGradesTable() {
@@ -77,8 +81,13 @@ public class StudentPastExamsController {
 
     @FXML
     void handleMouseEvent(MouseEvent event) {
-        //will show a certain exam's details
         reviewExam.setDisable(false);
+    }
+
+    @FXML
+    void showExamDetails(ActionEvent event) {
+        String examId = gradesTable.getSelectionModel().getSelectedItem().getExamId();
+        model.reviewStudentExam(examId);
     }
 
     @FXML
