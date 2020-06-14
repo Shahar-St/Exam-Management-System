@@ -104,7 +104,6 @@ public class ExamManager {
     }
 
     public void respondToTimeExtension(ConfirmTimeExtensionNotifier notifier) {
-
         try
         {
             teacher.sendToClient(notifier);
@@ -119,7 +118,6 @@ public class ExamManager {
         {
             e.printStackTrace();
         }
-
     }
 
     public void notifyTeacherAboutRaisedHand(RaiseHandNotifier raiseHandNotifier) {
