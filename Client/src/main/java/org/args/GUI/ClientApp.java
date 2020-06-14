@@ -15,6 +15,7 @@ import DatabaseAccess.Responses.ReviewExam.UncheckedExecutesOfConcreteResponse;
 import DatabaseAccess.Responses.Statistics.TeacherStatisticsResponse;
 import Notifiers.ConfirmTimeExtensionNotifier;
 import Notifiers.ExamEndedNotifier;
+import Notifiers.TimeExtensionRequestNotifier;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -413,6 +414,11 @@ public class ClientApp extends Application {
             errorAlert("Something Went Wrong With Time Extension Request, Please Try Again. ");
         }
     }
+    @Subscribe
+    public void handleTimeExtensionRequestNotifier(TimeExtensionRequestNotifier notifier)
+    {
+        infoAlert("New Time Extension Request Received!");
+    }
 
     @Subscribe
     public void handleRaisedHandResponse(RaiseHandResponse response) {
@@ -448,10 +454,8 @@ public class ClientApp extends Application {
 
     @Subscribe
     public void handleDeanTimeExtensionResponse(ConfirmTimeExtensionResponse response) {
-        if (response.getStatus() == 0) {
-            infoAlert("There are new time extension requests!");
-        } else {
-            errorAlert("Failed to fetch time extension requests from the server!");
+        if (response.getStatus() != 0) {
+            errorAlert("Failed to send time extension reply!");
         }
     }
 
