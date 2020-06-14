@@ -61,7 +61,7 @@ public class TeacherReviewManualExamController {
             File defaultDirectory = new File("C:\\");
             fileChooser.setInitialDirectory(defaultDirectory);
             File selectedFile = fileChooser.showOpenDialog(ClientApp.primaryStage);
-            model.submitExamReview(Double.parseDouble(grade.getText()),notes.getText(),selectedFile);
+            model.submitExamReview(Double.parseDouble(grade.getText()),notes.getText(),null,selectedFile);
         });
 
     }

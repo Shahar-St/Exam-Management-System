@@ -970,6 +970,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
             currentHandsRaised.clear();
         } else {
 
+
         }
 
 
@@ -1170,7 +1171,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         }
     }
 
-    public void submitExamReview(double grade, String notes, File manualExamFile) {
+    public void submitExamReview(double grade, String notes, String reason, File manualExamFile) {
 
         if (!currentLightExecutedExam.isComputerized())
             currentLightExecutedExam.setManualExam(fileToByteArray(manualExamFile));
@@ -1179,6 +1180,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
         currentLightExecutedExam.setGrade(grade);
         currentLightExecutedExam.setCommentsAfterCheck(notes);
+        currentLightExecutedExam.setReasonsForChangeGrade(reason);
         currentLightExecutedExam.setChecked(true);
         ClientApp.sendRequest(new EvaluateExamRequest(currentLightExecutedExam));
     }

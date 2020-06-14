@@ -134,7 +134,8 @@ public class TeacherReviewCompExamController {
                         return;
                     }
 
-                    model.submitExamReview(finalScore, notes.getText(), null);
+                    //model.submitExamReview(finalScore, notes.getText(), null);
+                    model.submitExamReview(Integer.valueOf(finalGrade.getText()), notes.getText(),reasonForChangeGrade.getText(), null);
                 });
 
                 editButton.setOnAction(event -> {
