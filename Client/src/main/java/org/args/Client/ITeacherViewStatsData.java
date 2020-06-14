@@ -16,7 +16,6 @@ public interface ITeacherViewStatsData {
 
     void viewExamStatistics(String examId);
 
-
     void loadPastExams();
 
     public ObservableList<StudentPastExam> getStudentPastExamsObservableList();
@@ -54,4 +53,6 @@ public interface ITeacherViewStatsData {
     void setCurrentExamTitle(String currentExamTitle);
 
     String getExamTitleFromId(String examId);
+
+    void clearTeacherPastExamsData();
 }
