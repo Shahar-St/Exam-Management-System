@@ -21,4 +21,5 @@ public interface IStudentExamExecutionData {
     int getTimeExtensionDuration();
     boolean isTimeExtensionGranted();
     void setTimeExtensionGranted(boolean timeExtensionGranted);
+    boolean isSubmitted();
 }

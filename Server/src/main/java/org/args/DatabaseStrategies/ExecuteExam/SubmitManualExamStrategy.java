@@ -5,6 +5,7 @@ import DatabaseAccess.Requests.ExecuteExam.SubmitExamRequest;
 import DatabaseAccess.Requests.ExecuteExam.SubmitManualExamRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.ExecuteExam.SubmitExamResponse;
+import DatabaseAccess.Responses.ExecuteExam.SubmitManualExamResponse;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.Entities.ConcreteExam;
 import org.args.Entities.ExecutedExam;
@@ -35,11 +36,10 @@ public class SubmitManualExamStrategy extends DatabaseStrategy implements IExamI
         executedExam.setFileBytes(file);
         executedExam.setComputerized(false);
         executedExam.setSubmitted(true);
-//        concreteExam.addExecutedExam(executedExam);
 
         session.saveOrUpdate(executedExam);
         session.flush();
-        return new SubmitExamResponse(0,request1);
+        return new SubmitManualExamResponse(0,request1);
     }
 
     @Override
