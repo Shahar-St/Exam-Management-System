@@ -26,6 +26,7 @@ import org.hibernate.service.ServiceRegistry;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import java.io.File;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -51,7 +52,7 @@ public class DatabaseHandler {
         this.put("ExecuteExamRequest", new ExecuteExamStrategy());
         this.put("TakeExamRequest", new TakeExamStrategy());
         this.put("SubmitExamRequest", new SubmitExamStrategy());
-        this.put("SubmitManualExamRequest",new SubmitManualExamStrategy());
+        this.put("SubmitManualExamRequest", new SubmitManualExamStrategy());
         this.put("TimeExtensionRequest", new TimeExtensionStrategy());
         this.put("ConfirmTimeExtensionRequest", new ConfirmTimeExtensionStrategy());
         this.put("EvaluateExamRequest", new EvaluateExamStrategy());
@@ -59,8 +60,8 @@ public class DatabaseHandler {
         this.put("PendingExamsRequest", new PendingExamsStrategy());
         this.put("UncheckedExecutesOfConcreteRequest", new UncheckedExecutesOfConcreteStrategy());
         this.put("GetAllPastExamsRequest", new GetAllPastExamsStrategy());
-        this.put("TeacherEndExamRequest",new TeacherEndExamStrategy());
-        this.put("RaiseHandRequest",new RaiseHandStrategy());
+        this.put("TeacherEndExamRequest", new TeacherEndExamStrategy());
+        this.put("RaiseHandRequest", new RaiseHandStrategy());
         this.put("TeacherGetAllPastExamsRequest", new TeacherGetAllPastExamsStrategy());
         this.put("TeacherStatisticsRequest", new TeacherStatisticsStrategy());
     }};
@@ -72,23 +73,11 @@ public class DatabaseHandler {
             session = sessionFactory.openSession();
             session.beginTransaction();
 
-            Scanner scanner = new Scanner(System.in);
-            String ans = "";
-            System.out.println("Build dummy database? (y/n)");
-            System.out.println("//enter y only if the database is empty//");
-            while (!ans.equals("y") && !ans.equals("n"))
-            {
-                ans = scanner.nextLine();
-                if (!ans.equals("y") && !ans.equals("n"))
-                    System.out.println("wrong input, try again");
-            }
-            if (ans.equals("y"))
-            {
-                createDummyEntities();
-                session.getTransaction().commit();
-                session.clear();
-                session.beginTransaction();
-            }
+            System.out.println("Creating dummy database");
+            createDummyEntities();
+            session.getTransaction().commit();
+            session.clear();
+            session.beginTransaction();
         }
         catch (Exception exception)
         {
@@ -280,7 +269,7 @@ public class DatabaseHandler {
         //creating exams by teachers
         String[] titlesArr = {"functions", "Jerusalem", "circles", "Germany", "letters", "nikud", "spelling", "vocabulary"};
         List<Double> questionsScores = Arrays.asList(50.0, 50.0);
-        List<Integer> answersByStudent = Arrays.asList(2,3,2,3);
+        List<Integer> answersByStudent = Arrays.asList(2, 3, 2, 3);
         k = 0;
         for (int j = 0; j < NUM_OF_TEACHERS; j++)
         {
@@ -299,14 +288,14 @@ public class DatabaseHandler {
                 session.save(executedExam1);
                 executedExam1.setSubmitted(true);
                 executedExam1.setComputerized(true);
-                if(i%2==0)
+                if (i % 2 == 0)
                     executedExam1.setChecked(true);
                 executedExam1.setGrade(50);
                 ExecutedExam executedExam2 = new ExecutedExam(concreteExam, exam.getCourse().getStudentsList().get(1),
                         "very good!", answersByStudent, "");
                 session.save(executedExam2);
                 executedExam2.setSubmitted(true);
-                if(i%2==0)
+                if (i % 2 == 0)
                     executedExam2.setChecked(true);
                 executedExam2.setGrade(100);
                 k++;
