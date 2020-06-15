@@ -106,6 +106,11 @@ public class ViewExamController {
         pageView.setMaxPageIndicatorCount(5);
         pageView.setPageFactory((pageIndex) -> {
 
+            title.setEditable(false);
+            privateNotes.setEditable(false);
+            sNotes.setEditable(false);
+            duration.setEditable(false);
+
             if(pageIndex==0){
                 return new VBox(title_label, title, privateNotes_label, privateNotes,studentNotes_label,sNotes ,duration_label, duration);
             }
@@ -141,9 +146,7 @@ public class ViewExamController {
 
             TextField score = new TextField(questionsScores.get(pageIndex-1).toString());
 
-            title.setEditable(false);
-            privateNotes.setEditable(false);
-            duration.setEditable(false);
+
             lastModified.setEditable(false);
             author.setEditable(false);
             content.setEditable(false);
@@ -154,7 +157,7 @@ public class ViewExamController {
             score.setEditable(false);
 
 
-            switch (questionList.get(pageIndex).getCorrectAnswer()) {
+            switch (questionList.get(pageIndex-1).getCorrectAnswer()) {
                 case 0:
                     answer1.setStyle("-fx-background-color: #00ff00 ;");
 

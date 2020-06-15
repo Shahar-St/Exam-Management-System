@@ -87,6 +87,7 @@ public class ExamQuestionsController {
         if (courseQuestionsListView.getSelectionModel().getSelectedItem() != null) {
             int indexOfColon = courseQuestionsListView.getSelectionModel().getSelectedItem().indexOf(':');
             String questionId = courseQuestionsListView.getSelectionModel().getSelectedItem().substring(1, indexOfColon);
+            ClientApp.pushLastScene("ExamQuestionsScreen");
             model.loadQuestionDetails(questionId);
         }
     }

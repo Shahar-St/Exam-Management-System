@@ -3,7 +3,6 @@ package org.args.GUI;
 import LightEntities.LightExecutedExam;
 import LightEntities.LightQuestion;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -21,11 +20,6 @@ public class TeacherReviewCompExamController {
     private IExamReviewData model;
     private double finalScore = 0;
     private boolean isChangingGrade = false;
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
 
     @FXML
     private Pagination pageView;
@@ -35,7 +29,7 @@ public class TeacherReviewCompExamController {
 
 
     @FXML
-    void onBackClick(ActionEvent event) {
+    void onBackClick() {
         ClientApp.setRoot("TeacherExamGradesReviewScreen");
     }
 
@@ -135,7 +129,7 @@ public class TeacherReviewCompExamController {
                         return;
                     }
 
-                    model.submitExamReview(Integer.parseInt(finalGrade.getText()), notes.getText(),reasonForChangeGrade.getText(), null);
+                    model.submitExamReview(Double.parseDouble(finalGrade.getText()), notes.getText(),reasonForChangeGrade.getText(), null);
                 });
 
                 editButton.setOnAction(event -> {
@@ -146,7 +140,7 @@ public class TeacherReviewCompExamController {
                         confirmButton.setDisable(true);
                         editButton.setText("Done Editing.");
                     } else {
-                        if(reasonForChangeGrade.getText().equals("")){
+                        if(reasonForChangeGrade.getText().equals("") && !finalGrade.getText().equals(String.valueOf(finalScore)) ){
                             Platform.runLater(()->{
                                 Alert alert = new Alert(Alert.AlertType.ERROR);
                                 alert.setHeaderText(null);

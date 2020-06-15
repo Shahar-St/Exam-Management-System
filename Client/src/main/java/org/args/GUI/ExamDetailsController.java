@@ -59,7 +59,7 @@ public class ExamDetailsController {
         }
         else
         {
-            model.clearDetailsScreen();
+            //model.clearDetailsScreen();
         }
     }
 

@@ -117,7 +117,7 @@ public class TeacherExamExecutionController {
                         alert.setTitle("Attention!");
                         alert.setContentText("Exam has ended!");
                         alert.showAndWait();
-                        ClientApp.setRoot("MainScreen");
+                        ClientApp.setRoot("ExamManagementScreen");
                     });
                 }
             }
