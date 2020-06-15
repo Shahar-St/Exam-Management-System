@@ -392,6 +392,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void setViewMode(String viewMode) {
         this.viewMode = viewMode;
         if (viewMode.equals("ADD")) {
+            clearDetailsScreen();
             if (!observableQuestionsScoringList.isEmpty())
                 observableQuestionsScoringList.clear();
         }
@@ -966,12 +967,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
                 submitAndQuit();
         } else if (getPermission().equals("teacher")) {
             currentHandsRaised.clear();
-        } else {
-
-
         }
-
-
     }
 
     @Override

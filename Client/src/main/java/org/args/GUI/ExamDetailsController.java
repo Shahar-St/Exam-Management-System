@@ -57,10 +57,6 @@ public class ExamDetailsController {
             pageTitle.setText("Edit An Existing Exam");
             saveOriginalExamData();
         }
-        else
-        {
-            //model.clearDetailsScreen();
-        }
     }
 
     private void saveOriginalExamData() {
@@ -98,7 +94,7 @@ public class ExamDetailsController {
     {
         if (model.getViewMode().equals("ADD"))
         {
-            model.clearDetailsScreen();
+//            model.clearDetailsScreen();
         }
         else
         {
