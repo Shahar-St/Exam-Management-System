@@ -4,10 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import org.args.Client.IQuestionData;
 
@@ -15,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 public class QuestionController {
 
@@ -105,14 +103,14 @@ public class QuestionController {
                     break;
             }
             // if the current logged user is not the author of the question disable edit and delete buttons
-            if(!model.getUserName().equals(model.getAuthor())){
+            if (!model.getUserName().equals(model.getAuthor())) {
                 EditButton.setDisable(true);
                 DeleteButton.setDisable(true);
             }
 
-        }else{
+        } else {
             // when creating new question set the edit button to save from the beginning
-            Author.setText(model.getName());
+            Author.setText(model.getUserName());
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             LastModified.setText(LocalDateTime.now().format(formatter));
@@ -173,26 +171,35 @@ public class QuestionController {
 
     @FXML
     void CancelButtonClicked(ActionEvent event) {
-        if(model.isCreating())
+        if (model.isCreating())
             model.setCreating(false);
         ClientApp.backToLastScene();
     }
 
     @FXML
     void deleteButtonClicked(ActionEvent event) {
-        model.deleteQuestion(model.getQuestionId());
-
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Delete");
+        alert.setContentText("Are you sure you want to delete this?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            model.deleteQuestion(model.getQuestionId());
+        }
     }
 
     @FXML
     void EditButtonClicked(ActionEvent event) {
         if (model.isCreating()) {
             // null as question id indicates of new question being created
-            if(!Answer1.getText().equals("") && !Answer2.getText().equals("") && !Answer3.getText().equals("") && !Answer4.getText().equals("") && !Content.getText().equals("") && correctAnswerChoice.getValue() != null){
+            if (!Answer1.getText().equals("") && !Answer2.getText().equals("") && !Answer3.getText().equals("") && !Answer4.getText().equals("") && !Content.getText().equals("") && correctAnswerChoice.getValue() != null) {
                 model.saveQuestion(null, Answer1.getText(), Answer2.getText(), Answer3.getText(), Answer4.getText(), Content.getText());
                 model.setCreating(false);
-            }else{
-                model.alert("Invalid Question Or Some Data Fields May Be Missing.");
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Dialog");
+                alert.setHeaderText("Look, an Error Dialog");
+                alert.setContentText("Ooops, Invalid Question Or Some Data Fields May Be Missing.");
+                alert.showAndWait();
             }
 
         } else {
@@ -204,6 +211,7 @@ public class QuestionController {
                 Answer4.setEditable(true);
                 EditButton.setText("Save");
                 isEditing = true;
+                DeleteButton.setDisable(true);
                 correctAnswerChoice.setDisable(false);
                 switch (this.correctAnswer) {
                     case 0:
@@ -231,6 +239,7 @@ public class QuestionController {
                 Answer4.setEditable(false);
                 EditButton.setText("Edit");
                 isEditing = false;
+                DeleteButton.setDisable(false);
                 correctAnswerChoice.setDisable(true);
                 String questionId = model.getQuestionId();
                 model.saveQuestion(questionId, Answer1.getText(), Answer2.getText(), Answer3.getText(), Answer4.getText(), Content.getText());
