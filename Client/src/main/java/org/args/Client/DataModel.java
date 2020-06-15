@@ -140,6 +140,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         EventBus.getDefault().register(this);
     }
 
+    // handle LoginResponse
     @Subscribe
     public void handleLoginResponse(LoginResponse response) {
         if (response.getStatus() == 0) {
