@@ -41,6 +41,8 @@ public class TeacherReviewManualExamController {
             fileChooser.setInitialDirectory(defaultDirectory);
             fileChooser.setInitialFileName(model.getManualExamForReviewStudentId()+"_exam.docx");
             File selectedFile = fileChooser.showSaveDialog(ClientApp.primaryStage);
+            if(selectedFile==null)
+                return;
             if(!selectedFile.getName().contains(".")){
                 selectedFile = new File(selectedFile.getAbsoluteFile()+".docx");
             }else if(!selectedFile.getName().contains(".docx")){
