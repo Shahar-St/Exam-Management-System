@@ -42,9 +42,9 @@ public class GetAllPastExamsStrategy extends DatabaseStrategy {
                     executedExam.getConcreteExam().getExam().getCourse()
                             .getId().equals(getAllPastExamsRequest.getCourseId()))
             {
-                map1.put(String.valueOf(executedExam.getId()),
+                map1.put(String.valueOf(executedExam.getConcreteExam().getId()),
                         new Pair<>(executedExam.getConcreteExam().getExam().getTitle(), executedExam.getGrade()));
-                map2.put(String.valueOf(executedExam.getId()),
+                map2.put(String.valueOf(executedExam.getConcreteExam().getId()),
                         executedExam.getConcreteExam().getExamForExecutionInitDate());
             }
         }
