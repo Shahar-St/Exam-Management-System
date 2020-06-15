@@ -1015,6 +1015,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
             currentExecutedExamLaunchTime = currentExecutedExamStartLocalDateTime.format(hourMinutesformatter);
             currentExecutedExamEndLocalDateTime = currentExecutedExamStartLocalDateTime.plusMinutes(response.getDuration());
             currentExecutedExamEndTime.setValue(currentExecutedExamEndLocalDateTime.format(hourMinutesformatter));
+
         }
     }
 
