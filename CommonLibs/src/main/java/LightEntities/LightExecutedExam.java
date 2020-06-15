@@ -12,7 +12,7 @@ public class LightExecutedExam implements Serializable {
     private final String studentID;
     private final List<LightQuestion> lightQuestionList;
     private final List<Double> questionsScores;
-    private  List<Integer> answersByStudent = new ArrayList<>();
+    private List<Integer> answersByStudent = new ArrayList<>();
     private String reasonsForChangeGrade;
     private String commentsAfterCheck;
     private double grade = 0;
@@ -22,8 +22,9 @@ public class LightExecutedExam implements Serializable {
     private byte[] manualExam = null;
 
     public LightExecutedExam(String title, String testerUserName, String executedID, String studentID,
-                             List<LightQuestion> lightQuestionList, List<Double> questionsScores,List<Integer> answersByStudent,
-                             int duration, boolean isComputerized) {
+                             List<LightQuestion> lightQuestionList, List<Double> questionsScores,
+                             List<Integer> answersByStudent, int duration, boolean isComputerized, double grade,
+                             String reasonsForChangeGrade, String commentsAfterCheck) {
         this.title = title;
         this.testerUserName = testerUserName;
         this.executedID = executedID;
@@ -33,6 +34,9 @@ public class LightExecutedExam implements Serializable {
         this.duration = duration;
         this.isComputerized = isComputerized;
         this.answersByStudent = answersByStudent;
+        this.grade = grade;
+        this.reasonsForChangeGrade = reasonsForChangeGrade;
+        this.commentsAfterCheck = commentsAfterCheck;
     }
 
     public String getTitle() {
