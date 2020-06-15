@@ -295,7 +295,7 @@ public class DatabaseHandler {
                 ConcreteExam concreteExam = new ConcreteExam(exam, teacher, "1111");
                 session.save(concreteExam);
                 ExecutedExam executedExam1 = new ExecutedExam(concreteExam, exam.getCourse().getStudentsList().get(0),
-                        "perfect", answersByStudent, "");
+                        "not so good...", answersByStudent, "");
                 session.save(executedExam1);
                 executedExam1.setSubmitted(true);
                 executedExam1.setComputerized(true);
@@ -303,11 +303,12 @@ public class DatabaseHandler {
                     executedExam1.setChecked(true);
                 executedExam1.setGrade(50);
                 ExecutedExam executedExam2 = new ExecutedExam(concreteExam, exam.getCourse().getStudentsList().get(1),
-                        "", answersByStudent, "");
+                        "very good!", answersByStudent, "");
                 session.save(executedExam2);
                 executedExam2.setSubmitted(true);
                 if(i%2==0)
                     executedExam2.setChecked(true);
+                executedExam2.setGrade(100);
                 k++;
             }
         }
