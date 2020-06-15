@@ -192,7 +192,7 @@ public class QuestionController {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error Dialog");
                 alert.setHeaderText("Look, an Error Dialog");
-                alert.setContentText("Ooops, Invalid Question Or Some Data Fields May Be Missing.\"");
+                alert.setContentText("Ooops, Invalid Question Or Some Data Fields May Be Missing.");
                 alert.showAndWait();
             }
 

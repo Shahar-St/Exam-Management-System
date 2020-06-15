@@ -108,7 +108,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Override
     public void loadSubjects() { //used to load subjects and courses to the model before switching screens
-        ClientApp.sendRequest(new SubjectsAndCoursesRequest());
+        if(subjectsAndCourses == null)
+            ClientApp.sendRequest(new SubjectsAndCoursesRequest());
     }
 
     public String getPermission() {
