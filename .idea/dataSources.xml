@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="ems@localhost" uuid="1ec83467-1d1e-4063-9c79-90f6a10f18f3">
+    <data-source source="LOCAL" name="client@localhost" uuid="c33b8f09-9646-447c-accd-5d0700ddfc91">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/ems</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/client</jdbc-url>
     </data-source>
   </component>
 </project>

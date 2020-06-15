@@ -1,10 +1,9 @@
 package org.args.Client;
 
+@SuppressWarnings("ALL")
 public interface IMainScreenData {
 
     String getName();
-
-    void setName(String name);
 
     void login(String userName,String password);
 

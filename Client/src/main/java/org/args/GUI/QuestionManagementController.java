@@ -26,8 +26,6 @@ public class QuestionManagementController {
     private MenuButton coursesDropdown; // Value injected by FXMLLoader
     @FXML // fx:id="subjectsDropdown"
     private MenuButton subjectsDropdown; // Value injected by FXMLLoader
-    @FXML // fx:id="showQuestionList"
-    private Button showQuestionList; // Value injected by FXMLLoader
 
     @FXML // fx:id="questionsList"
     private ListView<String> questionsList; // Value injected by FXMLLoader

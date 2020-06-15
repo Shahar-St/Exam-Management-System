@@ -37,8 +37,6 @@ public interface IExamManagementData {
 
     void executeExam(String examId, String examCode);
 
-    String getViewMode();
-
     void setViewMode(String viewMode);
 
     void setCurrentExamId(String examId);

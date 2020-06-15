@@ -98,7 +98,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return name;
     }
 
-    public void setName(String name) {
+    private void setName(String name) {
         this.name = name;
     }
 
@@ -139,10 +139,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     String currentQuestionId;
 
-    public String getCurrentQuestionId() {
-        return currentQuestionId;
-    }
-
     private HashMap<String, HashMap<String, String>> subjectsAndCourses;
 
     private String currentSubject;
@@ -173,7 +169,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         this.currentQuestionId = currentQuestionId;
     }
 
-    public void setSubjectsAndCourses(HashMap<String, HashMap<String, String>> mapFromResponse) {
+    private void setSubjectsAndCourses(HashMap<String, HashMap<String, String>> mapFromResponse) {
         subjectsAndCourses = mapFromResponse;
     }
 
@@ -251,7 +247,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     /*break down the response and show strings that represents question in an -#id: content- format*/
-    public void generateQuestionDescriptors(HashMap<String, Pair<LocalDateTime, String>> questionList) {
+    private void generateQuestionDescriptors(HashMap<String, Pair<LocalDateTime, String>> questionList) {
         for (Map.Entry<String, Pair<LocalDateTime, String>> question : questionList.entrySet()) {
             String questionId = question.getKey();
             String questionDescription = question.getValue().getSecond();
@@ -298,7 +294,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return questionId;
     }
 
-    public void setQuestionId(String questionId) {
+    private void setQuestionId(String questionId) {
         this.questionId = questionId;
     }
 
@@ -306,7 +302,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return lastModified;
     }
 
-    public void setLastModified(String lastModified) {
+    private void setLastModified(String lastModified) {
         this.lastModified = lastModified;
     }
 
@@ -314,7 +310,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return author;
     }
 
-    public void setAuthor(String author) {
+    private void setAuthor(String author) {
         this.author = author;
     }
 
@@ -322,7 +318,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return content;
     }
 
-    public void setContent(String content) {
+    private void setContent(String content) {
         this.content = content;
     }
 
@@ -330,7 +326,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return answers;
     }
 
-    public void setAnswers(List<String> answers) {
+    private void setAnswers(List<String> answers) {
         this.answers = answers;
     }
 
@@ -382,7 +378,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private LightExam currentExam;
 
-    @Override
     public String getViewMode() {
         return viewMode;
     }
@@ -445,10 +440,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Override
     public void deleteExam() {
         ClientApp.sendRequest(new DeleteExamRequest(currentExam.getId()));
-    }
-
-    public String getCurrentExamTotalScore() {
-        return currentExamTotalScore.get();
     }
 
     @Override
@@ -568,8 +559,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.sendRequest(new ViewExamRequest(examId));
     }
 
-    @Override
-    public void cancelExamAddition() {
+    private void cancelExamAddition() {
         observableExamQuestionsList.clear();
     }
 
@@ -751,10 +741,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         isManualExam = manualExam;
     }
 
-    public void setCorrectAnswersMap(HashMap<Integer, Integer> correctAnswersMap) {
-        this.correctAnswersMap = correctAnswersMap;
-    }
-
     public File getManualExamFile() {
         return manualExamFile;
     }
@@ -767,7 +753,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return finishedOnTime;
     }
 
-    public void setFinishedOnTime(boolean finishedOnTime) {
+    private void setFinishedOnTime(boolean finishedOnTime) {
         this.finishedOnTime = finishedOnTime;
     }
 
@@ -951,20 +937,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return currentExecutedExamEndLocalDateTime;
     }
 
-    public void setCurrentExecutedExamEndLocalDateTime(LocalDateTime currentExecutedExamEndLocalDateTime) {
-        this.currentExecutedExamEndLocalDateTime = currentExecutedExamEndLocalDateTime;
-    }
-
-    public String getCurrentExecutedExamEndTime() {
-        return currentExecutedExamEndTime.get();
-    }
-
     public StringProperty getCurrentExecutedExamEndTimeProperty() {
         return currentExecutedExamEndTime;
-    }
-
-    public void setCurrentExecutedExamEndTime(String currentExecutedExamEndTime) {
-        this.currentExecutedExamEndTime.set(currentExecutedExamEndTime);
     }
 
     @Subscribe
@@ -1073,10 +1047,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     private String manualExamForReviewStudentId;
 
 
-    public void setStudentsGradesToReview(ObservableList<StudentExamType> studentsGradesToReview) {
-        this.studentsGradesToReview = studentsGradesToReview;
-    }
-
     public LightExecutedExam getCurrentLightExecutedExam() {
         return currentLightExecutedExam;
     }
@@ -1093,16 +1063,9 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         this.manualExamBytes = manualExamBytes;
     }
 
-    public void setManualExamForReview(File manualExamForReview) {
-    }
-
     @Override
     public String getManualExamForReviewStudentId() {
         return manualExamForReviewStudentId;
-    }
-
-    public void setManualExamForReviewStudentId(String manualExamForReviewStudentId) {
-        this.manualExamForReviewStudentId = manualExamForReviewStudentId;
     }
 
     public void saveWordFile(File filePath) {
@@ -1238,7 +1201,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     public void clearStudentPastExamsList() {
-        Platform.runLater(() -> studentPastExamsObservableList.clear());
+        Platform.runLater(studentPastExamsObservableList::clear);
     }
 
     @Override
