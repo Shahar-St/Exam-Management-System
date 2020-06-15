@@ -96,7 +96,7 @@ public class StudentExamExecutionController {
 
                 details.setPadding(new Insets(20,20,20,20));
 
-                return new ScrollPane(details);
+                return details;
             }
 
             LightQuestion currentQuestion = model.getExamForStudentExecution().getLightQuestionList().get(pageIndex - 1);
@@ -203,7 +203,7 @@ public class StudentExamExecutionController {
                 details.setPadding(new Insets(20,20,20,20));
             }
 
-            return new ScrollPane(new VBox(details));
+            return details;
 
 
         });
