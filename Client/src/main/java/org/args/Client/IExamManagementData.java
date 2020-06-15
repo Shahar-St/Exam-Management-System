@@ -46,4 +46,6 @@ public interface IExamManagementData {
     void setCurrentExecutedExamLaunchTime(String currentExecutedExamLaunchTime);
 
     void setCurrentExecutedExamTitle(String currentExecutedExamTitle);
+    String getCurrentCourseName();
+    void setCurrentCourseName(String currentCourseName);
 }

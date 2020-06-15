@@ -77,4 +77,8 @@ public interface IExamData {
 
     String getCurrentExamId();
 
+    void fillQuestionsList(String courseId);
+
+    String getCurrentCourseName();
+
 }

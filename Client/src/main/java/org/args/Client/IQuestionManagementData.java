@@ -33,6 +33,9 @@ public interface IQuestionManagementData {
 
     void setCourseSelected(boolean courseSelected);
 
+    String getCurrentCourseName();
+    void setCurrentCourseName(String currentCourseName);
+
     //questions list data
 
 

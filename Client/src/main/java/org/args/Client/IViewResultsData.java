@@ -3,6 +3,7 @@ package org.args.Client;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import org.args.GUI.StudentGrade;
+
 import java.util.List;
 import java.util.Set;
 
@@ -41,4 +42,8 @@ public interface IViewResultsData {
     String getExamIdFromTitle(String examId);
 
     void clearTeacherPastExamsData();
+
+    String getCurrentCourseName();
+
+    void setCurrentCourseName(String currentCourseName);
 }

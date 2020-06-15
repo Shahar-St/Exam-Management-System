@@ -167,7 +167,6 @@ public class QuestionController {
         });
     }
 
-
     @FXML
     void CancelButtonClicked(ActionEvent event) {
         if (model.isCreating())

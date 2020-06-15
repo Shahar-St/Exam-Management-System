@@ -39,7 +39,6 @@ public class ExamManagementController {
     @FXML
     private Button executeButton;
 
-
     private IExamManagementData model;
 
     public void setModel(IExamManagementData model) {
@@ -77,7 +76,7 @@ public class ExamManagementController {
             addSubjectToSubjectDropdown(subjectName);
         }
         subjectsDropdown.setText(model.getCurrentSubject());
-        coursesDropdown.setText(model.getCurrentCourseId());
+        coursesDropdown.setText(model.getCurrentCourseName());
         initializeCoursesDropdown();
         fillCoursesDropdown(model.getCurrentSubject());
     }
@@ -124,6 +123,7 @@ public class ExamManagementController {
         course.setOnAction(event -> {
             String text = ((MenuItem) event.getSource()).getText();
             coursesDropdown.setText(text);
+            model.setCurrentCourseName(text.substring(5));
             model.setCurrentCourseId(text.substring(0, 2));
             model.fillExamList(text.substring(0, 2));
         });

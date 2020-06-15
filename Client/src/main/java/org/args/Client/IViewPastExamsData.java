@@ -33,4 +33,8 @@ public interface IViewPastExamsData {
     LightExecutedExam getCurrentLightExecutedExam();
 
     void reviewStudentExam(String examId);
+
+    String getCurrentCourseName();
+
+    void setCurrentCourseName(String currentCourseName);
 }

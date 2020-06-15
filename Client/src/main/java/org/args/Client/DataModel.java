@@ -148,6 +148,17 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     private String currentSubject;
 
     private String currentCourseId;
+
+    private String currentCourseName;
+
+    public String getCurrentCourseName() {
+        return currentCourseName;
+    }
+
+    public void setCurrentCourseName(String currentCourseName) {
+        this.currentCourseName = currentCourseName;
+    }
+
     /* bound to buttons that shouldn't be visible/enabled while a course isn't selected */
     private final BooleanProperty courseSelected = new SimpleBooleanProperty(false);
 

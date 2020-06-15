@@ -106,8 +106,8 @@ public class ClientApp extends Application {
 
     public static boolean isNumeric(String str) {
         try {
-            Integer.parseInt(str);
-            return true;
+            int i = Integer.parseInt(str);
+            return i > 0;
         } catch (NumberFormatException e) {
             return false;
         }
@@ -308,8 +308,7 @@ public class ClientApp extends Application {
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Question Deleted");
                 alert.setContentText("Question Deleted Successfully!");
-                popLastScene();
-                setRoot("QuestionManagementScreen");
+                ClientApp.backToLastScene();
             } else if (response.getStatus() == 4)
             {
                 alert = new Alert(Alert.AlertType.ERROR);
