@@ -1,8 +1,6 @@
 package org.args;
 
 import DatabaseAccess.Requests.DatabaseRequest;
-import DatabaseAccess.Requests.Questions.DeleteQuestionRequest;
-import org.args.Entities.ConcreteExam;
 import org.args.OCSF.AbstractServer;
 import org.args.OCSF.ConnectionToClient;
 
@@ -25,7 +23,7 @@ public class EMSserver extends AbstractServer {
         this.databaseHandler = databaseHandler;
     }
 
-    public static EMSserver EMSserverInit(DatabaseHandler databaseHandler) {
+    public synchronized static EMSserver EMSserverInit(DatabaseHandler databaseHandler) {
 
         if (singleInstanceServer == null)
         {
@@ -66,7 +64,7 @@ public class EMSserver extends AbstractServer {
 
     @Override
     protected synchronized void clientDisconnected(ConnectionToClient client) {
-        //TODO student disconnected in exam to remove from exam manager
+
         System.out.print("Interrupted\nClient disconnected." + "\n>> ");
         loggedInUsers.remove((String) client.getInfo("userName"));
     }

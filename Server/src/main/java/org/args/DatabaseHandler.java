@@ -26,7 +26,6 @@ import org.hibernate.service.ServiceRegistry;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import java.io.File;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -34,7 +33,7 @@ public class DatabaseHandler {
 
     private static DatabaseHandler databaseHandler = null;
     private static Session session;
-    Map<Integer, ExamManager> examManagers = new HashMap<Integer, ExamManager>();    //key = concreteExam ID
+    Map<Integer, ExamManager> examManagers = new HashMap<>();    //key = concreteExam ID
 
     private final HashMap<String, DatabaseStrategy> strategies = new HashMap<>() {{
         this.put("LoginRequest", new LoginStrategy());
@@ -254,10 +253,10 @@ public class DatabaseHandler {
         for (int j = 0; j < NUM_OF_TEACHERS; j++)
         {
             Teacher teacher = teachers.get(j % NUM_OF_TEACHERS);
-            List<Course> c = teacher.getCoursesList();
             for (int i = 0; i < NUM_OF_QUESTIONS / NUM_OF_TEACHERS; i++)
             {
-                Question question = teacher.createQuestion(questionsArr[k], answers.get(k), i % NUM_OF_OPTIONAL_ANSWERS,
+                Question question = teacher.createQuestion(questionsArr[k], answers.get(k),
+                        i % NUM_OF_OPTIONAL_ANSWERS,
                         teacher.getCoursesList().get(i % teacher.getCoursesList().size()));
                 session.save(question);
                 session.update(teacher);
@@ -302,9 +301,6 @@ public class DatabaseHandler {
             }
         }
         session.flush();
-
-        ConcreteExam concreteExam = new ConcreteExam();
-
     }
 
     private static <T> List<T> getAllOfType(Session session, Class<T> objectType) {

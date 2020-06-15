@@ -2,16 +2,13 @@ package org.args.Entities;
 
 import LightEntities.LightExam;
 import LightEntities.LightQuestion;
-import org.hibernate.Session;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Entity

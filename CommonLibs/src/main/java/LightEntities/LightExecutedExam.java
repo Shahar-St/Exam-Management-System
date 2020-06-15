@@ -1,7 +1,6 @@
 package LightEntities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class LightExecutedExam implements Serializable {
@@ -12,10 +11,10 @@ public class LightExecutedExam implements Serializable {
     private final String studentID;
     private final List<LightQuestion> lightQuestionList;
     private final List<Double> questionsScores;
-    private List<Integer> answersByStudent = new ArrayList<>();
+    private List<Integer> answersByStudent;
     private String reasonsForChangeGrade;
     private String commentsAfterCheck;
-    private double grade = 0;
+    private double grade;
     private final int duration; // exam duration in minutes
     private final boolean isComputerized;
     private boolean checked = false;

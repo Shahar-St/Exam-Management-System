@@ -1,7 +1,6 @@
 package DatabaseAccess.Requests.Questions;
 
 import DatabaseAccess.Requests.DatabaseRequest;
-import LightEntities.LightQuestion;
 
 public class DeleteQuestionRequest  extends DatabaseRequest {
 

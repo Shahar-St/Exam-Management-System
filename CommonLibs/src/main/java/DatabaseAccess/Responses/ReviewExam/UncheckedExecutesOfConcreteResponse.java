@@ -2,10 +2,8 @@ package DatabaseAccess.Responses.ReviewExam;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
-import Util.Pair;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * status dictionary:

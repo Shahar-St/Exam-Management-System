@@ -18,10 +18,9 @@ public class ExamManager {
 
     private static ConnectionToClient dean;
     private ConnectionToClient teacher;
-    private Map<String, ConnectionToClient> students = new HashMap<>();
+    private final Map<String, ConnectionToClient> students = new HashMap<>();
 
-    private static List<TimeExtensionRequestNotifier> deanNotifications = new ArrayList<>();
-    private ConfirmTimeExtensionNotifier confirmTimeExtensionNotifier = null;
+    private static final List<TimeExtensionRequestNotifier> deanNotifications = new ArrayList<>();
 
     private final static Lock deanLock = new ReentrantLock();
 
@@ -29,9 +28,7 @@ public class ExamManager {
         this.teacher = teacher;
     }
 
-    public static ConnectionToClient getDean() {
-        return dean;
-    }
+    //Group setters and getters
     public static void setDean(ConnectionToClient dean) {
         ExamManager.dean = dean;
     }
@@ -42,24 +39,11 @@ public class ExamManager {
     public void setTeacher(ConnectionToClient teacher) {
         this.teacher = teacher;
     }
+
     public Map<String, ConnectionToClient> getStudents() {
         return students;
     }
-    public void setStudents(Map<String, ConnectionToClient> students) {
-        this.students = students;
-    }
-    public ConfirmTimeExtensionNotifier getConfirmTimeExtensionNotifier() {
-        return confirmTimeExtensionNotifier;
-    }
-    public void setConfirmTimeExtensionNotifier(ConfirmTimeExtensionNotifier confirmTimeExtensionNotifier) {
-        this.confirmTimeExtensionNotifier = confirmTimeExtensionNotifier;
-    }
-    public static List<TimeExtensionRequestNotifier> getDeanNotifications() {
-        return deanNotifications;
-    }
-    public static void setDeanNotifications(List<TimeExtensionRequestNotifier> deanNotifications) {
-        ExamManager.deanNotifications = deanNotifications;
-    }
+
     public static Lock getDeanLock() {
         return deanLock;
     }

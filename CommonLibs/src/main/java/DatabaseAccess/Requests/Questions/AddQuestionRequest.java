@@ -1,7 +1,6 @@
 package DatabaseAccess.Requests.Questions;
 
 import DatabaseAccess.Requests.DatabaseRequest;
-import LightEntities.LightQuestion;
 
 import java.util.List;
 

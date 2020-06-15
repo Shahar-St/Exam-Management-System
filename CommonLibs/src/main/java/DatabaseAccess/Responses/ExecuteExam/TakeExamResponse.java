@@ -1,7 +1,6 @@
 package DatabaseAccess.Responses.ExecuteExam;
 
 import DatabaseAccess.Requests.DatabaseRequest;
-import DatabaseAccess.Requests.ExecuteExam.TakeExamRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import LightEntities.LightExam;
 
