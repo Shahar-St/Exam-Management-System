@@ -5,9 +5,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import org.args.Client.IExamReviewData;
 
+import javax.swing.text.html.ImageView;
 import java.io.File;
 
 public class TeacherReviewManualExamController {
@@ -25,6 +27,9 @@ public class TeacherReviewManualExamController {
 
     @FXML
     private Button submitButton;
+
+    @FXML
+    private ImageView backButton;
 
     @FXML
     void initialize() {
@@ -71,5 +76,10 @@ public class TeacherReviewManualExamController {
     private void setModel(IExamReviewData newModel){
         if(model==null)
             model = newModel;
+    }
+
+    @FXML
+    void backButtonClicked(MouseEvent event) {
+        ClientApp.setRoot("TeacherExamGradesReviewScreen");
     }
 }

@@ -205,6 +205,7 @@ public class QuestionController {
                 Answer4.setEditable(true);
                 EditButton.setText("Save");
                 isEditing = true;
+                DeleteButton.setDisable(true);
                 correctAnswerChoice.setDisable(false);
                 switch (this.correctAnswer) {
                     case 0:
@@ -232,6 +233,7 @@ public class QuestionController {
                 Answer4.setEditable(false);
                 EditButton.setText("Edit");
                 isEditing = false;
+                DeleteButton.setDisable(false);
                 correctAnswerChoice.setDisable(true);
                 String questionId = model.getQuestionId();
                 model.saveQuestion(questionId, Answer1.getText(), Answer2.getText(), Answer3.getText(), Answer4.getText(), Content.getText());

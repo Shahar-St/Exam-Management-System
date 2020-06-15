@@ -6,6 +6,8 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -47,15 +49,29 @@
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                      </padding>
                   </VBox>
-                      <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20.0">
-                          <children>
-                              <Label text="Exam Submmission:" />
-                              <Button fx:id="submitButton" mnemonicParsing="false" text="Submit" />
-                          </children>
-                          <padding>
-                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                          </padding>
-                      </HBox>
+                  <VBox>
+                     <children>
+                            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20.0">
+                                <children>
+                                    <Label text="Exam Submmission:" />
+                                    <Button fx:id="submitButton" mnemonicParsing="false" text="Submit" />
+                                </children>
+                                <padding>
+                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                </padding>
+                            </HBox>
+                        <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                           <children>
+                              <ImageView fx:id="backButton" fitHeight="60.0" fitWidth="60.0" onMouseClicked="#backButtonClicked" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../Assets/left-arrow.png" />
+                                 </image>
+                              </ImageView>
+                              <Label text="Back" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
                   </children>
                   <padding>
                       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
