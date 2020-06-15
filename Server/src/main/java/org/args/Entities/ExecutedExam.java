@@ -169,14 +169,18 @@ public class ExecutedExam {
     }
 
     public LightExecutedExam getLightExecutedExam() {
-        List<LightQuestion> lightQuestionsList = new ArrayList<>();;
+
+        List<LightQuestion> lightQuestionsList = new ArrayList<>();
+        ;
         for (Question question : concreteExam.getExam().getQuestionsList())
             lightQuestionsList.add(question.createLightQuestion());
         List<Double> questionScoreList = new ArrayList<>(concreteExam.getExam().getQuestionsScores());
         LightExecutedExam lightExecutedExam = new LightExecutedExam(concreteExam.getExam().getTitle(), concreteExam.getTester().getUserName(),
                 String.valueOf(id), student.getSocialId(), lightQuestionsList, questionScoreList,
-                new ArrayList<>(this.answersByStudent), duration, isComputerized);
+                new ArrayList<>(this.answersByStudent), duration, isComputerized, this.grade,
+                this.reasonsForChangeGrade, this.commentsAfterCheck);
         lightExecutedExam.setManualExam(getFileBytes());
+
         return lightExecutedExam;
     }
 }
