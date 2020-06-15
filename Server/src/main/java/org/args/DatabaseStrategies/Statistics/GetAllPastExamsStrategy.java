@@ -38,6 +38,7 @@ public class GetAllPastExamsStrategy extends DatabaseStrategy {
 
         for (ExecutedExam executedExam : student.getExecutedExamsList())
         {
+            pastExamsLock.lock();
             if (executedExam.isChecked() && executedExam.isComputerized() &&
                     executedExam.getConcreteExam().getExam().getCourse()
                             .getId().equals(getAllPastExamsRequest.getCourseId()))
@@ -47,6 +48,7 @@ public class GetAllPastExamsStrategy extends DatabaseStrategy {
                 map2.put(String.valueOf(executedExam.getConcreteExam().getId()),
                         executedExam.getConcreteExam().getExamForExecutionInitDate());
             }
+            pastExamsLock.unlock();
         }
 
         return new GetAllPastExamsResponse(SUCCESS, request, map1, map2);

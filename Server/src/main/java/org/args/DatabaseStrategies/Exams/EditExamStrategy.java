@@ -31,13 +31,20 @@ public class EditExamStrategy extends DatabaseStrategy {
         if (client.getInfo("userName") == null)
             return new EditExamResponse(UNAUTHORIZED, request);
 
+        questionsAndExamsLock.lock();
         Exam exam = getTypeById(Exam.class, editExamRequest.getExamId(), session);
 
         if (exam == null)
+        {
+            questionsAndExamsLock.unlock();
             return new EditExamResponse(ERROR2, request);
+        }
 
         if (exam.getAuthor() != getUser((String) client.getInfo("userName"), session))
+        {
+            questionsAndExamsLock.unlock();
             return new EditExamResponse(ERROR3, request);
+        }
 
         List<Question> questionsList = new ArrayList<>();
         for (String question : editExamRequest.getQuestionsIDs())
@@ -46,7 +53,10 @@ public class EditExamStrategy extends DatabaseStrategy {
         if (!exam.getConcreteExamsList().isEmpty())
         {
             if (exam.getCourse().getAvailableExamCodes().isEmpty())
+            {
+                questionsAndExamsLock.unlock();
                 return new EditExamResponse(ERROR4, request);
+            }
 
             Exam newExam = new Exam(exam.getCourse(), exam.getAuthor(), editExamRequest.getDurationInMinutes(),
                     editExamRequest.getExamTitle(), editExamRequest.getStudentNotes(), editExamRequest.getTeacherNotes(),
@@ -66,6 +76,9 @@ public class EditExamStrategy extends DatabaseStrategy {
             session.update(exam);
         }
         session.flush();
+
+        questionsAndExamsLock.unlock();
+
         return new EditExamResponse(SUCCESS, request);
     }
 }

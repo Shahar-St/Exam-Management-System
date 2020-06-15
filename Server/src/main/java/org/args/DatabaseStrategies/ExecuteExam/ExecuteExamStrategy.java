@@ -33,7 +33,15 @@ public class ExecuteExamStrategy extends DatabaseStrategy implements IExamInProg
         if (client.getInfo("userName") == null)
             return new ExecuteExamResponse(UNAUTHORIZED, request);
 
+        questionsAndExamsLock.lock();
+
         Exam exam = getTypeById(Exam.class, request1.getExamID(), session);
+        if (exam == null)
+        {
+            questionsAndExamsLock.unlock();
+            return new ExecuteExamResponse(ERROR2, request);
+        }
+
         List<Student> students = exam.getCourse().getStudentsList();
 
         Teacher teacher = (Teacher) getUser((String) client.getInfo("userName"), session);
@@ -51,7 +59,8 @@ public class ExecuteExamStrategy extends DatabaseStrategy implements IExamInProg
         }
         session.flush();
 
-        return new ExecuteExamResponse(SUCCESS, request, String.valueOf(concreteExam.getId()),concreteExam.getExam().getDurationInMinutes());
+        questionsAndExamsLock.unlock();
+        return new ExecuteExamResponse(SUCCESS, request, String.valueOf(concreteExam.getId()), concreteExam.getExam().getDurationInMinutes());
     }
 
     @Override

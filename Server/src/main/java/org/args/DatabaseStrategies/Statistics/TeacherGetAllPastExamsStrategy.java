@@ -60,6 +60,8 @@ public class TeacherGetAllPastExamsStrategy extends DatabaseStrategy {
         {
             needToCheck = true;
             for (int i = 0; i < concreteExam.getExecutedExamsList().size() && needToCheck; i++)
+            {
+                pastExamsLock.lock();
                 if (concreteExam.getExecutedExamsList().get(i).isChecked() &&
                         concreteExam.getExecutedExamsList().get(i).isComputerized())
                 {
@@ -68,6 +70,8 @@ public class TeacherGetAllPastExamsStrategy extends DatabaseStrategy {
                                     concreteExam.getExam().getTitle()));
                     needToCheck = false;
                 }
+                pastExamsLock.unlock();
+            }
         }
     }
 }

@@ -24,7 +24,8 @@ public abstract class DatabaseStrategy {
     protected final int ERROR3 = 3;
     protected final int ERROR4 = 4;
 
-    protected static Lock readWriteLock = new ReentrantLock();
+    protected static Lock questionsAndExamsLock = new ReentrantLock();
+    protected static Lock pastExamsLock = new ReentrantLock();
 
     public abstract DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
                                             List<String> loggedInUsers);

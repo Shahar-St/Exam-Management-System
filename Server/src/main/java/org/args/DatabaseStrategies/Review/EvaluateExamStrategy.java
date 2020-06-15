@@ -38,9 +38,14 @@ public class EvaluateExamStrategy extends DatabaseStrategy {
         executedExam.setGrade(request1.getExam().getGrade());
         executedExam.setCommentsAfterCheck(request1.getExam().getCommentsAfterCheck());
         executedExam.setReasonsForChangeGrade(request1.getExam().getReasonsForChangeGrade());
+
+        pastExamsLock.lock();
+
         executedExam.setChecked(request1.getExam().isChecked());
         session.saveOrUpdate(executedExam);
         session.flush();
+
+        pastExamsLock.unlock();
 
         return new EvaluateExamResponse(SUCCESS, request1);
     }
