@@ -42,7 +42,6 @@ public class ClientApp extends Application {
     private static Scene scene;
     private static EMSClient client;
     private static DataModel model;
-    // specify the server defaults
     private static String host = "127.0.0.1";
     private static boolean isRunning;
     private static int port = 3000;

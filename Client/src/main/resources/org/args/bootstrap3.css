@@ -468,6 +468,8 @@ VBox > .split-menu-button.last > .arrow-button {
 .tab-pane .tab-header-area .tab:selected .tab-label {
 	-fx-text-fill: #333333;
 }
+
+/*noinspection ALL*/
 .tab-pane > .tab-content-area {
 	-fx-background-color: white;
 }
