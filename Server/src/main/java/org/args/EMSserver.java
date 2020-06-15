@@ -27,10 +27,9 @@ public class EMSserver extends AbstractServer {
 
         if (singleInstanceServer == null)
         {
-//            System.out.print("Enter port number: ");
-//            Scanner scanner = new Scanner(System.in);
-//            int port = scanner.nextInt();
-            int port = 3000;
+            System.out.print("Enter port number: ");
+            Scanner scanner = new Scanner(System.in);
+            int port = scanner.nextInt();
             singleInstanceServer = new EMSserver(port, databaseHandler);
             return singleInstanceServer;
         }
