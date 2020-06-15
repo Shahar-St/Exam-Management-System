@@ -46,7 +46,7 @@ public class SubmitManualExamStrategy extends DatabaseStrategy implements IExamI
 
         session.saveOrUpdate(executedExam);
         session.flush();
-        return new SubmitManualExamResponse(0, request1);
+        return new SubmitManualExamResponse(SUCCESS, request1);
     }
 
     @Override
