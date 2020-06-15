@@ -73,7 +73,7 @@ public class TeacherReviewCompExamController {
                 VBox details = new VBox(title_label, title, tester_label, tester, duration_label, duration);
                 details.setPadding(new Insets(20, 20, 20, 20));
                 details.setSpacing(20);
-                return new ScrollPane(details);
+                return details;
             }
             if (pageIndex == exam.getLightQuestionList().size() + 1) {
 
@@ -280,7 +280,7 @@ public class TeacherReviewCompExamController {
             details.setSpacing(20);
             details.setPadding(new Insets(20, 20, 20, 20));
 
-            return new ScrollPane(details);
+            return details;
         });
 
 
