@@ -290,11 +290,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         isCreating = creating;
     }
 
-    @Override
-    public void alert(String message) {
-        app.infoAlert(message);
-    }
-
 
     public String getQuestionId() {
         return questionId;

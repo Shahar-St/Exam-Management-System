@@ -4,10 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import org.args.Client.IQuestionData;
 
@@ -112,7 +109,7 @@ public class QuestionController {
 
         }else{
             // when creating new question set the edit button to save from the beginning
-            Author.setText(model.getName());
+            Author.setText(model.getUserName());
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             LastModified.setText(LocalDateTime.now().format(formatter));
@@ -192,7 +189,11 @@ public class QuestionController {
                 model.saveQuestion(null, Answer1.getText(), Answer2.getText(), Answer3.getText(), Answer4.getText(), Content.getText());
                 model.setCreating(false);
             }else{
-                model.alert("Invalid Question Or Some Data Fields May Be Missing.");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Dialog");
+                alert.setHeaderText("Look, an Error Dialog");
+                alert.setContentText("Ooops, Invalid Question Or Some Data Fields May Be Missing.\"");
+                alert.showAndWait();
             }
 
         } else {
