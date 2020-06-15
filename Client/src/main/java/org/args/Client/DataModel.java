@@ -967,12 +967,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
                 submitAndQuit();
         } else if (getPermission().equals("teacher")) {
             currentHandsRaised.clear();
-        } else {
-
-
         }
-
-
     }
 
     @Override

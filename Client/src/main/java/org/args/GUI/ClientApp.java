@@ -385,8 +385,14 @@ public class ClientApp extends Application {
                 setRoot("MainScreen"); // redirect client to main screen because of exam timeout.
             });
         else if(model.getPermission().equals("teacher")){
-            //do teacher stuff
-            //TODO: what do you need here? -Ronnie
+            Platform.runLater(()->{
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Attention!");
+                alert.setHeaderText(null);
+                alert.setContentText("Attention! \nExam Has Ended, All Exams Has Been Submitted, You're Now Being Redirected To The Main Screen");
+                alert.showAndWait();
+                setRoot("MainScreen");
+            });
         }
     }
 
