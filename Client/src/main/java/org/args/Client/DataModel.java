@@ -60,15 +60,12 @@ import java.util.*;
 public class DataModel implements IMainScreenData, IQuestionManagementData, IQuestionData, IStudentExamExecutionData,
         IDeanViewStatsData, IStudentViewStatsData, IExamData, ITeacherViewStatsData, IExamManagementData, IExamReviewData, ITeacherExecuteExamData, IViewDeanTimeExtensionData {
 
-    private final ClientApp app;
-
     private final WordGenerator wordGenerator;
 
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
     private final DateTimeFormatter hourMinutesformatter = DateTimeFormatter.ofPattern("HH:mm");
 
-    public DataModel(ClientApp clientApp) {
-        app = clientApp;
+    public DataModel() {
         wordGenerator = new WordGenerator();
         EventBus.getDefault().register(this);
     }
@@ -109,13 +106,10 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.sendRequest(new LoginRequest(userName, password));
     }
 
-    public void logOut() {
-        app.logOut();
-    }
-
     @Override
     public void loadSubjects() { //used to load subjects and courses to the model before switching screens
-        ClientApp.sendRequest(new SubjectsAndCoursesRequest());
+        if(subjectsAndCourses == null)
+            ClientApp.sendRequest(new SubjectsAndCoursesRequest());
     }
 
     public String getPermission() {
@@ -289,7 +283,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void setCreating(boolean creating) {
         isCreating = creating;
     }
-
 
     public String getQuestionId() {
         return questionId;
