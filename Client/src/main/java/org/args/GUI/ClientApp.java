@@ -95,13 +95,7 @@ public class ClientApp extends Application {
     }
 
     public static void sendRequest(Object data) {
-        try {
             client.sendToServer(data);
-        } catch (IOException e) {
-            System.out.println("Failed to send request to server");
-            e.printStackTrace();
-
-        }
     }
 
     public static boolean isNumeric(String str) {
