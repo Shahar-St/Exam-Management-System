@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.args.Client.IViewPastExamsData;
 
@@ -30,13 +31,13 @@ public class StudentPastExamsController {
     private Button reviewExam;
 
     @FXML
-    private TableColumn<String,Double> titleColumn;
+    private TableColumn<String, Double> titleColumn;
 
     @FXML
-    private TableColumn<String,Double> dateColumn;
+    private TableColumn<String, Double> dateColumn;
 
     @FXML
-    private TableColumn<String,Double> gradeColumn;
+    private TableColumn<String, Double> gradeColumn;
 
     IViewPastExamsData model;
 
@@ -45,15 +46,14 @@ public class StudentPastExamsController {
     }
 
     @FXML
-    public void initialize()
-    {
+    public void initialize() {
         setModel(ClientApp.getModel());
         initializeGradesTable();
         if (model.dataWasAlreadyInitialized()) {
             restoreInitializedData();
             model.loadPastExams();
         } else {
-           fillSubjectsDropDown(model.getSubjects());
+            fillSubjectsDropDown(model.getSubjects());
         }
     }
 
@@ -79,10 +79,17 @@ public class StudentPastExamsController {
     @FXML
     void handleMouseEvent(MouseEvent event) {
         reviewExam.setDisable(false);
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            showSelectedExamDetails();
+        }
     }
 
     @FXML
     void showExamDetails(ActionEvent event) {
+        showSelectedExamDetails();
+    }
+
+    private void showSelectedExamDetails() {
         String examId = gradesTable.getSelectionModel().getSelectedItem().getExamId();
         model.reviewStudentExam(examId);
     }
@@ -134,7 +141,7 @@ public class StudentPastExamsController {
             String text = ((MenuItem) event.getSource()).getText();
             coursesDropdown.setText(text);
             model.setCurrentCourseName(text.substring(5));
-            model.setCurrentCourseId(text.substring(0,2));
+            model.setCurrentCourseId(text.substring(0, 2));
             model.loadPastExams();
         });
         coursesDropdown.getItems().add(course);
@@ -147,15 +154,13 @@ public class StudentPastExamsController {
         }
     }
 
-    void clearScreen()
-    {
+    void clearScreen() {
         subjectsDropdown.getItems().clear();
         coursesDropdown.getItems().clear();
         model.setCurrentSubject(null);
         model.setCourseSelected(false);
         model.clearStudentPastExamsList();
     }
-
 
 
 }

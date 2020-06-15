@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.args.Client.IViewResultsData;
 
@@ -69,11 +70,19 @@ public class ResultsController {
     @FXML
     void handleMouseEvent(MouseEvent event) {
         detailsButton.setDisable(false);
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2)
+        {
+            presentDetails();
+        }
 
     }
 
     @FXML
     void showExamDetails(ActionEvent event) {
+        presentDetails();
+    }
+
+    private void presentDetails() {
         String selectedItem = examListView.getSelectionModel().getSelectedItem();
         String examTitle = selectedItem.substring(0,selectedItem.indexOf("-"));
         String examId = model.getExamIdFromTitle(examTitle);
