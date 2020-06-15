@@ -257,8 +257,7 @@ public class ClientApp extends Application {
     public void handleEditQuestionResponse(EditQuestionResponse response) {
         if (response.getStatus() == 0) {
             infoAlert("Edit Question Success");
-            popLastScene();
-            setRoot("QuestionManagementScreen");
+            backToLastScene();
         } else {
             errorAlert("Edit Question Failed, Please Try Again." + getErrorMessage(response.getStatus()));
         }

@@ -117,8 +117,9 @@ public class ExamQuestionsController {
             removeButton.setDisable(false);
         if (!addButton.isDisabled())
             addButton.setDisable(true);
+        if(!detailsButton.isDisabled())
+            detailsButton.setDisable(true);
         courseQuestionsListView.getSelectionModel().clearSelection();
-        detailsButton.setDisable(examQuestionsListView.getSelectionModel().getSelectedItems().size() > 1);
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2 &&
                 event.getTarget() instanceof ListCell && examQuestionsListView.getSelectionModel().getSelectedItems().size() == 1)
             model.removeFromExamQuestionsList(examQuestionsListView.getSelectionModel().getSelectedItem());
