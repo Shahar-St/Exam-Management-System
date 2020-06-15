@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 public class QuestionController {
 
@@ -102,12 +103,12 @@ public class QuestionController {
                     break;
             }
             // if the current logged user is not the author of the question disable edit and delete buttons
-            if(!model.getUserName().equals(model.getAuthor())){
+            if (!model.getUserName().equals(model.getAuthor())) {
                 EditButton.setDisable(true);
                 DeleteButton.setDisable(true);
             }
 
-        }else{
+        } else {
             // when creating new question set the edit button to save from the beginning
             Author.setText(model.getUserName());
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -170,25 +171,30 @@ public class QuestionController {
 
     @FXML
     void CancelButtonClicked(ActionEvent event) {
-        if(model.isCreating())
+        if (model.isCreating())
             model.setCreating(false);
         ClientApp.backToLastScene();
     }
 
     @FXML
     void deleteButtonClicked(ActionEvent event) {
-        model.deleteQuestion(model.getQuestionId());
-
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Delete");
+        alert.setContentText("Are you sure you want to delete this?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            model.deleteQuestion(model.getQuestionId());
+        }
     }
 
     @FXML
     void EditButtonClicked(ActionEvent event) {
         if (model.isCreating()) {
             // null as question id indicates of new question being created
-            if(!Answer1.getText().equals("") && !Answer2.getText().equals("") && !Answer3.getText().equals("") && !Answer4.getText().equals("") && !Content.getText().equals("") && correctAnswerChoice.getValue() != null){
+            if (!Answer1.getText().equals("") && !Answer2.getText().equals("") && !Answer3.getText().equals("") && !Answer4.getText().equals("") && !Content.getText().equals("") && correctAnswerChoice.getValue() != null) {
                 model.saveQuestion(null, Answer1.getText(), Answer2.getText(), Answer3.getText(), Answer4.getText(), Content.getText());
                 model.setCreating(false);
-            }else{
+            } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error Dialog");
                 alert.setHeaderText("Look, an Error Dialog");

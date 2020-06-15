@@ -312,8 +312,7 @@ public class ClientApp extends Application {
             {
                 alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
-                alert.setContentText("Question could not be deleted because it's already a part of an exam!");
-
+                alert.setContentText("Question could not be deleted \nbecause it's already a part of an exam!");
             }
             else {
                 alert = new Alert(Alert.AlertType.ERROR);
