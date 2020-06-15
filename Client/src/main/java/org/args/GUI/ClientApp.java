@@ -148,12 +148,11 @@ public class ClientApp extends Application {
         try {
             super.init();
             client = new EMSClient(host, port, this);
-            model = new DataModel(this);
+            model = new DataModel();
             lastScenes = new Stack<>();
         } catch (Exception e) {
             System.out.println("Failed to init app.. exiting");
             e.printStackTrace();
-
         }
     }
 
@@ -220,10 +219,19 @@ public class ClientApp extends Application {
         });
     }
 
-    public void logOut() {
+    public static void logOut() {
         client.logOut();
-        infoAlert("You have logged out successfully.");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Logout");
+        alert.setContentText("You have logged out successfully!");
+        Platform.runLater(() -> {
+            ((Stage) scene.getWindow()).setResizable(true);
+            scene.getWindow().setWidth(550);
+            scene.getWindow().setHeight(400);
+            scene.getWindow().centerOnScreen();
+        });
         setRoot("LoginScreen");
+        alert.showAndWait();
     }
 
 

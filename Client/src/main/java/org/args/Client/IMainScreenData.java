@@ -18,6 +18,5 @@ public interface IMainScreenData {
 
     void studentTakeManualExam(String code);
 
-    void logOut();
 
 }

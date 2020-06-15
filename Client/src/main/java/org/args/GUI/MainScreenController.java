@@ -289,7 +289,7 @@ public class MainScreenController {
 
     @FXML
     void logOutClicked(ActionEvent event){
-        model.logOut();
+        ClientApp.logOut();
     }
 
 }
