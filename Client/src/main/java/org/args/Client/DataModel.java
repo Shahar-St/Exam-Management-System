@@ -1091,7 +1091,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
 
-    ObservableList<StudentExamType> studentsGradesToReview = FXCollections.observableArrayList();
+    final ObservableList<StudentExamType> studentsGradesToReview = FXCollections.observableArrayList();
 
     public ObservableList<StudentExamType> getStudentsGradesToReview() {
         return studentsGradesToReview;

@@ -95,13 +95,7 @@ public class ClientApp extends Application {
     }
 
     public static void sendRequest(Object data) {
-        try {
             client.sendToServer(data);
-        } catch (IOException e) {
-            System.out.println("Failed to send request to server");
-            e.printStackTrace();
-
-        }
     }
 
     public static boolean isNumeric(String str) {
@@ -263,8 +257,7 @@ public class ClientApp extends Application {
     public void handleEditQuestionResponse(EditQuestionResponse response) {
         if (response.getStatus() == 0) {
             infoAlert("Edit Question Success");
-            popLastScene();
-            setRoot("QuestionManagementScreen");
+            backToLastScene();
         } else {
             errorAlert("Edit Question Failed, Please Try Again." + getErrorMessage(response.getStatus()));
         }
