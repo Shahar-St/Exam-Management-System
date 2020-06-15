@@ -3,26 +3,15 @@ package org.args.Client;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import org.args.GUI.StudentGrade;
-import org.args.GUI.StudentPastExam;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-public interface ITeacherViewStatsData {
-    List getTeacherExams();
+public interface IViewResultsData {
 
     Set<String> getSubjects();
 
-    void viewExamStatistics(String examId);
-
-    void loadPastExams();
-
-    public ObservableList<StudentPastExam> getStudentPastExamsObservableList();
-
-    public void loadSubjects();
-
-    public boolean dataWasAlreadyInitialized();
+    boolean dataWasAlreadyInitialized();
 
     List<String> getCoursesOfSubject(String subject);
 
@@ -34,11 +23,9 @@ public interface ITeacherViewStatsData {
 
     void setCurrentCourseId(String currentCourseId);
 
-    void clearStudentPastExamsList();
-
     void loadResults();
 
-    public ObservableList<String> getPastExamsResultsObservableList();
+    ObservableList<String> getPastExamsResultsObservableList();
 
     void setCourseSelected(boolean courseSelected);
 
@@ -55,4 +42,8 @@ public interface ITeacherViewStatsData {
     String getExamIdFromTitle(String examId);
 
     void clearTeacherPastExamsData();
+
+    String getCurrentCourseName();
+
+    void setCurrentCourseName(String currentCourseName);
 }

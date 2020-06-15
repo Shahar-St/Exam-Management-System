@@ -15,6 +15,7 @@ public interface IExamData {
 
     List<Double> getCurrentExamQuestionsScoreList();
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean isExamDeletable();
 
     void deleteExam();
@@ -24,10 +25,6 @@ public interface IExamData {
     void addToExamQuestionsList(String question);
 
     void removeFromExamQuestionsList(String question);
-
-    void cancelExamAddition();
-
-    void viewExam(String examId);
 
     ObservableList<String> getObservableQuestionsList();
 
@@ -67,8 +64,6 @@ public interface IExamData {
 
     String getViewMode();
 
-    void setViewMode(String viewMode);
-
     boolean checkQuestionScoringList();
 
     StringProperty currentExamTotalScoreProperty();
@@ -78,5 +73,9 @@ public interface IExamData {
     void clearDetailsScreen();
 
     String getCurrentExamId();
+
+    void fillQuestionsList(String courseId);
+
+    String getCurrentCourseName();
 
 }

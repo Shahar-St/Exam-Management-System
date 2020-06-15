@@ -54,7 +54,6 @@ public class MainScreenController {
 
     private void generateGreeting()
     {
-        Date dt = new Date();
         int hours = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         String greeting;
         if (hours >= 5 && hours <= 12) {
@@ -276,11 +275,6 @@ public class MainScreenController {
         errorAlert.showAndWait();
     }
 
-    @FXML
-    void switchToReportsScreen (ActionEvent event)
-    {
-        ClientApp.setRoot("ReportsScreen");
-    }
     @FXML
     void switchToExtensionRequestsScreen (ActionEvent event)
     {

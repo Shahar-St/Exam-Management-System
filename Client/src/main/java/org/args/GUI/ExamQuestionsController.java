@@ -42,7 +42,8 @@ public class ExamQuestionsController {
     @FXML
     public void initialize() {
         setModel(ClientApp.getModel());
-        questionsListTitle.setText("Questions from " + model.getCurrentCourseId() + " course");
+        model.fillQuestionsList(model.getCurrentCourseId());
+        questionsListTitle.setText("Questions from " + model.getCurrentCourseName() + " course");
         courseQuestionsListView.setItems(model.getObservableQuestionsList());
         examQuestionsListView.setItems(model.getObservableExamQuestionsList());
         examQuestionsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);

@@ -7,14 +7,12 @@ import org.args.GUI.StudentPastExam;
 import java.util.List;
 import java.util.Set;
 
-public interface IStudentViewStatsData {
+public interface IViewPastExamsData {
     void loadPastExams();
 
-    public ObservableList<StudentPastExam> getStudentPastExamsObservableList();
+    ObservableList<StudentPastExam> getStudentPastExamsObservableList();
 
-    public void loadSubjects();
-
-    public boolean dataWasAlreadyInitialized();
+    boolean dataWasAlreadyInitialized();
 
     Set<String> getSubjects();
 
@@ -35,4 +33,8 @@ public interface IStudentViewStatsData {
     LightExecutedExam getCurrentLightExecutedExam();
 
     void reviewStudentExam(String examId);
+
+    String getCurrentCourseName();
+
+    void setCurrentCourseName(String currentCourseName);
 }

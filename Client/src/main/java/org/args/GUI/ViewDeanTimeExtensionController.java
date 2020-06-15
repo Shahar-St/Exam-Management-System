@@ -31,10 +31,6 @@ public class ViewDeanTimeExtensionController {
         this.model = model;
     }
 
-    private String getSelectedExamId() {
-        return requestListView.getSelectionModel().getSelectedItem().substring(1, 7);
-    }
-
     @FXML
     void acceptExtension(ActionEvent event) {
 

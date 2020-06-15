@@ -1,11 +1,7 @@
 package org.args.GUI;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import org.args.Client.IStudentExamExecutionData;
 

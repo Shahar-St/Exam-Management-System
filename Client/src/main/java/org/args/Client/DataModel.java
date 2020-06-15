@@ -58,7 +58,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class DataModel implements IMainScreenData, IQuestionManagementData, IQuestionData, IStudentExamExecutionData,
-        IDeanViewStatsData, IStudentViewStatsData, IExamData, ITeacherViewStatsData, IExamManagementData, IExamReviewData, ITeacherExecuteExamData, IViewDeanTimeExtensionData {
+        IViewPastExamsData, IExamData, IViewResultsData, IExamManagementData, IExamReviewData, ITeacherExecuteExamData, IViewDeanTimeExtensionData {
 
     private final WordGenerator wordGenerator;
 
@@ -98,7 +98,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return name;
     }
 
-    public void setName(String name) {
+    private void setName(String name) {
         this.name = name;
     }
 
@@ -106,7 +106,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.sendRequest(new LoginRequest(userName, password));
     }
 
-    @Override
     public void loadSubjects() { //used to load subjects and courses to the model before switching screens
         if(subjectsAndCourses == null)
             ClientApp.sendRequest(new SubjectsAndCoursesRequest());
@@ -140,15 +139,22 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     String currentQuestionId;
 
-    public String getCurrentQuestionId() {
-        return currentQuestionId;
-    }
-
     private HashMap<String, HashMap<String, String>> subjectsAndCourses;
 
     private String currentSubject;
 
     private String currentCourseId;
+
+    private String currentCourseName;
+
+    public String getCurrentCourseName() {
+        return currentCourseName;
+    }
+
+    public void setCurrentCourseName(String currentCourseName) {
+        this.currentCourseName = currentCourseName;
+    }
+
     /* bound to buttons that shouldn't be visible/enabled while a course isn't selected */
     private final BooleanProperty courseSelected = new SimpleBooleanProperty(false);
 
@@ -163,7 +169,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         this.currentQuestionId = currentQuestionId;
     }
 
-    public void setSubjectsAndCourses(HashMap<String, HashMap<String, String>> mapFromResponse) {
+    private void setSubjectsAndCourses(HashMap<String, HashMap<String, String>> mapFromResponse) {
         subjectsAndCourses = mapFromResponse;
     }
 
@@ -241,7 +247,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
     /*break down the response and show strings that represents question in an -#id: content- format*/
-    public void generateQuestionDescriptors(HashMap<String, Pair<LocalDateTime, String>> questionList) {
+    private void generateQuestionDescriptors(HashMap<String, Pair<LocalDateTime, String>> questionList) {
         for (Map.Entry<String, Pair<LocalDateTime, String>> question : questionList.entrySet()) {
             String questionId = question.getKey();
             String questionDescription = question.getValue().getSecond();
@@ -288,7 +294,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return questionId;
     }
 
-    public void setQuestionId(String questionId) {
+    private void setQuestionId(String questionId) {
         this.questionId = questionId;
     }
 
@@ -296,7 +302,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return lastModified;
     }
 
-    public void setLastModified(String lastModified) {
+    private void setLastModified(String lastModified) {
         this.lastModified = lastModified;
     }
 
@@ -304,7 +310,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return author;
     }
 
-    public void setAuthor(String author) {
+    private void setAuthor(String author) {
         this.author = author;
     }
 
@@ -312,7 +318,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return content;
     }
 
-    public void setContent(String content) {
+    private void setContent(String content) {
         this.content = content;
     }
 
@@ -320,7 +326,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return answers;
     }
 
-    public void setAnswers(List<String> answers) {
+    private void setAnswers(List<String> answers) {
         this.answers = answers;
     }
 
@@ -372,7 +378,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private LightExam currentExam;
 
-    @Override
     public String getViewMode() {
         return viewMode;
     }
@@ -435,10 +440,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Override
     public void deleteExam() {
         ClientApp.sendRequest(new DeleteExamRequest(currentExam.getId()));
-    }
-
-    public String getCurrentExamTotalScore() {
-        return currentExamTotalScore.get();
     }
 
     @Override
@@ -553,14 +554,12 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return observableExamQuestionsList;
     }
 
-    @Override
     public void viewExam(String examId) {
         fillQuestionsList(currentCourseId);
         ClientApp.sendRequest(new ViewExamRequest(examId));
     }
 
-    @Override
-    public void cancelExamAddition() {
+    private void cancelExamAddition() {
         observableExamQuestionsList.clear();
     }
 
@@ -631,13 +630,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.sendRequest(new AllExamsRequest(courseId));
     }
 
-    @Override
-    public void addNote(String note) {
-
-    }
-
     // TODO: implement method for ITeacherViewStatsData
-    ObservableList<StudentGrade> studentGradesObservableList = FXCollections.observableArrayList();
+    final ObservableList<StudentGrade> studentGradesObservableList = FXCollections.observableArrayList();
 
     public ObservableList<StudentGrade> getStudentGradesObservableList() {
         return studentGradesObservableList;
@@ -645,12 +639,9 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Subscribe
     public void handleTeacherStatisticsResponse(TeacherStatisticsResponse response) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                for(Map.Entry<String,Double> e: response.getStudentGrades().entrySet()){
-                    studentGradesObservableList.add(new StudentGrade(e.getKey(),e.getValue()));
-                }
+        Platform.runLater(() -> {
+            for(Map.Entry<String,Double> e: response.getStudentGrades().entrySet()){
+                studentGradesObservableList.add(new StudentGrade(e.getKey(),e.getValue()));
             }
         });
     }
@@ -671,24 +662,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.sendRequest(new TeacherStatisticsRequest(examId));
     }
 
-    @Override
-    public List getTeacherExams() {
-        return null;
-    }
-
     public Set<String> getSubjects() {
         return subjectsAndCourses.keySet();
-    }
-
-
-    @Override
-    public void viewExamStatistics(String examId) {
-
-    }
-
-    @Override
-    public void viewReport(String report) {
-
     }
 
 
@@ -766,10 +741,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         isManualExam = manualExam;
     }
 
-    public void setCorrectAnswersMap(HashMap<Integer, Integer> correctAnswersMap) {
-        this.correctAnswersMap = correctAnswersMap;
-    }
-
     public File getManualExamFile() {
         return manualExamFile;
     }
@@ -782,7 +753,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return finishedOnTime;
     }
 
-    public void setFinishedOnTime(boolean finishedOnTime) {
+    private void setFinishedOnTime(boolean finishedOnTime) {
         this.finishedOnTime = finishedOnTime;
     }
 
@@ -803,11 +774,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Override
     public void storeAnswer(int questionNumber, int answerNumber) {
         correctAnswersMap.put(questionNumber, answerNumber);
-    }
-
-    @Override
-    public void displayExam() {
-
     }
 
     // take care of empty byte array
@@ -963,32 +929,16 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         Platform.runLater(() -> currentHandsRaised.remove(currentStudentName));
     }
 
-    StringProperty currentExecutedExamEndTime = new SimpleStringProperty();
+    final StringProperty currentExecutedExamEndTime = new SimpleStringProperty();
     LocalDateTime currentExecutedExamStartLocalDateTime;
     LocalDateTime currentExecutedExamEndLocalDateTime;
-
-    public LocalDateTime getCurrentExecutedExamStartLocalDateTime() {
-        return currentExecutedExamStartLocalDateTime;
-    }
 
     public LocalDateTime getCurrentExecutedExamEndLocalDateTime() {
         return currentExecutedExamEndLocalDateTime;
     }
 
-    public void setCurrentExecutedExamEndLocalDateTime(LocalDateTime currentExecutedExamEndLocalDateTime) {
-        this.currentExecutedExamEndLocalDateTime = currentExecutedExamEndLocalDateTime;
-    }
-
-    public String getCurrentExecutedExamEndTime() {
-        return currentExecutedExamEndTime.get();
-    }
-
     public StringProperty getCurrentExecutedExamEndTimeProperty() {
         return currentExecutedExamEndTime;
-    }
-
-    public void setCurrentExecutedExamEndTime(String currentExecutedExamEndTime) {
-        this.currentExecutedExamEndTime.set(currentExecutedExamEndTime);
     }
 
     @Subscribe
@@ -1010,9 +960,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
                 setTimeExtensionGranted(true);
                 setTimeExtensionDuration(notifier.getAuthorizedTimeExtension());
             }else if(getPermission().equals("teacher")){
-                Platform.runLater(() -> {
-                    currentExecutedExamEndTime.setValue(currentExecutedExamEndLocalDateTime.plusMinutes(notifier.getAuthorizedTimeExtension()).format(hourMinutesformatter));
-                });
+                Platform.runLater(() -> currentExecutedExamEndTime.setValue(currentExecutedExamEndLocalDateTime.plusMinutes(notifier.getAuthorizedTimeExtension()).format(hourMinutesformatter)));
             }
 
         }
@@ -1025,19 +973,9 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
 
-    @Override
-    public void confirmGrade(String examId) {
-
-    }
-
-    @Override
-    public void changeGrade(double newGrade, String reason, String examId) {
-
-    }
-
     //Teacher pending exams data
 
-    ObservableList<String> pendingExamsObservableList = FXCollections.observableArrayList();
+    final ObservableList<String> pendingExamsObservableList = FXCollections.observableArrayList();
     private String currentConcreteExamId;
     private String currentConcreteExamTitle;
 
@@ -1060,7 +998,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public ObservableList<String> getPendingExamsObservableList() {
         return pendingExamsObservableList;
     }
-    HashMap<String,String> pendingExamsMap = new HashMap<>();
+    final HashMap<String,String> pendingExamsMap = new HashMap<>();
 
     @Subscribe
     public void handlePendingExamResponse(PendingExamsResponse response) {
@@ -1106,14 +1044,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private LightExecutedExam currentLightExecutedExam;
 
-    private File manualExamForReview;
-
     private String manualExamForReviewStudentId;
 
-
-    public void setStudentsGradesToReview(ObservableList<StudentExamType> studentsGradesToReview) {
-        this.studentsGradesToReview = studentsGradesToReview;
-    }
 
     public LightExecutedExam getCurrentLightExecutedExam() {
         return currentLightExecutedExam;
@@ -1131,21 +1063,9 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         this.manualExamBytes = manualExamBytes;
     }
 
-    public File getManualExamForReview() {
-        return manualExamForReview;
-    }
-
-    public void setManualExamForReview(File manualExamForReview) {
-        this.manualExamForReview = manualExamForReview;
-    }
-
     @Override
     public String getManualExamForReviewStudentId() {
         return manualExamForReviewStudentId;
-    }
-
-    public void setManualExamForReviewStudentId(String manualExamForReviewStudentId) {
-        this.manualExamForReviewStudentId = manualExamForReviewStudentId;
     }
 
     public void saveWordFile(File filePath) {
@@ -1186,7 +1106,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void handleUncheckedExecutesOfConcreteResponse(UncheckedExecutesOfConcreteResponse response) {
         if (response.getStatus() == 0) {
             Platform.runLater(() -> {
-                //HashMap<studentID,isComputerized>
+                //HashMap<ConcreteID,isComputerized>
                 for (Map.Entry<String, Boolean> entry : response.getCheckedExamsList().entrySet()) {
                     String method = entry.getValue() ? "Computerized" : "Manual";
                     studentsGradesToReview.add(new StudentExamType(entry.getKey(), method));
@@ -1221,7 +1141,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     // dean time extension
 
-    ObservableList<String> ObservableTimeExtensionRequestsList = FXCollections.observableArrayList();
+    final ObservableList<String> ObservableTimeExtensionRequestsList = FXCollections.observableArrayList();
 
     public ObservableList<String> getObservableTimeExtensionRequestsList() {
         return ObservableTimeExtensionRequestsList;
@@ -1255,13 +1175,12 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     //Student past exams screen
 
-    ObservableList<StudentPastExam> studentPastExamsObservableList = FXCollections.observableArrayList();
+    final ObservableList<StudentPastExam> studentPastExamsObservableList = FXCollections.observableArrayList();
 
     public ObservableList<StudentPastExam> getStudentPastExamsObservableList() {
         return studentPastExamsObservableList;
     }
 
-    @Override
     public void loadPastExams() {
         ClientApp.sendRequest(new GetAllPastExamsRequest(currentCourseId));
     }
@@ -1269,24 +1188,20 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Subscribe
     public void handleGetAllPastExamsResponse(GetAllPastExamsResponse response) {
         studentPastExamsObservableList.clear();
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                // hashMap: executedExamId, (title,grade)
-                for (Map.Entry<String, Pair<String, Double>> entry : response.getExecutedExamsList().entrySet()) {
-                    String id = entry.getKey();
-                    String examDate = response.getExecutedExamsDates().get(id).format(dateTimeFormatter);
-                    String examTitle = entry.getValue().getFirst();
-                    Double grade = entry.getValue().getSecond();
-                    studentPastExamsObservableList.add(new StudentPastExam( examTitle, id,grade,examDate));
-                }
+        Platform.runLater(() -> {
+            // hashMap: executedExamId, (title,grade)
+            for (Map.Entry<String, Pair<String, Double>> entry : response.getExecutedExamsList().entrySet()) {
+                String id = entry.getKey();
+                String examDate = response.getExecutedExamsDates().get(id).format(dateTimeFormatter);
+                String examTitle = entry.getValue().getFirst();
+                Double grade = entry.getValue().getSecond();
+                studentPastExamsObservableList.add(new StudentPastExam( examTitle, id,grade,examDate));
             }
         });
     }
 
-    @Override
     public void clearStudentPastExamsList() {
-        Platform.runLater(() -> studentPastExamsObservableList.clear());
+        Platform.runLater(studentPastExamsObservableList::clear);
     }
 
     @Override
@@ -1301,7 +1216,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.sendRequest(new TeacherGetAllPastExamsRequest(currentCourseId));
     }
 
-    ObservableList<String> pastExamsResultsObservableList = FXCollections.observableArrayList();
+    final ObservableList<String> pastExamsResultsObservableList = FXCollections.observableArrayList();
     private final HashMap<String,String> pastExamsMap = new HashMap<>();
 
     public ObservableList<String> getPastExamsResultsObservableList() {
@@ -1311,20 +1226,17 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Subscribe
     public void handleTeacherGetAllPastExamsResponse(TeacherGetAllPastExamsResponse response)
     {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                clearTeacherPastExamsData();
-                //hashMap: executedExamId, (date, title)
-                for(Map.Entry<String,Pair<LocalDateTime,String>> entry : response.getConcreteExamsList().entrySet())
-                {
-                    String examId = entry.getKey();
-                    String date = entry.getValue().getFirst().format(dateTimeFormatter);
-                    String title = entry.getValue().getSecond();
-                    pastExamsMap.put(title,examId);
-                    String examToAdd = title + "-" + " Executed at: " + date;
-                    pastExamsResultsObservableList.add(examToAdd);
-                }
+        Platform.runLater(() -> {
+            clearTeacherPastExamsData();
+            //hashMap: executedExamId, (date, title)
+            for(Map.Entry<String,Pair<LocalDateTime,String>> entry : response.getConcreteExamsList().entrySet())
+            {
+                String examId = entry.getKey();
+                String date = entry.getValue().getFirst().format(dateTimeFormatter);
+                String title = entry.getValue().getSecond();
+                pastExamsMap.put(title,examId);
+                String examToAdd = title + "-" + " Executed at: " + date;
+                pastExamsResultsObservableList.add(examToAdd);
             }
         });
     }

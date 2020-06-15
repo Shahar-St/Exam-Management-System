@@ -18,7 +18,6 @@ public class QuestionController {
 
 
     private boolean isEditing = false;
-    private boolean isNew = false;
     private IQuestionData model;
     private int correctAnswer;
 
@@ -111,7 +110,7 @@ public class QuestionController {
         } else {
             // when creating new question set the edit button to save from the beginning
             Author.setText(model.getUserName());
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             LastModified.setText(LocalDateTime.now().format(formatter));
             Content.setEditable(true);
@@ -168,7 +167,6 @@ public class QuestionController {
         });
     }
 
-
     @FXML
     void CancelButtonClicked(ActionEvent event) {
         if (model.isCreating())
@@ -182,7 +180,7 @@ public class QuestionController {
         alert.setTitle("Confirm Delete");
         alert.setContentText("Are you sure you want to delete this?");
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
+        if (result.isPresent() && result.get() == ButtonType.OK) {
             model.deleteQuestion(model.getQuestionId());
         }
     }

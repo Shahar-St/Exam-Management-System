@@ -7,14 +7,12 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import org.args.Client.IStudentViewStatsData;
+import org.args.Client.IViewPastExamsData;
 
-import java.time.format.DateTimeFormatter;
-
+@SuppressWarnings("DuplicatedCode")
 public class StudentReviewPastExamController {
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    private IStudentViewStatsData model;
+    private IViewPastExamsData model;
 
 
     @FXML
@@ -29,6 +27,7 @@ public class StudentReviewPastExamController {
         ClientApp.setRoot("StudentPastExamsScreen");
     }
 
+    @SuppressWarnings("DuplicatedCode")
     @FXML
     void initialize() {
         setModel(ClientApp.getModel());
@@ -195,7 +194,7 @@ public class StudentReviewPastExamController {
 
     }
 
-    public void setModel(IStudentViewStatsData model) {
+    public void setModel(IViewPastExamsData model) {
         this.model = model;
     }
 

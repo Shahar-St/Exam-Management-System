@@ -49,6 +49,7 @@ public class ClientApp extends Application {
     private static Stack<String> lastScenes;
     private final String[] errors = {"SUCCESS", "UNAUTHORIZED", "NOT_FOUND", "NO_ACCESS", "WRONG_INFO"};
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isRunning() {
         return isRunning;
     }
@@ -105,13 +106,14 @@ public class ClientApp extends Application {
 
     public static boolean isNumeric(String str) {
         try {
-            Integer.parseInt(str);
-            return true;
+            int i = Integer.parseInt(str);
+            return i > 0;
         } catch (NumberFormatException e) {
             return false;
         }
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isDouble(String str) {
         try {
             Double.parseDouble(str);
@@ -306,8 +308,7 @@ public class ClientApp extends Application {
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Question Deleted");
                 alert.setContentText("Question Deleted Successfully!");
-                popLastScene();
-                setRoot("QuestionManagementScreen");
+                ClientApp.backToLastScene();
             } else if (response.getStatus() == 4)
             {
                 alert = new Alert(Alert.AlertType.ERROR);

@@ -8,18 +8,11 @@ import java.util.logging.Logger;
 
 public class EMSClient extends AbstractClient {
 
-    private static final Logger LOGGER =
-            Logger.getLogger(EMSClient.class.getName());
-
     private final ClientApp app;
 
     public EMSClient(String host, int port, ClientApp clientApp) {
         super(host, port);
         this.app = clientApp;
-    }
-
-    public ClientApp getApp() {
-        return app;
     }
 
     @Override

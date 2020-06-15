@@ -39,7 +39,6 @@ public class ExamManagementController {
     @FXML
     private Button executeButton;
 
-
     private IExamManagementData model;
 
     public void setModel(IExamManagementData model) {
@@ -77,7 +76,7 @@ public class ExamManagementController {
             addSubjectToSubjectDropdown(subjectName);
         }
         subjectsDropdown.setText(model.getCurrentSubject());
-        coursesDropdown.setText(model.getCurrentCourseId());
+        coursesDropdown.setText(model.getCurrentCourseName());
         initializeCoursesDropdown();
         fillCoursesDropdown(model.getCurrentSubject());
     }
@@ -124,6 +123,7 @@ public class ExamManagementController {
         course.setOnAction(event -> {
             String text = ((MenuItem) event.getSource()).getText();
             coursesDropdown.setText(text);
+            model.setCurrentCourseName(text.substring(5));
             model.setCurrentCourseId(text.substring(0, 2));
             model.fillExamList(text.substring(0, 2));
         });
@@ -200,45 +200,44 @@ public class ExamManagementController {
 
     @FXML
     void executeExam(ActionEvent event) {
-        disableDetailsAndExecuteButtons();
-        String examId = getExamIdFromSelected();
-        if (examId != null)
-        {
-            AtomicBoolean advance = new AtomicBoolean(false);
-            TextInputDialog examCodeDialog = new TextInputDialog();
-            examCodeDialog.setTitle("Exam Code");
-            examCodeDialog.setContentText("Please enter exam code:");
+        if (examListView.getSelectionModel().getSelectedItem() != null) {
+            disableDetailsAndExecuteButtons();
+            String examId = getExamIdFromSelected();
+            if (examId != null) {
+                AtomicBoolean advance = new AtomicBoolean(false);
+                TextInputDialog examCodeDialog = new TextInputDialog();
+                examCodeDialog.setTitle("Exam Code");
+                examCodeDialog.setContentText("Please enter exam code:");
 
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            while (!advance.get())
-            {
-                Optional<String> result = examCodeDialog.showAndWait();
-                result.ifPresent(code ->
-                        {
-                            if (code.length() != 4) {
-                                alert.setHeaderText("Wrong number of digits");
-                                alert.setContentText("Please enter a 4-digit code!");
-                                alert.showAndWait();
-                            } else if (!ClientApp.isNumeric(code)) {
-                                alert.setHeaderText("Invalid exam code");
-                                alert.setContentText("Code must only contain digits!");
-                                alert.showAndWait();
-                            }else
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                while (!advance.get()) {
+                    Optional<String> result = examCodeDialog.showAndWait();
+                    result.ifPresent(code ->
                             {
-                                model.executeExam(examId, code);
-                                advance.set(true);
+                                if (code.length() != 4) {
+                                    alert.setHeaderText("Wrong number of digits");
+                                    alert.setContentText("Please enter a 4-digit code!");
+                                    alert.showAndWait();
+                                } else if (!ClientApp.isNumeric(code)) {
+                                    alert.setHeaderText("Invalid exam code");
+                                    alert.setContentText("Code must only contain digits!");
+                                    alert.showAndWait();
+                                } else {
+                                    model.executeExam(examId, code);
+                                    advance.set(true);
+                                }
                             }
-                        }
-                );
-                if (result.isEmpty())
-                    advance.set(true);
+                    );
+                    if (result.isEmpty())
+                        advance.set(true);
+                }
             }
+            model.setCurrentExecutedExamLaunchTime(LocalDateTime.now().format(formatter));
+            String currentTitle = examListView.getSelectionModel().getSelectedItem();
+            currentTitle = currentTitle.substring(currentTitle.indexOf(":") + 1);
+            model.setCurrentExecutedExamTitle(currentTitle);
         }
-        model.setCurrentExecutedExamLaunchTime(LocalDateTime.now().format(formatter));
-        String currentTitle = examListView.getSelectionModel().getSelectedItem();
-        currentTitle = currentTitle.substring(currentTitle.indexOf(":")+1);
-        model.setCurrentExecutedExamTitle(currentTitle);
     }
 
     private void disableDetailsAndExecuteButtons()

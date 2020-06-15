@@ -61,7 +61,7 @@ public class ViewExamController {
         alert.setHeaderText("Delete Exam " + model.getCurrentExamTitle());
         alert.setContentText("Are you sure you want to delete this exam?");
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
+        if (result.isPresent() && result.get() == ButtonType.OK){
             model.deleteExam();
         }
     }

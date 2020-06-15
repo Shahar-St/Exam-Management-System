@@ -31,6 +31,7 @@ public class TeacherReviewManualExamController {
     @FXML
     private ImageView backButton;
 
+    @SuppressWarnings("DuplicatedCode")
     @FXML
     void initialize() {
         setModel(ClientApp.getModel());

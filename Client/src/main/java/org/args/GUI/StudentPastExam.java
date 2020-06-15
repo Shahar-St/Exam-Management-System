@@ -1,5 +1,6 @@
 package org.args.GUI;
 
+@SuppressWarnings("ALL")
 public class StudentPastExam {
 
     private final String examTitle;

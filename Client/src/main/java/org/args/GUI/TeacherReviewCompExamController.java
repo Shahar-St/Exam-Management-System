@@ -10,13 +10,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import org.args.Client.IExamReviewData;
 
-import java.net.URL;
-import java.time.format.DateTimeFormatter;
-import java.util.ResourceBundle;
-
 public class TeacherReviewCompExamController {
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private IExamReviewData model;
     private double finalScore = 0;
     private boolean isChangingGrade = false;
@@ -33,6 +28,7 @@ public class TeacherReviewCompExamController {
         ClientApp.setRoot("TeacherExamGradesReviewScreen");
     }
 
+    @SuppressWarnings("DuplicatedCode")
     @FXML
     void initialize() {
         setModel(ClientApp.getModel());

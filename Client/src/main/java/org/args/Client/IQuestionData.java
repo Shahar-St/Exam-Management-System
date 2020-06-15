@@ -4,29 +4,18 @@ import javafx.collections.ObservableList;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public interface IQuestionData {
-
-    String getCurrentCourseId();
 
     String getQuestionId();
 
-    void setQuestionId(String questionId);
-
     String getLastModified();
-
-    void setLastModified(String lastModified);
 
     String getAuthor();
 
-    void setAuthor(String author);
-
     String getContent();
 
-    void setContent(String content);
-
     List<String> getAnswers();
-
-    void setAnswers(List<String> answers);
 
     int getCorrectAnswer();
 
@@ -40,12 +29,10 @@ public interface IQuestionData {
 
     void setCreating(boolean creating);
 
-    String getName();
-
     String getUserName();
 
     void saveQuestion(String questionId, String answer_1, String answer_2, String answer_3, String answer_4, String newContent);
 
     void deleteQuestion(String questionId);
-    void fillQuestionsList(String courseId);
+
 }
