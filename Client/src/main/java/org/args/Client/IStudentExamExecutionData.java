@@ -21,8 +21,6 @@ public interface IStudentExamExecutionData {
 
     void setManualExamFile(File manualExamFile);
 
-    void setFinishedOnTime(boolean finishedOnTime);
-
     void submitAndQuit();
 
     LocalDateTime getExamForStudentExecutionInitDate();

@@ -32,6 +32,7 @@ public class ExamScoringController {
     @FXML
     private Label scoreLabel;
 
+    @SuppressWarnings("unused")
     @FXML
     private ImageView backArrow;
 
