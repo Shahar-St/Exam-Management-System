@@ -11,7 +11,7 @@ import java.util.Set;
 
 public interface IQuestionManagementData {
 
-    void setSubjectsAndCourses(HashMap<String, HashMap<String,String>> mapFromResponse);
+    void setSubjectsAndCourses(HashMap<String, HashMap<String, String>> mapFromResponse);
 
     Set<String> getSubjects();
 
@@ -34,9 +34,6 @@ public interface IQuestionManagementData {
     void setCourseSelected(boolean courseSelected);
 
     //questions list data
-
-
-
 
 
     void generateQuestionDescriptors(HashMap<String, Pair<LocalDateTime, String>> questionList);

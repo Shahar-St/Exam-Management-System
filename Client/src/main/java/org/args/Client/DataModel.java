@@ -58,7 +58,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class DataModel implements IMainScreenData, IQuestionManagementData, IQuestionData, IStudentExamExecutionData,
-        IDeanViewStatsData, IStudentViewStatsData, IExamData, ITeacherViewStatsData, IExamManagementData, IExamReviewData, ITeacherExecuteExamData, IViewDeanTimeExtensionData {
+        IViewPastExamsData, IExamData, IViewResultsData, IExamManagementData, IExamReviewData, ITeacherExecuteExamData, IViewDeanTimeExtensionData {
 
     private final WordGenerator wordGenerator;
 
@@ -106,7 +106,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.sendRequest(new LoginRequest(userName, password));
     }
 
-    @Override
     public void loadSubjects() { //used to load subjects and courses to the model before switching screens
         if(subjectsAndCourses == null)
             ClientApp.sendRequest(new SubjectsAndCoursesRequest());
@@ -553,7 +552,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         return observableExamQuestionsList;
     }
 
-    @Override
     public void viewExam(String examId) {
         fillQuestionsList(currentCourseId);
         ClientApp.sendRequest(new ViewExamRequest(examId));
@@ -631,13 +629,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.sendRequest(new AllExamsRequest(courseId));
     }
 
-    @Override
-    public void addNote(String note) {
-
-    }
-
     // TODO: implement method for ITeacherViewStatsData
-    ObservableList<StudentGrade> studentGradesObservableList = FXCollections.observableArrayList();
+    final ObservableList<StudentGrade> studentGradesObservableList = FXCollections.observableArrayList();
 
     public ObservableList<StudentGrade> getStudentGradesObservableList() {
         return studentGradesObservableList;
@@ -645,12 +638,9 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Subscribe
     public void handleTeacherStatisticsResponse(TeacherStatisticsResponse response) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                for(Map.Entry<String,Double> e: response.getStudentGrades().entrySet()){
-                    studentGradesObservableList.add(new StudentGrade(e.getKey(),e.getValue()));
-                }
+        Platform.runLater(() -> {
+            for(Map.Entry<String,Double> e: response.getStudentGrades().entrySet()){
+                studentGradesObservableList.add(new StudentGrade(e.getKey(),e.getValue()));
             }
         });
     }
@@ -671,24 +661,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.sendRequest(new TeacherStatisticsRequest(examId));
     }
 
-    @Override
-    public List getTeacherExams() {
-        return null;
-    }
-
     public Set<String> getSubjects() {
         return subjectsAndCourses.keySet();
-    }
-
-
-    @Override
-    public void viewExamStatistics(String examId) {
-
-    }
-
-    @Override
-    public void viewReport(String report) {
-
     }
 
 
@@ -803,11 +777,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Override
     public void storeAnswer(int questionNumber, int answerNumber) {
         correctAnswersMap.put(questionNumber, answerNumber);
-    }
-
-    @Override
-    public void displayExam() {
-
     }
 
     // take care of empty byte array
@@ -963,13 +932,9 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         Platform.runLater(() -> currentHandsRaised.remove(currentStudentName));
     }
 
-    StringProperty currentExecutedExamEndTime = new SimpleStringProperty();
+    final StringProperty currentExecutedExamEndTime = new SimpleStringProperty();
     LocalDateTime currentExecutedExamStartLocalDateTime;
     LocalDateTime currentExecutedExamEndLocalDateTime;
-
-    public LocalDateTime getCurrentExecutedExamStartLocalDateTime() {
-        return currentExecutedExamStartLocalDateTime;
-    }
 
     public LocalDateTime getCurrentExecutedExamEndLocalDateTime() {
         return currentExecutedExamEndLocalDateTime;
@@ -1010,9 +975,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
                 setTimeExtensionGranted(true);
                 setTimeExtensionDuration(notifier.getAuthorizedTimeExtension());
             }else if(getPermission().equals("teacher")){
-                Platform.runLater(() -> {
-                    currentExecutedExamEndTime.setValue(currentExecutedExamEndLocalDateTime.plusMinutes(notifier.getAuthorizedTimeExtension()).format(hourMinutesformatter));
-                });
+                Platform.runLater(() -> currentExecutedExamEndTime.setValue(currentExecutedExamEndLocalDateTime.plusMinutes(notifier.getAuthorizedTimeExtension()).format(hourMinutesformatter)));
             }
 
         }
@@ -1025,19 +988,9 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     }
 
 
-    @Override
-    public void confirmGrade(String examId) {
-
-    }
-
-    @Override
-    public void changeGrade(double newGrade, String reason, String examId) {
-
-    }
-
     //Teacher pending exams data
 
-    ObservableList<String> pendingExamsObservableList = FXCollections.observableArrayList();
+    final ObservableList<String> pendingExamsObservableList = FXCollections.observableArrayList();
     private String currentConcreteExamId;
     private String currentConcreteExamTitle;
 
@@ -1060,7 +1013,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public ObservableList<String> getPendingExamsObservableList() {
         return pendingExamsObservableList;
     }
-    HashMap<String,String> pendingExamsMap = new HashMap<>();
+    final HashMap<String,String> pendingExamsMap = new HashMap<>();
 
     @Subscribe
     public void handlePendingExamResponse(PendingExamsResponse response) {
@@ -1106,8 +1059,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     private LightExecutedExam currentLightExecutedExam;
 
-    private File manualExamForReview;
-
     private String manualExamForReviewStudentId;
 
 
@@ -1131,12 +1082,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         this.manualExamBytes = manualExamBytes;
     }
 
-    public File getManualExamForReview() {
-        return manualExamForReview;
-    }
-
     public void setManualExamForReview(File manualExamForReview) {
-        this.manualExamForReview = manualExamForReview;
     }
 
     @Override
@@ -1186,7 +1132,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public void handleUncheckedExecutesOfConcreteResponse(UncheckedExecutesOfConcreteResponse response) {
         if (response.getStatus() == 0) {
             Platform.runLater(() -> {
-                //HashMap<studentID,isComputerized>
+                //HashMap<ConcreteID,isComputerized>
                 for (Map.Entry<String, Boolean> entry : response.getCheckedExamsList().entrySet()) {
                     String method = entry.getValue() ? "Computerized" : "Manual";
                     studentsGradesToReview.add(new StudentExamType(entry.getKey(), method));
@@ -1221,7 +1167,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     // dean time extension
 
-    ObservableList<String> ObservableTimeExtensionRequestsList = FXCollections.observableArrayList();
+    final ObservableList<String> ObservableTimeExtensionRequestsList = FXCollections.observableArrayList();
 
     public ObservableList<String> getObservableTimeExtensionRequestsList() {
         return ObservableTimeExtensionRequestsList;
@@ -1255,13 +1201,12 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     //Student past exams screen
 
-    ObservableList<StudentPastExam> studentPastExamsObservableList = FXCollections.observableArrayList();
+    final ObservableList<StudentPastExam> studentPastExamsObservableList = FXCollections.observableArrayList();
 
     public ObservableList<StudentPastExam> getStudentPastExamsObservableList() {
         return studentPastExamsObservableList;
     }
 
-    @Override
     public void loadPastExams() {
         ClientApp.sendRequest(new GetAllPastExamsRequest(currentCourseId));
     }
@@ -1269,22 +1214,18 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Subscribe
     public void handleGetAllPastExamsResponse(GetAllPastExamsResponse response) {
         studentPastExamsObservableList.clear();
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                // hashMap: executedExamId, (title,grade)
-                for (Map.Entry<String, Pair<String, Double>> entry : response.getExecutedExamsList().entrySet()) {
-                    String id = entry.getKey();
-                    String examDate = response.getExecutedExamsDates().get(id).format(dateTimeFormatter);
-                    String examTitle = entry.getValue().getFirst();
-                    Double grade = entry.getValue().getSecond();
-                    studentPastExamsObservableList.add(new StudentPastExam( examTitle, id,grade,examDate));
-                }
+        Platform.runLater(() -> {
+            // hashMap: executedExamId, (title,grade)
+            for (Map.Entry<String, Pair<String, Double>> entry : response.getExecutedExamsList().entrySet()) {
+                String id = entry.getKey();
+                String examDate = response.getExecutedExamsDates().get(id).format(dateTimeFormatter);
+                String examTitle = entry.getValue().getFirst();
+                Double grade = entry.getValue().getSecond();
+                studentPastExamsObservableList.add(new StudentPastExam( examTitle, id,grade,examDate));
             }
         });
     }
 
-    @Override
     public void clearStudentPastExamsList() {
         Platform.runLater(() -> studentPastExamsObservableList.clear());
     }
@@ -1301,7 +1242,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.sendRequest(new TeacherGetAllPastExamsRequest(currentCourseId));
     }
 
-    ObservableList<String> pastExamsResultsObservableList = FXCollections.observableArrayList();
+    final ObservableList<String> pastExamsResultsObservableList = FXCollections.observableArrayList();
     private final HashMap<String,String> pastExamsMap = new HashMap<>();
 
     public ObservableList<String> getPastExamsResultsObservableList() {
@@ -1311,20 +1252,17 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Subscribe
     public void handleTeacherGetAllPastExamsResponse(TeacherGetAllPastExamsResponse response)
     {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                clearTeacherPastExamsData();
-                //hashMap: executedExamId, (date, title)
-                for(Map.Entry<String,Pair<LocalDateTime,String>> entry : response.getConcreteExamsList().entrySet())
-                {
-                    String examId = entry.getKey();
-                    String date = entry.getValue().getFirst().format(dateTimeFormatter);
-                    String title = entry.getValue().getSecond();
-                    pastExamsMap.put(title,examId);
-                    String examToAdd = title + "-" + " Executed at: " + date;
-                    pastExamsResultsObservableList.add(examToAdd);
-                }
+        Platform.runLater(() -> {
+            clearTeacherPastExamsData();
+            //hashMap: executedExamId, (date, title)
+            for(Map.Entry<String,Pair<LocalDateTime,String>> entry : response.getConcreteExamsList().entrySet())
+            {
+                String examId = entry.getKey();
+                String date = entry.getValue().getFirst().format(dateTimeFormatter);
+                String title = entry.getValue().getSecond();
+                pastExamsMap.put(title,examId);
+                String examToAdd = title + "-" + " Executed at: " + date;
+                pastExamsResultsObservableList.add(examToAdd);
             }
         });
     }

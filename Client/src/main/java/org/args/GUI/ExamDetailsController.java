@@ -92,11 +92,7 @@ public class ExamDetailsController {
     @FXML
     void back(ActionEvent event)
     {
-        if (model.getViewMode().equals("ADD"))
-        {
-//            model.clearDetailsScreen();
-        }
-        else
+        if (model.getViewMode().equals("EDIT"))
         {
             restoreOriginalExamData();
         }

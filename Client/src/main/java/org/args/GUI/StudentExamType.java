@@ -16,7 +16,4 @@ public class StudentExamType {
         return id;
     }
 
-    public String getExamType() {
-        return examType;
-    }
 }

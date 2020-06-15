@@ -8,7 +8,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
-import org.args.Client.ITeacherViewStatsData;
+import org.args.Client.IViewResultsData;
 
 import java.util.List;
 import java.util.Set;
@@ -30,9 +30,9 @@ public class ResultsController {
     @FXML
     private Button backButton;
 
-    ITeacherViewStatsData model;
+    IViewResultsData model;
 
-    public void setModel(ITeacherViewStatsData model) {
+    public void setModel(IViewResultsData model) {
         this.model = model;
     }
 
@@ -79,10 +79,6 @@ public class ResultsController {
         String examId = model.getExamIdFromTitle(examTitle);
         model.setCurrentExamTitle(examTitle);
         model.showGradesOf(examId);
-    }
-
-    void switchToMainScreen(MouseEvent event) {
-        ClientApp.setRoot("MainScreen");
     }
 
     @FXML

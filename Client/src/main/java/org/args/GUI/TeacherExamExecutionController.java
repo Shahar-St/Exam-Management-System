@@ -9,7 +9,6 @@ import javafx.scene.input.MouseEvent;
 import org.args.Client.ITeacherExecuteExamData;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -106,6 +105,7 @@ public class TeacherExamExecutionController {
                     // in case that the window has been closed
                     timer.cancel();
                     timer.purge();
+                    //noinspection UnnecessaryReturnStatement
                     return;
                 } else if (LocalDateTime.now().isEqual(model.getCurrentExecutedExamEndLocalDateTime())
                 || LocalDateTime.now().isAfter(model.getCurrentExecutedExamEndLocalDateTime())) {

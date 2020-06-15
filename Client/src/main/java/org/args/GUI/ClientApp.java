@@ -49,6 +49,7 @@ public class ClientApp extends Application {
     private static Stack<String> lastScenes;
     private final String[] errors = {"SUCCESS", "UNAUTHORIZED", "NOT_FOUND", "NO_ACCESS", "WRONG_INFO"};
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isRunning() {
         return isRunning;
     }
@@ -112,6 +113,7 @@ public class ClientApp extends Application {
         }
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isDouble(String str) {
         try {
             Double.parseDouble(str);

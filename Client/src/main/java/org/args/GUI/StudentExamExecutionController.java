@@ -30,7 +30,6 @@ public class StudentExamExecutionController {
     private final String fontStyle = "Cambria";
 
     private final int smallSpacing = 5;
-    private final int mediumSpacing = 10;
     private final int largeSpacing = 20;
 
     @FXML

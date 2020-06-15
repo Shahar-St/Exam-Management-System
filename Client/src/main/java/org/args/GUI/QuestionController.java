@@ -18,7 +18,6 @@ public class QuestionController {
 
 
     private boolean isEditing = false;
-    private boolean isNew = false;
     private IQuestionData model;
     private int correctAnswer;
 
@@ -111,7 +110,7 @@ public class QuestionController {
         } else {
             // when creating new question set the edit button to save from the beginning
             Author.setText(model.getUserName());
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             LastModified.setText(LocalDateTime.now().format(formatter));
             Content.setEditable(true);

@@ -9,12 +9,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.args.Client.ITeacherViewStatsData;
+import org.args.Client.IViewResultsData;
 
 public class TeacherStatisticsController {
 
 
-    private ITeacherViewStatsData model;
+    private IViewResultsData model;
 
     @FXML
     private Label examTitleLabel;
@@ -50,7 +50,7 @@ public class TeacherStatisticsController {
         gradesTableView.setItems(model.getStudentGradesObservableList());
     }
 
-    private void setModel(ITeacherViewStatsData newModel){
+    private void setModel(IViewResultsData newModel){
         if(model==null)
             model = newModel;
     }

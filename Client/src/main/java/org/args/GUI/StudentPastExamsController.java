@@ -7,7 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import org.args.Client.IStudentViewStatsData;
+import org.args.Client.IViewPastExamsData;
 
 import java.util.List;
 import java.util.Set;
@@ -38,9 +38,9 @@ public class StudentPastExamsController {
     @FXML
     private TableColumn<String,Double> gradeColumn;
 
-    IStudentViewStatsData model;
+    IViewPastExamsData model;
 
-    public void setModel(IStudentViewStatsData model) {
+    public void setModel(IViewPastExamsData model) {
         this.model = model;
     }
 
