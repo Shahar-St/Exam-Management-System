@@ -98,7 +98,7 @@ public class ExamDetailsController {
     {
         if (model.getViewMode().equals("ADD"))
         {
-            model.clearDetailsScreen();
+//            model.clearDetailsScreen();
         }
         else
         {

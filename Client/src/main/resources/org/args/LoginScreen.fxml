@@ -32,7 +32,7 @@
                        <Insets />
                    </TilePane.margin>
                </Label>
-               <TextField fx:id="usernameField" styleClass="first" text="Yoni_Cohen" />
+               <TextField fx:id="usernameField" styleClass="first" text="1_1" />
            </TilePane>
            <TilePane alignment="CENTER">
                <Label text="Password:">
@@ -40,7 +40,7 @@
                        <Font size="24.0" />
                    </font>
                </Label>
-               <PasswordField fx:id="passwordField" text="Yoni" />
+               <PasswordField fx:id="passwordField" text="1" />
            </TilePane>
        </VBox>
    </center>

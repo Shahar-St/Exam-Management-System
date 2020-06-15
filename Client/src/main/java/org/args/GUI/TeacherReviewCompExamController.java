@@ -138,7 +138,7 @@ public class TeacherReviewCompExamController {
                         finalGrade.setEditable(true);
                         reasonForChangeGrade.setEditable(true);
                         confirmButton.setDisable(true);
-                        editButton.setText("Done Editing.");
+                        editButton.setText("Done Editing");
                     } else {
                         if(reasonForChangeGrade.getText().equals("") && !finalGrade.getText().equals(String.valueOf(finalScore)) ){
                             Platform.runLater(()->{
