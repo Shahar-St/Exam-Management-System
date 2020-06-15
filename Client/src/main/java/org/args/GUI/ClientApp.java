@@ -300,7 +300,14 @@ public class ClientApp extends Application {
                 alert.setContentText("Question Deleted Successfully!");
                 popLastScene();
                 setRoot("QuestionManagementScreen");
-            } else {
+            } else if (response.getStatus() == 4)
+            {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("Question could not be deleted because it's already a part of an exam!");
+
+            }
+            else {
                 alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setContentText("Ooops, Question could not be deleted!");
@@ -319,7 +326,13 @@ public class ClientApp extends Application {
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Exam Deleted");
                 alert.setContentText("Exam Deleted Successfully!");
-            } else {
+            } else if (response.getStatus() == 4)
+            {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("exam could not be deleted because it was already executed!");
+            }
+            else {
                 alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setContentText("Ooops, exam could not be deleted!");
