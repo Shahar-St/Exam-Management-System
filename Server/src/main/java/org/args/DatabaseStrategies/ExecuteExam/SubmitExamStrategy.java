@@ -68,6 +68,7 @@ public class SubmitExamStrategy extends DatabaseStrategy implements IExamInProgr
         return new SubmitExamResponse(SUCCESS, request1);
     }
 
+    @SuppressWarnings("RedundantCast")
     @Override
     public void handle(DatabaseRequest request, DatabaseResponse response, Map<Integer, ExamManager> examManagers, ConnectionToClient client, Session session) {
 

@@ -49,6 +49,7 @@ public class SubmitManualExamStrategy extends DatabaseStrategy implements IExamI
         return new SubmitManualExamResponse(SUCCESS, request1);
     }
 
+    @SuppressWarnings("RedundantCast")
     @Override
     public void handle(DatabaseRequest request, DatabaseResponse response, Map<Integer, ExamManager> examManagers,
                        ConnectionToClient client, Session session) {

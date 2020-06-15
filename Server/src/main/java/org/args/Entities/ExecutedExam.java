@@ -169,7 +169,6 @@ public class ExecutedExam {
     public LightExecutedExam getLightExecutedExam() {
 
         List<LightQuestion> lightQuestionsList = new ArrayList<>();
-        ;
         for (Question question : concreteExam.getExam().getQuestionsList())
             lightQuestionsList.add(question.createLightQuestion());
         List<Double> questionScoreList = new ArrayList<>(concreteExam.getExam().getQuestionsScores());

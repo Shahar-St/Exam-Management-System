@@ -29,11 +29,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import java.util.*;
 import java.util.logging.Level;
 
+@SuppressWarnings({"FieldCanBeLocal", "SpellCheckingInspection"})
 public class DatabaseHandler {
 
     private static DatabaseHandler databaseHandler = null;
     private static Session session;
-    Map<Integer, ExamManager> examManagers = new HashMap<>();    //key = concreteExam ID
+    final Map<Integer, ExamManager> examManagers = new HashMap<>();    //key = concreteExam ID
 
     private final HashMap<String, DatabaseStrategy> strategies = new HashMap<>() {{
         this.put("LoginRequest", new LoginStrategy());

@@ -34,7 +34,7 @@ public class Exam {
 
     @ManyToMany(mappedBy = "containedInExams")
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
-    private List<Question> questionsList = new ArrayList<>();
+    private final List<Question> questionsList = new ArrayList<>();
 
     @ElementCollection
     private List<Double> questionsScores = new ArrayList<>();

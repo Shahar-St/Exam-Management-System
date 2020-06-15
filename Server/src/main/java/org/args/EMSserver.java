@@ -16,7 +16,7 @@ public class EMSserver extends AbstractServer {
 
     private static EMSserver singleInstanceServer = null;
     private final DatabaseHandler databaseHandler;
-    List<String> loggedInUsers = new ArrayList<>();
+    final List<String> loggedInUsers = new ArrayList<>();
 
     private EMSserver(int port, DatabaseHandler databaseHandler) {
         super(port);
@@ -61,6 +61,7 @@ public class EMSserver extends AbstractServer {
         System.out.print("Interrupted\nClient connected: " + client.getInetAddress() + "\n>> ");
     }
 
+    @SuppressWarnings("RedundantCast")
     @Override
     protected synchronized void clientDisconnected(ConnectionToClient client) {
 
