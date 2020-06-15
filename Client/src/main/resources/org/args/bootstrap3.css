@@ -251,6 +251,7 @@ VBox > .split-menu-button.last > .arrow-button {
 	-fx-background-color: #449d44;
 }
 /*pressed selected*/
+/*noinspection ALL*/
 .button.success:pressed, .button.success:selected,
 .menu-button.success:pressed,.menu-button.success:selected
 ,.toggle-button.success:pressed,.toggle-button.success:selected,
@@ -359,6 +360,7 @@ VBox > .split-menu-button.last > .arrow-button {
 	-fx-background-color: #333333;
 }
 
+/*noinspection ALL*/
 .check-menu-item:checked:hover > .left-container > .check,
 .check-menu-item:checked:focused > .left-container > .check,
 .radio-menu-item:checked:hover > .left-container > .radio,

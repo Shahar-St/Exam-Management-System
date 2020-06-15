@@ -31,6 +31,9 @@ public class MainScreenController {
     @FXML
     private Button button4;
 
+    @FXML
+    private Button logOutButton;
+
 
     @FXML
     private Label welcomeLabel;

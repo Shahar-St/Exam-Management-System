@@ -10,45 +10,38 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.ResultsController">
-   <children>
-      <VBox prefHeight="200.0" prefWidth="100.0">
-         <children>
-            <HBox alignment="CENTER" prefHeight="68.0" prefWidth="800.0">
-               <children>
-                  <Label prefHeight="53.0" prefWidth="296.0" text="View Exam Results">
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="63.0" prefWidth="800.0" spacing="50.0">
-               <children>
-                  <Label text="Select question filters:">
-                     <font>
-                        <Font name="Calibri" size="24.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </Label>
-                  <MenuButton fx:id="subjectsDropdown" mnemonicParsing="false" styleClass="primary" text="Subjects" />
-                  <MenuButton fx:id="coursesDropdown" disable="true" mnemonicParsing="false" styleClass="primary" text="Courses" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="411.0" prefWidth="800.0" spacing="50.0">
-               <children>
-                  <ListView fx:id="examListView" onMouseClicked="#handleMouseEvent" prefHeight="405.0" prefWidth="474.0" />
-                  <Button fx:id="detailsButton" disable="true" mnemonicParsing="false" onAction="#showExamDetails" text="Show Details" />
-               </children>
-            </HBox>
-            <HBox alignment="BOTTOM_RIGHT" prefHeight="80.0" prefWidth="800.0">
-               <children>
-                  <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" text="Back" />
-               </children>
-            </HBox>
-         </children>
-      </VBox>
-   </children>
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+           prefWidth="800.0" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/11.0.1"
+           xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.ResultsController">
+    <VBox prefHeight="200.0" prefWidth="100.0">
+        <HBox alignment="CENTER" prefHeight="68.0" prefWidth="800.0">
+            <Label prefHeight="53.0" prefWidth="296.0" text="View Exam Results">
+                <font>
+                    <Font size="36.0"/>
+                </font>
+            </Label>
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="63.0" prefWidth="800.0" spacing="50.0">
+            <Label text="Select question filters:">
+                <font>
+                    <Font name="Calibri" size="24.0"/>
+                </font>
+                <HBox.margin>
+                    <Insets/>
+                </HBox.margin>
+            </Label>
+            <MenuButton fx:id="subjectsDropdown" mnemonicParsing="false" styleClass="primary" text="Subjects"/>
+            <MenuButton fx:id="coursesDropdown" disable="true" mnemonicParsing="false" styleClass="primary"
+                        text="Courses"/>
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="411.0" prefWidth="800.0" spacing="50.0">
+            <ListView fx:id="examListView" onMouseClicked="#handleMouseEvent" prefHeight="405.0"
+                      prefWidth="474.0"/>
+            <Button fx:id="detailsButton" disable="true" mnemonicParsing="false" onAction="#showExamDetails"
+                    text="Show Details"/>
+        </HBox>
+        <HBox alignment="BOTTOM_RIGHT" prefHeight="80.0" prefWidth="800.0">
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" text="Back"/>
+        </HBox>
+    </VBox>
 </StackPane>
