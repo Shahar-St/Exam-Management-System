@@ -60,6 +60,6 @@ public class SubmitManualExamStrategy extends DatabaseStrategy implements IExamI
         manager.getStudents().remove((String) client.getInfo("userName"), client);
 
         if (concreteExam.getExecutedExamsList().size() == concreteExam.getFinishedOnTime())
-            manager.notifyAboutExamEnd();
+            manager.notifyAllSubmittedExamEnd();
     }
 }
