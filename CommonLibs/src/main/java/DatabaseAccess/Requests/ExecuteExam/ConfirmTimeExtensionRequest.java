@@ -2,6 +2,9 @@ package DatabaseAccess.Requests.ExecuteExam;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 
+/**
+ * sent by the dean when she approves/rejects a time extension request sent by a teacher.
+ */
 public class ConfirmTimeExtensionRequest extends DatabaseRequest {
 
     private final String deanResponse;

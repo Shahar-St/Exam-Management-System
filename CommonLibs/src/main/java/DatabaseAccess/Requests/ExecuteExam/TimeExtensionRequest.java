@@ -2,7 +2,10 @@ package DatabaseAccess.Requests.ExecuteExam;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 
-//this is what the teacher sends to the server when the teacher requests time extension.
+/**
+ * this is what the teacher sends to the server when she requests time extension.
+ */
+
 
 public class TimeExtensionRequest extends DatabaseRequest {
 

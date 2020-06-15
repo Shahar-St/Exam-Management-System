@@ -2,6 +2,9 @@ package DatabaseAccess.Requests.ExecuteExam;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 
+/**
+ * student submits a manual exam
+ */
 public class SubmitManualExamRequest extends DatabaseRequest {
     private final String examID;
     private final byte[] examFile;

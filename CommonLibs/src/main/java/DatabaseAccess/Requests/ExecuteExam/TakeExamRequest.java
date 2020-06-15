@@ -2,7 +2,9 @@ package DatabaseAccess.Requests.ExecuteExam;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 
-// student side
+/**
+ * student begins to execute an exam
+ */
 public class TakeExamRequest extends DatabaseRequest {
 
     private final String socialId;

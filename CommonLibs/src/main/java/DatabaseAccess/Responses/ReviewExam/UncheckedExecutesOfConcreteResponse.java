@@ -6,6 +6,7 @@ import DatabaseAccess.Responses.DatabaseResponse;
 import java.util.HashMap;
 
 /**
+ * returns the details of every specific student's exam that were not yet completely evaluated.
  * status dictionary:
  * 0 - success
  * 1 - unauthorized access - user isn't logged in

@@ -2,6 +2,9 @@ package DatabaseAccess.Requests.Statistics;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 
+/**
+ * show the results of a specific requested exam.
+ */
 public class TeacherStatisticsRequest extends DatabaseRequest {
 
     private final String concreteExamID;

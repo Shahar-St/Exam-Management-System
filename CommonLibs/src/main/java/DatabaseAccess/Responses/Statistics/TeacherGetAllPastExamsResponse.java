@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 
 /**
+ * returns all past exam executions of exams written by requesting teacher.
  * status dictionary:
  * 0 - success
  * 1 - unauthorized access - user isn't logged in

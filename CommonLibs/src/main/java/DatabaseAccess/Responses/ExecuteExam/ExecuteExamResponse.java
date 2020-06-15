@@ -4,6 +4,7 @@ import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 
 /**
+ * initiates the exam requested by the teacher.
  * status dictionary:
  * 0 - success
  * 1 - unauthorized access - user isn't logged in

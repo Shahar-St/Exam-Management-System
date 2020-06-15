@@ -7,6 +7,7 @@ import LightEntities.LightExam;
 import java.time.LocalDateTime;
 
 /**
+ * if user details were correct - return information needed for him to execute the exam.
  * status dictionary:
  * 0 - success
  * 1 - unauthorized access - user isn't logged in

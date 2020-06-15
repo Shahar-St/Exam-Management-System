@@ -4,6 +4,7 @@ import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 
 /**
+ * notifies the client that his exam evaluation was successful.
  * status dictionary:
  * 0 - success
  * 1 - unauthorized access - user isn't logged in

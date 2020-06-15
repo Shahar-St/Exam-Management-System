@@ -3,7 +3,7 @@ package DatabaseAccess.Requests.ReviewExam;
 import DatabaseAccess.Requests.DatabaseRequest;
 
 /**
- * you need to return a list of unchecked exams that the current teacher needs to review.
+ * request to view every exam that still contains student exams that were not completely evaluated.
  * **/
 public class PendingExamsRequest extends DatabaseRequest {
     public PendingExamsRequest() {

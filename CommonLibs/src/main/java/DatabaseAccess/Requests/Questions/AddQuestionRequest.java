@@ -4,6 +4,9 @@ import DatabaseAccess.Requests.DatabaseRequest;
 
 import java.util.List;
 
+/**
+ * adding a new question to the DB
+ */
 public class AddQuestionRequest extends DatabaseRequest {
 
     private final String newDescription;

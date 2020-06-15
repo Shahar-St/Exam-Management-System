@@ -5,6 +5,7 @@ import DatabaseAccess.Responses.DatabaseResponse;
 import LightEntities.LightExecutedExam;
 
 /**
+ * returns details of an executed exam, either to the student or the teacher.
  * status dictionary:
  * 0 - success
  * 1 - unauthorized access - user isn't logged in

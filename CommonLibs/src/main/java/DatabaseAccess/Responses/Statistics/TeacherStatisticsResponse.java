@@ -6,6 +6,7 @@ import DatabaseAccess.Responses.DatabaseResponse;
 import java.util.HashMap;
 
 /**
+ * returns results of an executed exam.
  * status dictionary:
  * 0 - success
  * 1 - unauthorized access - user isn't logged in

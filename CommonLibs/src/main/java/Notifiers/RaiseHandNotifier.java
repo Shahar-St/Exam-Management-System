@@ -2,6 +2,10 @@ package Notifiers;
 
 import java.io.Serializable;
 
+/**
+ * notify the teacher that a student has raised his hand.
+ */
+
 public class RaiseHandNotifier implements Serializable {
     private final String studentName;
 

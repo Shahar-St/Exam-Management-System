@@ -3,7 +3,9 @@ package DatabaseAccess.Requests.Exams;
 import DatabaseAccess.Requests.DatabaseRequest;
 
 import java.util.List;
-
+/**
+ * adding a new exam to the DB
+ */
 public class AddExamRequest extends DatabaseRequest {
 
     private final String examTitle;

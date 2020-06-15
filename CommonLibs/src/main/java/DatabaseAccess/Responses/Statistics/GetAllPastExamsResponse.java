@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 
 /**
+ * returns details of all the student's past exams from a specific course.
  * status dictionary:
  * 0 - success
  * 1 - unauthorized access - user isn't logged in

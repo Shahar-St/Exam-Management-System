@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 
 /**
+ * returns details of all exams that are yet to be completely evaluated.
  * status dictionary:
  * 0 - success
  * 1 - unauthorized access - user isn't logged in

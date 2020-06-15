@@ -3,10 +3,7 @@ package DatabaseAccess.Requests.ExecuteExam;
 import DatabaseAccess.Requests.DatabaseRequest;
 
 /**
- * status dictionary:
- * 0 - success
- * 1 - unauthorized access - user isn't logged in
- * 2 - exam wasn't found
+ * teacher sends this when the time expires.
  */
 
 public class TeacherEndExamRequest extends DatabaseRequest {

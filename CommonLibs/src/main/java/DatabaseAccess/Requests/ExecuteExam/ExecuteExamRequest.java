@@ -2,7 +2,9 @@ package DatabaseAccess.Requests.ExecuteExam;
 
 import DatabaseAccess.Requests.DatabaseRequest;
 
-// start exam
+/**
+ * teacher starts an exam for the course's students.
+ */
 
 public class ExecuteExamRequest extends DatabaseRequest {
     private final String examID;

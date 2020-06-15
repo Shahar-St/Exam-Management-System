@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 
 /**
+ * returns all information needed to present a list of questions from requested course.
  * status dictionary:
  *  0 - success
  *  1 - unauthorized access - user isn't logged in
