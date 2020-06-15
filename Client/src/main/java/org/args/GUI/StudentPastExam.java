@@ -1,6 +1,7 @@
 package org.args.GUI;
 
-@SuppressWarnings("ALL")
+//POJO for showing a student past exam in the tableview.
+
 public class StudentPastExam {
 
     private final String examTitle;
