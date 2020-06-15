@@ -40,7 +40,6 @@ public interface IQuestionData {
 
     void setCreating(boolean creating);
 
-    void alert(String message);
 
     String getName();
 
