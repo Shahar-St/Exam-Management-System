@@ -953,7 +953,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
                 setTimeExtensionGranted(true);
                 setTimeExtensionDuration(notifier.getAuthorizedTimeExtension());
             } else if (getPermission().equals("teacher")) {
-                Platform.runLater(() -> currentExecutedExamEndTime.setValue(currentExecutedExamEndLocalDateTime.plusMinutes(notifier.getAuthorizedTimeExtension()).format(hourMinutesFormatter)));
+                currentExecutedExamEndLocalDateTime = currentExecutedExamEndLocalDateTime.plusMinutes(notifier.getAuthorizedTimeExtension());
+                Platform.runLater(() -> currentExecutedExamEndTime.setValue(getCurrentExecutedExamEndLocalDateTime().format(hourMinutesFormatter)));
             }
 
         }
