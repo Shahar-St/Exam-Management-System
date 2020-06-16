@@ -375,7 +375,7 @@ public class ClientApp extends Application {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Attention!");
                 alert.setHeaderText(null);
-                alert.setContentText("Attention! \nExam Time Has Ended, Your'e Exam Has Been Submitted And You're Now Being Redirected To The Main Screen");
+                alert.setContentText("Attention! \nExam Time Has Ended, Your'e Exam Has Been Submitted And \nYou're Now Being Redirected To The Main Screen");
                 alert.showAndWait();
                 setRoot("MainScreen"); // redirect client to main screen because of exam timeout.
             });
@@ -384,7 +384,7 @@ public class ClientApp extends Application {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Attention!");
                 alert.setHeaderText(null);
-                alert.setContentText("Attention! \nExam Has Ended, All Exams Has Been Submitted, You're Now Being Redirected To The Main Screen");
+                alert.setContentText("Attention! \nExam Has Ended, All Exams Has Been Submitted, \nYou're Now Being Redirected To The Main Screen");
                 alert.showAndWait();
                 setRoot("MainScreen");
             });

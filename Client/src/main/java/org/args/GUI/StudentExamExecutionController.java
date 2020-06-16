@@ -25,7 +25,7 @@ public class StudentExamExecutionController {
 
     private long examDuration;
 
-    private final int fontSize = 32;
+    private final int fontSize = 24;
 
     private final String fontStyle = "Cambria";
 

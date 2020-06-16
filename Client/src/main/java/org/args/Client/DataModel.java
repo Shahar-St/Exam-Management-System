@@ -828,7 +828,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("INFO");
                 alert.setHeaderText(null);
-                alert.setContentText("A Massage Has Been Sent To You're Teacher");
+                alert.setContentText("A Massage Has Been Sent To You're Teacher!");
                 alert.show();
             });
         } else {
@@ -836,7 +836,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("INFO");
                 alert.setHeaderText(null);
-                alert.setContentText("A Massage Has Been Sent Already, Please Wait To You're Teacher Response");
+                alert.setContentText("You can only raise your hand once!");
                 alert.show();
             });
         }
@@ -871,7 +871,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.popLastScene();
     }
 
-    //turn whole question decriptors into question IDs
+    //turn whole question descriptors into question IDs
     private List<String> generateListOfIds(List<String> questions) {
         List<String> questionIds = new Vector<>();
         for (String question : questions) {
