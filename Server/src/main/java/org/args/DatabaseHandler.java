@@ -96,7 +96,7 @@ public class DatabaseHandler {
         }
     }
 
-    public static DatabaseHandler DatabaseHandlerInit() {
+    public synchronized static DatabaseHandler DatabaseHandlerInit() {
         if (databaseHandler == null)
         {
             databaseHandler = new DatabaseHandler();
