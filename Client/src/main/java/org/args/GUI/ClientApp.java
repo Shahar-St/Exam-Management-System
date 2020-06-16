@@ -506,7 +506,7 @@ public class ClientApp extends Application {
     public void handleConfirmTimeExtensionNotifier(ConfirmTimeExtensionNotifier notifier) {
         if (notifier.isAccepted() && model.getPermission().equals("teacher")) {
             System.out.println("time extension confirmed");
-            infoAlert("Time Extension Confirmed! Approved Time: " + notifier.getAuthorizedTimeExtension());
+            infoAlert("Time Extension Confirmed! Approved Time: " + notifier.getAuthorizedTimeExtension() +" minutes");
         } else if (!notifier.isAccepted() && model.getPermission().equals("teacher")) {
             System.out.println("time extension rejected");
             errorAlert("Time Extension Rejected! Reason: " + notifier.getDeanResponse());
