@@ -136,6 +136,7 @@ public class DatabaseHandler {
         session.clear();
         countOfOperations++;
 
+        // once in REFRESHING_FREQUENCY we'll do a commit
         if (countOfOperations % REFRESHING_FREQUENCY == 0)
         {
             session.getTransaction().commit();
