@@ -824,13 +824,6 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         if (!raisedHand) {
             ClientApp.sendRequest(new RaiseHandRequest());
             raisedHand = true;
-            Platform.runLater(() -> {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("INFO");
-                alert.setHeaderText(null);
-                alert.setContentText("A Massage Has Been Sent To You're Teacher!");
-                alert.show();
-            });
         } else {
             Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
