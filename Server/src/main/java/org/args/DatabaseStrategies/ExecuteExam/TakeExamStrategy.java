@@ -42,16 +42,19 @@ public class TakeExamStrategy extends DatabaseStrategy implements IExamInProgres
         if (executedExam == null)
             return new TakeExamResponse(ERROR2, takeExamRequest);
 
-        if (!student.getSocialId().equals(String.valueOf(takeExamRequest.getSocialId())))
+        if (!student.getSocialId().equals(String.valueOf(takeExamRequest.getSocialId())) && takeExamRequest.isComputerized())
             return new TakeExamResponse(ERROR4, takeExamRequest);
 
         if (!executedExam.getConcreteExam().getExamCode().equals(takeExamRequest.getExamCode()))
             return new TakeExamResponse(ERROR3, takeExamRequest);
 
         executedExam.setComputerized(takeExamRequest.isComputerized());
-        LightExam lightExam = executedExam.getConcreteExam().createLightExam();
+        executedExam.setStartTime();
 
-        return new TakeExamResponse(SUCCESS, takeExamRequest, lightExam);
+        session.saveOrUpdate(executedExam);
+        LightExam lightExam = executedExam.getConcreteExam().createLightExam();
+        return new TakeExamResponse(SUCCESS, takeExamRequest, lightExam,
+                executedExam.getConcreteExam().getExamForExecutionInitDate());
     }
 
     @Override
@@ -59,7 +62,6 @@ public class TakeExamStrategy extends DatabaseStrategy implements IExamInProgres
                        ConnectionToClient client, Session session) {
 
         TakeExamResponse response1 = (TakeExamResponse) response;
-
         ConcreteExam concreteExam = getTypeById(ConcreteExam.class, response1.getLightExam().getId(), session);
         ExamManager manager = examManagers.get(concreteExam.getId());
         manager.getStudents().put((String) client.getInfo("userName"), client);

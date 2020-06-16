@@ -26,8 +26,6 @@ public class QuestionManagementController {
     private MenuButton coursesDropdown; // Value injected by FXMLLoader
     @FXML // fx:id="subjectsDropdown"
     private MenuButton subjectsDropdown; // Value injected by FXMLLoader
-    @FXML // fx:id="showQuestionList"
-    private Button showQuestionList; // Value injected by FXMLLoader
 
     @FXML // fx:id="questionsList"
     private ListView<String> questionsList; // Value injected by FXMLLoader
@@ -56,18 +54,22 @@ public class QuestionManagementController {
             model.clearQuestionsList();
         bindButtonVisibility();
         if (model.dataWasAlreadyInitialized()) {
-            for (String subjectName : model.getSubjects()) //iterate through every subject in the hashmap
-            {
-                addSubjectToSubjectDropdown(subjectName);
-            }
-            subjectsDropdown.setText(model.getCurrentSubject());
-            coursesDropdown.setText(model.getCurrentCourseId());
-            initializeCoursesDropdown();
-            fillCoursesDropdown(model.getCurrentSubject());
+            initializeFormerData();
             model.fillQuestionsList(model.getCurrentCourseId());
         } else {
             fillSubjectsDropDown(model.getSubjects());
         }
+    }
+
+    private void initializeFormerData() {
+        for (String subjectName : model.getSubjects()) //iterate through every subject in the hashmap
+        {
+            addSubjectToSubjectDropdown(subjectName);
+        }
+        subjectsDropdown.setText(model.getCurrentSubject());
+        coursesDropdown.setText(model.getCurrentCourseName());
+        initializeCoursesDropdown();
+        fillCoursesDropdown(model.getCurrentSubject());
     }
 
     private void bindButtonVisibility() {
@@ -82,6 +84,7 @@ public class QuestionManagementController {
         course.setOnAction(event -> {
             String text = ((MenuItem) event.getSource()).getText();
             coursesDropdown.setText(text);
+            model.setCurrentCourseName(text.substring(5));
             model.setCurrentCourseId(text.substring(0,2));
             model.fillQuestionsList(text.substring(0,2));
         });

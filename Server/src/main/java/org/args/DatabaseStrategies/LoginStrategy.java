@@ -36,7 +36,7 @@ public class LoginStrategy extends DatabaseStrategy implements IExamInProgress {
         client.setInfo("userName", user.getUserName());
         loggedInUsers.add(user.getUserName());
         return new LoginResponse(SUCCESS, user.getClass().getSimpleName().toLowerCase(),
-                user.getFullName(), request);
+                user.getFullName(),user.getSocialId(),request);
 
     }
 

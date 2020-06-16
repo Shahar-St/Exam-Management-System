@@ -14,10 +14,6 @@
       </resource>
       <resource>
         <directory>src/main/resources</directory>
-        <excludes>
-          <exclude>org/args/bootstrap2overview.fxml</exclude>
-          <exclude>org/args/bootstrap3overview.fxml</exclude>
-        </excludes>
       </resource>
     </resources>
     <plugins>
@@ -25,7 +21,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.0</version>
         <configuration>
-          <release>14</release>
+          <release>11</release>
         </configuration>
       </plugin>
       <plugin>

@@ -5,6 +5,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import org.args.Client.IExamReviewData;
 
@@ -27,6 +29,10 @@ public class TeacherReviewManualExamController {
     private Button submitButton;
 
     @FXML
+    private ImageView backImage;
+
+    @SuppressWarnings("DuplicatedCode")
+    @FXML
     void initialize() {
         setModel(ClientApp.getModel());
         assert downloadButton != null;
@@ -37,10 +43,12 @@ public class TeacherReviewManualExamController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Microsoft Word Open XML Format Document", "*.docx","*.doc"));
         downloadButton.setOnAction(event -> {
             fileChooser.setTitle("Download Exam");
-            File defaultDirectory = new File("/home");
+            File defaultDirectory = new File("C:\\");
             fileChooser.setInitialDirectory(defaultDirectory);
             fileChooser.setInitialFileName(model.getManualExamForReviewStudentId()+"_exam.docx");
             File selectedFile = fileChooser.showSaveDialog(ClientApp.primaryStage);
+            if(selectedFile==null)
+                return;
             if(!selectedFile.getName().contains(".")){
                 selectedFile = new File(selectedFile.getAbsoluteFile()+".docx");
             }else if(!selectedFile.getName().contains(".docx")){
@@ -58,10 +66,10 @@ public class TeacherReviewManualExamController {
                 return;
             }
             fileChooser.setTitle("Upload Exam");
-            File defaultDirectory = new File("/home");
+            File defaultDirectory = new File("C:\\");
             fileChooser.setInitialDirectory(defaultDirectory);
             File selectedFile = fileChooser.showOpenDialog(ClientApp.primaryStage);
-            model.submitExamReview(Double.parseDouble(grade.getText()),notes.getText(),selectedFile);
+            model.submitExamReview(Double.parseDouble(grade.getText()),notes.getText(),null,selectedFile);
         });
 
     }
@@ -69,5 +77,10 @@ public class TeacherReviewManualExamController {
     private void setModel(IExamReviewData newModel){
         if(model==null)
             model = newModel;
+    }
+
+    @FXML
+    void backButtonClicked(MouseEvent event) {
+        ClientApp.setRoot("TeacherExamGradesReviewScreen");
     }
 }

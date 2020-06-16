@@ -1,6 +1,8 @@
 package org.args;
 
 import Notifiers.ConfirmTimeExtensionNotifier;
+import Notifiers.ExamEndedNotifier;
+import Notifiers.RaiseHandNotifier;
 import Notifiers.TimeExtensionRequestNotifier;
 import org.args.OCSF.ConnectionToClient;
 
@@ -16,10 +18,9 @@ public class ExamManager {
 
     private static ConnectionToClient dean;
     private ConnectionToClient teacher;
-    private Map<String, ConnectionToClient> students = new HashMap<>();
+    private final Map<String, ConnectionToClient> students = new HashMap<>();
 
-    private static List<TimeExtensionRequestNotifier> deanNotifications = new ArrayList<>();
-    private ConfirmTimeExtensionNotifier confirmTimeExtensionNotifier = null;
+    private static final List<TimeExtensionRequestNotifier> deanNotifications = new ArrayList<>();
 
     private final static Lock deanLock = new ReentrantLock();
 
@@ -27,41 +28,26 @@ public class ExamManager {
         this.teacher = teacher;
     }
 
-    public static ConnectionToClient getDean() {
-        return dean;
-    }
+    //Group setters and getters
     public static void setDean(ConnectionToClient dean) {
         ExamManager.dean = dean;
     }
+
     public ConnectionToClient getTeacher() {
         return teacher;
     }
     public void setTeacher(ConnectionToClient teacher) {
         this.teacher = teacher;
     }
+
     public Map<String, ConnectionToClient> getStudents() {
         return students;
     }
-    public void setStudents(Map<String, ConnectionToClient> students) {
-        this.students = students;
-    }
-    public ConfirmTimeExtensionNotifier getConfirmTimeExtensionNotifier() {
-        return confirmTimeExtensionNotifier;
-    }
-    public void setConfirmTimeExtensionNotifier(ConfirmTimeExtensionNotifier confirmTimeExtensionNotifier) {
-        this.confirmTimeExtensionNotifier = confirmTimeExtensionNotifier;
-    }
-    public static List<TimeExtensionRequestNotifier> getDeanNotifications() {
-        return deanNotifications;
-    }
-    public static void setDeanNotifications(List<TimeExtensionRequestNotifier> deanNotifications) {
-        ExamManager.deanNotifications = deanNotifications;
-    }
+
     public static Lock getDeanLock() {
         return deanLock;
     }
 
-    //TODO
     public static void askForTimeExtension(TimeExtensionRequestNotifier notifier) {
 
         deanLock.lock();
@@ -101,11 +87,9 @@ public class ExamManager {
     }
 
     public void respondToTimeExtension(ConfirmTimeExtensionNotifier notifier) {
-
         try
         {
             teacher.sendToClient(notifier);
-
             notifier.setDeanResponse(null);
             for (Map.Entry<String, ConnectionToClient> entry : students.entrySet())
             {
@@ -117,6 +101,45 @@ public class ExamManager {
         {
             e.printStackTrace();
         }
+    }
 
+    public void notifyTeacherAboutRaisedHand(RaiseHandNotifier raiseHandNotifier) {
+        try
+        {
+            teacher.sendToClient(raiseHandNotifier);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void notifyAboutExamEnd() {
+
+        ExamEndedNotifier notifier = new ExamEndedNotifier();
+        for (Map.Entry<String, ConnectionToClient> entry : students.entrySet())
+        {
+            try
+            {
+                entry.getValue().sendToClient(notifier);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void notifyAllSubmittedExamEnd() {
+
+        notifyAboutExamEnd();
+        try
+        {
+            teacher.sendToClient(new ExamEndedNotifier());
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 }

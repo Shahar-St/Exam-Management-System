@@ -1,10 +1,9 @@
 package org.args.Client;
 
+@SuppressWarnings("ALL")
 public interface IMainScreenData {
 
     String getName();
-
-    void setName(String name);
 
     void login(String userName,String password);
 
@@ -17,4 +16,6 @@ public interface IMainScreenData {
     void studentTakeComputerizedExam(String examCode, String id);
 
     void studentTakeManualExam(String code);
+
+    void clearSubjectsAndCourses();
 }

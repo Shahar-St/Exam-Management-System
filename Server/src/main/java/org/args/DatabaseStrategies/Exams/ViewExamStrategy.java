@@ -4,7 +4,6 @@ import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.Exams.ViewExamRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.Exams.ViewExamResponse;
-import LightEntities.LightExam;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.Entities.Exam;
 import org.args.OCSF.ConnectionToClient;
@@ -29,11 +28,17 @@ public class ViewExamStrategy extends DatabaseStrategy {
         if (client.getInfo("userName") == null)
             return new ViewExamResponse(UNAUTHORIZED, viewExamRequest);
 
+        questionsAndExamsLock.lock();
+
         Exam exam = getTypeById(Exam.class, viewExamRequest.getExamId(), session);
 
         if (exam == null)
+        {
+            questionsAndExamsLock.unlock();
             return new ViewExamResponse(ERROR2, viewExamRequest);
+        }
 
+        questionsAndExamsLock.unlock();
         return new ViewExamResponse(SUCCESS, request, exam.createLightExam());
     }
 }

@@ -1,8 +1,10 @@
 package DatabaseAccess.Requests.Questions;
 
 import DatabaseAccess.Requests.DatabaseRequest;
-import LightEntities.LightQuestion;
 
+/**
+ * delete a question from the DB
+ */
 public class DeleteQuestionRequest  extends DatabaseRequest {
 
     private final String questionID;

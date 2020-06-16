@@ -4,6 +4,9 @@ import DatabaseAccess.Requests.DatabaseRequest;
 
 import java.util.List;
 
+/**
+ * student submits an exam
+ */
 public class SubmitExamRequest extends DatabaseRequest {
 
     private final String examID;

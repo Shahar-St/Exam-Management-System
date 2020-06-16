@@ -42,7 +42,8 @@ public class ExamQuestionsController {
     @FXML
     public void initialize() {
         setModel(ClientApp.getModel());
-        questionsListTitle.setText("Questions from " + model.getCurrentCourseId() + " course");
+        model.fillQuestionsList(model.getCurrentCourseId());
+        questionsListTitle.setText("Questions from " + model.getCurrentCourseName() + " course");
         courseQuestionsListView.setItems(model.getObservableQuestionsList());
         examQuestionsListView.setItems(model.getObservableExamQuestionsList());
         examQuestionsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -87,6 +88,7 @@ public class ExamQuestionsController {
         if (courseQuestionsListView.getSelectionModel().getSelectedItem() != null) {
             int indexOfColon = courseQuestionsListView.getSelectionModel().getSelectedItem().indexOf(':');
             String questionId = courseQuestionsListView.getSelectionModel().getSelectedItem().substring(1, indexOfColon);
+            ClientApp.pushLastScene("ExamQuestionsScreen");
             model.loadQuestionDetails(questionId);
         }
     }
@@ -115,8 +117,9 @@ public class ExamQuestionsController {
             removeButton.setDisable(false);
         if (!addButton.isDisabled())
             addButton.setDisable(true);
+        if(!detailsButton.isDisabled())
+            detailsButton.setDisable(true);
         courseQuestionsListView.getSelectionModel().clearSelection();
-        detailsButton.setDisable(examQuestionsListView.getSelectionModel().getSelectedItems().size() > 1);
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2 &&
                 event.getTarget() instanceof ListCell && examQuestionsListView.getSelectionModel().getSelectedItems().size() == 1)
             model.removeFromExamQuestionsList(examQuestionsListView.getSelectionModel().getSelectedItem());

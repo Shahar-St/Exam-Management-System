@@ -29,14 +29,23 @@ public class QuestionStrategy extends DatabaseStrategy {
         if (client.getInfo("userName") == null)
             return new QuestionResponse(UNAUTHORIZED, questionRequest);
 
+        questionsAndExamsLock.lock();
+
         Question question = getTypeById(Question.class, questionRequest.getQuestionID(), session);
 
         if (question == null)
+        {
+            questionsAndExamsLock.unlock();
             return new QuestionResponse(ERROR2, questionRequest);
+        }
 
         List<String> answers = new ArrayList<>(question.getAnswersArray());
+
+        questionsAndExamsLock.unlock();
         return new QuestionResponse(SUCCESS, request, question.getQuestionContent(),
                 answers, question.getCorrectAnswer(), question.getAuthor().getUserName(),
                 question.getLastModified());
+
+
     }
 }

@@ -4,12 +4,8 @@ import org.args.GUI.ClientApp;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 public class EMSClient extends AbstractClient {
-
-    private static final Logger LOGGER =
-            Logger.getLogger(EMSClient.class.getName());
 
     private final ClientApp app;
 
@@ -18,21 +14,33 @@ public class EMSClient extends AbstractClient {
         this.app = clientApp;
     }
 
-    public ClientApp getApp() {
-        return app;
-    }
-
     @Override
-    public void sendToServer(Object msg) throws IOException {
+    public void sendToServer(Object msg) {
         // check if the client is not connected to the server then connect
         // good for initial connection and for disconnections
-        if (!super.isConnected())
-        {
-            super.openConnection();
+        try {
+            if (!super.isConnected()) {
+
+                super.openConnection();
+
+            }
+            super.sendToServer(msg);
+        } catch (IOException e) {
+            connectionException(e);
         }
-        super.sendToServer(msg);
         System.out.println("Message Has Been Sent To The Server");
         System.out.println(msg.toString());
+    }
+
+    public void logOut() {
+        if (super.isConnected()) {
+
+            try {
+                super.closeConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -45,7 +53,7 @@ public class EMSClient extends AbstractClient {
     protected void connectionException(Exception exception) {
         super.connectionException(exception);
         System.out.println("Connection Exception : " + exception.toString());
-        exception.printStackTrace();
+        app.errorAlert("Connection To Server Failed.");
     }
 
     @Override

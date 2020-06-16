@@ -4,30 +4,55 @@ import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Requests.ReviewExam.PendingExamsRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 import DatabaseAccess.Responses.ReviewExam.PendingExamsResponse;
+import Util.Pair;
 import org.args.DatabaseStrategies.DatabaseStrategy;
 import org.args.Entities.ConcreteExam;
-import org.args.Entities.Exam;
+import org.args.Entities.ExecutedExam;
 import org.args.Entities.Teacher;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
-//TODO
+
+/**
+ * status dictionary:
+ * 0 - success
+ * 1 - unauthorized access - user isn't logged in
+ */
+
 public class PendingExamsStrategy extends DatabaseStrategy {
+
     @Override
-    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session, List<String> loggedInUsers) {
-        PendingExamsRequest request1 = (PendingExamsRequest)request;
+    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
+                                   List<String> loggedInUsers) {
+
+        PendingExamsRequest pendingExamsRequest = (PendingExamsRequest) request;
+
         if (client.getInfo("userName") == null)
-            return new PendingExamsResponse(UNAUTHORIZED,request1,null);
-        Teacher teacher = getTypeById(Teacher.class,getUser((String) client.getInfo("userName"),session).getSocialId(),session);
-        HashMap<Integer, String> map = new HashMap<>();
-        for(ConcreteExam concreteExam:teacher.getConcreteExamsList()){
-            Exam currentExam = concreteExam.getExam();
-            map.put(concreteExam.getId(),currentExam.getTitle());
+            return new PendingExamsResponse(UNAUTHORIZED, pendingExamsRequest);
+
+        Teacher teacher = (Teacher) getUser((String) client.getInfo("userName"), session);
+
+        HashMap<String, Pair<LocalDateTime, String>> map = new HashMap<>();
+
+        boolean needToCheck;
+        for (ConcreteExam concreteExam : teacher.getConcreteExamsList())
+        {
+            List<ExecutedExam> executedExamList = concreteExam.getExecutedExamsList();
+            needToCheck = true;
+            for (int i = 0; i < executedExamList.size() && needToCheck; i++)
+            {
+                if ((!executedExamList.get(i).isChecked()) && (executedExamList.get(i).isSubmitted()))
+                {
+                    map.put(String.valueOf(concreteExam.getId()),
+                            new Pair<>(concreteExam.getExamForExecutionInitDate(), concreteExam.getExam().getTitle()));
+                    needToCheck = false;
+                }
+            }
         }
-        if(map.isEmpty())
-            return new PendingExamsResponse(ERROR2,request1,null);
-        return new PendingExamsResponse(0,request1,map);
+
+        return new PendingExamsResponse(SUCCESS, pendingExamsRequest, map);
     }
 }

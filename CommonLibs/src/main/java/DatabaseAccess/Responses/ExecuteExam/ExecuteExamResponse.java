@@ -4,6 +4,7 @@ import DatabaseAccess.Requests.DatabaseRequest;
 import DatabaseAccess.Responses.DatabaseResponse;
 
 /**
+ * initiates the exam requested by the teacher.
  * status dictionary:
  * 0 - success
  * 1 - unauthorized access - user isn't logged in
@@ -12,18 +13,24 @@ import DatabaseAccess.Responses.DatabaseResponse;
 
 public class ExecuteExamResponse extends DatabaseResponse {
 
-    private final String examID;
+    private final String concreteExamID;
+    private final int duration;
 
-    public ExecuteExamResponse(int status, DatabaseRequest request, String examID) {
+    public ExecuteExamResponse(int status, DatabaseRequest request, String concreteExamID,int duration) {
         super(status, request);
-        this.examID = examID;
+        this.concreteExamID = concreteExamID;
+        this.duration = duration;
     }
 
     public ExecuteExamResponse(int status, DatabaseRequest request) {
-        this(status, request, null);
+        this(status, request, null,0);
     }
 
-    public String getExamID() {
-        return examID;
+    public String getConcreteExamID() {
+        return concreteExamID;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }

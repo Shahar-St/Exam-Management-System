@@ -1,8 +1,6 @@
 package org.args.Entities;
 
-import LightEntities.LightExam;
 import LightEntities.LightQuestion;
-import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -10,7 +8,6 @@ import javax.persistence.*;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -58,7 +55,6 @@ public class Question {
         this.setCourse(course);
         setLastModified();
 
-        // handle empty queue
         DecimalFormat decimalFormat = new DecimalFormat("000");
         this.id = course.getId() +
                 decimalFormat.format(course.getAvailableQuestionCodes().remove(0));

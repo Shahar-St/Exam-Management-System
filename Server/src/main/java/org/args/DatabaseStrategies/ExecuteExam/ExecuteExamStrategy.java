@@ -11,6 +11,7 @@ import org.args.ExamManager;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -32,12 +33,22 @@ public class ExecuteExamStrategy extends DatabaseStrategy implements IExamInProg
         if (client.getInfo("userName") == null)
             return new ExecuteExamResponse(UNAUTHORIZED, request);
 
+        questionsAndExamsLock.lock();
+
         Exam exam = getTypeById(Exam.class, request1.getExamID(), session);
+        if (exam == null)
+        {
+            questionsAndExamsLock.unlock();
+            return new ExecuteExamResponse(ERROR2, request);
+        }
+
         List<Student> students = exam.getCourse().getStudentsList();
 
         Teacher teacher = (Teacher) getUser((String) client.getInfo("userName"), session);
         ConcreteExam concreteExam = new ConcreteExam(exam, teacher, request1.getExamCode());
+        concreteExam.setExamForExecutionInitDate(LocalDateTime.now());
         session.saveOrUpdate(concreteExam);
+        session.flush();
 
         for (Student student : students)
         {
@@ -48,7 +59,8 @@ public class ExecuteExamStrategy extends DatabaseStrategy implements IExamInProg
         }
         session.flush();
 
-        return new ExecuteExamResponse(SUCCESS, request, String.valueOf(concreteExam.getId()));
+        questionsAndExamsLock.unlock();
+        return new ExecuteExamResponse(SUCCESS, request, String.valueOf(concreteExam.getId()), concreteExam.getExam().getDurationInMinutes());
     }
 
     @Override
@@ -56,7 +68,7 @@ public class ExecuteExamStrategy extends DatabaseStrategy implements IExamInProg
 
         ExecuteExamResponse response1 = (ExecuteExamResponse) response;
 
-        ConcreteExam concreteExam = getTypeById(ConcreteExam.class, response1.getExamID(), session);
+        ConcreteExam concreteExam = getTypeById(ConcreteExam.class, response1.getConcreteExamID(), session);
         examManagers.put(concreteExam.getId(), new ExamManager(client));
     }
 }

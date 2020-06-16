@@ -5,6 +5,7 @@ import LightEntities.LightQuestion;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +31,9 @@ public class ConcreteExam {
     private List<ExecutedExam> executedExamsList = new ArrayList<>();
 
     private String examCode;
-    private int numOfTakers;
-    private int finishedOnTime;
-    private int UnfinishedOnTime;
+    private int finishedOnTime = 0;
+    private int unfinishedOnTime = 0;
+    private LocalDateTime examForExecutionInitDate;
 
     //Group c'tors
     public ConcreteExam() {
@@ -42,6 +43,7 @@ public class ConcreteExam {
         this.setExam(exam);
         this.setTester(tester);
         this.examCode = examCode;
+        this.examForExecutionInitDate = LocalDateTime.now();
     }
 
     public void addExecutedExam(ExecutedExam executedExam) {
@@ -51,6 +53,14 @@ public class ConcreteExam {
 
         if (executedExam.getConcreteExam() != this)
             executedExam.setConcreteExam(this);
+    }
+
+    public synchronized void addFinishedOnTime() {
+        finishedOnTime++;
+    }
+
+    public synchronized void addUnfinishedOnTime() {
+        unfinishedOnTime++;
     }
 
     //Group adders and removers
@@ -98,12 +108,6 @@ public class ConcreteExam {
                 exam.getTitle(), exam.getStudentNotes());
     }
 
-    public int getNumOfTakers() {
-        return numOfTakers;
-    }
-    public void setNumOfTakers(int numOfTakers) {
-        this.numOfTakers = numOfTakers;
-    }
     public int getFinishedOnTime() {
         return finishedOnTime;
     }
@@ -111,9 +115,17 @@ public class ConcreteExam {
         this.finishedOnTime = finishedOnTime;
     }
     public int getUnfinishedOnTime() {
-        return UnfinishedOnTime;
+        return unfinishedOnTime;
     }
     public void setUnfinishedOnTime(int unfinishedOnTime) {
-        UnfinishedOnTime = unfinishedOnTime;
+        this.unfinishedOnTime = unfinishedOnTime;
+    }
+
+    public LocalDateTime getExamForExecutionInitDate() {
+        return examForExecutionInitDate;
+    }
+
+    public void setExamForExecutionInitDate(LocalDateTime examForExecutionInitDate) {
+        this.examForExecutionInitDate = examForExecutionInitDate;
     }
 }

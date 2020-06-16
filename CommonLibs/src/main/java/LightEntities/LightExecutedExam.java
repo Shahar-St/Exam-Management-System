@@ -1,7 +1,6 @@
 package LightEntities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class LightExecutedExam implements Serializable {
@@ -12,18 +11,19 @@ public class LightExecutedExam implements Serializable {
     private final String studentID;
     private final List<LightQuestion> lightQuestionList;
     private final List<Double> questionsScores;
-    private final List<Integer> answersByStudent = new ArrayList<>();
+    private List<Integer> answersByStudent;
     private String reasonsForChangeGrade;
     private String commentsAfterCheck;
-    private double grade = 0;
+    private double grade;
     private final int duration; // exam duration in minutes
     private final boolean isComputerized;
     private boolean checked = false;
-    private Byte[] manualExam = null;
+    private byte[] manualExam = null;
 
     public LightExecutedExam(String title, String testerUserName, String executedID, String studentID,
                              List<LightQuestion> lightQuestionList, List<Double> questionsScores,
-                             int duration, boolean isComputerized) {
+                             List<Integer> answersByStudent, int duration, boolean isComputerized, double grade,
+                             String reasonsForChangeGrade, String commentsAfterCheck) {
         this.title = title;
         this.testerUserName = testerUserName;
         this.executedID = executedID;
@@ -32,6 +32,10 @@ public class LightExecutedExam implements Serializable {
         this.questionsScores = questionsScores;
         this.duration = duration;
         this.isComputerized = isComputerized;
+        this.answersByStudent = answersByStudent;
+        this.grade = grade;
+        this.reasonsForChangeGrade = reasonsForChangeGrade;
+        this.commentsAfterCheck = commentsAfterCheck;
     }
 
     public String getTitle() {
@@ -85,10 +89,14 @@ public class LightExecutedExam implements Serializable {
     public void setChecked(boolean checked) {
         this.checked = checked;
     }
-    public Byte[] getManualExam() {
+    public byte[] getManualExam() {
         return manualExam;
     }
-    public void setManualExam(Byte[] manualExam) {
+    public void setManualExam(byte[] manualExam) {
         this.manualExam = manualExam;
+    }
+
+    public void setAnswersByStudent(List<Integer> answersByStudent) {
+        this.answersByStudent = answersByStudent;
     }
 }

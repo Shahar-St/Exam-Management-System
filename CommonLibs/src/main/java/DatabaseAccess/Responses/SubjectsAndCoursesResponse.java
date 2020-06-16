@@ -1,10 +1,8 @@
 package DatabaseAccess.Responses;
 
 import DatabaseAccess.Requests.DatabaseRequest;
-import DatabaseAccess.Responses.DatabaseResponse;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * request: get the all subjects and courses the user have read access to

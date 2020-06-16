@@ -22,7 +22,6 @@ public class LoginController {
     @FXML // fx:id="loginButton"
     private Button loginButton; // Value injected by FXMLLoader
 
-
     @FXML
     private Button networkButton;
 

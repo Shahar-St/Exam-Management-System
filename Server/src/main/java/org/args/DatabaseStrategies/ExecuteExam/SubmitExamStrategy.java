@@ -10,6 +10,7 @@ import org.args.ExamManager;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -39,15 +40,36 @@ public class SubmitExamStrategy extends DatabaseStrategy implements IExamInProgr
         if (concreteExam == null || executedExam == null || concreteExam != executedExam.getConcreteExam())
             return new SubmitExamResponse(ERROR2, request);
 
-        executedExam.setAnswersByStudent(request1.getAnswersList());
-        concreteExam.addExecutedExam(executedExam);
+        List<Integer> answersList = new ArrayList<>(request1.getAnswersList());
+        executedExam.setAnswersByStudent(answersList);
+        executedExam.setComputerized(true);
+        executedExam.setSubmitted(true);
 
-        session.update(executedExam);
+        int grade = 0;
+        for (int i = 0; i < request1.getAnswersList().size(); ++i)
+        {
+            if (concreteExam.getExam().getQuestionsList().get(i).getCorrectAnswer() ==
+                    request1.getAnswersList().get(i))
+                grade += concreteExam.getExam().getQuestionsScores().get(i);
+        }
+        executedExam.setGrade(grade);
+        executedExam.setDurationOfExecutionInMinutes();
+
+        student.getExecutedExamsList().add(executedExam);
+        student.setCurrentlyExecutedID(-1);
+
+        if (request1.isFinishedOnTime())
+            concreteExam.addFinishedOnTime();
+        else
+            concreteExam.addUnfinishedOnTime();
+
+        session.saveOrUpdate(executedExam);
         session.flush();
 
         return new SubmitExamResponse(SUCCESS, request1);
     }
 
+    @SuppressWarnings("RedundantCast")
     @Override
     public void handle(DatabaseRequest request, DatabaseResponse response, Map<Integer, ExamManager> examManagers, ConnectionToClient client, Session session) {
 
@@ -56,5 +78,8 @@ public class SubmitExamStrategy extends DatabaseStrategy implements IExamInProgr
         ConcreteExam concreteExam = getTypeById(ConcreteExam.class, request1.getExamID(), session);
         ExamManager manager = examManagers.get(concreteExam.getId());
         manager.getStudents().remove((String) client.getInfo("userName"), client);
+
+        if (concreteExam.getExecutedExamsList().size() == concreteExam.getFinishedOnTime())
+            manager.notifyAllSubmittedExamEnd();
     }
 }

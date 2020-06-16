@@ -1,8 +1,10 @@
 package DatabaseAccess.Requests.Exams;
 
 import DatabaseAccess.Requests.DatabaseRequest;
-import LightEntities.LightExam;
 
+/**
+ * deleting an exam
+ */
 public class DeleteExamRequest  extends DatabaseRequest {
     private final String examId;
 

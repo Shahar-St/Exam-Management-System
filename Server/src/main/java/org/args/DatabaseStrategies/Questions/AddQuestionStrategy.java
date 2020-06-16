@@ -31,17 +31,25 @@ public class AddQuestionStrategy extends DatabaseStrategy {
         if (client.getInfo("userName") == null)
             return new AddQuestionResponse(UNAUTHORIZED, request);
 
+        questionsAndExamsLock.lock();
+
         Teacher teacher = (Teacher) getUser((String) client.getInfo("userName"), session);
         Course course = getTypeById(Course.class, request1.getCourseID(), session);
 
         if (course.getAvailableQuestionCodes().isEmpty())
+        {
+            questionsAndExamsLock.unlock();
             return new AddQuestionResponse(ERROR2, request);
+        }
 
         Question question = new Question(request1.getNewDescription(), request1.getNewAnswers(),
                 request1.getCorrectAnswer(), course, teacher);
 
         session.saveOrUpdate(question);
         session.flush();
+
+        questionsAndExamsLock.unlock();
+
         return new AddQuestionResponse(SUCCESS, request);
     }
 }

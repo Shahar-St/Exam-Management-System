@@ -31,10 +31,6 @@ public class ViewDeanTimeExtensionController {
         this.model = model;
     }
 
-    private String getSelectedExamId() {
-        return requestListView.getSelectionModel().getSelectedItem().substring(1, 7);
-    }
-
     @FXML
     void acceptExtension(ActionEvent event) {
 
@@ -44,7 +40,7 @@ public class ViewDeanTimeExtensionController {
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(extension -> {
             if (ClientApp.isNumeric(extension)) {
-                model.acceptExtension(extension, getSelectedExamId());
+                model.acceptExtension(extension);
                 model.removeRequest(requestListView.getSelectionModel().getSelectedItem());
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -61,7 +57,7 @@ public class ViewDeanTimeExtensionController {
         dialog.setContentText("Please enter reason for rejecting:");
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(reason -> {
-            model.rejectExtension(reason, getSelectedExamId());
+            model.rejectExtension(reason);
             model.removeRequest(requestListView.getSelectionModel().getSelectedItem());
         });
     }
@@ -69,7 +65,7 @@ public class ViewDeanTimeExtensionController {
     public void initialize() {
         setModel(ClientApp.getModel());
         requestListView.setItems(model.getObservableTimeExtensionRequestsList());
-        TextInputDialog dialog = new TextInputDialog();
+        dialog = new TextInputDialog();
     }
 
     @FXML

@@ -1,14 +1,14 @@
 package org.args.Entities;
 
 import LightEntities.LightExecutedExam;
+import LightEntities.LightQuestion;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Entity
 public class ExecutedExam {
@@ -37,7 +37,13 @@ public class ExecutedExam {
     private boolean isComputerized = false;
     private boolean checked = false;
     private boolean finishedOnTime = false;
-    private Date startedDate;
+    private boolean isSubmitted = false;
+
+    private long startTime;
+    private long durationOfExecutionInMinutes;
+
+    @Column(length = 3000)
+    private byte[] fileBytes;
 
     //Group c'tors
     public ExecutedExam() {
@@ -142,21 +148,51 @@ public class ExecutedExam {
         this.checked = checked;
     }
 
+    public boolean isSubmitted() {
+        return isSubmitted;
+    }
+
+    public void setSubmitted(boolean submitted) {
+        isSubmitted = submitted;
+    }
+
     public boolean isFinishedOnTime() {
         return finishedOnTime;
     }
     public void setFinishedOnTime(boolean finishedOnTime) {
         this.finishedOnTime = finishedOnTime;
     }
-    public Date getStartedDate() {
-        return startedDate;
-    }
-    public void setStartedDate(Date startedDate) {
-        this.startedDate = startedDate;
+
+    public byte[] getFileBytes() {
+        return fileBytes;
     }
 
-    public LightExecutedExam getLightVersion() {
-        //TODO
-        return null;
+    public void setFileBytes(byte[] fileBytes) {
+        this.fileBytes = fileBytes;
+    }
+
+    public void setStartTime() {
+        this.startTime = System.currentTimeMillis();
+    }
+
+    public void setDurationOfExecutionInMinutes() {
+
+        long inMillis = System.currentTimeMillis() - startTime;
+        durationOfExecutionInMinutes = TimeUnit.MILLISECONDS.toMinutes(inMillis);
+    }
+
+    public LightExecutedExam getLightExecutedExam() {
+
+        List<LightQuestion> lightQuestionsList = new ArrayList<>();
+        for (Question question : concreteExam.getExam().getQuestionsList())
+            lightQuestionsList.add(question.createLightQuestion());
+        List<Double> questionScoreList = new ArrayList<>(concreteExam.getExam().getQuestionsScores());
+        LightExecutedExam lightExecutedExam = new LightExecutedExam(concreteExam.getExam().getTitle(), concreteExam.getTester().getUserName(),
+                String.valueOf(id), student.getSocialId(), lightQuestionsList, questionScoreList,
+                new ArrayList<>(this.answersByStudent), duration, isComputerized, this.grade,
+                this.reasonsForChangeGrade, this.commentsAfterCheck);
+        lightExecutedExam.setManualExam(getFileBytes());
+
+        return lightExecutedExam;
     }
 }

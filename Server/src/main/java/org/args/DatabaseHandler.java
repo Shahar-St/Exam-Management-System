@@ -7,6 +7,13 @@ import org.args.DatabaseStrategies.Exams.*;
 import org.args.DatabaseStrategies.ExecuteExam.*;
 import org.args.DatabaseStrategies.LoginStrategy;
 import org.args.DatabaseStrategies.Questions.*;
+import org.args.DatabaseStrategies.Review.EvaluateExamStrategy;
+import org.args.DatabaseStrategies.Review.GetExecutedExamStrategy;
+import org.args.DatabaseStrategies.Review.PendingExamsStrategy;
+import org.args.DatabaseStrategies.Review.UncheckedExecutesOfConcreteStrategy;
+import org.args.DatabaseStrategies.Statistics.GetAllPastExamsStrategy;
+import org.args.DatabaseStrategies.Statistics.TeacherGetAllPastExamsStrategy;
+import org.args.DatabaseStrategies.Statistics.TeacherStatisticsStrategy;
 import org.args.DatabaseStrategies.SubjectAndCoursesStrategy;
 import org.args.Entities.*;
 import org.args.OCSF.ConnectionToClient;
@@ -22,11 +29,16 @@ import javax.persistence.criteria.CriteriaQuery;
 import java.util.*;
 import java.util.logging.Level;
 
+@SuppressWarnings({"FieldCanBeLocal", "SpellCheckingInspection"})
 public class DatabaseHandler {
 
     private static DatabaseHandler databaseHandler = null;
     private static Session session;
-    Map<Integer, ExamManager> examManagers = new HashMap<Integer, ExamManager>();    //key = concreteExam ID
+    final Map<Integer, ExamManager> examManagers = new HashMap<>();    //key = concreteExam ID
+    int countOfOperations = 0;
+
+    // how often a commit we'll happen
+    private final int REFRESHING_FREQUENCY = 3;
 
     private final HashMap<String, DatabaseStrategy> strategies = new HashMap<>() {{
         this.put("LoginRequest", new LoginStrategy());
@@ -44,8 +56,18 @@ public class DatabaseHandler {
         this.put("ExecuteExamRequest", new ExecuteExamStrategy());
         this.put("TakeExamRequest", new TakeExamStrategy());
         this.put("SubmitExamRequest", new SubmitExamStrategy());
+        this.put("SubmitManualExamRequest", new SubmitManualExamStrategy());
         this.put("TimeExtensionRequest", new TimeExtensionStrategy());
         this.put("ConfirmTimeExtensionRequest", new ConfirmTimeExtensionStrategy());
+        this.put("EvaluateExamRequest", new EvaluateExamStrategy());
+        this.put("GetExecutedExamRequest", new GetExecutedExamStrategy());
+        this.put("PendingExamsRequest", new PendingExamsStrategy());
+        this.put("UncheckedExecutesOfConcreteRequest", new UncheckedExecutesOfConcreteStrategy());
+        this.put("GetAllPastExamsRequest", new GetAllPastExamsStrategy());
+        this.put("TeacherEndExamRequest", new TeacherEndExamStrategy());
+        this.put("RaiseHandRequest", new RaiseHandStrategy());
+        this.put("TeacherGetAllPastExamsRequest", new TeacherGetAllPastExamsStrategy());
+        this.put("TeacherStatisticsRequest", new TeacherStatisticsStrategy());
     }};
 
     private DatabaseHandler() {
@@ -55,23 +77,11 @@ public class DatabaseHandler {
             session = sessionFactory.openSession();
             session.beginTransaction();
 
-            Scanner scanner = new Scanner(System.in);
-            String ans = "";
-            System.out.println("Build dummy database? (y/n)");
-            System.out.println("//enter y only if the database is empty//");
-            while (!ans.equals("y") && !ans.equals("n"))
-            {
-                ans = scanner.nextLine();
-                if (!ans.equals("y") && !ans.equals("n"))
-                    System.out.println("wrong input, try again");
-            }
-            if (ans.equals("y"))
-            {
-                createDummyEntities();
-                session.getTransaction().commit();
-                session.clear();
-                session.beginTransaction();
-            }
+            System.out.println("Creating dummy database");
+            createDummyEntities();
+            session.getTransaction().commit();
+            session.clear();
+            session.beginTransaction();
         }
         catch (Exception exception)
         {
@@ -124,6 +134,15 @@ public class DatabaseHandler {
             ((IExamInProgress) strategy).handle(request, response, examManagers, client, session);
 
         session.clear();
+        countOfOperations++;
+
+        if (countOfOperations % REFRESHING_FREQUENCY == 0)
+        {
+            session.getTransaction().commit();
+            session.clear();
+            session.beginTransaction();
+        }
+
         return response;
     }
 
@@ -145,7 +164,7 @@ public class DatabaseHandler {
     private void createDummyEntities() {
 
         //creating Dean
-        Dean dean = new Dean(123456789, "Head", "Teacher", "passDean", "deanUN");
+        Dean dean = new Dean(123456789, "Liel", "Fridman", "Liel", "Liel");
         session.save(dean);
         session.flush();
 
@@ -172,7 +191,7 @@ public class DatabaseHandler {
 
         //creating teachers and connecting with courses and subjects
         String[] teacherFirstNamesArr = {"1", "Miri", "Shir", "Neta", "Ronit", "Shiri", "Yuval", "shahar"};
-        String[] teacherLastNamesArr = {"1", "Haim", "Levi", "Zur", "Cohen", "Levi", "Lev", "Oren"};
+        String[] teacherLastNamesArr = {"1", "Haim", "Levi", "Zur", "Hen", "Levi", "Lev", "Oren"};
         for (int i = 0; i < NUM_OF_TEACHERS; i++)
         {
             Teacher teacher = new Teacher(i, teacherFirstNamesArr[i % teacherFirstNamesArr.length],
@@ -248,10 +267,10 @@ public class DatabaseHandler {
         for (int j = 0; j < NUM_OF_TEACHERS; j++)
         {
             Teacher teacher = teachers.get(j % NUM_OF_TEACHERS);
-            List<Course> c = teacher.getCoursesList();
             for (int i = 0; i < NUM_OF_QUESTIONS / NUM_OF_TEACHERS; i++)
             {
-                Question question = teacher.createQuestion(questionsArr[k], answers.get(k), i % NUM_OF_OPTIONAL_ANSWERS,
+                Question question = teacher.createQuestion(questionsArr[k], answers.get(k),
+                        i % NUM_OF_OPTIONAL_ANSWERS,
                         teacher.getCoursesList().get(i % teacher.getCoursesList().size()));
                 session.save(question);
                 session.update(teacher);
@@ -263,7 +282,7 @@ public class DatabaseHandler {
         //creating exams by teachers
         String[] titlesArr = {"functions", "Jerusalem", "circles", "Germany", "letters", "nikud", "spelling", "vocabulary"};
         List<Double> questionsScores = Arrays.asList(50.0, 50.0);
-
+        List<Integer> answersByStudent = Arrays.asList(2, 3, 2, 3);
         k = 0;
         for (int j = 0; j < NUM_OF_TEACHERS; j++)
         {
@@ -271,10 +290,28 @@ public class DatabaseHandler {
             for (int i = 0; i < NUM_OF_EXAMS / NUM_OF_TEACHERS; i++)
             {
                 Course course = teacher.getCoursesList().get(i % teacher.getCoursesList().size());
-                Exam exam = teacher.createExam(course, 90, titlesArr[k], "good luck!", "my private notes",
+                Exam exam = teacher.createExam(course, 2, titlesArr[k], "good luck!", "my private notes",
                         course.getQuestionsList(), questionsScores);
                 session.save(exam);
                 session.update(teacher);
+                ConcreteExam concreteExam = new ConcreteExam(exam, teacher, "1111");
+                session.save(concreteExam);
+                ExecutedExam executedExam1 = new ExecutedExam(concreteExam, exam.getCourse().getStudentsList().get(0),
+                        "not so good...", answersByStudent, "");
+                session.save(executedExam1);
+                executedExam1.setSubmitted(true);
+                executedExam1.setComputerized(true);
+                if (i % 2 == 0)
+                    executedExam1.setChecked(true);
+                executedExam1.setGrade(50);
+                ExecutedExam executedExam2 = new ExecutedExam(concreteExam, exam.getCourse().getStudentsList().get(1),
+                        "very good!", answersByStudent, "");
+                session.save(executedExam2);
+                executedExam2.setSubmitted(true);
+                executedExam2.setComputerized(true);
+                if (i % 2 == 0)
+                    executedExam2.setChecked(true);
+                executedExam2.setGrade(100);
                 k++;
             }
         }

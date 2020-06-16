@@ -1,7 +1,10 @@
 package DatabaseAccess.Requests.ExecuteExam;
 
 import DatabaseAccess.Requests.DatabaseRequest;
-import LightEntities.LightExam;
+
+/**
+ * teacher starts an exam for the course's students.
+ */
 
 // start exam
 

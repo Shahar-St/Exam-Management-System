@@ -1,10 +1,12 @@
 package DatabaseAccess.Requests.Exams;
 
 import DatabaseAccess.Requests.DatabaseRequest;
-import LightEntities.LightExam;
 
 import java.util.List;
 
+/**
+ * editing an existing exam
+ */
 public class EditExamRequest extends DatabaseRequest {
     private final String examId;
     private final String examTitle;

@@ -24,9 +24,12 @@ public class EditQuestionStrategy extends DatabaseStrategy {
     @Override
     public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client, Session session,
                                    List<String> loggedInUsers) {
+
         EditQuestionRequest editRequest = (EditQuestionRequest) request;
         if (client.getInfo("userName") == null)
             return new EditQuestionResponse(UNAUTHORIZED, request);
+
+        questionsAndExamsLock.lock();
 
         Question question = getTypeById(Question.class, editRequest.getQuestionID(), session);
 
@@ -54,6 +57,8 @@ public class EditQuestionStrategy extends DatabaseStrategy {
             session.update(question);
         }
         session.flush();
+
+        questionsAndExamsLock.unlock();
 
         return new EditQuestionResponse(SUCCESS, request);
     }

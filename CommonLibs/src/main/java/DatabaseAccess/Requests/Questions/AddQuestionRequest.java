@@ -1,10 +1,12 @@
 package DatabaseAccess.Requests.Questions;
 
 import DatabaseAccess.Requests.DatabaseRequest;
-import LightEntities.LightQuestion;
 
 import java.util.List;
 
+/**
+ * adding a new question to the DB
+ */
 public class AddQuestionRequest extends DatabaseRequest {
 
     private final String newDescription;

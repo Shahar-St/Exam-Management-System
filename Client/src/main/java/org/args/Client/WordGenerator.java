@@ -5,7 +5,6 @@ import LightEntities.LightQuestion;
 import org.apache.poi.xwpf.usermodel.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -64,15 +63,16 @@ public class WordGenerator {
         document.close();
     }
 
-    public void saveWordFile(File origin, File filePath) throws IOException {
-
-        FileInputStream inputStream = new FileInputStream(origin);
-        XWPFDocument document = new XWPFDocument(inputStream);
+    /**
+     * method get byte array and file path , writes the byte array to docx file located in filepath.
+     **/
+    public void saveWordFile(byte[] source, File filePath) throws IOException {
+        // handle non existing source bytes
+        if(source == null)
+            return;
         FileOutputStream outputStream = new FileOutputStream(filePath);
-        document.write(outputStream);
+        outputStream.write(source);
         outputStream.close();
-        document.close();
-
 
     }
 }

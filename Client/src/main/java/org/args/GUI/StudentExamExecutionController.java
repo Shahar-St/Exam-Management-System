@@ -11,7 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import org.args.Client.IStudentExamExecutionData;
-
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -22,14 +23,13 @@ public class StudentExamExecutionController {
 
     private final Label timeElapsed = new Label();
 
-    private int examDuration;
+    private long examDuration;
 
     private final int fontSize = 32;
 
     private final String fontStyle = "Cambria";
 
     private final int smallSpacing = 5;
-    private final int mediumSpacing = 10;
     private final int largeSpacing = 20;
 
     @FXML
@@ -41,7 +41,10 @@ public class StudentExamExecutionController {
     @FXML
     void initialize() {
         setModel(ClientApp.getModel());
-        examDuration = model.getExamForStudentExecution().getDurationInMinutes() * 60; // convert into seconds
+        LocalDateTime start = model.getExamForStudentExecutionInitDate();
+        LocalDateTime now = LocalDateTime.now();
+        long dateDelta = start.until(now, ChronoUnit.SECONDS);
+        examDuration = (model.getExamForStudentExecution().getDurationInMinutes()*60)-dateDelta; // convert into seconds
         timeElapsed.setFont(Font.font(fontStyle, fontSize));
         assert questionsPagination != null;
         questionsPagination.setPageCount(model.getExamForStudentExecution().getLightQuestionList().size()+1);
@@ -92,7 +95,7 @@ public class StudentExamExecutionController {
 
                 details.setPadding(new Insets(20,20,20,20));
 
-                return new ScrollPane(details);
+                return details;
             }
 
             LightQuestion currentQuestion = model.getExamForStudentExecution().getLightQuestionList().get(pageIndex - 1);
@@ -199,7 +202,7 @@ public class StudentExamExecutionController {
                 details.setPadding(new Insets(20,20,20,20));
             }
 
-            return new ScrollPane(new VBox(details));
+            return details;
 
 
         });
@@ -224,7 +227,7 @@ public class StudentExamExecutionController {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (!ClientApp.isRunning()) {
+                if (!ClientApp.isRunning()||model.isSubmitted()) {
                     // in case that the window has been closed
                     timer.cancel();
                     timer.purge();
@@ -233,17 +236,20 @@ public class StudentExamExecutionController {
                     timer.cancel();
                     timer.purge();
                     // submit and quit
-                    model.submitExam();
+                    model.submitAndQuit();
+
+                    return;
+                }else if(model.isTimeExtensionGranted()){
+                    examDuration+=model.getTimeExtensionDuration()*60;
+                    // set to false to prevent multiple additions for the same extension
+                    model.setTimeExtensionGranted(false);
                     Platform.runLater(()->{
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Attention!");
                         alert.setHeaderText(null);
-                        alert.setContentText("Attention!, Exam Time Has Ended, You're Exam Has Been Submitted And You're Now Being Redirected To Main Screen");
+                        alert.setContentText("A Time Extension Has Been Approved For Your'e Exam, You Have Another: "+model.getTimeExtensionDuration()+" Minutes, Good Luck!");
                         alert.showAndWait();
-                        ClientApp.setRoot("MainScreen"); // redirect client to main screen because of exam timeout.
                     });
-
-                    return;
                 }
                 Platform.runLater(() -> timeElapsed.setText("Remaining Time: " + (examDuration / 60) + ":" + (examDuration % 60)));
                 examDuration--;
@@ -251,6 +257,8 @@ public class StudentExamExecutionController {
             }
         }, 1000, 1000);
     }
+
+
 
 }
 

@@ -4,7 +4,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldListCell;
-import javafx.scene.image.ImageView;
 import org.args.Client.IExamData;
 
 import java.net.URL;
@@ -33,7 +32,7 @@ public class ExamScoringController {
     private Label scoreLabel;
 
     @FXML
-    private ImageView backArrow;
+    private Button backButton;
 
     @FXML
     private Button doneButton;
@@ -109,7 +108,7 @@ public class ExamScoringController {
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Attention!");
-            alert.setHeaderText("Attention! , Please Confirm the following:");
+            alert.setHeaderText("Attention! Please Confirm The Following:");
             alert.setContentText("Exams Grade isn't 100. are you sure you want to proceed?");
 
             Optional<ButtonType> result = alert.showAndWait();

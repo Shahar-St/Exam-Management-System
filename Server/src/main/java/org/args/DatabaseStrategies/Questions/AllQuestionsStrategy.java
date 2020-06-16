@@ -11,7 +11,6 @@ import org.args.OCSF.ConnectionToClient;
 import org.hibernate.Session;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,11 +35,15 @@ public class AllQuestionsStrategy extends DatabaseStrategy {
         if (client.getInfo("userName") == null)
             return new AllQuestionsResponse(UNAUTHORIZED, request);
 
+        questionsAndExamsLock.lock();
+
         Course course = getTypeById(Course.class, allQuestionsRequest.getCourseID(), session);
 
         for (Question question : course.getQuestionsList())
             map.put(question.getId(),
                     new Pair<>(question.getLastModified(), question.getQuestionContent()));
+
+        questionsAndExamsLock.unlock();
 
         return new AllQuestionsResponse(SUCCESS, request, map);
     }

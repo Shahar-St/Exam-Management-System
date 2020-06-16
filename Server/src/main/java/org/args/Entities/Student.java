@@ -76,4 +76,9 @@ public class Student extends User {
     public void setCurrentlyExecutedID(int idExecutedExamCurrent) {
         this.currentlyExecutedID = idExecutedExamCurrent;
     }
+
+    public ExecutedExam createExecutedExam(){
+
+        return new ExecutedExam();
+    }
 }
