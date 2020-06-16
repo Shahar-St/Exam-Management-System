@@ -813,6 +813,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
             for (int i = 0; i < examForStudentExecution.getLightQuestionList().size(); ++i) {
                 correctAnswersList.add(getCorrectAnswersMap().getOrDefault(i, -1));
             }
+            setRaisedHand(false);
             ClientApp.sendRequest(new SubmitExamRequest(examForStudentExecution.getId(), correctAnswersList, isFinishedOnTime()));
         }
         setSubmitted(true);
@@ -822,6 +823,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     public boolean isHandRaised() {
         return raisedHand;
     }
+
 
     public void setRaisedHand(boolean raisedHand) {
         this.raisedHand = raisedHand;
