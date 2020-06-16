@@ -44,6 +44,11 @@ public class SubmitManualExamStrategy extends DatabaseStrategy implements IExamI
         executedExam.setComputerized(false);
         executedExam.setSubmitted(true);
 
+        executedExam.setDurationOfExecutionInMinutes();
+
+        student.getExecutedExamsList().add(executedExam);
+        student.setCurrentlyExecutedID(-1);
+
         session.saveOrUpdate(executedExam);
         session.flush();
         return new SubmitManualExamResponse(SUCCESS, request1);

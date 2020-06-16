@@ -120,6 +120,7 @@ public class Exam {
     }
 
     public void setQuestionsList(List<Question> questionsList) {
+
         for (Question question : questionsList)
             this.addQuestion(question);
     }

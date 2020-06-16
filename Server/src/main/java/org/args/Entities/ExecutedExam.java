@@ -8,6 +8,7 @@ import org.hibernate.annotations.CascadeType;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Entity
 public class ExecutedExam {
@@ -37,6 +38,10 @@ public class ExecutedExam {
     private boolean checked = false;
     private boolean finishedOnTime = false;
     private boolean isSubmitted = false;
+
+    private long startTime;
+    private long durationOfExecutionInMinutes;
+
     @Column(length = 3000)
     private byte[] fileBytes;
 
@@ -164,6 +169,16 @@ public class ExecutedExam {
 
     public void setFileBytes(byte[] fileBytes) {
         this.fileBytes = fileBytes;
+    }
+
+    public void setStartTime() {
+        this.startTime = System.currentTimeMillis();
+    }
+
+    public void setDurationOfExecutionInMinutes() {
+
+        long inMillis = System.currentTimeMillis() - startTime;
+        durationOfExecutionInMinutes = TimeUnit.MILLISECONDS.toMinutes(inMillis);
     }
 
     public LightExecutedExam getLightExecutedExam() {

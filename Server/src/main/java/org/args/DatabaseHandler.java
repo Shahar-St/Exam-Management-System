@@ -35,6 +35,10 @@ public class DatabaseHandler {
     private static DatabaseHandler databaseHandler = null;
     private static Session session;
     final Map<Integer, ExamManager> examManagers = new HashMap<>();    //key = concreteExam ID
+    int countOfOperations = 0;
+
+    // how often a commit we'll happen
+    private final int REFRESHING_FREQUENCY = 3;
 
     private final HashMap<String, DatabaseStrategy> strategies = new HashMap<>() {{
         this.put("LoginRequest", new LoginStrategy());
@@ -130,6 +134,15 @@ public class DatabaseHandler {
             ((IExamInProgress) strategy).handle(request, response, examManagers, client, session);
 
         session.clear();
+        countOfOperations++;
+
+        if (countOfOperations % REFRESHING_FREQUENCY == 0)
+        {
+            session.getTransaction().commit();
+            session.clear();
+            session.beginTransaction();
+        }
+
         return response;
     }
 

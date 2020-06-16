@@ -53,6 +53,7 @@ public class SubmitExamStrategy extends DatabaseStrategy implements IExamInProgr
                 grade += concreteExam.getExam().getQuestionsScores().get(i);
         }
         executedExam.setGrade(grade);
+        executedExam.setDurationOfExecutionInMinutes();
 
         student.getExecutedExamsList().add(executedExam);
         student.setCurrentlyExecutedID(-1);
