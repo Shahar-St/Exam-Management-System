@@ -183,7 +183,7 @@ public class MainScreenController {
             result.ifPresent(code -> {
                 if (result.get().length() != 4) {
                     codeIdLengthAlert();
-                } else if (!ClientApp.isNumeric(result.get())) {
+                } else if (ClientApp.containsSpecialCharacters(result.get())) {
                     codeIdInvalidInputAlert();
                 }else {
                     model.studentTakeManualExam(code);
@@ -245,7 +245,7 @@ public class MainScreenController {
             result.ifPresent(codeId -> {
                 if (codeId.getFirst().length() != 4) {
                     codeIdLengthAlert();
-                } else if (!ClientApp.isNumeric(codeId.getFirst())) {
+                } else if (ClientApp.containsSpecialCharacters(codeId.getFirst())) {
                     codeIdInvalidInputAlert();
                 } else if (!ClientApp.isNumeric(codeId.getSecond())) {
                     studentIdInvalidInputAlert();
@@ -286,6 +286,7 @@ public class MainScreenController {
 
     @FXML
     void logOutClicked(ActionEvent event){
+        model.clearSubjectsAndCourses();
         ClientApp.logOut();
     }
 

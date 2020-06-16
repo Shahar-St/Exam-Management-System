@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
 
 public class ExamManagementController {
 
@@ -219,9 +220,9 @@ public class ExamManagementController {
                                     alert.setHeaderText("Wrong number of digits");
                                     alert.setContentText("Please enter a 4-digit code!");
                                     alert.showAndWait();
-                                } else if (!ClientApp.isNumeric(code)) {
+                                } else if (ClientApp.containsSpecialCharacters(code)) {
                                     alert.setHeaderText("Invalid exam code");
-                                    alert.setContentText("Code must only contain digits!");
+                                    alert.setContentText("Code must only contain digits and letters!");
                                     alert.showAndWait();
                                 } else {
                                     model.executeExam(examId, code);

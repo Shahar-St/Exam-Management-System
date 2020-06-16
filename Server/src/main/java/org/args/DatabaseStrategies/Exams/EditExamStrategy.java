@@ -73,8 +73,10 @@ public class EditExamStrategy extends DatabaseStrategy {
             exam.setQuestionsScores(editExamRequest.getScoresList());
             exam.setQuestionsList(questionsList);
 
-            session.update(exam);
+            session.saveOrUpdate(exam);
+
         }
+
         session.flush();
 
         questionsAndExamsLock.unlock();

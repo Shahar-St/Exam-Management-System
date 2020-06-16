@@ -31,6 +31,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 import java.util.Stack;
+import java.util.regex.Pattern;
 
 
 /**
@@ -179,7 +180,6 @@ public class ClientApp extends Application {
     }
 
     private void closeWindowEvent(WindowEvent event) {
-        System.out.println("Window close request ...");
         // set false
         isRunning = false;
         try {
@@ -535,5 +535,10 @@ public class ClientApp extends Application {
             errorAlert("Failed to fetch required results!");
 
 
+    }
+
+    public static boolean containsSpecialCharacters(String str){
+        Pattern regex = Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!-]");
+        return regex.matcher(str).find();
     }
 }
