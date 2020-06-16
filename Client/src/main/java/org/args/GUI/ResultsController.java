@@ -70,11 +70,10 @@ public class ResultsController {
     @FXML
     void handleMouseEvent(MouseEvent event) {
         detailsButton.setDisable(false);
-        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2)
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2 && examListView.getSelectionModel().getSelectedItem() != null)
         {
             presentDetails();
         }
-
     }
 
     @FXML

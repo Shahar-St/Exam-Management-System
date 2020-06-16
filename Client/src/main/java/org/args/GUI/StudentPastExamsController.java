@@ -79,7 +79,7 @@ public class StudentPastExamsController {
     @FXML
     void handleMouseEvent(MouseEvent event) {
         reviewExam.setDisable(false);
-        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2 && gradesTable.getSelectionModel().getSelectedItem() != null) {
             showSelectedExamDetails();
         }
     }
