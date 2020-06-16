@@ -454,6 +454,7 @@ public class ClientApp extends Application {
         if (response.getStatus() == 0) {
             setRoot("MainScreen");
             SubmitExamRequest request = (SubmitExamRequest) response.getRequest();
+            model.setSubmitted(false);
             if (request.isFinishedOnTime())
                 infoAlert("Exam Was Successfully Submitted.");
         } else {
