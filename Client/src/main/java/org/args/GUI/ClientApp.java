@@ -434,7 +434,10 @@ public class ClientApp extends Application {
     public void handleSubmitManualExamResponse(SubmitManualExamResponse response) {
         if (response.getStatus() == 0) {
             setRoot("MainScreen");
-            infoAlert("Exam Was Successfully Submitted.");
+            if(model.getManualExamFile() != null)
+                infoAlert("Exam Was Successfully Submitted.");
+            else
+                errorAlert("Exam Was Not Submitted On Time!");
         } else {
             errorAlert("Submission Failed, Please Try Again.");
         }
