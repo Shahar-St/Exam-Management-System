@@ -826,8 +826,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
             raisedHand = true;
         } else {
             Platform.runLater(() -> {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("INFO");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Can't Raise Hand Again");
                 alert.setHeaderText(null);
                 alert.setContentText("You can only raise your hand once!");
                 alert.show();
