@@ -370,17 +370,8 @@ public class ClientApp extends Application {
 
     @Subscribe
     public void handleExamEndedNotifier(ExamEndedNotifier notifier) {
-        if (model.getPermission().equals("student")){}
-//            Platform.runLater(() -> {
-//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                alert.setTitle("Attention!");
-//                alert.setHeaderText(null);
-//                alert.setContentText("Attention! \nExam Time Has Ended, Your'e Exam Has Been Submitted And \nYou're Now Being Redirected To The Main Screen");
-//                alert.showAndWait();
-//                setRoot("MainScreen"); // redirect client to main screen because of exam timeout.
-//            });
-        else if (model.getPermission().equals("teacher")) {
-            Platform.runLater(() -> {
+             if (model.getPermission().equals("teacher")) {
+                Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Attention!");
                 alert.setHeaderText(null);
@@ -454,7 +445,6 @@ public class ClientApp extends Application {
         if (response.getStatus() == 0) {
             setRoot("MainScreen");
             SubmitExamRequest request = (SubmitExamRequest) response.getRequest();
-            model.setSubmitted(false);
             if (request.isFinishedOnTime())
                 infoAlert("Exam Was Successfully Submitted.");
         } else {
