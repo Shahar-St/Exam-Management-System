@@ -83,6 +83,7 @@ public class EMSserver extends AbstractServer {
         serverCommands.start();
     }
 
+    // interface for server
     private void serverCommands() {
 
         Scanner scanner = new Scanner(System.in);
