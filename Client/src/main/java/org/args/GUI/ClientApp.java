@@ -371,6 +371,7 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleExamEndedNotifier(ExamEndedNotifier notifier) {
              if (model.getPermission().equals("teacher")) {
+                 model.setHasEnded(true);
                 Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Attention!");

@@ -160,6 +160,15 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     private byte[] manualExamBytes;
     private LightExecutedExam currentLightExecutedExam;
     private String manualExamForReviewStudentId;
+    private boolean hasEnded =false;
+
+    public boolean hasEnded(){
+        return hasEnded;
+    }
+
+    public void setHasEnded(boolean bol){
+        this.hasEnded = bol;
+    }
 
     public DataModel() {
         wordGenerator = new WordGenerator();
@@ -895,6 +904,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
     @Override
     public void executeExam(String examId, String examCode) {
         setCurrentExamId(examId);
+        setHasEnded(false);
         ClientApp.sendRequest(new ExecuteExamRequest(examId, examCode));
     }
 
