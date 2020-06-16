@@ -31,9 +31,9 @@ public class Teacher extends User {
     @Cascade(CascadeType.SAVE_UPDATE)
     private List<Exam> examsList = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "tester")
     @Cascade(CascadeType.SAVE_UPDATE)
-    private List<ExecutedExam> executedExamsList = new ArrayList<>();
+    private List<ConcreteExam> concreteExamsList = new ArrayList<>();
 
     //Group c'tors
     public Teacher() {
@@ -76,23 +76,22 @@ public class Teacher extends User {
             question.setAuthor(this);
     }
 
-    public void addExecutedExam(ExecutedExam executedExam) {
-        if (!executedExamsList.contains(executedExam))
-            executedExamsList.add(executedExam);
+    public void addConcreteExam(ConcreteExam concreteExam) {
+        if (!concreteExamsList.contains(concreteExam))
+            concreteExamsList.add(concreteExam);
 
-        if (executedExam.getAuthor() != this)
-            executedExam.setAuthor(this);
+        if (concreteExam.getTester() != this)
+            concreteExam.setTester(this);
     }
 
     public Question createQuestion(String questionContent, List<String> answersArray, int correctAnswer, Course course){
-        Question question = new Question(questionContent, answersArray, correctAnswer, course, this);
-        this.questionsList.add(question);
-        return question;
+        return new Question(questionContent, answersArray, correctAnswer, course, this);
     }
 
-    public Exam createExam(Course course, int durationInMinutes, String description, String teacherPrivateNotes,
-                           List<Question> questionsList, List<Double> questionsScores) {
-        Exam exam = new Exam(course, this, durationInMinutes, description, teacherPrivateNotes,
+    public Exam createExam(Course course, int durationInMinutes, String title, String studentNotes,
+                           String teacherNotes, List<Question> questionsList, List<Double> questionsScores)
+    {
+        Exam exam = new Exam(course, this, durationInMinutes, title, studentNotes, teacherNotes,
                 questionsList, questionsScores);
         this.examsList.add(exam);
         return exam;
@@ -127,10 +126,10 @@ public class Teacher extends User {
         this.examsList = examsList;
     }
 
-    public List<ExecutedExam> getExecutedExamsList() {
-        return executedExamsList;
+    public List<ConcreteExam> getConcreteExamsList() {
+        return concreteExamsList;
     }
-    public void setExecutedExamsList(List<ExecutedExam> execExamsList) {
-        this.executedExamsList = execExamsList;
+    public void setConcreteExamsList(List<ConcreteExam> concreteExamsList) {
+        this.concreteExamsList = concreteExamsList;
     }
 }

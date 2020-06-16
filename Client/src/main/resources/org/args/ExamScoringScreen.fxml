@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="800.0" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.ExamScoringController">
+    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="50.0">
+        <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20.0">
+            <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="30.0">
+                <Label alignment="CENTER" text="Question List" textAlignment="CENTER">
+               <font>
+                  <Font name="Calibri" size="24.0" />
+               </font></Label>
+                <ListView fx:id="questionListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="378.0" prefWidth="250.0" />
+            </VBox>
+            <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="30.0">
+                <Label text="Score List">
+               <font>
+                  <Font size="24.0" />
+               </font></Label>
+                <ListView fx:id="scoreListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="381.0" prefWidth="250.0" />
+            </VBox>
+        </HBox>
+        <ButtonBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+            <buttons>
+                <Label text="Total Score:">
+               <font>
+                  <Font name="Calibri Bold" size="24.0" />
+               </font></Label>
+                <Label fx:id="scoreLabel" layoutX="230.0" layoutY="22.0" text="Score">
+               <font>
+                  <Font name="Calibri Bold" size="24.0" />
+               </font></Label>
+                <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonClicked" styleClass="danger" text="Back" />
+                <Button fx:id="doneButton" mnemonicParsing="false" onAction="#doneButtonOnAction" styleClass="primary" text="Done" />
+            </buttons>
+        </ButtonBar>
+    </VBox>
+</ScrollPane>

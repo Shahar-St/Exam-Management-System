@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<BorderPane maxHeight="350.0" maxWidth="550.0" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#paneKeyPressed" prefHeight="350.0" prefWidth="550.0" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.NetworkConfigScreenController">
+<BorderPane maxHeight="350.0" maxWidth="550.0" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#paneKeyPressed" prefHeight="350.0" prefWidth="550.0" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.args.GUI.NetworkConfigController">
     <top>
         <Label alignment="CENTER" text="Welcome to the HSTS system!" textAlignment="CENTER" BorderPane.alignment="CENTER">
             <font>
@@ -14,45 +14,38 @@
     </top>
     <center>
         <VBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT">
-            <children>
-                <TilePane alignment="CENTER">
-                    <children>
-                        <Label alignment="BOTTOM_LEFT" focusTraversable="false" text="IP" textOverrun="CENTER_ELLIPSIS">
-                            <font>
-                                <Font size="24.0" />
-                            </font>
-                            <TilePane.margin>
-                                <Insets />
-                            </TilePane.margin>
-                        </Label>
-                        <TextField fx:id="ipField" styleClass="first" />
-                    </children>
-                    <padding>
-                        <Insets bottom="50.0" />
-                    </padding>
-                </TilePane>
-                <TilePane alignment="CENTER">
-                    <children>
-                        <Label text="Port">
-                            <font>
-                                <Font size="24.0" />
-                            </font>
-                        </Label>
-                  <TextField fx:id="portField" styleClass="first" />
-                    </children>
-                </TilePane>
-            </children>
+            <TilePane alignment="CENTER">
+                <padding>
+                    <Insets bottom="50.0"/>
+                </padding>
+                <Label alignment="BOTTOM_LEFT" text="IP" textOverrun="CENTER_ELLIPSIS">
+                    <font>
+                        <Font size="24.0"/>
+                    </font>
+                    <TilePane.margin>
+                        <Insets/>
+                    </TilePane.margin>
+                </Label>
+                <TextField fx:id="ipField" styleClass="first"/>
+            </TilePane>
+            <TilePane alignment="CENTER">
+                <Label text="Port">
+                    <font>
+                        <Font size="24.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="portField" styleClass="first"/>
+            </TilePane>
         </VBox>
     </center>
     <bottom>
         <TilePane alignment="CENTER" hgap="30.0" prefHeight="74.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-            <children>
-                <Button fx:id="okButton" alignment="CENTER" mnemonicParsing="false" onAction="#switchToLoginScreen" prefHeight="59.0" prefWidth="122.0" styleClass="primary" stylesheets="@bootstrap3.css" text="OK">
-                    <font>
-                        <Font name="Bell MT" size="24.0" />
-                    </font>
-                </Button>
-            </children>
+            <Button fx:id="okButton" alignment="CENTER" mnemonicParsing="false" onAction="#switchToLoginScreen"
+                    prefHeight="59.0" prefWidth="122.0" styleClass="primary" stylesheets="@bootstrap3.css" text="OK">
+                <font>
+                    <Font name="Bell MT" size="24.0"/>
+                </font>
+            </Button>
         </TilePane>
     </bottom>
 </BorderPane>

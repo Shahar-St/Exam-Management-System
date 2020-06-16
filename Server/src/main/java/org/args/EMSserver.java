@@ -15,24 +15,21 @@ import java.util.Scanner;
 public class EMSserver extends AbstractServer {
 
     private static EMSserver singleInstanceServer = null;
-    //private boolean isOnline = false;
-
     private final DatabaseHandler databaseHandler;
-    List<String> loggedInUsers = new ArrayList<>();
+    final List<String> loggedInUsers = new ArrayList<>();
 
     private EMSserver(int port, DatabaseHandler databaseHandler) {
         super(port);
         this.databaseHandler = databaseHandler;
     }
 
-    public static EMSserver EMSserverInit(DatabaseHandler databaseHandler) {
+    public synchronized static EMSserver EMSserverInit(DatabaseHandler databaseHandler) {
 
         if (singleInstanceServer == null)
         {
             System.out.print("Enter port number: ");
             Scanner scanner = new Scanner(System.in);
             int port = scanner.nextInt();
-
             singleInstanceServer = new EMSserver(port, databaseHandler);
             return singleInstanceServer;
         }
@@ -49,7 +46,8 @@ public class EMSserver extends AbstractServer {
         {
             try
             {
-                client.sendToClient(databaseHandler.handle((DatabaseRequest) msg, client, loggedInUsers));
+                client.sendToClient(databaseHandler.produceResponse((DatabaseRequest) msg,
+                        client, loggedInUsers));
             }
             catch (Exception e)
             {
@@ -63,8 +61,10 @@ public class EMSserver extends AbstractServer {
         System.out.print("Interrupted\nClient connected: " + client.getInetAddress() + "\n>> ");
     }
 
+    @SuppressWarnings("RedundantCast")
     @Override
     protected synchronized void clientDisconnected(ConnectionToClient client) {
+
         System.out.print("Interrupted\nClient disconnected." + "\n>> ");
         loggedInUsers.remove((String) client.getInfo("userName"));
     }
@@ -93,7 +93,6 @@ public class EMSserver extends AbstractServer {
             String input = scanner.nextLine();
             if (input.equals("exit"))
             {
-                databaseHandler.close();
                 try
                 {
                     this.close();
@@ -102,6 +101,7 @@ public class EMSserver extends AbstractServer {
                 {
                     e.printStackTrace();
                 }
+                databaseHandler.close();
                 return;
             }
         }

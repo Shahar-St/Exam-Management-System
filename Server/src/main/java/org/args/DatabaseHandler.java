@@ -2,6 +2,19 @@ package org.args;
 
 import DatabaseAccess.Requests.*;
 import DatabaseAccess.Responses.*;
+import org.args.DatabaseStrategies.DatabaseStrategy;
+import org.args.DatabaseStrategies.Exams.*;
+import org.args.DatabaseStrategies.ExecuteExam.*;
+import org.args.DatabaseStrategies.LoginStrategy;
+import org.args.DatabaseStrategies.Questions.*;
+import org.args.DatabaseStrategies.Review.EvaluateExamStrategy;
+import org.args.DatabaseStrategies.Review.GetExecutedExamStrategy;
+import org.args.DatabaseStrategies.Review.PendingExamsStrategy;
+import org.args.DatabaseStrategies.Review.UncheckedExecutesOfConcreteStrategy;
+import org.args.DatabaseStrategies.Statistics.GetAllPastExamsStrategy;
+import org.args.DatabaseStrategies.Statistics.TeacherGetAllPastExamsStrategy;
+import org.args.DatabaseStrategies.Statistics.TeacherStatisticsStrategy;
+import org.args.DatabaseStrategies.SubjectAndCoursesStrategy;
 import org.args.Entities.*;
 import org.args.OCSF.ConnectionToClient;
 import org.hibernate.HibernateException;
@@ -9,28 +22,53 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
 import org.hibernate.service.ServiceRegistry;
 
-import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.logging.Level;
 
+@SuppressWarnings({"FieldCanBeLocal", "SpellCheckingInspection"})
 public class DatabaseHandler {
 
     private static DatabaseHandler databaseHandler = null;
-    private Session session;
+    private static Session session;
+    final Map<Integer, ExamManager> examManagers = new HashMap<>();    //key = concreteExam ID
+    int countOfOperations = 0;
 
-    // error codes
-    private final int SUCCESS = 0;
-    private final int UNAUTHORIZED = 1;
-    private final int NOT_FOUND = 2;
-    private final int NO_ACCESS = 3;
-    private final int WRONG_INFO = 4;
+    // how often a commit we'll happen
+    private final int REFRESHING_FREQUENCY = 3;
+
+    private final HashMap<String, DatabaseStrategy> strategies = new HashMap<>() {{
+        this.put("LoginRequest", new LoginStrategy());
+        this.put("SubjectsAndCoursesRequest", new SubjectAndCoursesStrategy());
+        this.put("QuestionRequest", new QuestionStrategy());
+        this.put("EditQuestionRequest", new EditQuestionStrategy());
+        this.put("AllQuestionsRequest", new AllQuestionsStrategy());
+        this.put("DeleteQuestionRequest", new DeleteQuestionStrategy());
+        this.put("AddQuestionRequest", new AddQuestionStrategy());
+        this.put("AddExamRequest", new AddExamStrategy());
+        this.put("AllExamsRequest", new AllExamsStrategy());
+        this.put("DeleteExamRequest", new DeleteExamStrategy());
+        this.put("EditExamRequest", new EditExamStrategy());
+        this.put("ViewExamRequest", new ViewExamStrategy());
+        this.put("ExecuteExamRequest", new ExecuteExamStrategy());
+        this.put("TakeExamRequest", new TakeExamStrategy());
+        this.put("SubmitExamRequest", new SubmitExamStrategy());
+        this.put("SubmitManualExamRequest", new SubmitManualExamStrategy());
+        this.put("TimeExtensionRequest", new TimeExtensionStrategy());
+        this.put("ConfirmTimeExtensionRequest", new ConfirmTimeExtensionStrategy());
+        this.put("EvaluateExamRequest", new EvaluateExamStrategy());
+        this.put("GetExecutedExamRequest", new GetExecutedExamStrategy());
+        this.put("PendingExamsRequest", new PendingExamsStrategy());
+        this.put("UncheckedExecutesOfConcreteRequest", new UncheckedExecutesOfConcreteStrategy());
+        this.put("GetAllPastExamsRequest", new GetAllPastExamsStrategy());
+        this.put("TeacherEndExamRequest", new TeacherEndExamStrategy());
+        this.put("RaiseHandRequest", new RaiseHandStrategy());
+        this.put("TeacherGetAllPastExamsRequest", new TeacherGetAllPastExamsStrategy());
+        this.put("TeacherStatisticsRequest", new TeacherStatisticsStrategy());
+    }};
 
     private DatabaseHandler() {
         try
@@ -39,23 +77,11 @@ public class DatabaseHandler {
             session = sessionFactory.openSession();
             session.beginTransaction();
 
-            Scanner scanner = new Scanner(System.in);
-            String ans = "";
-            System.out.println("Build dummy database? (y/n)");
-            System.out.println("//enter y only if the database is empty//");
-            while (!ans.equals("y") && !ans.equals("n"))
-            {
-                ans = scanner.nextLine();
-                if (!ans.equals("y") && !ans.equals("n"))
-                    System.out.println("wrong input, try again");
-            }
-            if (ans.equals("y"))
-            {
-                createDummyEntities();
-                session.getTransaction().commit();
-                session.clear();
-                session.beginTransaction();
-            }
+            System.out.println("Creating dummy database");
+            createDummyEntities();
+            session.getTransaction().commit();
+            session.clear();
+            session.beginTransaction();
         }
         catch (Exception exception)
         {
@@ -82,232 +108,68 @@ public class DatabaseHandler {
     private static SessionFactory getSessionFactory() throws HibernateException {
 
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
-        Configuration configuration = new Configuration();
-        configuration.addAnnotatedClass(User.class);
-        configuration.addAnnotatedClass(Teacher.class);
-        configuration.addAnnotatedClass(Dean.class);
-        configuration.addAnnotatedClass(Student.class);
-        configuration.addAnnotatedClass(Subject.class);
-        configuration.addAnnotatedClass(Course.class);
-        configuration.addAnnotatedClass(Question.class);
-        configuration.addAnnotatedClass(Exam.class);
-        configuration.addAnnotatedClass(ExecutedExam.class);
+        Configuration configuration = new Configuration()
+                .addAnnotatedClass(User.class)
+                .addAnnotatedClass(Teacher.class)
+                .addAnnotatedClass(Dean.class)
+                .addAnnotatedClass(Student.class)
+                .addAnnotatedClass(Subject.class)
+                .addAnnotatedClass(Course.class)
+                .addAnnotatedClass(Question.class)
+                .addAnnotatedClass(Exam.class)
+                .addAnnotatedClass(ExecutedExam.class)
+                .addAnnotatedClass(ConcreteExam.class);
 
         ServiceRegistry serviceRegistry =
                 new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         return configuration.buildSessionFactory(serviceRegistry);
     }
 
-    public DatabaseResponse handle(DatabaseRequest request, ConnectionToClient client,
-                                   List<String> loggedInUsers) {
-        DatabaseResponse response;
+    public DatabaseResponse produceResponse(DatabaseRequest request, ConnectionToClient client,
+                                            List<String> loggedInUsers) {
+        DatabaseStrategy strategy = strategies.get(request.getClass().getSimpleName());
+        DatabaseResponse response = strategy.handle(request, client, session, loggedInUsers);
 
-        if (request instanceof LoginRequest)
-            response = loginHandler((LoginRequest) request, client, loggedInUsers);
-        else if (request instanceof AllQuestionsRequest)
-            response = allQuestionsHandler((AllQuestionsRequest) request, client);
-        else if (request instanceof EditQuestionRequest)
-            response = editQuestionHandler((EditQuestionRequest) request, client);
-        else if (request instanceof QuestionRequest)
-            response = questionHandler((QuestionRequest) request, client);
-        else // request is instanceof SubjectsAndCoursesRequest
-            response = subjectsAndCoursesHandler((SubjectsAndCoursesRequest) request, client);
+        if (strategy instanceof IExamInProgress && response.getStatus() == 0)
+            ((IExamInProgress) strategy).handle(request, response, examManagers, client, session);
 
-        this.session.clear();
+        session.clear();
+        countOfOperations++;
+
+        if (countOfOperations % REFRESHING_FREQUENCY == 0)
+        {
+            session.getTransaction().commit();
+            session.clear();
+            session.beginTransaction();
+        }
+
         return response;
     }
 
-    private SubjectsAndCoursesResponse subjectsAndCoursesHandler(SubjectsAndCoursesRequest request,
-                                                                 ConnectionToClient client) {
-
-        if (client.getInfo("userName") == null)
-            return new SubjectsAndCoursesResponse(UNAUTHORIZED, request);
-
-        HashMap<String, List<String>> map = new HashMap<>();
-        User user = getUser((String) client.getInfo("userName"));
-
-        List<Course> courses;
-        if (user instanceof Teacher)
-            courses = ((Teacher) user).getCoursesList();
-        else    // user is dean, get all courses
-        {
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<Course> criteriaQuery = criteriaBuilder.createQuery(Course.class);
-            criteriaQuery.from(Course.class);
-            Query<Course> query = session.createQuery(criteriaQuery);
-            courses = query.getResultList();
-        }
-
-        for (Course course : courses)
-        {
-            if (map.containsKey(course.getSubject().getName()))
-                map.get(course.getSubject().getName()).add(course.getName());
-            else
-            {
-                List<String> subjectCourses = new ArrayList<>();
-                subjectCourses.add(course.getName());
-                map.put(course.getSubject().getName(), subjectCourses);
-            }
-        }
-        return new SubjectsAndCoursesResponse(SUCCESS, request, map);
-    }
-
-    private QuestionResponse questionHandler(QuestionRequest request, ConnectionToClient client) {
-
-        if (client.getInfo("userName") == null)
-            return new QuestionResponse(UNAUTHORIZED, request);
-
-        Question question = getQuestion(request.getQuestionID());
-
-        if (question == null)
-            return new QuestionResponse(NOT_FOUND, request);
-
-        List<String> answers = new ArrayList<>(question.getAnswersArray());
-        return new QuestionResponse(SUCCESS, request, question.getQuestionContent(),
-                answers, question.getCorrectAnswer(), question.getCourse().getName(),
-                question.getAuthor().getFullName(), question.getLastModified());
-    }
-
-    private EditQuestionResponse editQuestionHandler(EditQuestionRequest request, ConnectionToClient client) {
-
-        if (client.getInfo("userName") == null)
-            return new EditQuestionResponse(UNAUTHORIZED, request);
-
-        Question question = getQuestion(request.getQuestionID());
-
-        if (question == null)
-            return new EditQuestionResponse(NOT_FOUND, request);
-
-
-        if (question.getAuthor() != getUser((String) client.getInfo("userName")))
-            return new EditQuestionResponse(NO_ACCESS, request);
-
-        question.setQuestionContent(request.getNewDescription());
-        question.setAnswersArray(request.getNewAnswers());
-        question.setCorrectAnswer(request.getCorrectAnswer());
-        question.setLastModified();
-        session.update(question);
-        session.flush();
-
-        return new EditQuestionResponse(SUCCESS, request);
-    }
-
-    private LoginResponse loginHandler(LoginRequest request, ConnectionToClient client, List<String> loggedInUsers) {
-
-        User user = getUser(request.getUserName());
-
-        if (user == null || !user.getUserName().equals(request.getUserName()))
-            return new LoginResponse(NOT_FOUND, request);
-
-        if (loggedInUsers.contains(request.getUserName()))
-            return new LoginResponse(NO_ACCESS, request);
-
-        if (!user.getPassword().equals(request.getPassword()))
-            return new LoginResponse(WRONG_INFO, request);
-
-        client.setInfo("userName", user.getUserName());
-        loggedInUsers.add(user.getUserName());
-        return new LoginResponse(SUCCESS, user.getClass().getSimpleName().toLowerCase(),
-                user.getFullName(), request);
-    }
-
-    private AllQuestionsResponse allQuestionsHandler(AllQuestionsRequest request,
-                                                     ConnectionToClient client) {
-
-        HashMap<String, Pair<LocalDateTime, String>> map = new HashMap<>();
-
-        if (client.getInfo("userName") == null)
-            return new AllQuestionsResponse(UNAUTHORIZED, request);
-
-        User user = getUser((String) client.getInfo("userName"));
-
-        if (user == null)
-            return new AllQuestionsResponse(NOT_FOUND, request);
-
-
-        List<Question> questionList = new ArrayList<>();
-        if (user instanceof Teacher)
-        {
-            Teacher teacher = (Teacher) user;
-            for (Course tCourse : teacher.getCoursesList())
-            {
-                if (tCourse.getName().equals(request.getCourse()))
-                    questionList.addAll(tCourse.getQuestionsList());
-            }
-        }
-        else    // user is dean
-        {
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<Question> criteriaQuery = criteriaBuilder.createQuery(Question.class);
-            Root<Question> root = criteriaQuery.from(Question.class);
-            criteriaQuery.select(root);
-            Query<Question> query = session.createQuery(criteriaQuery);
-            questionList.addAll(query.getResultList());
-        }
-
-        for (Question question : questionList)
-            map.put(question.getId(),
-                    new Pair<>(question.getLastModified(), question.getQuestionContent()));
-
-        return new AllQuestionsResponse(SUCCESS, request, map);
-    }
-
-    private User getUser(String userName) throws NoResultException {
-
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
-        Root<User> root = criteriaQuery.from(User.class);
-        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("userName"), userName));
-        Query<User> query = session.createQuery(criteriaQuery);
-        try
-        {
-            return query.getSingleResult();
-        }
-        catch (NoResultException e)
-        {
-            return null;
-        }
-    }
-
-    private Question getQuestion(String questionID) {
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Question> criteriaQuery = criteriaBuilder.createQuery(Question.class);
-        Root<Question> root = criteriaQuery.from(Question.class);
-        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("id"), questionID));
-        Query<Question> query = session.createQuery(criteriaQuery);
-        try
-        {
-            return query.getSingleResult();
-        }
-        catch (NoResultException e)
-        {
-            return null;
-        }
-    }
     public void close() {
         assert session != null;
         session.close();
         session.getSessionFactory().close();
     }
 
-
     //Group dummy DB
-    private final int NUM_OF_SUBJECTS = 2;
-    private final int NUM_OF_TEACHERS = 4;
-    private final int NUM_OF_STUDENTS = 8;
-    private final int NUM_OF_COURSES = 4;
+    private final int NUM_OF_SUBJECTS = 4;
+    private final int NUM_OF_TEACHERS = 2;
+    private final int NUM_OF_STUDENTS = 16;
+    private final int NUM_OF_COURSES = 8;
     private final int NUM_OF_OPTIONAL_ANSWERS = 4;
-    private final int NUM_OF_QUESTIONS = 8;
+    private final int NUM_OF_QUESTIONS = 16;
+    private final int NUM_OF_EXAMS = 8;
 
     private void createDummyEntities() {
 
         //creating Dean
-        Dean dean = new Dean(123456789, "Head", "Teacher", "passDean", "deanUN");
+        Dean dean = new Dean(123456789, "Liel", "Fridman", "Liel", "Liel");
         session.save(dean);
         session.flush();
 
         //creating subjects
-        String[] subjectsNamesArr = {"Math", "English"};
+        String[] subjectsNamesArr = {"Math", "English", "History", "Hebrew"};
         for (int i = 0; i < NUM_OF_SUBJECTS; i++)
         {
             Subject subject = new Subject(i, subjectsNamesArr[i % subjectsNamesArr.length]);
@@ -317,7 +179,8 @@ public class DatabaseHandler {
         List<Subject> subjects = getAllOfType(session, Subject.class);
 
         //creating courses and connecting with subjects
-        String[] coursesNamesArr = {"Level 1", "Beginners", "Level 2", "Advanced"};
+        String[] coursesNamesArr = {"4 points", "Beginners", "Israel", "level 1", "5 points", "Advanced", "Holocaust",
+                "level 2"};
         for (int i = 0; i < NUM_OF_COURSES; i++)
         {
             Course course = new Course(i, coursesNamesArr[i % coursesNamesArr.length], subjects.get(i % NUM_OF_SUBJECTS));
@@ -327,8 +190,8 @@ public class DatabaseHandler {
         List<Course> courses = getAllOfType(session, Course.class);
 
         //creating teachers and connecting with courses and subjects
-        String[] teacherFirstNamesArr = {"Ronit", "Miri", "Shir", "Neta"};
-        String[] teacherLastNamesArr = {"Cohen", "Haim", "Levi", "Zur"};
+        String[] teacherFirstNamesArr = {"1", "Miri", "Shir", "Neta", "Ronit", "Shiri", "Yuval", "shahar"};
+        String[] teacherLastNamesArr = {"1", "Haim", "Levi", "Zur", "Hen", "Levi", "Lev", "Oren"};
         for (int i = 0; i < NUM_OF_TEACHERS; i++)
         {
             Teacher teacher = new Teacher(i, teacherFirstNamesArr[i % teacherFirstNamesArr.length],
@@ -336,18 +199,24 @@ public class DatabaseHandler {
                     teacherFirstNamesArr[i % teacherFirstNamesArr.length],
                     teacherFirstNamesArr[i] + "_" + teacherLastNamesArr[i]);
             session.save(teacher);
+        }
+        session.flush();
+        List<Teacher> teachers = getAllOfType(session, Teacher.class);
 
+        for (int i = 0; i < NUM_OF_COURSES; i++)
+        {
+            Teacher teacher = teachers.get(i % NUM_OF_TEACHERS);
             courses.get(i % NUM_OF_COURSES).setTeacher(teacher);
             session.update(teacher);
             courses.get(i % NUM_OF_COURSES).getSubject().addTeacher(teacher);
             session.update(teacher);
         }
-        session.flush();
-        List<Teacher> teachers = getAllOfType(session, Teacher.class);
+
 
         //creating students and connecting with courses
-        String[] studentFirstNamesArr = {"Yoni", "Guy", "Niv", "Maayan", "Or", "Ariel", "Shoval", "Tal"};
-        String[] studentLastNamesArr = {"Cohen", "Haim", "Bar-Dayan", "Shitrit"};
+        String[] studentFirstNamesArr = {"Yoni", "Guy", "Niv", "Maayan", "Or", "Ariel", "Shoval", "Tal",
+                "Tal", "Shoval", "Ariel", "Or", "Maayan", "Niv", "Guy", "Yoni"};
+        String[] studentLastNamesArr = {"Cohen", "Haim", "Bar-Dayan", "Shitrit", "Lev", "Yaron", "Raz", "Ezer"};
         for (int i = 0; i < NUM_OF_STUDENTS; i++)
         {
             Student student;
@@ -370,29 +239,83 @@ public class DatabaseHandler {
 
         //creating questions by teachers
 
-        String[] questionsArr = {"1 + 0 = ?", "cat is a/an:", "1 + 4 = ?", "same meaning of happy is:", "0 + 4 = ?",
-                "beautiful is a/an:", "1 + 1 = ?", "how to spell many people?"};
+        String[] questionsArr = {"1 + 0 = ?", "capital city of Israel:", "1 + 4 = ?", "how many jewish people died?:",
+                "0 + 4 = ?", "the biggest city in Israel is:", "1 + 1 = ?", "the leader was:",
+                "cat is a/an:", "after 'a':", "same meaning of happy is:", "after 'c':",
+                "beautiful is a/an:", "capital of 'b':", "how to spell many people?", "capital of 'd':"};
         List<String> ansArr1 = Arrays.asList("1", "2", "3", "4");
-        List<String> ansArr2 = Arrays.asList("food", "animal", "product", "emotions");
+        List<String> ansArr2 = Arrays.asList("Haifa", "Jerusalem", "Tel Aviv", "Dimona");
         List<String> ansArr3 = Arrays.asList("0", "3", "5", "-3");
-        List<String> ansArr4 = Arrays.asList("sad", "hungry", "afraid", "glad");
+        List<String> ansArr4 = Arrays.asList("3M", "4M", "5M", "6M");
         List<String> ansArr5 = Arrays.asList("4", "2", "1", "0");
-        List<String> ansArr6 = Arrays.asList("verb", "adjective", "noun", "none of above");
+        List<String> ansArr6 = Arrays.asList("Haifa", "Jerusalem", "Tel Aviv", "Dimona");
         List<String> ansArr7 = Arrays.asList("1", "3", "2", "4");
-        List<String> ansArr8 = Arrays.asList("mans", "man", "mens", "men");
+        List<String> ansArr8 = Arrays.asList("Gal", "Shahar", "Adar", "Hitler");
+        List<String> ansArr9 = Arrays.asList("animal", "food", "product", "emotions");
+        List<String> ansArr10 = Arrays.asList("a", "b", "c", "d");
+        List<String> ansArr11 = Arrays.asList("sad", "hungry", "glad", "afraid");
+        List<String> ansArr12 = Arrays.asList("a", "b", "c", "d");
+        List<String> ansArr13 = Arrays.asList("adjective", "verb", "noun", "none of above");
+        List<String> ansArr14 = Arrays.asList("A", "B", "C", "D");
+        List<String> ansArr15 = Arrays.asList("mans", "man", "men", "mens");
+        List<String> ansArr16 = Arrays.asList("A", "B", "C", "D");
         List<List<String>> answers = new ArrayList<>();
-        Collections.addAll(answers, ansArr1, ansArr2, ansArr3, ansArr4, ansArr5, ansArr6, ansArr7, ansArr8);
+        Collections.addAll(answers, ansArr1, ansArr2, ansArr3, ansArr4, ansArr5, ansArr6, ansArr7, ansArr8,
+                ansArr9, ansArr10, ansArr11, ansArr12, ansArr13, ansArr14, ansArr15, ansArr16);
 
-        for (int i = 0; i < NUM_OF_QUESTIONS; i++)
+        int k = 0;
+        for (int j = 0; j < NUM_OF_TEACHERS; j++)
         {
-            Teacher teacher = teachers.get(i % NUM_OF_TEACHERS);
-            Question question = teacher.createQuestion(questionsArr[i], answers.get(i), i % NUM_OF_OPTIONAL_ANSWERS,
-                    teacher.getCoursesList().get(i % teacher.getCoursesList().size()));
-            session.save(question);
-            session.update(teacher);
+            Teacher teacher = teachers.get(j % NUM_OF_TEACHERS);
+            for (int i = 0; i < NUM_OF_QUESTIONS / NUM_OF_TEACHERS; i++)
+            {
+                Question question = teacher.createQuestion(questionsArr[k], answers.get(k),
+                        i % NUM_OF_OPTIONAL_ANSWERS,
+                        teacher.getCoursesList().get(i % teacher.getCoursesList().size()));
+                session.save(question);
+                session.update(teacher);
+                k++;
+            }
         }
         session.flush();
 
+        //creating exams by teachers
+        String[] titlesArr = {"functions", "Jerusalem", "circles", "Germany", "letters", "nikud", "spelling", "vocabulary"};
+        List<Double> questionsScores = Arrays.asList(50.0, 50.0);
+        List<Integer> answersByStudent = Arrays.asList(2, 3, 2, 3);
+        k = 0;
+        for (int j = 0; j < NUM_OF_TEACHERS; j++)
+        {
+            Teacher teacher = teachers.get(j % NUM_OF_TEACHERS);
+            for (int i = 0; i < NUM_OF_EXAMS / NUM_OF_TEACHERS; i++)
+            {
+                Course course = teacher.getCoursesList().get(i % teacher.getCoursesList().size());
+                Exam exam = teacher.createExam(course, 2, titlesArr[k], "good luck!", "my private notes",
+                        course.getQuestionsList(), questionsScores);
+                session.save(exam);
+                session.update(teacher);
+                ConcreteExam concreteExam = new ConcreteExam(exam, teacher, "1111");
+                session.save(concreteExam);
+                ExecutedExam executedExam1 = new ExecutedExam(concreteExam, exam.getCourse().getStudentsList().get(0),
+                        "not so good...", answersByStudent, "");
+                session.save(executedExam1);
+                executedExam1.setSubmitted(true);
+                executedExam1.setComputerized(true);
+                if (i % 2 == 0)
+                    executedExam1.setChecked(true);
+                executedExam1.setGrade(50);
+                ExecutedExam executedExam2 = new ExecutedExam(concreteExam, exam.getCourse().getStudentsList().get(1),
+                        "very good!", answersByStudent, "");
+                session.save(executedExam2);
+                executedExam2.setSubmitted(true);
+                executedExam2.setComputerized(true);
+                if (i % 2 == 0)
+                    executedExam2.setChecked(true);
+                executedExam2.setGrade(100);
+                k++;
+            }
+        }
+        session.flush();
     }
 
     private static <T> List<T> getAllOfType(Session session, Class<T> objectType) {

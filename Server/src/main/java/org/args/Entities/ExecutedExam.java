@@ -1,11 +1,14 @@
 package org.args.Entities;
 
+import LightEntities.LightExecutedExam;
+import LightEntities.LightQuestion;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Entity
 public class ExecutedExam {
@@ -21,57 +24,46 @@ public class ExecutedExam {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Cascade(CascadeType.SAVE_UPDATE)
-    @JoinColumn(name = "course_id")
-    private Course course;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @Cascade(CascadeType.SAVE_UPDATE)
-    @JoinColumn(name = "teacher_id")
-    private Teacher author;
-
-    @ManyToMany(mappedBy = "containedInExecutedExams")
-    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
-    private List<Question> questionsList = new ArrayList<>();
+    @JoinColumn(name = "concrete_id")
+    private ConcreteExam concreteExam;
 
     @ElementCollection
-    private List<Double> questionsScores = new ArrayList<>();
+    private List<Integer> answersByStudent = new ArrayList<>();
 
-    private String examId;
-    private int grade = 0;
+    private String reasonsForChangeGrade;
+    private String commentsAfterCheck;
+    private double grade = 0;
     private int duration; // exam duration in minutes
-    private String executedExamDescription, teacherPrivateNotes; // teacherPrivateNotes only for the teacher
+    private boolean isComputerized = false;
+    private boolean checked = false;
+    private boolean finishedOnTime = false;
+    private boolean isSubmitted = false;
+
+    private long startTime;
+    private long durationOfExecutionInMinutes;
+
+    @Column(length = 3000)
+    private byte[] fileBytes;
 
     //Group c'tors
     public ExecutedExam() {
     }
 
-    public ExecutedExam(Exam exam, Student student) {
+    public ExecutedExam(ConcreteExam concreteExam, Student student, String commentsAfterCheck,
+                        List<Integer> answersByStudent, String reasonsForChangeGrade) {
 
-        //exam.getCourse().addExecutedExam(this);
-        this.setCourse(exam.getCourse());
-        for (Question question : exam.getQuestionsList())
-           // question.addExecutedExam(this);
-            this.addQuestion(question);
-        this.questionsScores.addAll(exam.getQuestionsScores());
-        //exam.getAuthor().addExecutedExam(this);
-        this.setAuthor(exam.getAuthor());
-        this.examId = exam.getId();
-        this.duration = exam.getDurationInMinutes();
-        this.executedExamDescription = exam.getDescription();
-        this.teacherPrivateNotes = exam.getTeacherPrivateNotes();
-        //student.addExecutedExam(this);
+        this.setConcreteExam(concreteExam);
         this.setStudent(student);
+        this.commentsAfterCheck = commentsAfterCheck;
+        this.reasonsForChangeGrade = reasonsForChangeGrade;
+        this.answersByStudent = answersByStudent;
+        this.duration = concreteExam.getExam().getDurationInMinutes();
         if (student.getExtensionEligible())
             setOverTime();
     }
 
-    //Group adders and removers
-    public void addQuestion(Question question) {
-        if (!questionsList.contains(question))
-            questionsList.add(question);
-
-        if (!question.getContainedInExecutedExams().contains(this))
-            question.getContainedInExecutedExams().add(this);
+    public ExecutedExam(ConcreteExam concreteExam, Student student) {
+        this(concreteExam, student, null, null, null);
     }
 
     //Group setters and getters
@@ -89,51 +81,20 @@ public class ExecutedExam {
             student.addExecutedExam(this);
     }
 
-    public Course getCourse() {
-        return course;
+    public ConcreteExam getConcreteExam() {
+        return concreteExam;
     }
-    public void setCourse(Course course) {
+    public void setConcreteExam(ConcreteExam concreteExam) {
 
-        this.course = course;
-        if (!course.getExecutedExamsList().contains(this))
-            course.addExecutedExam(this);
-    }
-
-    public Teacher getAuthor() {
-        return author;
-    }
-    public void setAuthor(Teacher author) {
-
-        this.author = author;
-        if (!author.getExecutedExamsList().contains(this))
-            author.addExecutedExam(this);
+        this.concreteExam = concreteExam;
+        if (!concreteExam.getExecutedExamsList().contains(this))
+            concreteExam.addExecutedExam(this);
     }
 
-    public List<Question> getQuestionsList() {
-        return questionsList;
-    }
-    public void setQuestionsList(List<Question> questionsList) {
-        this.questionsList = questionsList;
-    }
-
-    public List<Double> getQuestionsScores() {
-        return questionsScores;
-    }
-    public void setQuestionsScores(List<Double> questionsScores) {
-        this.questionsScores = questionsScores;
-    }
-
-    public String getExamId() {
-        return examId;
-    }
-    public void setExamId(String examId) {
-        this.examId = examId;
-    }
-
-    public int getGrade() {
+    public double getGrade() {
         return grade;
     }
-    public void setGrade(int grade) {
+    public void setGrade(double grade) {
         this.grade = grade;
     }
 
@@ -144,21 +105,94 @@ public class ExecutedExam {
         this.duration = duration;
     }
 
-    public String getExecutedExamDescription() {
-        return executedExamDescription;
-    }
-    public void setExecutedExamDescription(String description) {
-        this.executedExamDescription = description;
+    public boolean isComputerized() {
+        return isComputerized;
     }
 
-    public String getTeacherPrivateNotes() {
-        return teacherPrivateNotes;
-    }
-    public void setTeacherPrivateNotes(String teacherPrivateNotes) {
-        this.teacherPrivateNotes = teacherPrivateNotes;
+    public void setComputerized(boolean computerized) {
+        isComputerized = computerized;
     }
 
     public void setOverTime() {
         this.duration += 0.25 * this.duration;
+    }
+
+    public List<Integer> getAnswersByStudent() {
+        return answersByStudent;
+    }
+
+    public void setAnswersByStudent(List<Integer> answersByStudent) {
+        this.answersByStudent = answersByStudent;
+    }
+
+    public String getReasonsForChangeGrade() {
+        return reasonsForChangeGrade;
+    }
+
+    public void setReasonsForChangeGrade(String reasonsForChangeGrade) {
+        this.reasonsForChangeGrade = reasonsForChangeGrade;
+    }
+
+    public String getCommentsAfterCheck() {
+        return commentsAfterCheck;
+    }
+
+    public void setCommentsAfterCheck(String commentsAfterCheck) {
+        this.commentsAfterCheck = commentsAfterCheck;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
+    public boolean isSubmitted() {
+        return isSubmitted;
+    }
+
+    public void setSubmitted(boolean submitted) {
+        isSubmitted = submitted;
+    }
+
+    public boolean isFinishedOnTime() {
+        return finishedOnTime;
+    }
+    public void setFinishedOnTime(boolean finishedOnTime) {
+        this.finishedOnTime = finishedOnTime;
+    }
+
+    public byte[] getFileBytes() {
+        return fileBytes;
+    }
+
+    public void setFileBytes(byte[] fileBytes) {
+        this.fileBytes = fileBytes;
+    }
+
+    public void setStartTime() {
+        this.startTime = System.currentTimeMillis();
+    }
+
+    public void setDurationOfExecutionInMinutes() {
+
+        long inMillis = System.currentTimeMillis() - startTime;
+        durationOfExecutionInMinutes = TimeUnit.MILLISECONDS.toMinutes(inMillis);
+    }
+
+    public LightExecutedExam getLightExecutedExam() {
+
+        List<LightQuestion> lightQuestionsList = new ArrayList<>();
+        for (Question question : concreteExam.getExam().getQuestionsList())
+            lightQuestionsList.add(question.createLightQuestion());
+        List<Double> questionScoreList = new ArrayList<>(concreteExam.getExam().getQuestionsScores());
+        LightExecutedExam lightExecutedExam = new LightExecutedExam(concreteExam.getExam().getTitle(), concreteExam.getTester().getUserName(),
+                String.valueOf(id), student.getSocialId(), lightQuestionsList, questionScoreList,
+                new ArrayList<>(this.answersByStudent), duration, isComputerized, this.grade,
+                this.reasonsForChangeGrade, this.commentsAfterCheck);
+        lightExecutedExam.setManualExam(getFileBytes());
+
+        return lightExecutedExam;
     }
 }

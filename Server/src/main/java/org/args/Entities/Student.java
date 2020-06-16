@@ -21,6 +21,8 @@ public class Student extends User {
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
     private List<Course> coursesList = new ArrayList<>();
 
+    private int currentlyExecutedID = -1;
+
     private Boolean isExtensionEligible;
 
     //Group c'tors
@@ -67,5 +69,16 @@ public class Student extends User {
     }
     public void setExtensionEligible(Boolean extensionEligible) {
         isExtensionEligible = extensionEligible;
+    }
+
+    public int getCurrentlyExecutedID() { return currentlyExecutedID; }
+
+    public void setCurrentlyExecutedID(int idExecutedExamCurrent) {
+        this.currentlyExecutedID = idExecutedExamCurrent;
+    }
+
+    public ExecutedExam createExecutedExam(){
+
+        return new ExecutedExam();
     }
 }
