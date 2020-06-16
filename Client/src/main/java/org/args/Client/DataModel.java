@@ -911,10 +911,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     @Subscribe
     public void handleExamEndedNotifier(ExamEndedNotifier notifier) {
-        if (getPermission().equals("student")) {
-            if (!isSubmitted())
-                submitAndQuit();
-        } else if (getPermission().equals("teacher")) {
+        if (getPermission().equals("teacher")) {
             currentHandsRaised.clear();
         }
     }
