@@ -34,7 +34,7 @@ public class Exam {
 
     @ManyToMany(mappedBy = "containedInExams")
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
-    private final List<Question> questionsList = new ArrayList<>();
+    private List<Question> questionsList = new ArrayList<>();
 
     @ElementCollection
     private List<Double> questionsScores = new ArrayList<>();
@@ -120,6 +120,12 @@ public class Exam {
     }
 
     public void setQuestionsList(List<Question> questionsList) {
+
+        for(Question question : this.questionsList)
+            question.getContainedInExams().remove(this);
+
+        this.questionsList.clear();
+
         for (Question question : questionsList)
             this.addQuestion(question);
     }

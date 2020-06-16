@@ -151,7 +151,7 @@ public class DatabaseHandler {
     private void createDummyEntities() {
 
         //creating Dean
-        Dean dean = new Dean(123456789, "Head", "Teacher", "passDean", "deanUN");
+        Dean dean = new Dean(123456789, "Liel", "Fridman", "Liel", "Liel");
         session.save(dean);
         session.flush();
 
@@ -178,7 +178,7 @@ public class DatabaseHandler {
 
         //creating teachers and connecting with courses and subjects
         String[] teacherFirstNamesArr = {"1", "Miri", "Shir", "Neta", "Ronit", "Shiri", "Yuval", "shahar"};
-        String[] teacherLastNamesArr = {"1", "Haim", "Levi", "Zur", "Cohen", "Levi", "Lev", "Oren"};
+        String[] teacherLastNamesArr = {"1", "Haim", "Levi", "Zur", "Hen", "Levi", "Lev", "Oren"};
         for (int i = 0; i < NUM_OF_TEACHERS; i++)
         {
             Teacher teacher = new Teacher(i, teacherFirstNamesArr[i % teacherFirstNamesArr.length],
@@ -295,6 +295,7 @@ public class DatabaseHandler {
                         "very good!", answersByStudent, "");
                 session.save(executedExam2);
                 executedExam2.setSubmitted(true);
+                executedExam2.setComputerized(true);
                 if (i % 2 == 0)
                     executedExam2.setChecked(true);
                 executedExam2.setGrade(100);
