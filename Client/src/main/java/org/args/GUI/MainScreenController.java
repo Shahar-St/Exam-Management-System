@@ -286,6 +286,7 @@ public class MainScreenController {
 
     @FXML
     void logOutClicked(ActionEvent event){
+        model.clearSubjectsAndCourses();
         ClientApp.logOut();
     }
 

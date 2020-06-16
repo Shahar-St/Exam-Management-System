@@ -176,6 +176,11 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         }
     }
 
+    @Override
+    public void clearSubjectsAndCourses() {
+        subjectsAndCourses = null;
+    }
+
     public String getId() {
         return id;
     }
