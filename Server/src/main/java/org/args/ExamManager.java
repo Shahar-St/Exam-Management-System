@@ -14,11 +14,6 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-/**
- * this class handle each exam, holds the connection to the dean, teacher and students
- * it handle message passing without a specific request
- */
-
 public class ExamManager {
 
     private static ConnectionToClient dean;
@@ -72,7 +67,6 @@ public class ExamManager {
         deanLock.unlock();
     }
 
-    // if dean wasn't logged in, we save the requests and send it once he logs in
     public static void notifyDean() {
 
         deanLock.lock();
@@ -136,7 +130,6 @@ public class ExamManager {
         }
     }
 
-    // if all students submitted their exams, the exam will end
     public void notifyAllSubmittedExamEnd() {
 
         notifyAboutExamEnd();

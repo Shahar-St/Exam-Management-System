@@ -15,12 +15,6 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-/**
- * this is the father of all strategies:
- * strategy : the way we handle a specific request.
- * also holds methods used by all subclasses and locks for synchronization
- */
-
 public abstract class DatabaseStrategy {
 
     // error codes

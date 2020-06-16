@@ -8,11 +8,6 @@ import org.hibernate.Session;
 
 import java.util.Map;
 
-/**
- * this is being implemented by all class that need to pass messages without a specific request from the same client
- * i.e: exam ended, time extension
- */
-
 public interface IExamInProgress {
 
     void handle(DatabaseRequest request, DatabaseResponse response, Map<Integer, ExamManager> examManagers,

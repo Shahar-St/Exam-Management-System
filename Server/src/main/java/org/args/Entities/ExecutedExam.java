@@ -40,7 +40,6 @@ public class ExecutedExam {
     private boolean isSubmitted = false;
 
     private long startTime;
-    @SuppressWarnings("unused")
     private long durationOfExecutionInMinutes;
 
     @Column(length = 3000)

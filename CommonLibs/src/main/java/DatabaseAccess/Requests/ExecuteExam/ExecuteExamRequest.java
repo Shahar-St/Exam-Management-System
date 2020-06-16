@@ -6,8 +6,6 @@ import DatabaseAccess.Requests.DatabaseRequest;
  * teacher starts an exam for the course's students.
  */
 
-// start exam
-
 public class ExecuteExamRequest extends DatabaseRequest {
     private final String examID;
     private final String examCode;
