@@ -102,8 +102,10 @@ public class MainScreenController {
         button1.setOnAction(this::switchToResultsScreen);
         button2.setText("Time Extensions");
         button2.setOnAction(this::switchToExtensionRequestsScreen);
-        button3.setVisible(false);
-        button4.setVisible(false);
+        button3.setText("Exam Management");
+        button3.setOnAction(this::switchToExamManagementScreen);
+        button4.setText("Question Management");
+        button4.setOnAction(this::switchToQuestionManagement);
     }
 
     private void switchToResultsScreen(ActionEvent event) {

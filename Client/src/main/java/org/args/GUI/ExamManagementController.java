@@ -50,9 +50,15 @@ public class ExamManagementController {
 
     @FXML
     private void bindButtonVisibility() {
-        addButton.visibleProperty().bind(model.isCourseSelected());
         detailsButton.visibleProperty().bind(model.isCourseSelected());
-        executeButton.visibleProperty().bind(model.isCourseSelected());
+        if(model.getPermission().equals("dean"))
+        {
+            executeButton.setVisible(false);
+            addButton.setVisible(false);
+        }else {
+            executeButton.visibleProperty().bind(model.isCourseSelected());
+            addButton.visibleProperty().bind(model.isCourseSelected());
+        }
     }
 
     @FXML
@@ -238,6 +244,7 @@ public class ExamManagementController {
             String currentTitle = examListView.getSelectionModel().getSelectedItem();
             currentTitle = currentTitle.substring(currentTitle.indexOf(":") + 1);
             model.setCurrentExecutedExamTitle(currentTitle);
+            examListView.getSelectionModel().clearSelection();
         }
     }
 

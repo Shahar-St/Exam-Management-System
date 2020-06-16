@@ -46,4 +46,5 @@ public interface IExamManagementData {
     void setCurrentExecutedExamTitle(String currentExecutedExamTitle);
     String getCurrentCourseName();
     void setCurrentCourseName(String currentCourseName);
+    String getPermission();
 }
