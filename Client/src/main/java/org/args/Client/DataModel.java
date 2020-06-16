@@ -819,21 +819,17 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     }
 
+    public boolean isHandRaised() {
+        return raisedHand;
+    }
+
+    public void setRaisedHand(boolean raisedHand) {
+        this.raisedHand = raisedHand;
+    }
+
     @Override
     public void raiseHand() {
-        if (!raisedHand) {
-            ClientApp.sendRequest(new RaiseHandRequest());
-            raisedHand = true;
-        } else {
-            Platform.runLater(() -> {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Can't Raise Hand Again");
-                alert.setHeaderText(null);
-                alert.setContentText("You can only raise your hand once!");
-                alert.show();
-            });
-        }
-
+        ClientApp.sendRequest(new RaiseHandRequest());
     }
 
     @Override

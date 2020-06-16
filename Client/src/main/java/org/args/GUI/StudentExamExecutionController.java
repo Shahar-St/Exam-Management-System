@@ -1,5 +1,6 @@
 package org.args.GUI;
 
+import DatabaseAccess.Requests.ExecuteExam.RaiseHandRequest;
 import LightEntities.LightQuestion;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -213,7 +214,16 @@ public class StudentExamExecutionController {
 
     @FXML
     void onRaiseHandClicked(MouseEvent event) {
-        model.raiseHand();
+        if (!model.isHandRaised()) {
+            model.raiseHand();
+            model.setRaisedHand(true);
+        } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Can't Raise Hand Again");
+                alert.setHeaderText(null);
+                alert.setContentText("You can only raise your hand once!");
+                alert.show();
+        }
     }
 
     private void setModel(IStudentExamExecutionData newModel) {
