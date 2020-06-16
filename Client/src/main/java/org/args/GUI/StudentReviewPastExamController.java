@@ -64,7 +64,19 @@ public class StudentReviewPastExamController {
 
         Label notes_label = new Label("Notes:");
 
+        notes_label.setFont(Font.font(fontStyle, fontSize));
+
         Label notes = new Label(exam.getCommentsAfterCheck());
+
+        notes.setFont(Font.font(fontStyle, fontSize));
+
+        Label reasons_label = new Label("Reasons For Change Grade:");
+
+        reasons_label.setFont(Font.font(fontStyle, fontSize));
+
+        Label reasons = new Label(exam.getReasonsForChangeGrade());
+
+        reasons.setFont(Font.font(fontStyle, fontSize));
 
         assert pageView != null;
         pageView.setPageCount(exam.getLightQuestionList().size() + 1);
@@ -73,7 +85,7 @@ public class StudentReviewPastExamController {
         pageView.setPageFactory((pageIndex) -> {
 
             if (pageIndex == 0) {
-                VBox details = new VBox(title_label, title, tester_label, tester, grade_label, grade,notes_label,notes);
+                VBox details = new VBox(title_label, title, tester_label, tester, grade_label, grade,notes_label,notes,reasons_label,reasons);
                 details.setPadding(new Insets(20, 20, 20, 20));
                 details.setSpacing(20);
                 return new ScrollPane(details);

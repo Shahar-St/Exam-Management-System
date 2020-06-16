@@ -11,6 +11,10 @@ public interface IStudentExamExecutionData {
 
     void submitExam();
 
+    public boolean isHandRaised();
+
+    void setRaisedHand(boolean raisedHand);
+
     void raiseHand();
 
     LightExam getExamForStudentExecution();

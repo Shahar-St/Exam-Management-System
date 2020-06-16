@@ -819,28 +819,17 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
 
     }
 
+    public boolean isHandRaised() {
+        return raisedHand;
+    }
+
+    public void setRaisedHand(boolean raisedHand) {
+        this.raisedHand = raisedHand;
+    }
+
     @Override
     public void raiseHand() {
-        if (!raisedHand) {
-            ClientApp.sendRequest(new RaiseHandRequest());
-            raisedHand = true;
-            Platform.runLater(() -> {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("INFO");
-                alert.setHeaderText(null);
-                alert.setContentText("A Massage Has Been Sent To You're Teacher");
-                alert.show();
-            });
-        } else {
-            Platform.runLater(() -> {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("INFO");
-                alert.setHeaderText(null);
-                alert.setContentText("A Massage Has Been Sent Already, Please Wait To You're Teacher Response");
-                alert.show();
-            });
-        }
-
+        ClientApp.sendRequest(new RaiseHandRequest());
     }
 
     @Override
@@ -871,7 +860,7 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
         ClientApp.popLastScene();
     }
 
-    //turn whole question decriptors into question IDs
+    //turn whole question descriptors into question IDs
     private List<String> generateListOfIds(List<String> questions) {
         List<String> questionIds = new Vector<>();
         for (String question : questions) {
@@ -960,7 +949,8 @@ public class DataModel implements IMainScreenData, IQuestionManagementData, IQue
                 setTimeExtensionGranted(true);
                 setTimeExtensionDuration(notifier.getAuthorizedTimeExtension());
             } else if (getPermission().equals("teacher")) {
-                Platform.runLater(() -> currentExecutedExamEndTime.setValue(currentExecutedExamEndLocalDateTime.plusMinutes(notifier.getAuthorizedTimeExtension()).format(hourMinutesFormatter)));
+                currentExecutedExamEndLocalDateTime = currentExecutedExamEndLocalDateTime.plusMinutes(notifier.getAuthorizedTimeExtension());
+                Platform.runLater(() -> currentExecutedExamEndTime.setValue(getCurrentExecutedExamEndLocalDateTime().format(hourMinutesFormatter)));
             }
 
         }

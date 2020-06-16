@@ -95,7 +95,7 @@ public class ClientApp extends Application {
     }
 
     public static void sendRequest(Object data) {
-            client.sendToServer(data);
+        client.sendToServer(data);
     }
 
     public static boolean isNumeric(String str) {
@@ -301,13 +301,11 @@ public class ClientApp extends Application {
                 alert.setTitle("Question Deleted");
                 alert.setContentText("Question Deleted Successfully!");
                 ClientApp.backToLastScene();
-            } else if (response.getStatus() == 4)
-            {
+            } else if (response.getStatus() == 4) {
                 alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setContentText("Question could not be deleted \nbecause it's already a part of an exam!");
-            }
-            else {
+            } else {
                 alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setContentText("Ooops, Question could not be deleted!");
@@ -326,13 +324,11 @@ public class ClientApp extends Application {
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Exam Deleted");
                 alert.setContentText("Exam Deleted Successfully!");
-            } else if (response.getStatus() == 4)
-            {
+            } else if (response.getStatus() == 4) {
                 alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setContentText("exam could not be deleted because it was already executed!");
-            }
-            else {
+            } else {
                 alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setContentText("Ooops, exam could not be deleted!");
@@ -373,23 +369,22 @@ public class ClientApp extends Application {
     }
 
     @Subscribe
-    public void handleExamEndedNotifier(ExamEndedNotifier notifier)
-    {
-        if(model.getPermission().equals("student"))
-            Platform.runLater(()->{
+    public void handleExamEndedNotifier(ExamEndedNotifier notifier) {
+        if (model.getPermission().equals("student"))
+            Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Attention!");
                 alert.setHeaderText(null);
-                alert.setContentText("Attention! \nExam Time Has Ended, Your'e Exam Has Been Submitted And You're Now Being Redirected To The Main Screen");
+                alert.setContentText("Attention! \nExam Time Has Ended, Your'e Exam Has Been Submitted And \nYou're Now Being Redirected To The Main Screen");
                 alert.showAndWait();
                 setRoot("MainScreen"); // redirect client to main screen because of exam timeout.
             });
-        else if(model.getPermission().equals("teacher")){
-            Platform.runLater(()->{
+        else if (model.getPermission().equals("teacher")) {
+            Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Attention!");
                 alert.setHeaderText(null);
-                alert.setContentText("Attention! \nExam Has Ended, All Exams Has Been Submitted, You're Now Being Redirected To The Main Screen");
+                alert.setContentText("Attention! \nExam Has Ended, All Exams Has Been Submitted, \nYou're Now Being Redirected To The Main Screen");
                 alert.showAndWait();
                 setRoot("MainScreen");
             });
@@ -398,12 +393,10 @@ public class ClientApp extends Application {
 
     @Subscribe
     public void handleExecuteExamResponse(ExecuteExamResponse response) {
-        if (response.getStatus() == 0)
-        {
+        if (response.getStatus() == 0) {
             infoAlert("Exam Initiated. Students Can Now Start!");
             setRoot("TeacherExamExecutionScreen");
-        }
-        else {
+        } else {
             errorAlert("Exam failed to start! (Server Error)");
         }
     }
@@ -424,25 +417,24 @@ public class ClientApp extends Application {
 
     @Subscribe
     public void handleTimeExtensionResponse(TimeExtensionResponse response) {
-        if(response.getStatus()==0){
+        if (response.getStatus() == 0) {
             infoAlert("Time Extension Request Was Successfully Sent.");
 
-        }else{
+        } else {
             errorAlert("Something Went Wrong With Time Extension Request, Please Try Again. ");
         }
     }
+
     @Subscribe
-    public void handleTimeExtensionRequestNotifier(TimeExtensionRequestNotifier notifier)
-    {
+    public void handleTimeExtensionRequestNotifier(TimeExtensionRequestNotifier notifier) {
         infoAlert("New Time Extension Request Received!");
     }
 
     @Subscribe
     public void handleRaisedHandResponse(RaiseHandResponse response) {
-        if(response.getStatus()==0)
-        {
+        if (response.getStatus() == 0) {
             infoAlert("Your've Successfully Raised Your Hand :)");
-        }else {
+        } else {
             errorAlert("Failed To Send Raise Hand Request, Please Try Again.");
         }
     }
@@ -458,13 +450,14 @@ public class ClientApp extends Application {
     }
 
     @Subscribe
-    public void handleSubmitExamResponse(SubmitExamResponse response){
-        if(response.getStatus()==0){
+    public void handleSubmitExamResponse(SubmitExamResponse response) {
+        if (response.getStatus() == 0) {
             setRoot("MainScreen");
-            SubmitExamRequest request = (SubmitExamRequest)response.getRequest();
-            if(request.isFinishedOnTime())
+            SubmitExamRequest request = (SubmitExamRequest) response.getRequest();
+            model.setSubmitted(false);
+            if (request.isFinishedOnTime())
                 infoAlert("Exam Was Successfully Submitted.");
-        }else{
+        } else {
             errorAlert("Submission Failed, Please Try Again.");
         }
     }
@@ -486,14 +479,13 @@ public class ClientApp extends Application {
     @Subscribe
     public void handleGetExecutedExamResponse(GetExecutedExamResponse response) {
         if (response.getStatus() == 0) {
-            if(model.getPermission().equals("teacher")){
+            if (model.getPermission().equals("teacher")) {
                 if (!response.getExam().isComputerized())
                     setRoot("TeacherReviewManualExamScreen");
                 else
                     setRoot("TeacherReviewCompExamScreen");
-            }else if(model.getPermission().equals("student"))
+            } else if (model.getPermission().equals("student"))
                 setRoot("StudentReviewPastExamScreen");
-
 
 
         } else {
@@ -505,30 +497,24 @@ public class ClientApp extends Application {
     public void handleEvaluateExamResponse(EvaluateExamResponse response) {
         if (response.getStatus() == 0) {
             setRoot("TeacherExamGradesReviewScreen");
-        }else{
+        } else {
             errorAlert("Failed To Submit Exam Evaluation, Please Try Again.");
         }
     }
 
     @Subscribe
-    public void handleConfirmTimeExtensionNotifier(ConfirmTimeExtensionNotifier notifier)
-    {
-        if(notifier.isAccepted())
-        {
+    public void handleConfirmTimeExtensionNotifier(ConfirmTimeExtensionNotifier notifier) {
+        if (notifier.isAccepted() && model.getPermission().equals("teacher")) {
             System.out.println("time extension confirmed");
-            infoAlert("Time Extension Confirmed!");
-
-        }
-        else
-        {
+            infoAlert("Time Extension Confirmed! Approved Time: " + notifier.getAuthorizedTimeExtension() +" minutes");
+        } else if (!notifier.isAccepted() && model.getPermission().equals("teacher")) {
             System.out.println("time extension rejected");
-            errorAlert("Time Extension Rejected!");
+            errorAlert("Time Extension Rejected! Reason: " + notifier.getDeanResponse());
         }
     }
 
     @Subscribe
-    public void handleTeacherStatisticsResponse(TeacherStatisticsResponse response)
-    {
+    public void handleTeacherStatisticsResponse(TeacherStatisticsResponse response) {
         if (response.getStatus() == 0)
             ClientApp.setRoot("TeacherStatisticsScreen");
         else
@@ -537,7 +523,7 @@ public class ClientApp extends Application {
 
     }
 
-    public static boolean containsSpecialCharacters(String str){
+    public static boolean containsSpecialCharacters(String str) {
         Pattern regex = Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!-]");
         return regex.matcher(str).find();
     }
