@@ -73,8 +73,11 @@ public class QuestionManagementController {
     }
 
     private void bindButtonVisibility() {
-        addButton.visibleProperty().bind(model.isCourseSelected());
         questionDetailsButton.visibleProperty().bind(model.isCourseSelected());
+        if(model.getPermission().equals("dean"))
+            addButton.setVisible(false);
+        else
+            addButton.visibleProperty().bind(model.isCourseSelected());
 
     }
 

@@ -47,8 +47,7 @@ public class ExecutedExam {
     private byte[] fileBytes;
 
     //Group c'tors
-    public ExecutedExam() {
-    }
+    public ExecutedExam() { }
 
     public ExecutedExam(ConcreteExam concreteExam, Student student, String commentsAfterCheck,
                         List<Integer> answersByStudent, String reasonsForChangeGrade) {

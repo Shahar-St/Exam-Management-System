@@ -10,6 +10,8 @@ public interface IQuestionManagementData {
 
     Set<String> getSubjects();
 
+    String getPermission();
+
     List<String> getCoursesOfSubject(String subject);
 
     String getCurrentSubject();

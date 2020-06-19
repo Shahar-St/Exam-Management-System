@@ -1,5 +1,6 @@
 package org.args.GUI;
 
+import DatabaseAccess.Requests.ExecuteExam.RaiseHandRequest;
 import LightEntities.LightQuestion;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -11,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import org.args.Client.IStudentExamExecutionData;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
@@ -19,19 +21,13 @@ import java.util.TimerTask;
 
 public class StudentExamExecutionController {
 
-    private IStudentExamExecutionData model;
-
     private final Label timeElapsed = new Label();
-
-    private long examDuration;
-
-    private final int fontSize = 32;
-
+    private final int fontSize = 24;
     private final String fontStyle = "Cambria";
-
     private final int smallSpacing = 5;
     private final int largeSpacing = 20;
-
+    private IStudentExamExecutionData model;
+    private long examDuration;
     @FXML
     private ImageView raiseHandImage;
 
@@ -44,10 +40,10 @@ public class StudentExamExecutionController {
         LocalDateTime start = model.getExamForStudentExecutionInitDate();
         LocalDateTime now = LocalDateTime.now();
         long dateDelta = start.until(now, ChronoUnit.SECONDS);
-        examDuration = (model.getExamForStudentExecution().getDurationInMinutes()*60)-dateDelta; // convert into seconds
+        examDuration = (model.getExamForStudentExecution().getDurationInMinutes() * 60) - dateDelta; // convert into seconds
         timeElapsed.setFont(Font.font(fontStyle, fontSize));
         assert questionsPagination != null;
-        questionsPagination.setPageCount(model.getExamForStudentExecution().getLightQuestionList().size()+1);
+        questionsPagination.setPageCount(model.getExamForStudentExecution().getLightQuestionList().size() + 1);
         questionsPagination.setCurrentPageIndex(0);
         questionsPagination.setMaxPageIndicatorCount(10);
         questionsPagination.setPageFactory((pageIndex) -> {
@@ -63,7 +59,7 @@ public class StudentExamExecutionController {
 
                 Label duration_label = new Label("Duration:");
 
-                Label duration = new Label(model.getExamForStudentExecution().getDurationInMinutes() +" Min");
+                Label duration = new Label(model.getExamForStudentExecution().getDurationInMinutes() + " Min");
 
                 title_label.setFont(Font.font(fontStyle, fontSize));
 
@@ -93,7 +89,7 @@ public class StudentExamExecutionController {
 
                 details.setSpacing(largeSpacing);
 
-                details.setPadding(new Insets(20,20,20,20));
+                details.setPadding(new Insets(20, 20, 20, 20));
 
                 return details;
             }
@@ -124,15 +120,15 @@ public class StudentExamExecutionController {
 
             answer4.setFont(Font.font(fontStyle, fontSize));
 
-            Label questionScore = new Label("Question Score: "+model.getExamForStudentExecution().getQuestionsScores().get(pageIndex-1));
+            Label questionScore = new Label("Question Score: " + model.getExamForStudentExecution().getQuestionsScores().get(pageIndex - 1));
 
             questionScore.setFont(Font.font(fontStyle, fontSize));
 
-            details = new VBox(timeElapsed,content_label, questionContent,answer1,answer2,answer3,answer4,questionScore);
+            details = new VBox(timeElapsed, content_label, questionContent, answer1, answer2, answer3, answer4, questionScore);
 
             details.setSpacing(largeSpacing);
 
-            details.setPadding(new Insets(20,20,20,20));
+            details.setPadding(new Insets(20, 20, 20, 20));
 
             answer1.setOnAction(e -> {
                 answer2.setSelected(false);
@@ -160,7 +156,7 @@ public class StudentExamExecutionController {
                 model.storeAnswer(pageIndex - 1, 3);
             });
 
-            if (model.getCorrectAnswersMap() != null && model.getCorrectAnswersMap().get(pageIndex-1)!=null) {
+            if (model.getCorrectAnswersMap() != null && model.getCorrectAnswersMap().get(pageIndex - 1) != null) {
                 switch (model.getCorrectAnswersMap().get(pageIndex - 1)) {
                     case 0:
                         answer1.setSelected(true);
@@ -180,26 +176,25 @@ public class StudentExamExecutionController {
                 Button done = new Button();
                 done.setText("Done");
                 done.setFont(Font.font(fontStyle, fontSize));
-                done.setOnMouseClicked(e ->{
-                    if(model.getExamForStudentExecution().getLightQuestionList().size()>model.getCorrectAnswersMap().size()){
+                done.setOnMouseClicked(e -> {
+                    if (model.getExamForStudentExecution().getLightQuestionList().size() > model.getCorrectAnswersMap().size()) {
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Attention!");
                         alert.setHeaderText("Attention! , Please Confirm the following:");
                         alert.setContentText("You have left some answers unmarked are you sure you want to continue?");
 
                         Optional<ButtonType> result = alert.showAndWait();
-                        if (result.isPresent() && result.get() == ButtonType.OK){
+                        if (result.isPresent() && result.get() == ButtonType.OK) {
                             model.submitExam();
                         }
-                    }
-                    else
+                    } else
                         model.submitExam();
 
 
                 });
-                details = new VBox(timeElapsed, content_label, questionContent, answer1,answer2,answer3,answer4,questionScore,done);
+                details = new VBox(timeElapsed, content_label, questionContent, answer1, answer2, answer3, answer4, questionScore, done);
                 details.setSpacing(largeSpacing);
-                details.setPadding(new Insets(20,20,20,20));
+                details.setPadding(new Insets(20, 20, 20, 20));
             }
 
             return details;
@@ -213,7 +208,16 @@ public class StudentExamExecutionController {
 
     @FXML
     void onRaiseHandClicked(MouseEvent event) {
-        model.raiseHand();
+        if (!model.isHandRaised()) {
+            model.raiseHand();
+            model.setRaisedHand(true);
+        } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Can't Raise Hand Again");
+                alert.setHeaderText(null);
+                alert.setContentText("You can only raise your hand once!");
+                alert.show();
+        }
     }
 
     private void setModel(IStudentExamExecutionData newModel) {
@@ -227,7 +231,7 @@ public class StudentExamExecutionController {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (!ClientApp.isRunning()||model.isSubmitted()) {
+                if (!ClientApp.isRunning() || model.isSubmitted()) {
                     // in case that the window has been closed
                     timer.cancel();
                     timer.purge();
@@ -237,17 +241,25 @@ public class StudentExamExecutionController {
                     timer.purge();
                     // submit and quit
                     model.submitAndQuit();
-
-                    return;
-                }else if(model.isTimeExtensionGranted()){
-                    examDuration+=model.getTimeExtensionDuration()*60;
-                    // set to false to prevent multiple additions for the same extension
-                    model.setTimeExtensionGranted(false);
-                    Platform.runLater(()->{
+                    Platform.runLater(() -> {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Attention!");
                         alert.setHeaderText(null);
-                        alert.setContentText("A Time Extension Has Been Approved For Your'e Exam, You Have Another: "+model.getTimeExtensionDuration()+" Minutes, Good Luck!");
+                        alert.setContentText("Attention! \nExam Time Has Ended, Your'e Exam Has Been Submitted And \nYou're Now Being Redirected To The Main Screen");
+                        alert.showAndWait();
+                        ClientApp.setRoot("MainScreen"); // redirect client to main screen because of exam timeout.
+                    });
+
+                    return;
+                } else if (model.isTimeExtensionGranted()) {
+                    examDuration += model.getTimeExtensionDuration() * 60;
+                    // set to false to prevent multiple additions for the same extension
+                    model.setTimeExtensionGranted(false);
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Attention!");
+                        alert.setHeaderText(null);
+                        alert.setContentText("A Time Extension Has Been Approved For Your'e Exam, You Have Another: " + model.getTimeExtensionDuration() + " Minutes, Good Luck!");
                         alert.showAndWait();
                     });
                 }
@@ -257,7 +269,6 @@ public class StudentExamExecutionController {
             }
         }, 1000, 1000);
     }
-
 
 
 }

@@ -22,4 +22,8 @@ public interface ITeacherExecuteExamData {
     LocalDateTime getCurrentExecutedExamEndLocalDateTime();
 
     void endExam();
+
+    boolean hasEnded();
+
+    void setHasEnded(boolean bol);
 }

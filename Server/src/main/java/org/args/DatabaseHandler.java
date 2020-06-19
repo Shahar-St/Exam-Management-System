@@ -96,7 +96,7 @@ public class DatabaseHandler {
         }
     }
 
-    public static DatabaseHandler DatabaseHandlerInit() {
+    public synchronized static DatabaseHandler DatabaseHandlerInit() {
         if (databaseHandler == null)
         {
             databaseHandler = new DatabaseHandler();
@@ -191,8 +191,8 @@ public class DatabaseHandler {
         List<Course> courses = getAllOfType(session, Course.class);
 
         //creating teachers and connecting with courses and subjects
-        String[] teacherFirstNamesArr = {"1", "Miri", "Shir", "Neta", "Ronit", "Shiri", "Yuval", "shahar"};
-        String[] teacherLastNamesArr = {"1", "Haim", "Levi", "Zur", "Hen", "Levi", "Lev", "Oren"};
+        String[] teacherFirstNamesArr = {"Ronit", "Miri", "Shir", "Neta", "Ronit", "Shiri", "Yuval", "shahar"};
+        String[] teacherLastNamesArr = {"Cohen", "Haim", "Levi", "Zur", "Hen", "Levi", "Lev", "Oren"};
         for (int i = 0; i < NUM_OF_TEACHERS; i++)
         {
             Teacher teacher = new Teacher(i, teacherFirstNamesArr[i % teacherFirstNamesArr.length],

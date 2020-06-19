@@ -101,7 +101,7 @@ public class TeacherExamExecutionController {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (!ClientApp.isRunning()) {
+                if (!ClientApp.isRunning() || model.hasEnded()) {
                     // in case that the window has been closed
                     timer.cancel();
                     timer.purge();
